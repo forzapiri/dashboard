@@ -1,0 +1,3 @@
+#Options +FollowSymLinks
+#RewriteEngine on
+#RewriteRule (.*)/(.*) /admin/index.php?module=$1&$2

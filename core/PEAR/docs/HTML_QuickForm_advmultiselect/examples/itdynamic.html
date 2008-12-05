@@ -1,0 +1,124 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3c.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>HTML_QuickForm::advMultiSelect template example 1</title>
+<meta name="author" content="Laurent Laville" />
+<style type="text/css">
+<!--
+body {
+    background-color: #444444;
+    font-family:      Verdana, Arial, helvetica;
+    font-size:        10pt;
+    color: white;
+}
+h1 {
+    color:            #FFC;
+    text-align:       center;
+}
+table.maintable {
+    width:            100%;
+    border-width:     0;
+    border-style:     thin;
+    border-color:     #D0D0D0;
+    background-color: #EEE;
+    cellspacing:      2;
+    cellspadding:     3;
+}
+th.maintable {
+    text-align:       center;
+    color:            #FFC;
+    background-color: #AAA;
+    white-space:      nowrap;
+}
+table.pool {
+  border: 0;
+  width:450px;
+  color: black;
+}
+table.pool th {
+  font-size: 80%;
+  font-style: italic;
+  text-align: left;
+}
+table.pool select, input {
+  background-color: lightblue;
+}
+.inputCommand {
+    background-color: #d0d0d0;
+    border: 1px solid #7B7B88;
+    width: 7em;
+    margin-bottom: 2px;
+}
+span.qfError {
+    color:            #FF0000;
+}
+span.qfLabel {
+    font-weight:      bold;
+    color: black;
+}
+//-->
+</style>
+{qf_javascript}
+{ams_javascript}
+</head>
+<body>
+
+<table width="100%" border="0">
+<tr>
+  <td colspan="3" style="background-color:#FF9900"><h1>HeadBanner</h1></td>
+</tr>
+<tr>
+  <td style="background-color:red; vertical-align:top; width:15%; text-align:left">
+    <span style="font-color:white">pseudo-menu 1</span>&nbsp;
+  </td>
+  <td style="background-color:red; vertical-align:top; width:15%; text-align:left">
+    <span style="font-color:white">pseudo-menu 2</span>&nbsp;
+  </td>
+  <td style="background-color:#FF9900">
+    &nbsp;
+  </td>
+</tr>
+<tr>
+  <td colspan="3" style="background-color:#EEEEEE; vertical-align:top;">
+
+    <form {qf_attributes}>
+    <table class="maintable">
+
+    <!-- BEGIN qf_hidden_block -->
+    <div style="display: none;">
+      <!-- BEGIN qf_hidden_loop -->{qf_hidden}<!-- END qf_hidden_loop -->
+    </div>
+    <!-- END qf_hidden_block -->
+
+    <!-- BEGIN qf_main_loop -->
+      <!-- BEGIN qf_header -->
+      <tr><th class="maintable" colspan="2">{qf_header}</th></tr>
+      <!-- END qf_header -->
+
+      <!-- BEGIN qf_element -->
+      <tr>
+        <td style="text-align:right; width:30%"><!-- BEGIN qf_element_required --><span style="color: #FF0000;">*</span>&nbsp;<!-- END qf_element_required --><span class="qfLabel">{qf_label}&nbsp;</span></td>
+        <td>{qf_element}<!-- BEGIN qf_element_error --><br /><span style="color: #FF0000;">{qf_error}</span><!-- END qf_element_error --></td>
+      </tr>
+      <!-- END qf_element -->
+
+    <!-- END qf_main_loop -->
+    </table>
+    </form>
+
+</td>
+</tr>
+<tr>
+  <td colspan="3" style="background-color:white; text-align:right">
+    <span style="color:black; font-weight:bold">powered by PEAR</span>&nbsp;
+  </td>
+</tr>
+</table>
+
+{message_form_validate}
+
+</body>
+</html>

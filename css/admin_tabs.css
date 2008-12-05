@@ -1,0 +1,58 @@
+#header {
+	position: relative;
+	width: 100%;
+	height: 3em;
+	width: 45em; /* a width is required for Opera, older Mozilla browsers, and Konqueror browsers */
+	float: right;
+	clear: both;
+}
+
+#header ul#primary {
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	bottom: 0px;
+	width: 45em; /* a width is required for Opera, older Mozilla browsers, and Konqueror browsers */
+}
+
+#header ul#primary li  {
+	display: inline;
+	float: right;
+	list-style: none;
+}
+
+#header ul#primary a,#header ul#primary span,#header ul#primary a.current {
+	width: 12em;
+	display: block;
+	float: left;
+	padding: 4px 0;
+	margin: 1px 0px 1px 1px;
+	text-align: center;
+	font-family: tahoma, verdana, sans-serif;
+	font-size: 85%;
+	text-decoration: none;
+	color: #fff;
+	font-weight: 700;
+}
+
+#header ul#primary span,#header ul#primary a.current,#header ul#primary a.current:hover {
+	border-bottom: none;
+	background: #FFBF9C;
+	padding-bottom: 6px;
+	margin-top: 0;
+	color: #FF5500;
+}
+
+#header ul#primary a {
+	background: #FF5500;
+	border: 1px solid #FF5500;
+	border-bottom: #FFFFFF;
+}
+
+#header ul#primary a:hover {
+	margin-top: 0;
+	border-color: #FF5500;
+	background: #FFBF9C;
+	padding-bottom: 5px;
+	color: #FF5500;
+}

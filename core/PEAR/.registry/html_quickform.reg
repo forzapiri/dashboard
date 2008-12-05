@@ -1,0 +1,581 @@
+a:23:{s:7:"attribs";a:6:{s:15:"packagerversion";s:5:"1.6.1";s:7:"version";s:3:"2.0";s:5:"xmlns";s:35:"http://pear.php.net/dtd/package-2.0";s:11:"xmlns:tasks";s:33:"http://pear.php.net/dtd/tasks-1.0";s:9:"xmlns:xsi";s:41:"http://www.w3.org/2001/XMLSchema-instance";s:18:"xsi:schemaLocation";s:147:"http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd";}s:4:"name";s:14:"HTML_QuickForm";s:7:"channel";s:12:"pear.php.net";s:7:"summary";s:98:"The PEAR::HTML_QuickForm package provides methods for creating, validating, processing HTML forms.";s:11:"description";s:664:"NOTICE: development of HTML_QuickForm version 3 is frozen. Please submit
+feature requests for HTML_QuickForm2 package.
+
+The HTML_QuickForm package provides methods to dynamically create, validate
+and render HTML forms.
+
+Features:
+* More than 20 ready-to-use form elements.
+* XHTML compliant generated code.
+* Numerous mixable and extendable validation rules.
+* Automatic server-side validation and filtering.
+* On request javascript code generation for client-side validation.
+* File uploads support.
+* Total customization of form rendering.
+* Support for external template engines (ITX, Sigma, Flexy, Smarty).
+* Pluggable elements, rules and renderers extensions.";s:4:"lead";a:3:{i:0;a:4:{s:4:"name";s:16:"Bertrand Mansion";s:4:"user";s:7:"mansion";s:5:"email";s:20:"bmansion@mamasam.com";s:6:"active";s:3:"yes";}i:1;a:4:{s:4:"name";s:11:"Adam Daniel";s:4:"user";s:7:"adaniel";s:5:"email";s:22:"adaniel1@eesus.jnj.com";s:6:"active";s:2:"no";}i:2;a:4:{s:4:"name";s:13:"Alexey Borzov";s:4:"user";s:3:"avb";s:5:"email";s:18:"borz_off@cs.msu.su";s:6:"active";s:3:"yes";}}s:9:"developer";a:3:{i:0;a:4:{s:4:"name";s:10:"Jason Rust";s:4:"user";s:5:"jrust";s:5:"email";s:20:"jason@rustyparts.com";s:6:"active";s:2:"no";}i:1;a:4:{s:4:"name";s:13:"Thomas Schulz";s:4:"user";s:3:"ths";s:5:"email";s:16:"ths@4bconsult.de";s:6:"active";s:2:"no";}i:2;a:4:{s:4:"name";s:11:"Ron McClain";s:4:"user";s:6:"mixtli";s:5:"email";s:15:"ron@humaniq.com";s:6:"active";s:2:"no";}}s:4:"date";s:10:"2007-10-06";s:4:"time";s:8:"00:29:01";s:7:"version";a:2:{s:7:"release";s:6:"3.2.10";s:3:"api";s:5:"3.2.6";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:490:"* An error in date's setValue() method prevented setting the 'empty' value
+  as the default one (bug #11717)
+* A space could be displayed instead of '0' for frozen elements with value
+  set to '0' (bug #11995)
+* Validation rules on file uploads will be skipped only if no upload was
+  attempted, not if it failed for some reason (bug #12014)
+* 'filename' rule returned integer instead of expected boolean (bug #12015)
+* Regexps in Default renderer missed necessary 's' modifier (bug #12026)";s:8:"contents";a:1:{s:3:"dir";a:2:{s:7:"attribs";a:2:{s:14:"baseinstalldir";s:4:"HTML";s:4:"name";s:1:"/";}s:4:"file";a:71:{i:0;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"f698931588ce5ff73dccc0546ad79061";s:4:"name";s:47:"docs/renderers/templates/styles/fancygroup.html";s:4:"role";s:3:"doc";}}i:1;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"7cfd8f942b89e83fa1b9a998f954ee86";s:4:"name";s:42:"docs/renderers/templates/styles/green.html";s:4:"role";s:3:"doc";}}i:2;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"915340a44e3faa3f2eca4b95780567e8";s:4:"name";s:43:"docs/renderers/templates/flexy-dynamic.html";s:4:"role";s:3:"doc";}}i:3;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"66f0ce9baacaea87177d035ef1adfe00";s:4:"name";s:42:"docs/renderers/templates/flexy-static.html";s:4:"role";s:3:"doc";}}i:4;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"982de78ccdc5773e59e6b6a32b66f5c2";s:4:"name";s:34:"docs/renderers/templates/html.html";s:4:"role";s:3:"doc";}}i:5;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"e7c2560cc3c1052cebaa901e798b844a";s:4:"name";s:42:"docs/renderers/templates/it-dynamic-2.html";s:4:"role";s:3:"doc";}}i:6;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"d24ad458585358b176605bbdf82cb398";s:4:"name";s:40:"docs/renderers/templates/it-dynamic.html";s:4:"role";s:3:"doc";}}i:7;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"31ca1af83da407928b264d0e31292d26";s:4:"name";s:39:"docs/renderers/templates/it-static.html";s:4:"role";s:3:"doc";}}i:8;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"f687fc753fff815931daa2871bf63573";s:4:"name";s:35:"docs/renderers/templates/label.html";s:4:"role";s:3:"doc";}}i:9;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"6e602fbedcc29ed64330317f6d162ce6";s:4:"name";s:54:"docs/renderers/templates/smarty-dynamic-fancygroup.tpl";s:4:"role";s:3:"doc";}}i:10;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"d59a20aeef628e6fe814b0871fb935e5";s:4:"name";s:49:"docs/renderers/templates/smarty-dynamic-green.tpl";s:4:"role";s:3:"doc";}}i:11;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"c50c9103993eca27eb25506da0e6a841";s:4:"name";s:43:"docs/renderers/templates/smarty-dynamic.tpl";s:4:"role";s:3:"doc";}}i:12;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"9ecd73d5814981bfd9aaed057a923d9a";s:4:"name";s:42:"docs/renderers/templates/smarty-static.tpl";s:4:"role";s:3:"doc";}}i:13;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"4db51a8c749727fcbd6db27da6f7e069";s:4:"name";s:39:"docs/renderers/FlexyDynamic_example.php";s:4:"role";s:3:"doc";}}i:14;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"c23334f78fc24a8514bd7090eca61227";s:4:"name";s:38:"docs/renderers/FlexyStatic_example.php";s:4:"role";s:3:"doc";}}i:15;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"8f3a444d02ef38415aaec4c64857846d";s:4:"name";s:36:"docs/renderers/ITDynamic_example.php";s:4:"role";s:3:"doc";}}i:16;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"44c72adbd312ad808d9d7b0d0eb6089b";s:4:"name";s:37:"docs/renderers/ITDynamic_example2.php";s:4:"role";s:3:"doc";}}i:17;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"ea186843c14691dee2caad5e6650262c";s:4:"name";s:35:"docs/renderers/ITStatic_example.php";s:4:"role";s:3:"doc";}}i:18;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"976bd20b95a56160b2eb4dadda932406";s:4:"name";s:34:"docs/renderers/multiple-labels.php";s:4:"role";s:3:"doc";}}i:19;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"4e1289456c51bb57baae15d1f233be1a";s:4:"name";s:36:"docs/renderers/QuickHtml_example.php";s:4:"role";s:3:"doc";}}i:20;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"9031703f1e2aac9425c5548925da9875";s:4:"name";s:40:"docs/renderers/SmartyDynamic_example.php";s:4:"role";s:3:"doc";}}i:21;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"ae77ee5f2edf005eef6cd9f2fb88c783";s:4:"name";s:39:"docs/renderers/SmartyStatic_example.php";s:4:"role";s:3:"doc";}}i:22;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"dc45e6a84c986a50fb84fda9c37fd49b";s:4:"name";s:17:"docs/elements.php";s:4:"role";s:3:"doc";}}i:23;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"1c78d396d6625a83d68eb45924daab19";s:4:"name";s:16:"docs/filters.php";s:4:"role";s:3:"doc";}}i:24;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"d95bfe2c4f378e21b06cf5a2c493695f";s:4:"name";s:17:"docs/formrule.php";s:4:"role";s:3:"doc";}}i:25;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"081a5f2c285a70be2f4be8ded288c239";s:4:"name";s:15:"docs/groups.php";s:4:"role";s:3:"doc";}}i:26;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"47dd96e0092485dd9dc233df0f7c42d1";s:4:"name";s:22:"docs/rules-builtin.php";s:4:"role";s:3:"doc";}}i:27;a:1:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"ee1baf7442375291b2f22583f9be713d";s:4:"name";s:21:"docs/rules-custom.php";s:4:"role";s:3:"doc";}}i:28;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"5f7f4d6cbe08eb1202ec9a591ef800a5";s:4:"name";s:28:"QuickForm/Renderer/Array.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:29;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"c5c299090cf7ea06db006576367c6777";s:4:"name";s:34:"QuickForm/Renderer/ArraySmarty.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:30;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"eb171e851cf8251a1a3b85c1229898a2";s:4:"name";s:30:"QuickForm/Renderer/Default.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:31;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"7b19ffc7c038d477a924f1936ce4c4c3";s:4:"name";s:32:"QuickForm/Renderer/ITDynamic.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:32;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"203871aa3b5e08509c2d8a43a544b5a9";s:4:"name";s:31:"QuickForm/Renderer/ITStatic.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:33;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"35b6af91b2e855def41aa6590c09a6c1";s:4:"name";s:29:"QuickForm/Renderer/Object.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:34;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"59322a4dca50a8c8acb3a2bcd09dc181";s:4:"name";s:34:"QuickForm/Renderer/ObjectFlexy.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:35;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"de0fdf732a881ee956d2a4d90bd42880";s:4:"name";s:32:"QuickForm/Renderer/QuickHtml.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:36;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"b26f639d60e566906014adf736ade4a5";s:4:"name";s:27:"QuickForm/Rule/Callback.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:37;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"82aca1bf9d6391275cd17b7ab1012c39";s:4:"name";s:26:"QuickForm/Rule/Compare.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:38;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"a9f6a10610411e4df76342de09ebcf6c";s:4:"name";s:24:"QuickForm/Rule/Email.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:39;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"7e0c02d7f0a92b0d8ead5d0a9611a9a1";s:4:"name";s:24:"QuickForm/Rule/Range.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:40;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"3315ad96b8d495500e86dd42085a5209";s:4:"name";s:24:"QuickForm/Rule/Regex.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:41;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"cc2601ea8366efa5766ab8a14a3572a9";s:4:"name";s:27:"QuickForm/Rule/Required.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:42;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"ff4a47572557eb973dad1ca1ccbd5da7";s:4:"name";s:25:"QuickForm/advcheckbox.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:43;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"e1a46beacf7bd598822a1765594d9519";s:4:"name";s:26:"QuickForm/autocomplete.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:44;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"2390ce0265d83587d75735de25e90f4b";s:4:"name";s:20:"QuickForm/button.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:45;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"494ea135b35f8f11393a6964025d654c";s:4:"name";s:22:"QuickForm/checkbox.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:46;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"332244d1dd60e8e2908fad029cfe1e8e";s:4:"name";s:18:"QuickForm/date.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:47;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"6c56e6df6831ccd8baf3c107a3b90d10";s:4:"name";s:21:"QuickForm/element.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:48;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"346bc61cf4f3ac900bbb170c915c40df";s:4:"name";s:18:"QuickForm/file.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:49;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"f20db5b11a63950bac64f2976e287d8c";s:4:"name";s:19:"QuickForm/group.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:50;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"ae3b6f31dcf2c78005548bc12b72e9a6";s:4:"name";s:20:"QuickForm/header.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:51;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"be8b56665e9793401faf30fd2c6ccd34";s:4:"name";s:20:"QuickForm/hidden.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:52;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"9f2e5c5c70192237e2539e4e4caa0bc2";s:4:"name";s:26:"QuickForm/hiddenselect.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:53;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"f81c9ddd18ad86d1b7727ee2575e9225";s:4:"name";s:24:"QuickForm/hierselect.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:54;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"3ca442daa65765e1f49c6fe28f4391b4";s:4:"name";s:18:"QuickForm/html.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:55;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"141c8597939f2342ca22aa08d9042098";s:4:"name";s:19:"QuickForm/image.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:56;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"abc0041a25abe69aa2cafe020fce1831";s:4:"name";s:19:"QuickForm/input.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:57;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"ffb5a62c769eb8102fc173972685c986";s:4:"name";s:18:"QuickForm/link.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:58;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"2a81e65c1866f0275794ee3d81615e54";s:4:"name";s:22:"QuickForm/password.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:59;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"3a29426233fb3bbf1ff02e38cf191cb2";s:4:"name";s:19:"QuickForm/radio.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:60;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"74b900325b85983fc53e1784372b4803";s:4:"name";s:22:"QuickForm/Renderer.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:61;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"cef2be6a7615010d3900d3a66a2fd7d4";s:4:"name";s:19:"QuickForm/reset.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:62;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"9075561177fdfa1dfcf344e4892180b5";s:4:"name";s:18:"QuickForm/Rule.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:63;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"2fd7ffad98a5ca97e4ff4f03522d1d60";s:4:"name";s:26:"QuickForm/RuleRegistry.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:64;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"297d83095751de2dc143cd966cc91beb";s:4:"name";s:20:"QuickForm/select.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:65;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"f2466989fd56ebc40bb62e05da93d4fe";s:4:"name";s:20:"QuickForm/static.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:66;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"fba96db52f13e4e3134ffc29d07b1f01";s:4:"name";s:20:"QuickForm/submit.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:67;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"c6b281b35443c1d40e57ec0eb11584bf";s:4:"name";s:18:"QuickForm/text.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:68;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"af32a80effdd7ffa073e38ad752e4bda";s:4:"name";s:22:"QuickForm/textarea.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:69;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"fb1811928a870b048db7666c449ef454";s:4:"name";s:21:"QuickForm/xbutton.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}i:70;a:2:{s:7:"attribs";a:4:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"bb1c9bae58e6eb5cc467d504fc35e19d";s:4:"name";s:13:"QuickForm.php";s:4:"role";s:3:"php";}s:13:"tasks:replace";a:1:{s:7:"attribs";a:3:{s:4:"from";s:17:"@package_version@";s:2:"to";s:7:"version";s:4:"type";s:12:"package-info";}}}}}}s:12:"dependencies";a:1:{s:8:"required";a:3:{s:3:"php";a:1:{s:3:"min";s:3:"4.3";}s:13:"pearinstaller";a:1:{s:3:"min";s:5:"1.4.0";}s:7:"package";a:3:{s:4:"name";s:11:"HTML_Common";s:7:"channel";s:12:"pear.php.net";s:3:"min";s:5:"1.2.1";}}}s:10:"phprelease";s:0:"";s:9:"changelog";a:1:{s:7:"release";a:30:{i:0;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"3.2.9";s:3:"api";s:5:"3.2.6";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2007-06-05";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:275:"This release fixes problems introduced in release 3.2.8:
+* Fixes to bug #10837 and bug #11138 could prevent setting the values 
+  of 'date' elements. Thanks to Massimiliano Arione for reporting.
+* Fix to bug #10754 broke 'compare' rules with '!=' operators
+  (see bug #11229)";}i:1;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"3.2.8";s:3:"api";s:5:"3.2.6";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2007-06-03";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:792:"Development of QuickForm version 3 is now frozen. Only bug fixing will be
+done. All feature requests should be submitted for HTML_QuickForm2 package.
+
+Changes:
+* Moved to package.xml version 2
+* Proper header comment blocks
+
+Bugfixes:
+* Possible segfault when using Default Renderer due to sub-optimal regexps
+  (bug #9977)
+* Validation of elements containing numeric strings by 'compare' rule
+  could give wrong results (bug #10754)
+* Regexp-based rules incorrectly allowed trailing newlines in values being
+  validated (bug #10799)
+* Wrong options could be selected in <select> elements if numeric strings
+  were used as options' values (bug #10837, bug #11138)
+* 'checked' attribute of checkbox was not cleared if adding checkbox to 
+  a form submitted with this box unchecked (bug #11047)";}i:2;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"3.2.7";s:3:"api";s:5:"3.2.6";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2006-10-10";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:696:"Development of QuickForm version 3 is now frozen. Only bug fixing will be
+done. All feature requests should be submitted for HTML_QuickForm2 package.
+
+Bugfixes:
+* Radio button with value attribute of '0' was incorrectly set checked
+  after setDefaults() call (bug #8057)
+* Fixed errors in eval()'d code when element's name contains single quotes
+  and/or backslashes (bug #8123, bug #8414 has a more realistic example)
+* Fixed PHP warning on outputting hiddenselect element when its values
+  were never set (bug #8305)
+* Removed unnecessary if-else from HTML_QuickForm_file::moveUploadedFile()
+  (bug #8329)
+* Fixed Javascript error in hierselect element if option text was a number
+  (bug #8497)";}i:3;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"3.2.6";s:3:"api";s:5:"3.2.6";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2006-06-22";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:1910:"Development of QuickForm version 3 is now frozen. Only bug fixing will be
+done. All feature requests should be submitted for HTML_QuickForm2 package.
+
+Bugfixes:
+* Typo in javascript generated for form validation (bug #5205)
+* Default values for single-selects were ignored if form was considered
+  submitted (bug #5269)
+* Fixed array-based options for HTML_QuickForm_date (bug #5364)
+* Javascript validation of single radiobutton failed (bug #5644)
+* Incorrect fetch mode used in HTML_QuickForm_select::loadDbResult()
+  (bug #5705)
+* Removed unused variables found by code analysis (bug #5920)
+* hierselect now works correctly with HTML entities in option texts,
+  fix idea borrowed from Prototype JS library (bug #5974)
+* advcheckbox failed to submit properly if its id attribute was set equal 
+  to its name, due to javascript problems (bug #6134)
+* HTML_QuickForm_hierselect::setValue() should not decrease the number of
+  select elements in hierselect (bug #6766)
+* HTML_QuickForm::isTypeRegistered() is now case-insensitive (bug #7342)
+* Form is considered not valid after explicitly adding error via
+  HTML_QuickForm::setElementError() (bug #7470)
+* Regexps for 'error' and 'required' blocks in Default renderer now match
+  ungreedy, this allows having several such blocks in a template (bug #7820)
+* Document the return value of HTML_QuickForm_file::moveUploadedFile()
+  (bug #7832)
+
+Additions and changes:
+* Traditional Chinese translation for date element (request #5165)
+* Brazilian Portuguese translation for date element (request #5541)
+* An error message for element is now removed if removing the element via
+  HTML_QuickForm::removeElement(..., true) or passing an empty argument to
+  HTML_QuickForm::setElementError().
+* advcheckbox element no longer uses any javascript, therefore its JS-related
+  methods getOnclickJS() and getPrivateName() are no longer used internally
+  and are deprecated.";}i:4;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"3.2.5";s:3:"api";s:5:"3.2.5";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2005-08-05";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:3389:"This release addresses poorly documented backwards compatibility breaks
+in PHP versions 4.4 and 5.1 (see bugs #4725 and #4799).
+
+* Changes to hierselect element
+  Javascript for hierselect element was (once again) completely rewritten,
+  which fixed a significant number of bugs.
+- Fixed #2970 (hierselect did not handle form reset properly)
+- Fixed #3176 (hierselect did not handle page reload properly)
+- Fixed #3988 (javascript errors if element name contained brackets)
+- Fixed #4432 (javascript errors if strings used as option values)
+- Implemented #3367 (onchange attribute is not overwritten, but appended to)
+
+* Changes to date element
+- Added Romanian translation (request #2884)
+- Added Hebrew translation (request #3366)
+- Added Swedish translation (request #4821)
+- Added Portuguese translation (request #4963)
+- Removed extra copy of French translation
+- Fixed typos in French (bug #3947) and Spanish (bug #4531) translations
+- Implemented #3733 ('g' format support)
+- Implemented #3379 ('W' format support)
+- Implemented #3325 (display empty options on a per-field basis)
+- Implemented #3575 (different empty option texts for different fields)
+- Fixed #3049 (getElements() could return null)
+- Fixed #4781 (toHtml() could return incorrect result)
+
+* Form validation fixes
+- Fixed #3865 (Required rule should consider field containing '0' valid)
+- Fixed #3023 (a Fatal error was possible when having a compare rule after 
+  a frozen element)
+- Fixed #3501 (File elements should not be validated if not required and no 
+  file uploaded)
+- Fixed #2709 (radiobutton group not validated if no radiobutton selected)
+- Fixed #3035 (error in javascript validation function in case of select 
+  with size > 1)
+- Fixed #3150 (incorrect check for select elements in javascript 
+  validation function)
+- Fixed broken javascript validation for groups with brackets in name
+- Fixed #4470 (incorrect value for advcheckbox elements in javascript 
+  validation)
+- Fixed #4832 (Prevent javascript errors if form is frozen)
+
+* Other additions and fixes
+- Added HTML_QuickForm::isSubmitted() method
+- Implemented #4930 (value of upload_max_filesize php.ini directive is
+  used as default value for MAX_FILE_SIZE form element)
+- Fixed #2806 (Typo in rules-builtin.php example)
+- Fixed #4219 (ArraySmarty renderer should only render required and error 
+  template if the element has errors or is required, this gives significant
+  performance improvement).
+- Fixed #2681 (Identical classes declared alongside Object and ObjectFlexy
+  renderers)
+- Fixed #3511 (HTML_QuickForm_group::toHtml() ignored hidden elements)
+- Use HTML_Common::_getAttrString() when generating hidden elements in
+  various places (bug #4463, invalid HTML generated by hiddenselect)
+- Fixed #2726 (grouped elements failed to freeze if freeze() was called 
+  before _createElements())
+- Fixed #4645 (grouped elements having '0' as name handled incorrectly)
+- Make getSubmitValue() more robust when dealing with groups having brackets
+  in names (see bug #2587)
+- Fixed #4262 (Constructor for HTML_QuickForm ignored explicitly given 
+  $target = '_self' argument)
+- Fixed #4465 (Default values incorrectly used for select multiple elements
+  if all options were unselected)
+- Fixed #3193 (frozen select elements could display incorrect value)
+- Fixed #4611 (javascript for grouped autocomplete elements not output
+  properly)";}i:5;a:5:{s:7:"version";a:2:{s:7:"release";s:8:"3.2.4pl1";s:3:"api";s:5:"3.2.4";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2004-10-20";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:431:"- Fixed #2576: calling HTML_QuickForm::getSubmitValue() on a group 
+  of radio elements caused an infinite loop with PHP eventually 
+  dying of memory exhaustion. This was introduced in 3.2.4 in a 
+  fix for bug #2517, those upgrading from earlier releases should 
+  skip 3.2.4, those running 3.2.4 should upgrade ASAP.
+
+- Fixed #2571: selects after the second were not correctly 
+  populated in hierselect with 3 or more elements.";}i:6;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"3.2.4";s:3:"api";s:5:"3.2.4";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2004-10-18";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:1613:"* Additions and changes
+- Implemented HTML_QuickForm::insertElementBefore() method which 
+  allows adding elements into arbitrary places and reordering the 
+  existing form elements (thanks to Justin Patrin for initial
+  implementation and helpful comments, see request #1587)
+- Implemented HTML_QuickForm_element::unfreeze() method
+- HTML_QuickForm::removeElement() now returns reference to element
+  being removed
+- Array renderer outputs header name into the resultant array
+  (request #2276)
+- Added $staticLabels option to Array renderer's constructor, this
+  makes the renderer "flatten" the array of labels
+- Added Ukrainian translation for 'date' element (Andrey Kornilov)
+- Removed newline after <script> tags in 'autocomplete' and
+  'hierselect' elements (request #2373)
+
+* Bugfixes
+- HTML_QuickForm::getSubmitValue() now properly returns null for
+  groups if form was not yet submitted (bug #2517)
+- stripslashes() is used only on 'name' element of file upload
+  data (bug #1843)
+- HTML_QuickForm::addGroupRule() now works better with <select 
+  multiple> elements (bug #1810)
+- Fixed notice if empty string was passed to date::setValue() 
+  (bug #2530)
+- Calling HTML_QuickForm_group::getFrozenHtml() no longer freezes 
+  the group (bug #1836)
+- Groups now correctly handle setPersistantFreeze() call (bug #1836)
+- ITDynamic renderer does not replace empty separator with &nbsp;
+  anymore (bug #2354)
+- 'maxfilesize' rule returns false in case of file upload errors
+  (bug #2203)
+- Fixed Javascript generation for 'hierselect' elements (bug #1984)
+- Fixed examples using 'rangelength' rule (bug #2421)";}i:7;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"3.2.3";s:3:"api";s:5:"3.2.3";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2004-06-28";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:1504:"* Additions and changes
+- Implemented a new 'xbutton' element for HTML 4.0 <button> tag
+  (see also #1227)
+- HTML_QuickForm::toArray() method accepts a boolean value that is 
+  passed to the constructor of HTML_QuickForm_Renderer_Array (see #1392)
+- ITDynamic renderer is now able to select a block for rendering based
+  on the element's name (see #1506)
+- Default template of Default Renderer now allows XHTML-compliant output
+  of hidden elements (see #1124)
+- Added Esperanto translation and French accents for date element 
+  (Sebastien Montagne)
+- Implemented #553: ITStatic renderer can use special blocks for required
+  elements and errors, if present in the template
+- Implemented #1576: Enclose js code between //<![CDATA[ and //]]>
+  to make it xhtml compliant
+
+* Bugfixes
+- Fixed #1235 (setChecked() and setValue() did not work on advcheckbox)
+- Fixed #1389 (Invalid comments in autocomplete element's Javascript)
+- Fixed #1143 (Client validation should be turned off for frozen elements)
+- Fixed #1252 (File upload names were not cleaned when magic_quotes_gpc = On)
+- Fixed notices raised by hierselect element (reported by Herim Vasquez)
+- Fixed #1248 (Errors in hierselect's Javascript when element's name
+  begins with a number)
+- Fixed #1577 (hierselect's Javascript works with multiselects)
+- Fixed #1516 (Default Renderer should use separators even when 
+  setGroupTemplate() is used)
+- Fixed #1694 (ITStatic renders hidden element with brackets correctly,
+  patch provided by milamamu)";}i:8;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"3.2.2";s:3:"api";s:5:"3.2.2";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2004-03-22";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:2375:"* On XHTML compliance:
+As of 3.2.2 QuickForm does not rely on presence of 'name' attribute
+in form tag (which is invalid in Strict XHTML), although it does
+set this attribute. If you desire Strict XHTML compliance, you can
+remove the attribute via removeAttribute() method.
+
+* On Flexy renderers:
+The Flexy renderers currently lack a maintainer. If one is not
+found, they will be marked as unsupported and may later be removed
+from the package. If you wish to look after these renderers, please
+contact the package maintainers.
+
+* Additions and changes
+- Added arrayMerge() method to HTML_QuickForm, this behaves like
+  builtin array_merge_recursive() but does not renumber numeric
+  array keys. The new method is now used throughout the QuickForm
+  instead of array_merge_recursive()
+- Added setDatasource() method
+- Implemented #552 (ITStatic renderer can group hidden fields in
+  output)
+- Added Estonian translation for date element (Ants Aasma)
+- Added Turkish translation for date element (Suat Imam-Oglu)
+- Added Norwegian translation for date element (Espen Carlsen)
+- All non-ASCII symbols in date translations are now encoded as 
+  HTML Unicode entities to prevent encoding problems
+- Renamed labels-default.php example to multiple-labels.php
+  (suggested by Ignatius Reilly)
+- Date element accepts non numeric default values compatible with
+  function strtotime() (Kellan Elliot-Mccrea)
+- Added possibility to have more than just two selects in
+  the hierselect element (Herim Vasquez)
+
+
+* Bugfixes
+- Fixed #735 (applyFilter() failed for elements with "complex" names and
+  grouped elements)
+- Fixed #872 (possible get_class()-related issues in PHP5)
+- Fixed #925 (XHTML compliance, see the note)
+- Fixed #741 (frozen elements lost 'id' attribute)
+- Final fix for #202 (ArraySmarty renderer broke on elements with
+  brackets in names)
+- Fixed #645 (ArraySmarty renderer had problems with anonymous elements)
+- Fixed #734 (ArraySmarty renderer did not honour the change of Smarty
+  delimiters)
+- Fixed #745 (wrong removal of group name from elements)
+- Fixed #212 (ObjectFlexy renderer broke on elements with brackets in names)
+- Fixed #1032 (ITStatic used wrong placeholders for groups with 
+  $appendName = false)
+- updateElementAttr() works correctly if passed an array of actual element 
+  objects, also handles the case of multiple elements with the same name.";}i:9;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"3.2.1";s:3:"api";s:5:"3.2.1";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2004-01-03";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:1159:"* Additions and changes
+- The usage examples were significantly redone to better reflect current
+  package functionality.
+- Added Armenian translation for date element (Vahe Khachikyan)
+- Added Dutch translation for date element (Michiel Rook)
+- validate() throws a PEAR error if rule added via addFormRule() returns junk
+  (see also bugs #243 and #338)
+
+* Bugfixes
+- Fixed bug #351 (incorrect values set for groups with weird names)
+- Required elements in groups are once again marked correctly
+- Fixed setValue() method of date element (thanks to Orya and Mike Carter, 
+  see also bug #388)
+- Fixed bug #403 (typo in Rule_Callback::getValidationScript())
+- Fixed bug #356 (javascript generation for groups with $appendName = false)
+- Fixed bug #328 (js values in hierselect not escaped properly)
+- Fixed bug #302 (better support for RFC 2821 and RFC 2822 in Rule_Email)
+- Fixed bug #253 (ArraySmarty renderer broken with radiobuttons)
+- Partial fix for bug #202 (ArraySmarty renderer broke on elements with
+  brackets in names)
+- Fixed bug #493 (non-existant method in setConstants())
+- Fixed bug #209 (Flexy renderer broken with groups having '_' in names)";}i:10;a:5:{s:7:"version";a:2:{s:7:"release";s:3:"3.2";s:3:"api";s:3:"3.2";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2003-11-05";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:1966:"* Major changes in this release
+Refactored form validation using Strategy/Factory/Singleton patterns. Rules are now
+processed by subclasses of HTML_QuickForm_Rule class, HTML_QuickForm_RuleRegistry manages
+registering the rules and instantiating the rule classes. Backwards compatibility was
+completely preserved. (Bertrand Mansion)
+- Added ability to set a rule on several elements. Added 'compare' rule that compares the 
+  values of two form elements  to take advantage of this. (Alexey Borzov)
+- New 'callback' rule and an improved 'email' rule.
+- Function-based rules can now be used without registering.
+- Added 2 new examples for built-in and custom rules. (Alexey Borzov)
+- Javascript validation opportunities were enhanced, validation of groups, radios, checkboxes, 
+  selects now works correctly (see also PEAR bug #184) (Alexey Borzov, Hodicska Gergely)
+
+* Other additions and changes
+- Added 'autocomplete' element. (Matteo Di Giovinazzo)
+- Added possibility to check whether form was actually submitted (see also bug #185). (Alexey Borzov)
+- QuickForm now correctly handles 'file' elements with [] in name, 'file' elements inside groups. (Alexey Borzov)
+- 'date' element will display year select in reverse order if 'minYear' > 'maxYear'. (Alexey Borzov)
+- Added possibility to set increment value for some 'date' element selects. (Alexey Borzov)
+- Added 'y' format to 'date' element. (Bertrand Mansion)
+
+* Migration to 3.2
+- Features that were marked deprecated in previous releases are REMOVED
+- 'emailorblank' rule was REMOVED, use 'email' rule (see also PEAR bug #34)
+
+* Bugfixes
+- Fixed PEAR bug #140 (empty label tags for checkboxes and radios)
+- Fixed PEAR bug #175 (error in 'date' element's German translation)
+- Fixed PEAR bug #70 (Flexy renderer didn't handle multiple labels for element)
+- Fixed PEAR bug #152 (JS function for 'hierselect' element not printed)
+- ArraySmarty renderer correctly processes groups with '_' in names (Ian Duggan)";}i:11;a:5:{s:7:"version";a:2:{s:7:"release";s:5:"3.1.1";s:3:"api";s:5:"3.1.1";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2003-09-09";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:725:"* New additions
+- Added Flexy renderer with examples (Ron McClain)
+- Added QuickHtml renderer with example (Jason Rust)
+- Added possibility to add customized empty options on top of date element selects (Jason Rust)
+- Added Czech translation for date element (Tomas Zavodny)
+
+* Bugfixes
+- Fixed a bug in select element found by Pascal Thuet (Bertrand Mansion)
+- Fixed setting hierselect's values, reported by Keith Edmunds (Bertrand Mansion)
+- Fixed validate() not checking for presence of _formRules, reported by Justin Hendrickson (Alexey Borzov)
+- Fixed javascript for advcheckbox element (Jason Rust)
+
+Deprecated methods will be kept for 3.1.x releases, but will be removed in the next
+major one. Please update your code!";}i:12;a:5:{s:7:"version";a:2:{s:7:"release";s:3:"3.1";s:3:"api";s:3:"3.1";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2003-07-19";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:2194:"* New additions
+- Added a new hierselect element, a group of two selects where the first select changes the options of the second select using javascript (Bertrand Mansion)
+- Added exportValue() and exportValues() methods, these should now be the preferred way to get form values (Alexey Borzov)
+- Added addFormRule() method, this adds the rule that validates the whole form (Alexey Borzov)
+- Added Italian date/dategroup names (Marco Piarulli)
+- Added Slovak date/dategroup names (Peter Sablica)
+- Added Icelandic date/dategroup names (Birgir Stefansson)
+
+* Changes
+- Rule-registering functions can now be called statically (Alexey Borzov)
+- File-related rules and methods are moved to HTML_QuickForm_file (Alexey Borzov)
+- Moved 'magic quotes' handling to QuickForm's constructor (Alexey Borzov)
+- Use strtr() instead of rawurlencode() for javascript messages (Bertrand Mansion)
+- Changed the nonzero rule to every numbers (negative or positive) except zero (David Sklar)
+- Date element has been entirely reworked and optimised (Alexey Borzov)
+- Updated the examples to use the latest changes (Alexey Borzov, Bertrand Mansion)
+
+* Bugfixes
+- Fixed a bug in HTML_QuickForm_group::getFrozenHtml() (Alexey Borzov, Wolfram Kriesing)
+- Fixed a problem in HTML_QuickForm_group::getValue(): value was not changed to array (Alexey Borzov)
+- Correctly set element's index in addElement() if some of the elements were previously removed (Alexey Borzov, Wolfram Kriesing)
+- Fixed notice in _findElementValue() for files (Bertrand Mansion)
+- Fixed passing a 'selected' attribute to addOption() (Alexey Borzov, Wolfram Kriesing)
+
+* Deprecated
+- setFormat(), setMinYear() and other accessors in date element are now deprecated. Set options and attributes in the constructor instead (Alexey Borzov)
+- Method getAttributesString() is deprecated (Alexey Borzov)
+- HTML_QuickForm's isUploadedFile(), moveUploadedFile(), getUploadeFile() are now deprecated (Alexey Borzov)
+
+Deprecated methods will be removed from QuickForm in the next release.
+In this release, they throw PEAR errors but still finish the job.
+Use this to catch them with an error handler function, the global error code is QUICKFORM_DEPRECATED.";}i:13;a:5:{s:7:"version";a:2:{s:7:"release";s:3:"3.0";s:3:"api";s:3:"3.0";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2003-06-04";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:226:"* Fixes
+
+- do not use submit values for 'submit' elements also (reported by Thomas Schulz, Mike Carter)
+- assorted small fixes to HTML_QuickForm's methods and PHPDoc documentation
+- HTML_QuickForm::apiVersion() returns 3.0 now";}i:14;a:5:{s:7:"version";a:2:{s:7:"release";s:6:"3.0RC1";s:3:"api";s:6:"3.0RC1";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2003-05-28";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:657:"* Bugfixes
+
+- setMaxfileSize() does not throw pear error anymore (Alexey Borzov)
+- onQuickFormEvent 'updateValue' fixes, elements that cannot actually have a submit value do not try to use one (Alexey Borzov)
+- _loadElement() now returns a reference (Alexey Borzov)
+- Several fixes to usage examples (Alexey Borzov, Thomas Schulz, Joerg Bruckmann)
+
+* Changes
+
+- Added time to the date element (Jason Rust)
+- Required groups now show the asterisk (Bertrand Mansion)
+- Optimizations in HTML_QuickForm_group's methods (Alexey Borzov)
+- ArraySmarty renderer now requires a Smarty object and uses Smarty templates for 'required' and errors output (Thomas Schulz)";}i:15;a:5:{s:7:"version";a:2:{s:7:"release";s:8:"3.0Beta2";s:3:"api";s:8:"3.0Beta2";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2003-05-13";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:1259:"- PHP 4.2+ is now required for file uploads
+
+* Bugfixes
+
+- Fixed bug with selected values in select element
+- Fixed bug when form method was changed from get to post by adding a file element
+- addRule() and addGroupRule() now return a PEAR error when the rule is not registered
+- <label> tags are no more generated for frozen checkboxes and radios
+
+* Changes
+
+- Added new Array-based renderer for Smarty, with examples (Thomas Schulz)
+- Array renderer generates more info on the form, possibility to set styles for elements (Thomas Schulz)
+- Example of usage for Array renderer with Smarty (Thomas Schulz)
+- Better XHTML compliance for Default renderer output (Klaus Guenther, Alexey Borzov)
+- Added possibility to have multiple labels for one element (Jon Wood)
+- Added support for multiple labels in ITStatic and ITDynamic renderers (Jon Wood, Alexey, Bertrand)
+
+- Added client-side validation parameter to addGroupRule() (Bertrand Mansion)
+
+- getSubmitValues() can now return uploaded files (Markus Wolff, Alexey Borzov)
+- Added new methods set/getMaxFileSize (Tommy Ipsen)
+
+- Removed unwanted linefeeds in frozen checkboxes (Thomas Schulz)
+- Added Spanish translation for date element (The PhP_KiD)
+- Added a setValue() method to static element (Jon Wood)";}i:16;a:5:{s:7:"version";a:2:{s:7:"release";s:8:"3.0Beta1";s:3:"api";s:8:"3.0Beta1";}s:9:"stability";a:2:{s:7:"release";s:4:"beta";s:3:"api";s:4:"beta";}s:4:"date";s:10:"2003-04-17";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:3967:"* Major changes in this release
+
+- Renderers
+   QuickForm now uses external renderers to output the form. Currently 
+   available renderers are: Default - based on old toHtml() code, 
+   Array - based on old toArray() code, ITStatic and ITDynamic - these work
+   through an ITX/Sigma template engine. More renderers are expected to follow. 
+- Validation
+   Validation rules are tested in the order they are set. Groups can 
+   now be validated with custom functions. File validation only happens 
+   if a file is required. It is also tested if the file has been uploaded.
+- Static elements
+   Headers and Data (html) elements are treated like other form elements. 
+   Headers can have a name, this makes it possible to use different templates
+   for different headers.
+- XHTML
+   HTML_Common and QuickForm have been reworked to be more XHTML compliant.
+
+* Migration to 3.0
+
+Incompatibilities:
+
+- Filters registration is not used anymore. Just give applyFilter() the function name as a parameter.
+- toArray() now returns a different structure and calls an external renderer: elements in groups are rendered as seperate elements, every element has a numeric index for key.
+- Validation rules are validated in the order they were set.
+- File validation happens only when the file is required.
+- Direct calls to onQuickFormEvent() with 'setDefault' and 'setConstant' events won't work anymore, these events have been replaced by an 'updateValue' event.
+- Grouped elements index is now a numeric key only. This can break some group rules if you used their associative key in addGroupRule().
+- Groups must have a name. If you don't want the name to be appended to the elements names, set the appendName parameter to false.
+
+Deprecated features:
+- addHeader() and addData(), while still there, are deprecated. Use addElement('header') and addElement('html').
+- If you want to customize form output, do so by using a renderer object. setElementTemplate() and the like are now deprecated.
+
+* Changes
+
+- Added support for external renderers, added a default and an array renderer based on old QuickForm code (Alexey Borzov)
+- Added a dynamic ITX/Sigma renderer with examples (Alexey Borzov)
+- Added a static ITX/Sigma renderer with examples (Bertrand Mansion)
+
+- Added possibility to validate a group with a function using addRule() (Bertrand Mansion)
+- Added possibility to validate groups when appendName is false (Bertrand Mansion)
+- Rules are validated in the order they are set (Bertrand Mansion)
+- Fixed problems when validating a file not uploaded (Frederic Poeydomenge, Bertrand Mansion)
+
+- addHeader() and addData() now call addElement(), added new 'header' and 'html' elements (Alexey Borzov)
+- Got rid of registering filters, now only function existence is checked. First parameter to applyFilter can be an array (Alexey Borzov)
+- Automatically generate a name for group element when no name given. Added possibility to append the group name or not to grouped elements (Alexey Borzov)
+- process() now accepts a callback function to process the form (Bertrand Mansion)
+
+- Added XHTML compliant labels in radio and checkboxes (Alexey Borzov, Alexander Radivanovich)
+- XHTML for form tag (Bertrand Mansion)
+
+- Elements values are now set through a uniform 'updateValue' event (Alexey Borzov)
+- Elements with value 0 are not considered empty when validating (Bertrand Mansion)
+- Fix warning with uploaded files (Frederic Poeydomenge)
+- Changed _findElementValue to work with appendName (Bertrand Mansion)
+
+- Added Polish date names in date element (Robert Janeczek)
+- Added Hungarian date names in date element (Kovacs Gergely)
+- Added Russian date names in date element (Alexey Borzov)
+
+- Optimized select element addOption() and toHtml() methods (Alexey Borzov)
+- Added method getElementName() in group element (Bertrand Mansion)
+- Fix bug when setting attributes in date element (Bertrand Mansion)
+- Removed method display(), exists in parent class (Bertrand Mansion)";}i:17;a:5:{s:7:"version";a:2:{s:7:"release";s:4:"2.10";s:3:"api";s:4:"2.10";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2003-03-07";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:953:"* Email validation regex accepts lower and uppercases (Derick Rethans).
+* Added getUploadedFile() and isUploadedFile() methods (Wotjek Gdela).
+* XHTML compliant for the form tags (Jules Szemere).
+* Fixed Javascript validation when empty elements are not required (Joern Barthel).
+* Added possibility to call setDefaults() and setConstants() anytime.
+* Fix problem with duplicate element names (ex: radio).
+* Added method updateElementAttr() to update the attributes of multiple elements (Dan Wilson).
+* Slovanian translation of date in date element (Matej Dakol).
+* Fix bug in date element preventing submitted values to be used.
+* Removed nbsp; replace in frozen textarea (Carsten Bleek, Dan Wilson).
+
+This is probably the last release of QuickForm without template support.
+The next release will have two BC breaks:
+- Use of filters will be easier, no registration needed.
+- Groups with no name will not be supported anymore, even if name is not used.";}i:18;a:5:{s:7:"version";a:2:{s:7:"release";s:3:"2.9";s:3:"api";s:3:"2.9";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2003-02-20";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:437:"* Added htmlspecialchars() to frozen elements output in every case.
+* Elements are not validated against a function if they are empty and not required.
+  It is easier this way for QuickForm to work with external validators.
+  This is already the way it is done when using regex validation.
+* Added javascript validation for select multiple and checkboxes.
+* Added simple javascript validation for groups: values are imploded in a string.";}i:19;a:5:{s:7:"version";a:2:{s:7:"release";s:3:"2.8";s:3:"api";s:3:"2.8";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2003-02-18";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:342:"* IMPORTANT: favour the use of addGroup() instead of addElementGroup().
+* Fix bug when validating grouped elements.
+* Removed useless call to toHtml() in toArray(), was disturbing the date element.
+* Fix bug with select multiple for display and validation.
+* Textarea element now uses nl2br() instead of pre tags so it won't mess your layout.";}i:20;a:5:{s:7:"version";a:2:{s:7:"release";s:3:"2.7";s:3:"api";s:3:"2.7";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2003-02-12";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:975:"* Use moveUploadedFile() (PHP 4.1) for file uploads instead of copy() and unlink(). (Matthias Englert)
+* Added support for element names with brackets ie. element[name][firstname].
+* Added static element to add static text in form. (Wojciech Gdela)
+* Removed extra tabs created when wrapping form elements (Tim Glen)
+* Added validation for whole group with addRule('group') in complement to validation for group elements with addGroupRule('group').
+* Added ability to use a method from a class or from an object for validation using registerRule().
+* Fixed bug with radio button validation. (Jack Kline)
+* Fixed bug when validating checkboxes named with backets ie. checkbox[A]
+* Fixed a problem with stripslashes() in element.php
+* Fixed a bug in hidden.php preventing its value to be set under some conditions. (Arne Gellhaus)
+* In progress : fix bug with toArray() for the date element, use a layout object (templates), implement function validation for elements in group.";}i:21;a:5:{s:7:"version";a:2:{s:7:"release";s:3:"2.6";s:3:"api";s:3:"2.6";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2003-01-29";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:391:"* IMPORTANT: addElement now returns a reference to the added element.
+* Added new date element to create formatted date selects.
+* Added example for the new date element in QuickForm_Example.php
+* Fixed a warning in checkbox element
+* Default values are always overidden by submitted values.
+* Email validation rules accept 4 chars extensions (.info, .name, ...)
+* Fixed bug in applyFilter()";}i:22;a:5:{s:7:"version";a:2:{s:7:"release";s:3:"2.5";s:3:"api";s:3:"2.5";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2002-11-20";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:681:"* Refine the use of setDefaults and setContants.
+setDefaults is used to fill the form with defaults values that will be overriden by submitted values once the form is submitted.
+setConstants is used to overide default and submitted values for example if form is not valid when submitted. In this case, constant values will be shown again in the field.
+In all cases, values won't be overriden by the other method anymore.
+* Added grouped elements validation on the server-side.
+* Added grouped elements customization through templates.
+* Fixes in rules for file uploads on maxsize, mime... when element is not required.
+* Added a new example for groups customization and validation.";}i:23;a:5:{s:7:"version";a:2:{s:7:"release";s:3:"2.4";s:3:"api";s:3:"2.4";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2002-10-21";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:1040:"* Use $_POST, $_GET and $_FILES instead of $HTTP_.
+* Better error checking in renderElement().
+* Fixed freeze() for removed elements.
+* Added new element 'hiddenselect'.
+* Added optional $in_data parameter to method toHtml so that data can be added to the form right before it is rendered.  Useful when using with a template system.
+* Changed the way the key is obtained for _elementIndex in addElement() to accomodate with removeElement().
+* Some changes to _buildRules(): Made some of the javascript variables private which did not need have a global scope (such as frm).
+* Added new rule: emailorblank.
+* Fixes in HTML_QuickForm_Element.
+* Fixes in QuickForm_example2.php.
+* Added getElements() in HTML_QuickForm_Group which returns an array of all elements in group by reference.
+* Added getGroupType() in HTML_QuickForm_Group which returns the type of group as string or 'mixed' if group is composed of different element types.
+* Fixes in file upload validation rules.
+* Added a few new examples for filters, rules, file uploads usage.";}i:24;a:5:{s:7:"version";a:2:{s:7:"release";s:3:"2.3";s:3:"api";s:3:"2.3";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2002-06-19";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:695:"* Important API change in the way select elements load arrays.
+* Added the possibility to set a template for an element only.
+* Fixes in the creation of select elements with multiple attribute.
+* Added consistency in the magic_quotes handling.
+* Added recursive filters on setDefaults an setConstants values.
+* Added getSubmitValue (same as getSubmitValues but for one value only).
+* Removed HTML_QuickForm_date element: it needs more work.
+* Added the HTML_QuickForm_advcheckbox element in package and in registered elements.
+* Added one example for the HTML_QuickForm_advcheckbox element.
+* Added setPersistantFreeze accessor method in element.php.
+* Fixed problems with password field values.";}i:25;a:5:{s:7:"version";a:2:{s:7:"release";s:3:"2.2";s:3:"api";s:3:"2.2";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2002-05-29";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:62:"* Some fixes for file uploads.
+* Some fixes for hidden fields.";}i:26;a:5:{s:7:"version";a:2:{s:7:"release";s:3:"2.1";s:3:"api";s:3:"2.1";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2002-05-24";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:154:"* Fixes for many if not all E_ALL warnings.
+* Filter function is now recursive.
+* Better handling of registered rules.
+* New regex for numeric validation.";}i:27;a:5:{s:7:"version";a:2:{s:7:"release";s:3:"2.0";s:3:"api";s:3:"2.0";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2002-04-15";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:1929:"New API for new version 2.0!
+Here is a list of what's new in this version:
+* Moved all the elements from HTML/QuickForm/Elements/ to HTML/QuickForm/
+* Added $_elementIndex to keep track of the elements
+* Changed $_elementValues to $_defaultValues
+* Removed $_hidden and $_frozen
+* Added Filter support
+* Added templates for the _wrap functions
+* Changed loadDefault() to setDefaults()
+* Moved most of the logic to the element classes
+* Created an abstraction between the form class and the elements
+* Added getElement() and getElementValue()
+* Added toArray()
+* Cleaned up a lot of the code
+* Added the // {{{ markers to all files to make it for easier reading in vim
+* Added the error handlers and codes to make errors more descriptive
+* Added new method setConstants() which is like setDefaults() except that it overrides the POST or GET variables.
+* Added methods setElementTemplate(), setFormTemplate(), setHeaderTemplate() and setRequiredNotTemplate().  They are pretty self-explanatory.
+* Added method addData().  Same as before.
+* Added new method clearAllTemplates() which basically strips out all HTML.  This is useful if you want to create a completely custom looking form using addData()
+* Fixed the toHtml() method so that it is a while statement so that freeze() works.
+* Fixed a bug in the hidden type, where it was setting the value when you created the element, thus not allowing the value to be set by POST or GET variables.
+* Took out the is_int test in select.php.
+* Made the caller a global variable in element.php, so that it can be accessed, if need be, in other element classes.
+* Changed it so that if an element is frozen and has no value it outputs '&nbsp;' instead of nothing which messes up old browsers like NS4.
+* Added renderElement() method which will return the html for one element.
+* Added removeElement() method which removes the element from the elements list. Both methods accept parameters.";}i:28;a:5:{s:7:"version";a:2:{s:7:"release";s:4:"1.12";s:3:"api";s:4:"1.12";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2002-03-22";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:53:"Changed directory structure for package installation.";}i:29;a:5:{s:7:"version";a:2:{s:7:"release";s:3:"1.0";s:3:"api";s:3:"1.0";}s:9:"stability";a:2:{s:7:"release";s:6:"stable";s:3:"api";s:6:"stable";}s:4:"date";s:10:"2001-09-06";s:7:"license";a:2:{s:7:"attribs";a:1:{s:3:"uri";s:26:"http://www.php.net/license";}s:8:"_content";s:11:"PHP License";}s:5:"notes";s:58:"This is the initial release of the HTML_QuickForm package.";}}}s:8:"filelist";a:71:{s:47:"docs/renderers/templates/styles/fancygroup.html";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"f698931588ce5ff73dccc0546ad79061";s:4:"name";s:47:"docs/renderers/templates/styles/fancygroup.html";s:4:"role";s:3:"doc";s:12:"installed_as";s:128:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/renderers/templates/styles/fancygroup.html";}s:42:"docs/renderers/templates/styles/green.html";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"7cfd8f942b89e83fa1b9a998f954ee86";s:4:"name";s:42:"docs/renderers/templates/styles/green.html";s:4:"role";s:3:"doc";s:12:"installed_as";s:123:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/renderers/templates/styles/green.html";}s:43:"docs/renderers/templates/flexy-dynamic.html";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"915340a44e3faa3f2eca4b95780567e8";s:4:"name";s:43:"docs/renderers/templates/flexy-dynamic.html";s:4:"role";s:3:"doc";s:12:"installed_as";s:124:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/renderers/templates/flexy-dynamic.html";}s:42:"docs/renderers/templates/flexy-static.html";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"66f0ce9baacaea87177d035ef1adfe00";s:4:"name";s:42:"docs/renderers/templates/flexy-static.html";s:4:"role";s:3:"doc";s:12:"installed_as";s:123:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/renderers/templates/flexy-static.html";}s:34:"docs/renderers/templates/html.html";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"982de78ccdc5773e59e6b6a32b66f5c2";s:4:"name";s:34:"docs/renderers/templates/html.html";s:4:"role";s:3:"doc";s:12:"installed_as";s:115:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/renderers/templates/html.html";}s:42:"docs/renderers/templates/it-dynamic-2.html";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"e7c2560cc3c1052cebaa901e798b844a";s:4:"name";s:42:"docs/renderers/templates/it-dynamic-2.html";s:4:"role";s:3:"doc";s:12:"installed_as";s:123:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/renderers/templates/it-dynamic-2.html";}s:40:"docs/renderers/templates/it-dynamic.html";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"d24ad458585358b176605bbdf82cb398";s:4:"name";s:40:"docs/renderers/templates/it-dynamic.html";s:4:"role";s:3:"doc";s:12:"installed_as";s:121:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/renderers/templates/it-dynamic.html";}s:39:"docs/renderers/templates/it-static.html";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"31ca1af83da407928b264d0e31292d26";s:4:"name";s:39:"docs/renderers/templates/it-static.html";s:4:"role";s:3:"doc";s:12:"installed_as";s:120:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/renderers/templates/it-static.html";}s:35:"docs/renderers/templates/label.html";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"f687fc753fff815931daa2871bf63573";s:4:"name";s:35:"docs/renderers/templates/label.html";s:4:"role";s:3:"doc";s:12:"installed_as";s:116:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/renderers/templates/label.html";}s:54:"docs/renderers/templates/smarty-dynamic-fancygroup.tpl";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"6e602fbedcc29ed64330317f6d162ce6";s:4:"name";s:54:"docs/renderers/templates/smarty-dynamic-fancygroup.tpl";s:4:"role";s:3:"doc";s:12:"installed_as";s:135:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/renderers/templates/smarty-dynamic-fancygroup.tpl";}s:49:"docs/renderers/templates/smarty-dynamic-green.tpl";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"d59a20aeef628e6fe814b0871fb935e5";s:4:"name";s:49:"docs/renderers/templates/smarty-dynamic-green.tpl";s:4:"role";s:3:"doc";s:12:"installed_as";s:130:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/renderers/templates/smarty-dynamic-green.tpl";}s:43:"docs/renderers/templates/smarty-dynamic.tpl";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"c50c9103993eca27eb25506da0e6a841";s:4:"name";s:43:"docs/renderers/templates/smarty-dynamic.tpl";s:4:"role";s:3:"doc";s:12:"installed_as";s:124:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/renderers/templates/smarty-dynamic.tpl";}s:42:"docs/renderers/templates/smarty-static.tpl";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"9ecd73d5814981bfd9aaed057a923d9a";s:4:"name";s:42:"docs/renderers/templates/smarty-static.tpl";s:4:"role";s:3:"doc";s:12:"installed_as";s:123:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/renderers/templates/smarty-static.tpl";}s:39:"docs/renderers/FlexyDynamic_example.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"4db51a8c749727fcbd6db27da6f7e069";s:4:"name";s:39:"docs/renderers/FlexyDynamic_example.php";s:4:"role";s:3:"doc";s:12:"installed_as";s:120:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/renderers/FlexyDynamic_example.php";}s:38:"docs/renderers/FlexyStatic_example.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"c23334f78fc24a8514bd7090eca61227";s:4:"name";s:38:"docs/renderers/FlexyStatic_example.php";s:4:"role";s:3:"doc";s:12:"installed_as";s:119:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/renderers/FlexyStatic_example.php";}s:36:"docs/renderers/ITDynamic_example.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"8f3a444d02ef38415aaec4c64857846d";s:4:"name";s:36:"docs/renderers/ITDynamic_example.php";s:4:"role";s:3:"doc";s:12:"installed_as";s:117:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/renderers/ITDynamic_example.php";}s:37:"docs/renderers/ITDynamic_example2.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"44c72adbd312ad808d9d7b0d0eb6089b";s:4:"name";s:37:"docs/renderers/ITDynamic_example2.php";s:4:"role";s:3:"doc";s:12:"installed_as";s:118:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/renderers/ITDynamic_example2.php";}s:35:"docs/renderers/ITStatic_example.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"ea186843c14691dee2caad5e6650262c";s:4:"name";s:35:"docs/renderers/ITStatic_example.php";s:4:"role";s:3:"doc";s:12:"installed_as";s:116:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/renderers/ITStatic_example.php";}s:34:"docs/renderers/multiple-labels.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"976bd20b95a56160b2eb4dadda932406";s:4:"name";s:34:"docs/renderers/multiple-labels.php";s:4:"role";s:3:"doc";s:12:"installed_as";s:115:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/renderers/multiple-labels.php";}s:36:"docs/renderers/QuickHtml_example.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"4e1289456c51bb57baae15d1f233be1a";s:4:"name";s:36:"docs/renderers/QuickHtml_example.php";s:4:"role";s:3:"doc";s:12:"installed_as";s:117:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/renderers/QuickHtml_example.php";}s:40:"docs/renderers/SmartyDynamic_example.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"9031703f1e2aac9425c5548925da9875";s:4:"name";s:40:"docs/renderers/SmartyDynamic_example.php";s:4:"role";s:3:"doc";s:12:"installed_as";s:121:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/renderers/SmartyDynamic_example.php";}s:39:"docs/renderers/SmartyStatic_example.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"ae77ee5f2edf005eef6cd9f2fb88c783";s:4:"name";s:39:"docs/renderers/SmartyStatic_example.php";s:4:"role";s:3:"doc";s:12:"installed_as";s:120:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/renderers/SmartyStatic_example.php";}s:17:"docs/elements.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"dc45e6a84c986a50fb84fda9c37fd49b";s:4:"name";s:17:"docs/elements.php";s:4:"role";s:3:"doc";s:12:"installed_as";s:98:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/elements.php";}s:16:"docs/filters.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"1c78d396d6625a83d68eb45924daab19";s:4:"name";s:16:"docs/filters.php";s:4:"role";s:3:"doc";s:12:"installed_as";s:97:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/filters.php";}s:17:"docs/formrule.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"d95bfe2c4f378e21b06cf5a2c493695f";s:4:"name";s:17:"docs/formrule.php";s:4:"role";s:3:"doc";s:12:"installed_as";s:98:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/formrule.php";}s:15:"docs/groups.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"081a5f2c285a70be2f4be8ded288c239";s:4:"name";s:15:"docs/groups.php";s:4:"role";s:3:"doc";s:12:"installed_as";s:96:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/groups.php";}s:22:"docs/rules-builtin.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"47dd96e0092485dd9dc233df0f7c42d1";s:4:"name";s:22:"docs/rules-builtin.php";s:4:"role";s:3:"doc";s:12:"installed_as";s:103:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/rules-builtin.php";}s:21:"docs/rules-custom.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"ee1baf7442375291b2f22583f9be713d";s:4:"name";s:21:"docs/rules-custom.php";s:4:"role";s:3:"doc";s:12:"installed_as";s:102:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/rules-custom.php";}s:28:"QuickForm/Renderer/Array.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"5f7f4d6cbe08eb1202ec9a591ef800a5";s:4:"name";s:28:"QuickForm/Renderer/Array.php";s:4:"role";s:3:"php";s:12:"installed_as";s:94:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/Renderer/Array.php";}s:34:"QuickForm/Renderer/ArraySmarty.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"c5c299090cf7ea06db006576367c6777";s:4:"name";s:34:"QuickForm/Renderer/ArraySmarty.php";s:4:"role";s:3:"php";s:12:"installed_as";s:100:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/Renderer/ArraySmarty.php";}s:30:"QuickForm/Renderer/Default.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"eb171e851cf8251a1a3b85c1229898a2";s:4:"name";s:30:"QuickForm/Renderer/Default.php";s:4:"role";s:3:"php";s:12:"installed_as";s:96:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/Renderer/Default.php";}s:32:"QuickForm/Renderer/ITDynamic.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"7b19ffc7c038d477a924f1936ce4c4c3";s:4:"name";s:32:"QuickForm/Renderer/ITDynamic.php";s:4:"role";s:3:"php";s:12:"installed_as";s:98:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/Renderer/ITDynamic.php";}s:31:"QuickForm/Renderer/ITStatic.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"203871aa3b5e08509c2d8a43a544b5a9";s:4:"name";s:31:"QuickForm/Renderer/ITStatic.php";s:4:"role";s:3:"php";s:12:"installed_as";s:97:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/Renderer/ITStatic.php";}s:29:"QuickForm/Renderer/Object.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"35b6af91b2e855def41aa6590c09a6c1";s:4:"name";s:29:"QuickForm/Renderer/Object.php";s:4:"role";s:3:"php";s:12:"installed_as";s:95:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/Renderer/Object.php";}s:34:"QuickForm/Renderer/ObjectFlexy.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"59322a4dca50a8c8acb3a2bcd09dc181";s:4:"name";s:34:"QuickForm/Renderer/ObjectFlexy.php";s:4:"role";s:3:"php";s:12:"installed_as";s:100:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/Renderer/ObjectFlexy.php";}s:32:"QuickForm/Renderer/QuickHtml.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"de0fdf732a881ee956d2a4d90bd42880";s:4:"name";s:32:"QuickForm/Renderer/QuickHtml.php";s:4:"role";s:3:"php";s:12:"installed_as";s:98:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/Renderer/QuickHtml.php";}s:27:"QuickForm/Rule/Callback.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"b26f639d60e566906014adf736ade4a5";s:4:"name";s:27:"QuickForm/Rule/Callback.php";s:4:"role";s:3:"php";s:12:"installed_as";s:93:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/Rule/Callback.php";}s:26:"QuickForm/Rule/Compare.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"82aca1bf9d6391275cd17b7ab1012c39";s:4:"name";s:26:"QuickForm/Rule/Compare.php";s:4:"role";s:3:"php";s:12:"installed_as";s:92:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/Rule/Compare.php";}s:24:"QuickForm/Rule/Email.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"a9f6a10610411e4df76342de09ebcf6c";s:4:"name";s:24:"QuickForm/Rule/Email.php";s:4:"role";s:3:"php";s:12:"installed_as";s:90:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/Rule/Email.php";}s:24:"QuickForm/Rule/Range.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"7e0c02d7f0a92b0d8ead5d0a9611a9a1";s:4:"name";s:24:"QuickForm/Rule/Range.php";s:4:"role";s:3:"php";s:12:"installed_as";s:90:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/Rule/Range.php";}s:24:"QuickForm/Rule/Regex.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"3315ad96b8d495500e86dd42085a5209";s:4:"name";s:24:"QuickForm/Rule/Regex.php";s:4:"role";s:3:"php";s:12:"installed_as";s:90:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/Rule/Regex.php";}s:27:"QuickForm/Rule/Required.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"cc2601ea8366efa5766ab8a14a3572a9";s:4:"name";s:27:"QuickForm/Rule/Required.php";s:4:"role";s:3:"php";s:12:"installed_as";s:93:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/Rule/Required.php";}s:25:"QuickForm/advcheckbox.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"ff4a47572557eb973dad1ca1ccbd5da7";s:4:"name";s:25:"QuickForm/advcheckbox.php";s:4:"role";s:3:"php";s:12:"installed_as";s:91:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/advcheckbox.php";}s:26:"QuickForm/autocomplete.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"e1a46beacf7bd598822a1765594d9519";s:4:"name";s:26:"QuickForm/autocomplete.php";s:4:"role";s:3:"php";s:12:"installed_as";s:92:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/autocomplete.php";}s:20:"QuickForm/button.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"2390ce0265d83587d75735de25e90f4b";s:4:"name";s:20:"QuickForm/button.php";s:4:"role";s:3:"php";s:12:"installed_as";s:86:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/button.php";}s:22:"QuickForm/checkbox.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"494ea135b35f8f11393a6964025d654c";s:4:"name";s:22:"QuickForm/checkbox.php";s:4:"role";s:3:"php";s:12:"installed_as";s:88:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/checkbox.php";}s:18:"QuickForm/date.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"332244d1dd60e8e2908fad029cfe1e8e";s:4:"name";s:18:"QuickForm/date.php";s:4:"role";s:3:"php";s:12:"installed_as";s:84:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/date.php";}s:21:"QuickForm/element.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"6c56e6df6831ccd8baf3c107a3b90d10";s:4:"name";s:21:"QuickForm/element.php";s:4:"role";s:3:"php";s:12:"installed_as";s:87:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/element.php";}s:18:"QuickForm/file.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"346bc61cf4f3ac900bbb170c915c40df";s:4:"name";s:18:"QuickForm/file.php";s:4:"role";s:3:"php";s:12:"installed_as";s:84:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/file.php";}s:19:"QuickForm/group.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"f20db5b11a63950bac64f2976e287d8c";s:4:"name";s:19:"QuickForm/group.php";s:4:"role";s:3:"php";s:12:"installed_as";s:85:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/group.php";}s:20:"QuickForm/header.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"ae3b6f31dcf2c78005548bc12b72e9a6";s:4:"name";s:20:"QuickForm/header.php";s:4:"role";s:3:"php";s:12:"installed_as";s:86:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/header.php";}s:20:"QuickForm/hidden.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"be8b56665e9793401faf30fd2c6ccd34";s:4:"name";s:20:"QuickForm/hidden.php";s:4:"role";s:3:"php";s:12:"installed_as";s:86:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/hidden.php";}s:26:"QuickForm/hiddenselect.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"9f2e5c5c70192237e2539e4e4caa0bc2";s:4:"name";s:26:"QuickForm/hiddenselect.php";s:4:"role";s:3:"php";s:12:"installed_as";s:92:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/hiddenselect.php";}s:24:"QuickForm/hierselect.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"f81c9ddd18ad86d1b7727ee2575e9225";s:4:"name";s:24:"QuickForm/hierselect.php";s:4:"role";s:3:"php";s:12:"installed_as";s:90:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/hierselect.php";}s:18:"QuickForm/html.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"3ca442daa65765e1f49c6fe28f4391b4";s:4:"name";s:18:"QuickForm/html.php";s:4:"role";s:3:"php";s:12:"installed_as";s:84:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/html.php";}s:19:"QuickForm/image.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"141c8597939f2342ca22aa08d9042098";s:4:"name";s:19:"QuickForm/image.php";s:4:"role";s:3:"php";s:12:"installed_as";s:85:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/image.php";}s:19:"QuickForm/input.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"abc0041a25abe69aa2cafe020fce1831";s:4:"name";s:19:"QuickForm/input.php";s:4:"role";s:3:"php";s:12:"installed_as";s:85:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/input.php";}s:18:"QuickForm/link.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"ffb5a62c769eb8102fc173972685c986";s:4:"name";s:18:"QuickForm/link.php";s:4:"role";s:3:"php";s:12:"installed_as";s:84:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/link.php";}s:22:"QuickForm/password.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"2a81e65c1866f0275794ee3d81615e54";s:4:"name";s:22:"QuickForm/password.php";s:4:"role";s:3:"php";s:12:"installed_as";s:88:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/password.php";}s:19:"QuickForm/radio.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"3a29426233fb3bbf1ff02e38cf191cb2";s:4:"name";s:19:"QuickForm/radio.php";s:4:"role";s:3:"php";s:12:"installed_as";s:85:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/radio.php";}s:22:"QuickForm/Renderer.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"74b900325b85983fc53e1784372b4803";s:4:"name";s:22:"QuickForm/Renderer.php";s:4:"role";s:3:"php";s:12:"installed_as";s:88:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/Renderer.php";}s:19:"QuickForm/reset.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"cef2be6a7615010d3900d3a66a2fd7d4";s:4:"name";s:19:"QuickForm/reset.php";s:4:"role";s:3:"php";s:12:"installed_as";s:85:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/reset.php";}s:18:"QuickForm/Rule.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"9075561177fdfa1dfcf344e4892180b5";s:4:"name";s:18:"QuickForm/Rule.php";s:4:"role";s:3:"php";s:12:"installed_as";s:84:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/Rule.php";}s:26:"QuickForm/RuleRegistry.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"2fd7ffad98a5ca97e4ff4f03522d1d60";s:4:"name";s:26:"QuickForm/RuleRegistry.php";s:4:"role";s:3:"php";s:12:"installed_as";s:92:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/RuleRegistry.php";}s:20:"QuickForm/select.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"297d83095751de2dc143cd966cc91beb";s:4:"name";s:20:"QuickForm/select.php";s:4:"role";s:3:"php";s:12:"installed_as";s:86:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/select.php";}s:20:"QuickForm/static.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"f2466989fd56ebc40bb62e05da93d4fe";s:4:"name";s:20:"QuickForm/static.php";s:4:"role";s:3:"php";s:12:"installed_as";s:86:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/static.php";}s:20:"QuickForm/submit.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"fba96db52f13e4e3134ffc29d07b1f01";s:4:"name";s:20:"QuickForm/submit.php";s:4:"role";s:3:"php";s:12:"installed_as";s:86:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/submit.php";}s:18:"QuickForm/text.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"c6b281b35443c1d40e57ec0eb11584bf";s:4:"name";s:18:"QuickForm/text.php";s:4:"role";s:3:"php";s:12:"installed_as";s:84:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/text.php";}s:22:"QuickForm/textarea.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"af32a80effdd7ffa073e38ad752e4bda";s:4:"name";s:22:"QuickForm/textarea.php";s:4:"role";s:3:"php";s:12:"installed_as";s:88:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/textarea.php";}s:21:"QuickForm/xbutton.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"fb1811928a870b048db7666c449ef454";s:4:"name";s:21:"QuickForm/xbutton.php";s:4:"role";s:3:"php";s:12:"installed_as";s:87:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/xbutton.php";}s:13:"QuickForm.php";a:5:{s:14:"baseinstalldir";s:4:"HTML";s:6:"md5sum";s:32:"bb1c9bae58e6eb5cc467d504fc35e19d";s:4:"name";s:13:"QuickForm.php";s:4:"role";s:3:"php";s:12:"installed_as";s:79:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm.php";}}s:12:"_lastversion";N;s:7:"dirtree";a:9:{s:112:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/renderers/templates/styles";b:1;s:105:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/renderers/templates";b:1;s:95:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs/renderers";b:1;s:85:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm/docs";b:1;s:80:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/docs/HTML_QuickForm";b:1;s:84:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/Renderer";b:1;s:75:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm";b:1;s:65:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML";b:1;s:80:"/home/mini/Zend/workspaces/DefaultWorkspace/Norex2/core/PEAR/HTML/QuickForm/Rule";b:1;}s:3:"old";a:7:{s:7:"version";s:6:"3.2.10";s:12:"release_date";s:10:"2007-10-06";s:13:"release_state";s:6:"stable";s:15:"release_license";s:11:"PHP License";s:13:"release_notes";s:490:"* An error in date's setValue() method prevented setting the 'empty' value
+  as the default one (bug #11717)
+* A space could be displayed instead of '0' for frozen elements with value
+  set to '0' (bug #11995)
+* Validation rules on file uploads will be skipped only if no upload was
+  attempted, not if it failed for some reason (bug #12014)
+* 'filename' rule returned integer instead of expected boolean (bug #12015)
+* Regexps in Default renderer missed necessary 's' modifier (bug #12026)";s:12:"release_deps";a:3:{i:0;a:4:{s:4:"type";s:3:"php";s:3:"rel";s:2:"ge";s:7:"version";s:3:"4.3";s:8:"optional";s:2:"no";}i:1;a:6:{s:4:"type";s:3:"pkg";s:7:"channel";s:12:"pear.php.net";s:4:"name";s:4:"PEAR";s:3:"rel";s:2:"ge";s:7:"version";s:5:"1.4.0";s:8:"optional";s:2:"no";}i:2;a:6:{s:4:"type";s:3:"pkg";s:7:"channel";s:12:"pear.php.net";s:4:"name";s:11:"HTML_Common";s:3:"rel";s:2:"ge";s:7:"version";s:5:"1.2.1";s:8:"optional";s:2:"no";}}s:11:"maintainers";a:6:{i:0;a:5:{s:4:"name";s:16:"Bertrand Mansion";s:5:"email";s:20:"bmansion@mamasam.com";s:6:"active";s:3:"yes";s:6:"handle";s:7:"mansion";s:4:"role";s:4:"lead";}i:1;a:5:{s:4:"name";s:11:"Adam Daniel";s:5:"email";s:22:"adaniel1@eesus.jnj.com";s:6:"active";s:2:"no";s:6:"handle";s:7:"adaniel";s:4:"role";s:4:"lead";}i:2;a:5:{s:4:"name";s:13:"Alexey Borzov";s:5:"email";s:18:"borz_off@cs.msu.su";s:6:"active";s:3:"yes";s:6:"handle";s:3:"avb";s:4:"role";s:4:"lead";}i:3;a:5:{s:4:"name";s:10:"Jason Rust";s:5:"email";s:20:"jason@rustyparts.com";s:6:"active";s:2:"no";s:6:"handle";s:5:"jrust";s:4:"role";s:9:"developer";}i:4;a:5:{s:4:"name";s:13:"Thomas Schulz";s:5:"email";s:16:"ths@4bconsult.de";s:6:"active";s:2:"no";s:6:"handle";s:3:"ths";s:4:"role";s:9:"developer";}i:5;a:5:{s:4:"name";s:11:"Ron McClain";s:5:"email";s:15:"ron@humaniq.com";s:6:"active";s:2:"no";s:6:"handle";s:6:"mixtli";s:4:"role";s:9:"developer";}}}s:10:"xsdversion";s:3:"2.0";s:13:"_lastmodified";i:1203979688;}

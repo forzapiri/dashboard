@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>
+      Buttons
+    </title>
+    <link rel="stylesheet" href="book.css" type="text/css" />
+    <meta name="generator" content="DocBook XSL Stylesheets V1.69.1" />
+    <link rel="start" href="index.html" title=
+    "HTML_QuickForm_advmultiselect Manual" />
+    <link rel="up" href="ch06.html" title=
+    "Chapter&nbsp;6.&nbsp;Advanced features" />
+    <link rel="prev" href="ch06s02.html" title="Headers" />
+    <link rel="next" href="ch06s04.html" title="Sorts" />
+<style type="text/css">
+/*<![CDATA[*/
+ body {
+  background-color: white;
+  color: black;
+ }
+ :link { color: #0000FF }
+ :visited { color: #840084 }
+ :active { color: #0000FF }
+ div.c3 {font-family: monospace;}
+ div.c2 {margin-left: 0.5in; margin-right: 0.5in;}
+ h2.c1 {clear: both}
+/*]]>*/
+</style>
+  </head>
+  <body>
+    <table class="qfamsHeader">
+      <tr>
+        <td>
+          <img src="img/pearsmall.gif" align="left" alt="PEAR logo" />
+          <h1>
+            HTML_QuickForm_advmultiselect : The Definitive Guide
+          </h1>
+          <div class="navheader">
+            <table width="100%" summary="Navigation header">
+              <tr>
+                <th colspan="3" align="center">
+                  Buttons
+                </th>
+              </tr>
+              <tr>
+                <td width="20%" align="left">
+                  <a accesskey="p" href="ch06s02.html">Prev</a>&nbsp;
+                </td>
+                <th width="60%" align="center">
+                  Chapter&nbsp;6.&nbsp;Advanced features
+                </th>
+                <td width="20%" align="right">
+                  &nbsp;<a accesskey="n" href="ch06s04.html">Next</a>
+                </td>
+              </tr>
+            </table>
+          </div><br />
+          <br />
+        </td>
+      </tr>
+    </table>
+    <div class="sect1" lang="en" xml:lang="en">
+      <div class="titlepage">
+        <h2 class="title c1">
+          <a name="developers.buttons" id="developers.buttons"></a>Buttons
+        </h2>
+      </div>
+      <div class="toc">
+        <dl>
+          <dt>
+            <span class="sect2"><a href=
+            "ch06s03.html#id4784523">Introduction</a></span>
+          </dt>
+          <dt>
+            <span class="sect2"><a href=
+            "ch06s03.html#id4785751">Appearance</a></span>
+          </dt>
+          <dt>
+            <span class="sect2"><a href=
+            "ch06s03.html#id4785823">Attributes</a></span>
+          </dt>
+        </dl>
+      </div>
+      <div class="sect2" lang="en" xml:lang="en">
+        <div class="titlepage">
+          <h3 class="title">
+            <a name="id4784523" id="id4784523"></a>Introduction
+          </h3>
+        </div>
+        <p>
+          There is two categories of button: <span class=
+          "emphasis"><em>sort</em></span> and <span class=
+          "emphasis"><em>swap</em></span>.
+        </p>
+        <p>
+          The <span class="emphasis"><em>swap</em></span> buttons are included
+          since origin, while the <span class="emphasis"><em>sort</em></span>
+          buttons were included in the 0.5.0 version.
+        </p>
+        <p>
+          With <span class="bold"><strong>swap</strong></span> buttons, you
+          will do your selection easily. Select item(s) (one or more), from
+          unselected or selected list, then clic on the <span class=
+          "emphasis"><em>add</em></span> or <span class=
+          "emphasis"><em>remove</em></span> button to move your selection from
+          one list to the other.
+        </p>
+        <div class="tip c2">
+          <table border="0" summary="Tip">
+            <tr>
+              <td rowspan="2" align="center" valign="top" width="48">
+                <img alt="[Tip]" src="img/admons/tip.png" />
+              </td>
+              <th align="left">
+                Tip
+              </th>
+            </tr>
+            <tr>
+              <td align="left" valign="top">
+                You can also double-clic on one item to move it, immediately,
+                to the other list without to clic on the <span class=
+                "emphasis"><em>add</em></span> or <span class=
+                "emphasis"><em>remove</em></span> button.
+              </td>
+            </tr>
+          </table>
+        </div>
+        <p>
+          Since version 1.1.0 you have ability to select or unselect all items
+          in one stroke. You may also toggle a previous selection. This new
+          feature is available through buttons <span class=
+          "emphasis"><em>all</em></span>, <span class=
+          "emphasis"><em>none</em></span> and <span class=
+          "emphasis"><em>toggle</em></span>.
+        </p>
+        <p>
+          Since version 1.2.0 toggle selection feature is available for both
+          single and dual multi-select boxes.
+        </p>
+        <div class="note c2">
+          <table border="0" summary="Note">
+            <tr>
+              <td rowspan="2" align="center" valign="top" width="48">
+                <img alt="[Note]" src="img/admons/note.png" />
+              </td>
+              <th align="left">
+                Note
+              </th>
+            </tr>
+            <tr>
+              <td align="left" valign="top">
+                <div class="itemizedlist">
+                  <ul type="disc">
+                    <li>with one multi-select list, buttons available are only:
+                    <span class="emphasis"><em>all</em></span>, <span class=
+                    "emphasis"><em>none</em></span> and <span class="emphasis">
+                      <em>toggle</em></span>.
+                    </li>
+                    <li>with two multi-select list, buttons available are only:
+                    <span class="emphasis"><em>add</em></span>, <span class=
+                    "emphasis"><em>remove</em></span>, <span class="emphasis">
+                      <em>moveup</em></span>, <span class=
+                      "emphasis"><em>movedown</em></span>, <span class=
+                      "emphasis"><em>all</em></span>, <span class=
+                      "emphasis"><em>none</em></span> and <span class=
+                      "emphasis"><em>toggle</em></span>.
+                    </li>
+                  </ul>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <p>
+          A full example is given in appendices. See the <a href=
+          "ch09s03.html#examples.custom.7" title="">advanced selection</a>.
+        </p>
+        <p>
+          With <span class="bold"><strong>sort</strong></span> buttons, you
+          have ability to reorder your selection easily. Select one item then
+          clic on the <span class="emphasis"><em>up</em></span> or <span class=
+          "emphasis"><em>down</em></span> button to move it to the top or the
+          bottom of your selection.
+        </p>
+        <div class="note c2">
+          <table border="0" summary="Note">
+            <tr>
+              <td rowspan="2" align="center" valign="top" width="48">
+                <img alt="[Note]" src="img/admons/note.png" />
+              </td>
+              <th align="left">
+                Note
+              </th>
+            </tr>
+            <tr>
+              <td align="left" valign="top">
+                Order is keep in the $_POST super global array, when the form
+                is submit; Even if you've activated the auto-arrange feature
+                (see <em class="parameter"><code>$sort</code></em> parameter of
+                the <a href="re01.html" title=
+                "constructor HTML_QuickForm_advmultiselect::HTML_QuickForm_advmultiselect">
+                HTML_QuickForm_advmultiselect class constructor</a> )
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="sect2" lang="en" xml:lang="en">
+        <div class="titlepage">
+          <h3 class="title">
+            <a name="id4785751" id="id4785751"></a>Appearance
+          </h3>
+        </div>
+        <p>
+          There is two kinds of button: <span class=
+          "emphasis"><em>text</em></span> and <span class=
+          "emphasis"><em>image</em></span>. These are the standard html buttons
+          we can find in a form. Default appearance is <span class=
+          "emphasis"><em>text</em></span> but you can also easily use
+          <span class="emphasis"><em>image</em></span> layout. Here is how to
+          do :
+        </p>
+        <div class="php c3">
+          <ol>
+            <li class="li1">
+              <div class="de1">
+                <span class="kw2">&lt;?php</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="re0">$ams</span>-&gt;<span class=
+                "me1">setButtonAttributes</span><span class=
+                "br0">(</span><span class="st0">'add'</span>,&nbsp; &nbsp;
+                <span class="kw3">array</span><span class=
+                "br0">(</span><span class="st0">'type'</span> =&gt;
+                <span class="st0">'image'</span>, <span class=
+                "st0">'src'</span> =&gt; <span class=
+                "st0">'/img/add.png'</span><span class=
+                "br0">)</span><span class="br0">)</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="re0">$ams</span>-&gt;<span class=
+                "me1">setButtonAttributes</span><span class=
+                "br0">(</span><span class="st0">'remove'</span>, <span class=
+                "kw3">array</span><span class="br0">(</span><span class=
+                "st0">'type'</span> =&gt; <span class="st0">'image'</span>,
+                <span class="st0">'src'</span> =&gt; <span class=
+                "st0">'/img/remove.png'</span><span class=
+                "br0">)</span><span class="br0">)</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="kw2">?&gt;</span>
+              </div>
+            </li>
+          </ol>
+        </div>
+        <p>
+          Of course, all images are supported: PNG, GIF, etc ...
+        </p>
+        <div class="caution c2">
+          <table border="0" summary="Caution">
+            <tr>
+              <td rowspan="2" align="center" valign="top" width="48">
+                <img alt="[Caution]" src="img/admons/caution.png" />
+              </td>
+              <th align="left">
+                Caution
+              </th>
+            </tr>
+            <tr>
+              <td align="left" valign="top">
+                If the image file does not exist, you will get the internal
+                text value as output without nothing else.
+                <p>
+                  Remember that defaults are: "<span class="quote"><code class=
+                  "literal">&gt;&gt;</code></span> " for add button, and
+                  "<span class="quote"><code class=
+                  "literal">&lt;&lt;</code></span> " for remove button.
+                </p>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="sect2" lang="en" xml:lang="en">
+        <div class="titlepage">
+          <h3 class="title">
+            <a name="id4785823" id="id4785823"></a>Attributes
+          </h3>
+        </div>
+        <p>
+          In version 0.4.0, there were only the basic <span class=
+          "emphasis"><em>add</em></span> and <span class=
+          "emphasis"><em>remove</em></span> buttons. In version 0.5.0, two new
+          buttons were added: <span class="emphasis"><em>moveup</em></span> and
+          <span class="emphasis"><em>movedown</em></span>. In version 1.1.0,
+          three new buttons were added: <span class=
+          "emphasis"><em>all</em></span>, <span class=
+          "emphasis"><em>none</em></span>, and <span class=
+          "emphasis"><em>toggle</em></span>.
+        </p>
+        <div class="caution c2">
+          <table border="0" summary="Caution">
+            <tr>
+              <td rowspan="2" align="center" valign="top" width="48">
+                <img alt="[Caution]" src="img/admons/caution.png" />
+              </td>
+              <th align="left">
+                Caution
+              </th>
+            </tr>
+            <tr>
+              <td align="left" valign="top">
+                Any other button identifier than <span class=
+                "bold"><strong>add</strong></span>, <span class=
+                "bold"><strong>remove</strong></span>, <span class=
+                "bold"><strong>all</strong></span>, <span class=
+                "bold"><strong>none</strong></span>, <span class=
+                "bold"><strong>toggle</strong></span>, <span class=
+                "bold"><strong>moveup</strong></span>, <span class=
+                "bold"><strong>movedown</strong></span> will throws a
+                PEAR_Error.
+              </td>
+            </tr>
+          </table>
+        </div>
+        <p>
+          Only five attributes may be set, with these four button identifiers;
+          they are:
+        </p>
+        <div class="variablelist">
+          <dl>
+            <dt>
+              <span class="term"><em class=
+              "parameter"><code>name</code></em></span>
+            </dt>
+            <dd>
+              <p>
+                The form input button name. Default are: 'add', or 'remove', or
+                'all, or 'none', or 'toggle', or 'up', or 'down'.
+              </p>
+              <div class="warning c2">
+                <table border="0" summary="Warning">
+                  <tr>
+                    <td rowspan="2" align="center" valign="top" width="48">
+                      <img alt="[Warning]" src="img/admons/warning.png" />
+                    </td>
+                    <th align="left">
+                      Warning
+                    </th>
+                  </tr>
+                  <tr>
+                    <td align="left" valign="top">
+                      Default values of the name attribute are not equivalent
+                      to button identifiers.
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </dd>
+          </dl>
+        </div>
+        <div class="variablelist">
+          <dl>
+            <dt>
+              <span class="term"><em class=
+              "parameter"><code>value</code></em></span>
+            </dt>
+            <dd>
+              <p>
+                The form input button text. Default are ' &gt;&gt; ', or '
+                &lt;&lt; ', or ' Select All ', or ' Select None ', or ' Toggle
+                Selection ', or ' Up ', or ' Down '.
+              </p>
+            </dd>
+          </dl>
+        </div>
+        <div class="variablelist">
+          <dl>
+            <dt>
+              <span class="term"><em class=
+              "parameter"><code>type</code></em></span>
+            </dt>
+            <dd>
+              <p>
+                The form input button kind. Default is 'button' (Can be either
+                'button' or 'image').
+              </p>
+            </dd>
+          </dl>
+        </div>
+        <div class="variablelist">
+          <dl>
+            <dt>
+              <span class="term"><em class=
+              "parameter"><code>class</code></em></span>
+            </dt>
+            <dd>
+              <p>
+                A CSS class identifier in one of your stylesheets.
+              </p>
+            </dd>
+          </dl>
+        </div>
+        <div class="variablelist">
+          <dl>
+            <dt>
+              <span class="term"><em class=
+              "parameter"><code>src</code></em></span>
+            </dt>
+            <dd>
+              <p>
+                URL of the image file used.
+              </p>
+            </dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+    <table class="qfamsFooter">
+      <tr>
+        <td align="left">
+          HTML_QuickForm_advmultiselect : The Definitive Guide
+        </td>
+        <td align="right">
+          v 1.4.0 : 9 Juin 2007
+        </td>
+      </tr>
+    </table>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left">
+            <a accesskey="p" href="ch06s02.html">Prev</a>&nbsp;
+          </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="ch06.html">Up</a>
+          </td>
+          <td width="40%" align="right">
+            &nbsp;<a accesskey="n" href="ch06s04.html">Next</a>
+          </td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">
+            Headers&nbsp;
+          </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Home</a>
+          </td>
+          <td width="40%" align="right" valign="top">
+            &nbsp;Sorts
+          </td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>
+      Live counters
+    </title>
+    <link rel="stylesheet" href="book.css" type="text/css" />
+    <meta name="generator" content="DocBook XSL Stylesheets V1.69.1" />
+    <link rel="start" href="index.html" title=
+    "HTML_QuickForm_advmultiselect Manual" />
+    <link rel="up" href="ch06.html" title=
+    "Chapter&nbsp;6.&nbsp;Advanced features" />
+    <link rel="prev" href="ch06s04.html" title="Sorts" />
+    <link rel="next" href="pt03.html" title=
+    "Part&nbsp;III.&nbsp;Reference Guide" />
+<style type="text/css">
+/*<![CDATA[*/
+ body {
+  background-color: white;
+  color: black;
+ }
+ :link { color: #0000FF }
+ :visited { color: #840084 }
+ :active { color: #0000FF }
+ div.c3 {font-family: monospace;}
+ div.c2 {margin-left: 0.5in; margin-right: 0.5in;}
+ h2.c1 {clear: both}
+/*]]>*/
+</style>
+  </head>
+  <body>
+    <table class="qfamsHeader">
+      <tr>
+        <td>
+          <img src="img/pearsmall.gif" align="left" alt="PEAR logo" />
+          <h1>
+            HTML_QuickForm_advmultiselect : The Definitive Guide
+          </h1>
+          <div class="navheader">
+            <table width="100%" summary="Navigation header">
+              <tr>
+                <th colspan="3" align="center">
+                  Live counters
+                </th>
+              </tr>
+              <tr>
+                <td width="20%" align="left">
+                  <a accesskey="p" href="ch06s04.html">Prev</a>&nbsp;
+                </td>
+                <th width="60%" align="center">
+                  Chapter&nbsp;6.&nbsp;Advanced features
+                </th>
+                <td width="20%" align="right">
+                  &nbsp;<a accesskey="n" href="pt03.html">Next</a>
+                </td>
+              </tr>
+            </table>
+          </div><br />
+          <br />
+        </td>
+      </tr>
+    </table>
+    <div class="sect1" lang="en" xml:lang="en">
+      <div class="titlepage">
+        <h2 class="title c1">
+          <a name="developers.livecounter" id="developers.livecounter"></a>Live
+          counters
+        </h2>
+      </div>
+      <div class="toc">
+        <dl>
+          <dt>
+            <span class="sect2"><a href=
+            "ch06s05.html#id4786564">Introduction</a></span>
+          </dt>
+          <dt>
+            <span class="sect2"><a href="ch06s05.html#id4786605">Identification
+            and localisation</a></span>
+          </dt>
+        </dl>
+      </div>
+      <div class="sect2" lang="en" xml:lang="en">
+        <div class="titlepage">
+          <h3 class="title">
+            <a name="id4786564" id="id4786564"></a>Introduction
+          </h3>
+        </div>
+        <p>
+          When selection lists have lot of item, we don't expect to count each
+          item one by one.
+        </p>
+        <p>
+          When it's so easy to count selections on server side, once the form
+          is submitted, there is no ability to do the same in live, until new
+          feature "Live counter".
+        </p>
+        <div class="important c2">
+          <table border="0" summary="Important">
+            <tr>
+              <td rowspan="2" align="center" valign="top" width="48">
+                <img alt="[Important]" src="img/admons/important.png" />
+              </td>
+              <th align="left">
+                Important
+              </th>
+            </tr>
+            <tr>
+              <td align="left" valign="top">
+                This feature require HTML_QuickForm_advmultiselect package
+                version 1.3.0 or better.
+              </td>
+            </tr>
+          </table>
+        </div>
+        <p>
+          A full example is given in appendices. See <a href=
+          "ch09s07.html#examples.multiple.2" title="">live counter combines
+          with multiple elements</a>.
+        </p>
+      </div>
+      <div class="sect2" lang="en" xml:lang="en">
+        <div class="titlepage">
+          <h3 class="title">
+            <a name="id4786605" id="id4786605"></a>Identification and
+            localisation
+          </h3>
+        </div>
+        <p>
+          Implements display of live counters (selected, unselected items) is
+          fully independant. Its requires for each counter to add new
+          placeholders.
+        </p>
+        <p>
+          For item unselected list, these placehodlers are :
+        </p>
+        <div class="itemizedlist">
+          <ul type="disc">
+            <li>
+              <span class="bold"><strong>{unselected_count}</strong></span> for
+              localisation (where the counter value will be displayed)
+            </li>
+            <li>
+              <span class="bold"><strong>{unselected_count_id}</strong></span>
+              for identification by DOM API (ID attribut of any HTML tag)
+            </li>
+          </ul>
+        </div>
+        <p>
+          For item selected list, these placehodlers are :
+        </p>
+        <div class="itemizedlist">
+          <ul type="disc">
+            <li>
+              <span class="bold"><strong>{selected_count}</strong></span> for
+              localisation (where the counter value will be displayed)
+            </li>
+            <li>
+              <span class="bold"><strong>{selected_count_id}</strong></span>
+              for identification by DOM API (ID attribut of any HTML tag)
+            </li>
+          </ul>
+        </div>
+        <div class="note c2">
+          <table border="0" summary="Note">
+            <tr>
+              <td rowspan="2" align="center" valign="top" width="48">
+                <img alt="[Note]" src="img/admons/note.png" />
+              </td>
+              <th align="left">
+                Note
+              </th>
+            </tr>
+            <tr>
+              <td align="left" valign="top">
+                <div class="php c3">
+                  <ol>
+                    <li class="li1">
+                      <div class="de1">
+                        <span class="kw2">&lt;?php</span>
+                      </div>
+                    </li>
+                    <li class="li1">
+                      <div class="de1">
+                        <span class="kw1">require_once</span> <span class=
+                        "st0">'HTML/QuickForm.php'</span>;
+                      </div>
+                    </li>
+                    <li class="li1">
+                      <div class="de1">
+                        <span class="kw1">require_once</span> <span class=
+                        "st0">'HTML/QuickForm/advmultiselect.php'</span>;
+                      </div>
+                    </li>
+                    <li class="li1">
+                      <div class="de1">
+                        <span class="co1">// ...</span>
+                      </div>
+                    </li>
+                    <li class="li1">
+                      <div class="de1">
+                        <span class="re0">$form</span> = <span class=
+                        "kw2">new</span> HTML_QuickForm<span class=
+                        "br0">(</span><span class=
+                        "st0">'amsLC'</span><span class="br0">)</span>;
+                      </div>
+                    </li>
+                    <li class="li1">
+                      <div class="de1">
+                        <span class="re0">$ams</span> =&amp; <span class=
+                        "re0">$form</span>-&gt;<span class=
+                        "me1">addElement</span><span class=
+                        "br0">(</span><span class=
+                        "st0">'advmultiselect'</span>, <span class=
+                        "st0">'cars'</span>, <span class="kw2">null</span>,
+                        <span class="re0">$car_array</span><span class=
+                        "br0">)</span>;
+                      </div>
+                    </li>
+                    <li class="li1">
+                      <div class="de1">
+                        <span class="co1">// ...</span>
+                      </div>
+                    </li>
+                    <li class="li1">
+                      <div class="de1">
+                        <span class="kw2">?&gt;</span>
+                      </div>
+                    </li>
+                  </ol>
+                </div>
+                <p>
+                  Counters identifiers (attribut ID) used by DOM API are
+                  identified by string : advmultiselect element name concat
+                  with "_selected" or "_unselected" suffix (depending of
+                  lists).
+                </p>
+                <p>
+                  Result for example (previous code) : <code class=
+                  "literal">cars_selected</code> or <code class=
+                  "literal">cars_unselected</code>
+                </p>
+                <p>
+                  advmultiselect element with single list (with checkboxes) are
+                  identified by string : "qfams_" prefix concat with
+                  advmultiselect element name
+                </p>
+                <p>
+                  Result for example (previous code) : <code class=
+                  "literal">qfams_cars</code>
+                </p>
+                <p>
+                  advmultiselect element with double list are identified with
+                  string : prefix "__" (two underscores) concat with
+                  advmultiselect element name for unselected list. While
+                  selection list (selected item) is identified with string :
+                  prefix "_" (one underscore) concat with advmultiselect
+                  element name.
+                </p>
+                <p>
+                  Result for example (previous code) : <code class=
+                  "literal">__cars</code> et <code class="literal">_cars</code>
+                </p>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="important c2">
+          <table border="0" summary="Important">
+            <tr>
+              <td rowspan="2" align="center" valign="top" width="48">
+                <img alt="[Important]" src="img/admons/important.png" />
+              </td>
+              <th align="left">
+                Important
+              </th>
+            </tr>
+            <tr>
+              <td align="left" valign="top">
+                <p>
+                  advmultiselect elements with single list (with checkboxes)
+                  are identified by DOM API with only <code class=
+                  "literal">{selected_count}</code> et <code class=
+                  "literal">{selected_count_id}</code> placeholders. No need to
+                  add <code class="literal">{unselected_count}</code> and
+                  <code class="literal">{unselected_count_id}</code>
+                  placeholders.
+                </p>
+                <p>
+                  See example in appendix <a href=
+                  "ch09s07.html#examples.multiple.2" title="">Live counter
+                  combines with multiple elements</a>, and template definition
+                  <code class="literal">$template1</code> lines 49-57.
+                </p>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <table class="qfamsFooter">
+      <tr>
+        <td align="left">
+          HTML_QuickForm_advmultiselect : The Definitive Guide
+        </td>
+        <td align="right">
+          v 1.4.0 : 9 Juin 2007
+        </td>
+      </tr>
+    </table>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left">
+            <a accesskey="p" href="ch06s04.html">Prev</a>&nbsp;
+          </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="ch06.html">Up</a>
+          </td>
+          <td width="40%" align="right">
+            &nbsp;<a accesskey="n" href="pt03.html">Next</a>
+          </td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">
+            Sorts&nbsp;
+          </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Home</a>
+          </td>
+          <td width="40%" align="right" valign="top">
+            &nbsp;Part&nbsp;III.&nbsp;Reference Guide
+          </td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

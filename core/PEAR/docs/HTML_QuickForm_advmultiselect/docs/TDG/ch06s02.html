@@ -1,0 +1,1086 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>
+      Headers
+    </title>
+    <link rel="stylesheet" href="book.css" type="text/css" />
+    <meta name="generator" content="DocBook XSL Stylesheets V1.69.1" />
+    <link rel="start" href="index.html" title=
+    "HTML_QuickForm_advmultiselect Manual" />
+    <link rel="up" href="ch06.html" title=
+    "Chapter&nbsp;6.&nbsp;Advanced features" />
+    <link rel="prev" href="ch06.html" title=
+    "Chapter&nbsp;6.&nbsp;Advanced features" />
+    <link rel="next" href="ch06s03.html" title="Buttons" />
+<style type="text/css">
+/*<![CDATA[*/
+ body {
+  background-color: white;
+  color: black;
+ }
+ :link { color: #0000FF }
+ :visited { color: #840084 }
+ :active { color: #0000FF }
+ div.c3 {font-family: monospace;}
+ div.c2 {margin-left: 0.5in; margin-right: 0.5in;}
+ h2.c1 {clear: both}
+/*]]>*/
+</style>
+  </head>
+  <body>
+    <table class="qfamsHeader">
+      <tr>
+        <td>
+          <img src="img/pearsmall.gif" align="left" alt="PEAR logo" />
+          <h1>
+            HTML_QuickForm_advmultiselect : The Definitive Guide
+          </h1>
+          <div class="navheader">
+            <table width="100%" summary="Navigation header">
+              <tr>
+                <th colspan="3" align="center">
+                  Headers
+                </th>
+              </tr>
+              <tr>
+                <td width="20%" align="left">
+                  <a accesskey="p" href="ch06.html">Prev</a>&nbsp;
+                </td>
+                <th width="60%" align="center">
+                  Chapter&nbsp;6.&nbsp;Advanced features
+                </th>
+                <td width="20%" align="right">
+                  &nbsp;<a accesskey="n" href="ch06s03.html">Next</a>
+                </td>
+              </tr>
+            </table>
+          </div><br />
+          <br />
+        </td>
+      </tr>
+    </table>
+    <div class="sect1" lang="en" xml:lang="en">
+      <div class="titlepage">
+        <h2 class="title c1">
+          <a name="developers.headers" id="developers.headers"></a>Headers
+        </h2>
+      </div>
+      <div class="toc">
+        <dl>
+          <dt>
+            <span class="sect2"><a href=
+            "ch06s02.html#id4784107">Introduction</a></span>
+          </dt>
+          <dt>
+            <span class="sect2"><a href="ch06s02.html#id4784790">Naming with
+            QuickForm Default Renderer</a></span>
+          </dt>
+          <dt>
+            <span class="sect2"><a href="ch06s02.html#id4784891">Naming with
+            QuickForm ITDynamic Renderer</a></span>
+          </dt>
+          <dt>
+            <span class="sect2"><a href="ch06s02.html#id4784956">In
+            practice</a></span>
+          </dt>
+        </dl>
+      </div>
+      <div class="sect2" lang="en" xml:lang="en">
+        <div class="titlepage">
+          <h3 class="title">
+            <a name="id4784107" id="id4784107"></a>Introduction
+          </h3>
+        </div>
+        <p>
+          A label is a description text that will be displayed near the
+          element. Some renderers can handle multiple labels for the element.
+          Placeholders used by these renderers are different in naming
+          convention. Nevermind, HTML_QuickForm_advmultiselect used only one
+          standard coding that is equivalent to the QuickForm default renderer.
+        </p>
+        <p>
+          As <span class="bold"><strong>{label_2}</strong></span> is the
+          placeholder for the second label (unselected list), <span class=
+          "bold"><strong>{label_3}</strong></span> is the placeholder for the
+          third label (selected list), in the hash setting. See <a class=
+          "external" href=
+          "http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-element.setlabel.php"
+          title=
+          "http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-element.setlabel.php">
+          HTML_QuickForm::setLabel()</a> method.
+        </p>
+        <div class="important c2">
+          <table border="0" summary="Important">
+            <tr>
+              <td rowspan="2" align="center" valign="top" width="48">
+                <img alt="[Important]" src="img/admons/important.png" />
+              </td>
+              <th align="left">
+                Important
+              </th>
+            </tr>
+            <tr>
+              <td align="left" valign="top">
+                The first label is always for the advmultiselect element group
+                itself. Its name depend of the QuickForm renderer used. See
+                examples that follow to notice the difference.
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="sect2" lang="en" xml:lang="en">
+        <div class="titlepage">
+          <h3 class="title">
+            <a name="id4784790" id="id4784790"></a>Naming with QuickForm
+            Default Renderer
+          </h3>
+        </div>
+        <div class="php c3">
+          <ol>
+            <li class="li1">
+              <div class="de1">
+                <span class="kw2">&lt;?php</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="kw1">require_once</span> <span class=
+                "st0">'HTML/QuickForm.php'</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="kw1">require_once</span> <span class=
+                "st0">'HTML/QuickForm/advmultiselect.php'</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="re0">$template</span> =
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">'&lt;tr&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&nbsp; &nbsp; &lt;td align="right"
+                valign="top"&gt;</span>
+              </div>
+            </li>
+            <li class="li1 ln-xtra">
+              <div class="de1">
+                <span class="st0">&nbsp; &nbsp; &nbsp; &nbsp;
+                &lt;b&gt;{label}&lt;/b&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&nbsp; &nbsp; &lt;/td&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&nbsp; &nbsp; &lt;td valign="top"
+                align="left"&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&nbsp; &nbsp; &nbsp; &nbsp; {element}</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&nbsp; &nbsp; &nbsp; &nbsp; &lt;!-- BEGIN
+                error --&gt;&lt;br/&gt;&lt;font
+                color="red"&gt;{error}&lt;/font&gt;&lt;br/&gt;&lt;!-- END error
+                --&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&nbsp; &nbsp; &lt;/td&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&lt;/tr&gt;'</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="co1">// Create the form, and add a header to
+                it.</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="re0">$form</span> = <span class="kw2">new</span>
+                HTML_QuickForm<span class="br0">(</span><span class=
+                "st0">'qfamsLabels'</span><span class="br0">)</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="re0">$form</span>-&gt;<span class=
+                "me1">addElement</span><span class="br0">(</span><span class=
+                "st0">'header'</span>, <span class="kw2">null</span>,
+                <span class="st0">'QuickForm Labels Example: default
+                renderer'</span><span class="br0">)</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="re0">$cars</span> = <span class=
+                "kw3">array</span><span class="br0">(</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp; &nbsp; <span class="st0">'dodge'</span>&nbsp; &nbsp;
+                &nbsp;=&gt;&nbsp; <span class="st0">'Dodge'</span>,
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp; &nbsp; <span class="st0">'chevy'</span>&nbsp; &nbsp;
+                &nbsp;=&gt;&nbsp; <span class="st0">'Chevy'</span>,
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp; &nbsp; <span class="st0">'bmw'</span>&nbsp; &nbsp;
+                &nbsp; &nbsp;=&gt;&nbsp; <span class="st0">'BMW'</span>,
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp; &nbsp; <span class="st0">'audi'</span>&nbsp; &nbsp;
+                &nbsp; =&gt;&nbsp; <span class="st0">'Audi'</span>,
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp; &nbsp; <span class="st0">'porsche'</span>&nbsp;
+                &nbsp;=&gt;&nbsp; <span class="st0">'Porsche'</span>,
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp; &nbsp; <span class="st0">'kia'</span>&nbsp; &nbsp;
+                &nbsp; &nbsp;=&gt;&nbsp; <span class="st0">'Kia'</span>,
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp; &nbsp; <span class="st0">'subaru'</span>&nbsp; &nbsp;
+                =&gt;&nbsp; <span class="st0">'Subaru'</span>,
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp; &nbsp; <span class="st0">'mazda'</span>&nbsp; &nbsp;
+                &nbsp;=&gt;&nbsp; <span class="st0">'Mazda'</span>,
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp; &nbsp; <span class="st0">'isuzu'</span>&nbsp; &nbsp;
+                &nbsp;=&gt;&nbsp; <span class="st0">'Isuzu'</span>,
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="br0">)</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp;
+              </div>
+            </li>
+            <li class="li1 ln-xtra">
+              <div class="de1">
+                <span class="re0">$labels</span> = <span class=
+                "kw3">array</span><span class="br0">(</span><span class=
+                "st0">'Cars:'</span>, <span class="st0">'Models'</span>,
+                <span class="st0">'Your selection'</span><span class=
+                "br0">)</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="co1">// Do the magic! Just pass your label to the
+                element as an array!</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="re0">$form</span>-&gt;<span class=
+                "me1">addElement</span><span class="br0">(</span><span class=
+                "st0">'advmultiselect'</span>, <span class="st0">'cars'</span>,
+                <span class="re0">$labels</span>, <span class=
+                "re0">$cars</span><span class="br0">)</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="co1">// customize the element template</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="re0">$renderer</span> =&amp;amp; <span class=
+                "re0">$form</span>-&gt;<span class=
+                "me1">defaultRenderer</span><span class=
+                "br0">(</span><span class="br0">)</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="re0">$renderer</span>-&gt;<span class=
+                "me1">setElementTemplate</span><span class=
+                "br0">(</span><span class="re0">$template</span><span class=
+                "br0">)</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="co1">// output the form</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="re0">$form</span>-&gt;<span class=
+                "me1">display</span><span class="br0">(</span><span class=
+                "br0">)</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="kw2">?&gt;</span>
+              </div>
+            </li>
+          </ol>
+        </div>
+        <div class="variablelist">
+          <dl>
+            <dt>
+              <span class="term">Line 8 :</span>
+            </dt>
+            <dd>
+              <p>
+                The first label with default renderer, is always named
+                <span class="bold"><strong>{label}</strong></span>.
+              </p>
+            </dd>
+            <dt>
+              <span class="term">Line 32 :</span>
+            </dt>
+            <dd>
+              <p>
+                In this example, its value will be <code class=
+                "literal">Cars:</code>.
+              </p>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div class="sect2" lang="en" xml:lang="en">
+        <div class="titlepage">
+          <h3 class="title">
+            <a name="id4784891" id="id4784891"></a>Naming with QuickForm
+            ITDynamic Renderer
+          </h3>
+        </div>
+        <div class="php c3">
+          <ol>
+            <li class="li1">
+              <div class="de1">
+                <span class="kw2">&lt;?php</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="kw1">require_once</span> <span class=
+                "st0">'HTML/Template/Sigma.php'</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="kw1">require_once</span> <span class=
+                "st0">'HTML/QuickForm.php'</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="kw1">require_once</span> <span class=
+                "st0">'HTML/QuickForm/Renderer/ITDynamic.php'</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="kw1">require_once</span> <span class=
+                "st0">'HTML/QuickForm/advmultiselect.php'</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="re0">$template</span> = <span class="st0">'</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&lt;form {qf_attributes}&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&lt;table class="maintable"&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&lt;!-- BEGIN qf_hidden_block --&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&lt;div style="display: none;"&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&nbsp; &lt;!-- BEGIN qf_hidden_loop
+                --&gt;{qf_hidden}&lt;!-- END qf_hidden_loop --&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&lt;/div&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&lt;!-- END qf_hidden_block --&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&lt;!-- BEGIN qf_main_loop --&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&nbsp; &lt;!-- BEGIN qf_header --&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&nbsp; &lt;tr&gt;&lt;th class="maintable"
+                colspan="2"&gt;{qf_header}&lt;/th&gt;&lt;/tr&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&nbsp; &lt;!-- END qf_header --&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&nbsp; &lt;!-- BEGIN qf_element --&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&nbsp; &lt;tr&gt;</span>
+              </div>
+            </li>
+            <li class="li1 ln-xtra">
+              <div class="de1">
+                <span class="st0">&nbsp; &nbsp; &lt;td align="right"
+                width="30%"&gt;&lt;span
+                class="qfLabel"&gt;{qf_label}&amp;amp;nbsp;&lt;/span&gt;&lt;/td&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&nbsp; &nbsp; &lt;td&gt;{qf_element}</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&nbsp; &nbsp; &nbsp; &lt;!-- BEGIN
+                qf_element_error --&gt;&lt;br /&gt;&lt;span style="color:
+                #FF0000;"&gt;{qf_error}&lt;/span&gt;&lt;!-- END
+                qf_element_error --&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&nbsp; &nbsp; &lt;/td&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&nbsp; &lt;/tr&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&nbsp; &lt;!-- END qf_element --&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&lt;!-- END qf_main_loop --&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&lt;/table&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&lt;/form&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">'</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="co1">// Create the form, and add a header to
+                it.</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="re0">$form</span> = <span class="kw2">new</span>
+                HTML_QuickForm<span class="br0">(</span><span class=
+                "st0">'qfamsLabels'</span><span class="br0">)</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="re0">$form</span>-&gt;<span class=
+                "me1">addElement</span><span class="br0">(</span><span class=
+                "st0">'header'</span>, <span class="kw2">null</span>,
+                <span class="st0">'QuickForm Labels Example: itdynamic
+                renderer'</span><span class="br0">)</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="re0">$cars</span> = <span class=
+                "kw3">array</span><span class="br0">(</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp; &nbsp; <span class="st0">'dodge'</span>&nbsp; &nbsp;
+                &nbsp;=&gt;&nbsp; <span class="st0">'Dodge'</span>,
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp; &nbsp; <span class="st0">'chevy'</span>&nbsp; &nbsp;
+                &nbsp;=&gt;&nbsp; <span class="st0">'Chevy'</span>,
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp; &nbsp; <span class="st0">'bmw'</span>&nbsp; &nbsp;
+                &nbsp; &nbsp;=&gt;&nbsp; <span class="st0">'BMW'</span>,
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp; &nbsp; <span class="st0">'audi'</span>&nbsp; &nbsp;
+                &nbsp; =&gt;&nbsp; <span class="st0">'Audi'</span>,
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp; &nbsp; <span class="st0">'porsche'</span>&nbsp;
+                &nbsp;=&gt;&nbsp; <span class="st0">'Porsche'</span>,
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp; &nbsp; <span class="st0">'kia'</span>&nbsp; &nbsp;
+                &nbsp; &nbsp;=&gt;&nbsp; <span class="st0">'Kia'</span>,
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp; &nbsp; <span class="st0">'subaru'</span>&nbsp; &nbsp;
+                =&gt;&nbsp; <span class="st0">'Subaru'</span>,
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp; &nbsp; <span class="st0">'mazda'</span>&nbsp; &nbsp;
+                &nbsp;=&gt;&nbsp; <span class="st0">'Mazda'</span>,
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp; &nbsp; <span class="st0">'isuzu'</span>&nbsp; &nbsp;
+                &nbsp;=&gt;&nbsp; <span class="st0">'Isuzu'</span>,
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="br0">)</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp;
+              </div>
+            </li>
+            <li class="li1 ln-xtra">
+              <div class="de1">
+                <span class="re0">$labels</span> = <span class=
+                "kw3">array</span><span class="br0">(</span><span class=
+                "st0">'Cars:'</span>, <span class="st0">'Models'</span>,
+                <span class="st0">'Your selection'</span><span class=
+                "br0">)</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="co1">// Do the magic! Just pass your label to the
+                element as an array!</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="re0">$form</span>-&gt;<span class=
+                "me1">addElement</span><span class="br0">(</span><span class=
+                "st0">'advmultiselect'</span>, <span class="st0">'cars'</span>,
+                <span class="re0">$labels</span>, <span class=
+                "re0">$cars</span><span class="br0">)</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="co1">// set the form template</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="re0">$tpl</span> = <span class="kw2">new</span>
+                HTML_Template_Sigma<span class="br0">(</span><span class=
+                "st0">'.'</span><span class="br0">)</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="re0">$tpl</span>-&gt;<span class=
+                "me1">setTemplate</span><span class="br0">(</span><span class=
+                "re0">$template</span><span class="br0">)</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="re0">$renderer</span> = <span class=
+                "kw2">new</span> HTML_QuickForm_Renderer_ITDynamic<span class=
+                "br0">(</span><span class="re0">$tpl</span><span class=
+                "br0">)</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="re0">$form</span>-&gt;<span class=
+                "me1">accept</span><span class="br0">(</span><span class=
+                "re0">$renderer</span><span class="br0">)</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                &nbsp;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="co1">// output the form</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="re0">$tpl</span>-&gt;<span class=
+                "me1">show</span><span class="br0">(</span><span class=
+                "br0">)</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="kw2">?&gt;</span>
+              </div>
+            </li>
+          </ol>
+        </div>
+        <div class="variablelist">
+          <dl>
+            <dt>
+              <span class="term">Line 25 :</span>
+            </dt>
+            <dd>
+              <p>
+                The first label with ITDynamic renderer, is always named
+                <span class="bold"><strong>{qf_label}</strong></span>.
+              </p>
+            </dd>
+            <dt>
+              <span class="term">Line 53 :</span>
+            </dt>
+            <dd>
+              <p>
+                In this example, its value is still <code class=
+                "literal">Cars:</code>.
+              </p>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div class="sect2" lang="en" xml:lang="en">
+        <div class="titlepage">
+          <h3 class="title">
+            <a name="id4784956" id="id4784956"></a>In practice
+          </h3>
+        </div>
+        <p>
+          Lets review in details how to set the appearance of headers in
+          <a href="ch09s02.html#examples.custom.1" title="">one of examples</a>
+          included in the package.
+        </p>
+        <p>
+          After the labels are set:
+        </p>
+        <div class="php c3">
+          <ol>
+            <li class="li1">
+              <div class="de1">
+                <span class="kw2">&lt;?php</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="re0">$ams</span>-&gt;<span class=
+                "me1">setLabel</span><span class="br0">(</span><span class=
+                "kw3">array</span><span class="br0">(</span><span class=
+                "st0">'Fruit:'</span>, <span class="st0">'Available'</span>,
+                <span class="st0">'Selected'</span><span class=
+                "br0">)</span><span class="br0">)</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="kw2">?&gt;</span>
+              </div>
+            </li>
+          </ol>
+        </div>
+        <p>
+          Have a special look on the advmultiselect template element. Here is
+          it:
+        </p>
+        <div class="php c3">
+          <ol>
+            <li class="li1">
+              <div class="de1">
+                <span class="kw2">&lt;?php</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="re0">$template</span> = <span class="st0">'</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&lt;table{class}&gt;</span>
+              </div>
+            </li>
+            <li class="li1 ln-xtra">
+              <div class="de1">
+                <span class="st0">&lt;!-- BEGIN label_2 --&gt;&lt;tr&gt;&lt;th
+                align="center"&gt;{label_2}&lt;/th&gt;&lt;!-- END label_2
+                --&gt;</span>
+              </div>
+            </li>
+            <li class="li1 ln-xtra">
+              <div class="de1">
+                <span class="st0">&lt;!-- BEGIN label_3 --&gt;&lt;th
+                align="center"&gt;{label_3}&lt;/th&gt;&lt;/tr&gt;&lt;!-- END
+                label_3 --&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&lt;tr&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&nbsp;
+                &lt;td&gt;{unselected}&lt;/td&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&nbsp; &lt;td&gt;{selected}&lt;/td&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&lt;/tr&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&lt;tr&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&nbsp; &lt;td
+                align="center"&gt;{add}&lt;/td&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&nbsp; &lt;td
+                align="center"&gt;{remove}&lt;/td&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&lt;/tr&gt;</span>
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="st0">&lt;/table&gt;'</span>;
+              </div>
+            </li>
+            <li class="li1">
+              <div class="de1">
+                <span class="kw2">?&gt;</span>
+              </div>
+            </li>
+          </ol>
+        </div>
+        <div class="variablelist">
+          <dl>
+            <dt>
+              <span class="term">Line 4 :</span>
+            </dt>
+            <dd>
+              <p>
+                Header for the unselected list (named <code class=
+                "literal">Available</code>) is center aligned in bold with the
+                TH tag.
+              </p>
+            </dd>
+            <dt>
+              <span class="term">Line 5 :</span>
+            </dt>
+            <dd>
+              <p>
+                Header for the selected list (named <code class=
+                "literal">Selected</code>), is also center aligned in bold with
+                another TH tag.
+              </p>
+            </dd>
+          </dl>
+        </div>
+        <div class="tip c2">
+          <table border="0" summary="Tip">
+            <tr>
+              <td rowspan="2" align="center" valign="top" width="48">
+                <img alt="[Tip]" src="img/admons/tip.png" />
+              </td>
+              <th align="left">
+                Tip
+              </th>
+            </tr>
+            <tr>
+              <td align="left" valign="top">
+                To give only a header to the selection list, either you set
+                values as:
+                <div class="php c3">
+                  <ol>
+                    <li class="li1">
+                      <div class="de1">
+                        <span class="kw2">&lt;?php</span>
+                      </div>
+                    </li>
+                    <li class="li1">
+                      <div class="de1">
+                        <span class="re0">$ams</span>-&gt;<span class=
+                        "me1">setLabel</span><span class=
+                        "br0">(</span><span class=
+                        "kw3">array</span><span class="br0">(</span><span class="st0">
+                        'Fruit:'</span>, <span class="kw2">null</span>,
+                        <span class="st0">'Your selection'</span><span class=
+                        "br0">)</span><span class="br0">)</span>;
+                      </div>
+                    </li>
+                    <li class="li1">
+                      <div class="de1">
+                        <span class="kw2">?&gt;</span>
+                      </div>
+                    </li>
+                  </ol>
+                </div>or you remove line beginning by <code class=
+                "literal">&lt;!-- BEGIN label_2 --&gt;</code> into the
+                advmultiselect template element.
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <table class="qfamsFooter">
+      <tr>
+        <td align="left">
+          HTML_QuickForm_advmultiselect : The Definitive Guide
+        </td>
+        <td align="right">
+          v 1.4.0 : 9 Juin 2007
+        </td>
+      </tr>
+    </table>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left">
+            <a accesskey="p" href="ch06.html">Prev</a>&nbsp;
+          </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="ch06.html">Up</a>
+          </td>
+          <td width="40%" align="right">
+            &nbsp;<a accesskey="n" href="ch06s03.html">Next</a>
+          </td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">
+            Chapter&nbsp;6.&nbsp;Advanced features&nbsp;
+          </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Home</a>
+          </td>
+          <td width="40%" align="right" valign="top">
+            &nbsp;Buttons
+          </td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

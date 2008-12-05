@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+
+<project name="Norex Core Web Development CMS" default="build" basedir=".">
+	<property name="src" value="." />
+	<property name="buildtools" value="${basedir}/buildtools" />
+	<property name="javascript" value="${basedir}/js" />
+	<property name="docs" value="${buildtools}/api" />
+	<property name="logs" value="${buildtools}/logs" />
+
+	<target name="prepare">
+		<chmod perm="777" dir="${basedir}/templates_c" />
+		<chmod perm="777" dir="${basedir}/js/cache" />
+	</target>
+			
+	<target name="checkout">  
+		<exec executable="svn" dir="${src}/">  
+			<arg line="up" />  
+		</exec>  
+		<exec executable="git" dir="${buildtools}/prototype">  
+			<arg line="pull" />  
+		</exec>  
+	</target> 
+	
+	<target name="deploy" depends="prepare">
+		<exec executable="rake" dir="${buildtools}/prototype">  
+			<arg line="dist" />  
+		</exec>  
+		<copy file="${buildtools}/prototype/dist/prototype.js" tofile="${javascript}/prototype.js"/>
+	</target>
+
+	<target name="build" depends="prepare,deploy,phpunit">
+		<buildnumber file="${basedir}/include/build.number"/>
+	</target>
+ 
+	<target name="php-documentor" depends="prepare">  
+		<mkdir dir="${docs}" />
+		<exec executable="phpdoc" dir="${basedir}/source">  <arg line="-ct type -ue on -t ${basedir}/build/api -tb /PATH/TO/YOUR/PHPUC/DATA/phpdoc -o HTML:Phpuc:phpuc -d src/"/>  </exec> 
+	</target> 
+	
+	<target name="phpunit" depends="prepare">  
+		<mkdir dir="${logs}" /> 
+		<mkdir dir="${buildtools}/coverage" />
+		<exec executable="php" dir="${basedir}/" failonerror="true">  
+			<arg line="bin/phpunit testSuite ${buildtools}/test/testSuite.php" />  
+		</exec>  
+	</target> 
+	
+	<target name="clean">  
+		<delete dir="${docs}" />
+		<delete dir="${dist}" />
+		<delete dir="${logs}" />
+		<delete dir="${buildtools}/coverage" />
+	</target> 
+	
+</project>
+

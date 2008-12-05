@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>
+      Chapter&nbsp;6.&nbsp;Advanced features
+    </title>
+    <link rel="stylesheet" href="book.css" type="text/css" />
+    <meta name="generator" content="DocBook XSL Stylesheets V1.69.1" />
+    <link rel="start" href="index.html" title=
+    "HTML_QuickForm_advmultiselect Manual" />
+    <link rel="up" href="pt02.html" title=
+    "Part&nbsp;II.&nbsp;Getting Started" />
+    <link rel="prev" href="ch05.html" title=
+    "Chapter&nbsp;5.&nbsp;Your first form" />
+    <link rel="next" href="ch06s02.html" title="Headers" />
+<style type="text/css">
+/*<![CDATA[*/
+ body {
+  background-color: white;
+  color: black;
+ }
+ :link { color: #0000FF }
+ :visited { color: #840084 }
+ :active { color: #0000FF }
+ h2.c2 {clear: both}
+ p.c1 {font-weight: bold}
+/*]]>*/
+</style>
+  </head>
+  <body>
+    <table class="qfamsHeader">
+      <tr>
+        <td>
+          <img src="img/pearsmall.gif" align="left" alt="PEAR logo" />
+          <h1>
+            HTML_QuickForm_advmultiselect : The Definitive Guide
+          </h1>
+          <div class="navheader">
+            <table width="100%" summary="Navigation header">
+              <tr>
+                <th colspan="3" align="center">
+                  Chapter&nbsp;6.&nbsp;Advanced features
+                </th>
+              </tr>
+              <tr>
+                <td width="20%" align="left">
+                  <a accesskey="p" href="ch05.html">Prev</a>&nbsp;
+                </td>
+                <th width="60%" align="center">
+                  Part&nbsp;II.&nbsp;Getting Started
+                </th>
+                <td width="20%" align="right">
+                  &nbsp;<a accesskey="n" href="ch06s02.html">Next</a>
+                </td>
+              </tr>
+            </table>
+          </div><br />
+          <br />
+        </td>
+      </tr>
+    </table>
+    <div class="chapter" lang="en" xml:lang="en">
+      <div class="titlepage">
+        <h2 class="title">
+          <a name="developers.advanced" id=
+          "developers.advanced"></a>Chapter&nbsp;6.&nbsp;Advanced features
+        </h2>
+      </div>
+      <div class="toc">
+        <p class="c1">
+          Table of Contents
+        </p>
+        <dl>
+          <dt>
+            <span class="sect1"><a href=
+            "ch06.html#developers.advanced.purpose">In brief</a></span>
+          </dt>
+          <dt>
+            <span class="sect1"><a href="ch06s02.html">Headers</a></span>
+          </dt>
+          <dd>
+            <dl>
+              <dt>
+                <span class="sect2"><a href=
+                "ch06s02.html#id4784107">Introduction</a></span>
+              </dt>
+              <dt>
+                <span class="sect2"><a href="ch06s02.html#id4784790">Naming
+                with QuickForm Default Renderer</a></span>
+              </dt>
+              <dt>
+                <span class="sect2"><a href="ch06s02.html#id4784891">Naming
+                with QuickForm ITDynamic Renderer</a></span>
+              </dt>
+              <dt>
+                <span class="sect2"><a href="ch06s02.html#id4784956">In
+                practice</a></span>
+              </dt>
+            </dl>
+          </dd>
+          <dt>
+            <span class="sect1"><a href="ch06s03.html">Buttons</a></span>
+          </dt>
+          <dd>
+            <dl>
+              <dt>
+                <span class="sect2"><a href=
+                "ch06s03.html#id4784523">Introduction</a></span>
+              </dt>
+              <dt>
+                <span class="sect2"><a href=
+                "ch06s03.html#id4785751">Appearance</a></span>
+              </dt>
+              <dt>
+                <span class="sect2"><a href=
+                "ch06s03.html#id4785823">Attributes</a></span>
+              </dt>
+            </dl>
+          </dd>
+          <dt>
+            <span class="sect1"><a href="ch06s04.html">Sorts</a></span>
+          </dt>
+          <dd>
+            <dl>
+              <dt>
+                <span class="sect2"><a href=
+                "ch06s04.html#id4785536">Introduction</a></span>
+              </dt>
+              <dt>
+                <span class="sect2"><a href=
+                "ch06s04.html#id4785489">Auto-arrange</a></span>
+              </dt>
+              <dt>
+                <span class="sect2"><a href="ch06s04.html#id4786697">With
+                buttons</a></span>
+              </dt>
+            </dl>
+          </dd>
+          <dt>
+            <span class="sect1"><a href="ch06s05.html">Live counters</a></span>
+          </dt>
+          <dd>
+            <dl>
+              <dt>
+                <span class="sect2"><a href=
+                "ch06s05.html#id4786564">Introduction</a></span>
+              </dt>
+              <dt>
+                <span class="sect2"><a href=
+                "ch06s05.html#id4786605">Identification and
+                localisation</a></span>
+              </dt>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+      <div class="sect1" lang="en" xml:lang="en">
+        <div class="titlepage">
+          <h2 class="title c2">
+            <a name="developers.advanced.purpose" id=
+            "developers.advanced.purpose"></a>In brief
+          </h2>
+        </div>
+        <p>
+          You should now have an understanding of basic
+          HTML_QuickForm_advmultiselect functionality, but there are many more
+          features in the package, each of them deserving a separate tutorial.
+          This section will give a short overview of them and point you to the
+          complete documentation.
+        </p>
+        <p>
+          The advmultiselect element offers a lot of possibilities to customize
+          its layout and appearance. Remember that form output is done via
+          <a class="external" href=
+          "http://pear.php.net/manual/en/package.html.html-quickform.intro-renderers.php"
+          title=
+          "http://pear.php.net/manual/en/package.html.html-quickform.intro-renderers.php">
+          renderers</a> - special classes containing necessary logic. There are
+          QuickForm renderers that <a class="external" href=
+          "http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-renderer-default.php"
+          title=
+          "http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-renderer-default.php">
+          directly output HTML</a> and those that <a class="external" href=
+          "http://pear.php.net/manual/en/package.html.html-quickform.php#package.html.html-quickform.output.template-renderers"
+          title=
+          "http://pear.php.net/manual/en/package.html.html-quickform.php#package.html.html-quickform.output.template-renderers">
+          use template engines</a> for this.
+        </p>
+        <p>
+          <a href="ch06s02.html" title="Headers">Headers</a> allow to give
+          caption (label) to one or both list as any other QuickForm element
+          that support multi-labels system.
+        </p>
+        <p>
+          <a href="ch06s03.html" title="Buttons">Buttons</a> allow to swap
+          items from one list to the other, or arrange order of your selection.
+        </p>
+        <p>
+          <a href="ch06s04.html" title="Sorts">Sorts</a> allow to re-arrange
+          order of the selection, by the user-end. Its also allow to set (by
+          programming) a pre-set order (alphabetic or reverse) to each list.
+        </p>
+      </div>
+    </div>
+    <table class="qfamsFooter">
+      <tr>
+        <td align="left">
+          HTML_QuickForm_advmultiselect : The Definitive Guide
+        </td>
+        <td align="right">
+          v 1.4.0 : 9 Juin 2007
+        </td>
+      </tr>
+    </table>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left">
+            <a accesskey="p" href="ch05.html">Prev</a>&nbsp;
+          </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="pt02.html">Up</a>
+          </td>
+          <td width="40%" align="right">
+            &nbsp;<a accesskey="n" href="ch06s02.html">Next</a>
+          </td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">
+            Chapter&nbsp;5.&nbsp;Your first form&nbsp;
+          </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Home</a>
+          </td>
+          <td width="40%" align="right" valign="top">
+            &nbsp;Headers
+          </td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

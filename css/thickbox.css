@@ -1,0 +1,41 @@
+@CHARSET "UTF-8";
+
+div#thickbox_wrapper {
+z-index: 5000;
+width:600px;
+
+overflow: auto;
+position: absolute;
+top: 50%;
+left: 50%;
+margin-left: -300px;
+margin-top: -200px;
+}
+
+div#thickbox_header {
+	background-image: url(/images/admin/thickbox_wrapper_top.png);
+}
+
+div#thickbox_footer {
+	background-image: url(/images/admin/thickbox_wrapper_bottom.png);
+}
+
+div#thickbox {
+	background-image: url(/images/admin/thickbox_wrapper_back.png);
+	padding: 5px 15px 5px 15px;
+}
+
+div#overlay{
+  display:none;
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  z-index:1000;
+  background-color:#666;
+  -moz-opacity: 0.3;
+  opacity:.30;
+  filter: alpha(opacity=30);
+  align: center;
+}

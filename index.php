@@ -1,0 +1,57 @@
+<?php
+/**
+ * Site Initialization
+ *
+ * @author Christopher Troup <chris@norex.ca>
+ * @package CMS
+ * @subpackage Core
+ * @version 2.0
+ */
+
+/*
+ * Kicks things off with initiliziation of the general framework infrastructure.
+ */
+include_once 'include/Site.php';
+
+/*
+ * Assess whether we are logging in on this page request.
+ */
+if (isset($_REQUEST['username']) && isset($_REQUEST['password'])) {
+	$auth_container = new CMSAuthContainer();
+	$auth = new Auth($auth_container, null, 'authInlineHTML');
+	$auth->start();
+}
+
+
+if (@!isset($_REQUEST['module'])) {
+	$_REQUEST['module'] = 'Content';
+}
+
+if(ucfirst($_REQUEST['module']) == 'Content' && @empty($_REQUEST['page'])){
+	$_REQUEST['page'] = SiteConfig::get('Content::defaultPage');
+}
+
+
+require_once 'HTML/AJAX/Helper.php';
+$ajaxHelper = new HTML_AJAX_Helper ( );
+
+if ( $ajaxHelper->isAJAX () ){
+	echo Module::factory($_REQUEST['module'], $smarty)->getUserInterface($_REQUEST);
+} else {
+	
+	$smarty->addJS('/js/scriptaculous.js');
+	
+	$smarty->content[$_REQUEST['module']] = Module::factory($_REQUEST['module'], $smarty)->getUserInterface($_REQUEST);
+
+	$smarty->template_dir = SITE_ROOT . '/templates/';
+	$smarty->compile_dir = SITE_ROOT . '/templates_c';
+	$smarty->plugins_dir[] = SITE_ROOT . '/core/plugins';
+	$smarty->compile_id = 'CMS';
+	
+	$smarty->assign ( 'module', $_REQUEST['module'] );
+	if (isset($_SESSION['authenticated_user'])) {
+		$smarty->assign_by_ref ( 'user', $_SESSION['authenticated_user'] );
+	}
+	$smarty->render ( 'db:site.tpl', $smarty->templateOverride);
+}
+?>

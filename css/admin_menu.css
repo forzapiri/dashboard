@@ -1,0 +1,32 @@
+div.indent {
+  float: left;
+}
+div.sort_buttons {
+  width: 27px;
+  float: left;
+  text-align: center;
+  background: #FFF;
+  height: 17px;
+  border: 1px solid #FF5800;
+  margin-right: 3px;
+}
+div.sort_buttons a img {
+  margin-top: 4px;
+}
+div.menuItemName {
+  float: left;
+  font-weight: bold;
+  line-height: 19px;
+}
+td.opensIn {
+  font-size: 10px;
+}
+
+/*Form Styles*/
+form.admin label {
+  width: 180px!important;
+}
+#step2Doc ul li, #step2page ul li, #step2link ul li{
+  margin-top: 0;
+  margin-bottom: 0;
+}

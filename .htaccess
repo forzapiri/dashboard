@@ -1,0 +1,33 @@
+#RewriteRule [.*] http://woz.norex.ca/gone.html [NC,L]
+
+RewriteEngine On
+#RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*\.)(js|css)$ /js/jscsscomp.php?q=$1$2 [L,NC]
+
+RewriteRule ^admin/?$ 	    /cms/index.php [L]
+RewriteRule ^admin/(.*)/?$ 	/cms/index.php?module=$1  [L,QSA]
+
+RewriteRule ^file/([0-9]+)/?(.*)?$ /core/DataStorage.php?id=$1 [L]
+RewriteRule ^image/([0-9]+)/?(.*)?$ /images/image.php?id=$1 [L]
+
+RewriteRule ^mail/(.*)/(.*)/norexLink.jpg$	/index.php?module=Mail&section=collect&user=$1&mso_id=$2 [NC,L]
+
+RewriteRule ^user/(.*)?/?                  /index.php?module=User&section=$1 [NC,L]
+
+RewriteRule ^content/(.*)? /index.php?module=Content&page=$1 [NC,L]
+
+RewriteRule ^ad/(.*)? /index.php?module=Advertise&section=ad&page=$1 [NC,L]
+
+RewriteRule ^forum/(.*)? /index.php?module=Forums&page=$1 [NC,L]
+
+RewriteRule ^support/? /index.php?module=Support&page=$1 [NC,L]
+
+RewriteRule ^store/([A-Za-z]+)/?(.*)?$ /index.php?module=Cart&page=$2&section=$1 [NC,L]
+RewriteRule ^store/(.*)? /index.php?module=Cart&section=$1 [NC,L]
+
+
+RewriteRule ^blog/(.*)? /index.php?module=Blog&page=$1 [NC,L]
+RewriteRule ^gallery/(.*)? /index.php?module=Gallery&page=$1 [NC,L]
+
+RewriteRule ^sitemap.xml$ /index.php?module=SEO [NC,L]
+RewriteRule ^sitemap.xml.gz$ /index.php?module=SEO&encoding=gz [NC,L]
