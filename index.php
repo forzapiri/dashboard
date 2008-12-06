@@ -22,7 +22,6 @@ if (isset($_REQUEST['username']) && isset($_REQUEST['password'])) {
 	$auth->start();
 }
 
-
 if (@!isset($_REQUEST['module'])) {
 	$_REQUEST['module'] = 'Content';
 }
@@ -31,14 +30,12 @@ if(ucfirst($_REQUEST['module']) == 'Content' && @empty($_REQUEST['page'])){
 	$_REQUEST['page'] = SiteConfig::get('Content::defaultPage');
 }
 
-
 require_once 'HTML/AJAX/Helper.php';
 $ajaxHelper = new HTML_AJAX_Helper ( );
 
 if ( $ajaxHelper->isAJAX () ){
 	echo Module::factory($_REQUEST['module'], $smarty)->getUserInterface($_REQUEST);
 } else {
-	
 	$smarty->addJS('/js/scriptaculous.js');
 	
 	$smarty->content[$_REQUEST['module']] = Module::factory($_REQUEST['module'], $smarty)->getUserInterface($_REQUEST);
