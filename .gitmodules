@@ -10,3 +10,6 @@
 [submodule "modules/Block"]
 	path = modules/Block
 	url = git@github.com:minichate/block.git
+[submodule "modules/Menu"]
+	path = modules/Menu
+	url = git@github.com:minichate/menu.git
