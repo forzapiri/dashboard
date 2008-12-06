@@ -7,3 +7,6 @@
 [submodule "modules/SEO"]
 	path = modules/SEO
 	url = git@github.com:minichate/seo.git
+[submodule "modules/Block"]
+	path = modules/Block
+	url = git@github.com:minichate/block.git
