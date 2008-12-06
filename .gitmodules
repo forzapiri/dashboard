@@ -13,3 +13,6 @@
 [submodule "modules/Menu"]
 	path = modules/Menu
 	url = git@github.com:minichate/menu.git
+[submodule "modules/DBTable"]
+	path = modules/DBTable
+	url = git@github.com:minichate/dbtable.git
