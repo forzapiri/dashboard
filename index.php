@@ -7,8 +7,6 @@
  * @subpackage Core
  * @version 2.0
  */
-
-
 /*
  * Kicks things off with initiliziation of the general framework infrastructure.
  */
