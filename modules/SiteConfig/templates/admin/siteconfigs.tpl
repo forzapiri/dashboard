@@ -31,7 +31,7 @@
 
 		<td class="actions">
 {if $norex}
-		<form action="/admin/SiteConfig" method="post" onsubmit="return !formSubmit(this);">
+		<form action="/admin/SiteConfig" method="post" class="norexui_addedit">
 			<input type="hidden" name="action" value="toggle" />
 			<input type="hidden" name="NOREX" value="1" />
 			<input type="hidden" name="siteconfig_id" value="{$siteconfig->getId()}" />
