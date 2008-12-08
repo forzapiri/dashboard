@@ -55,8 +55,8 @@ class Database {
 		/**
 		 * include the database configuration file. Contains username, password, etc.
 		 */
-		//include (dirname(__FILE__) . '/../include/db-config.php');
-		include(SITE_ROOT.'/include/db-config.php');
+		include (dirname(__FILE__) . '/../include/db-config.php');
+		//include(SITE_ROOT.'/include/db-config.php');
 		if (!(@$dbhost && @$dbuser && @$dbpass && @$dbase)) {
 			printf ("<h1>Check that db-config.php is installed properly.</h1>");
 			die();
