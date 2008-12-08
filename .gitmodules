@@ -25,3 +25,6 @@
 [submodule "modules/Templater"]
 	path = modules/Templater
 	url = git@github.com:minichate/templater.git
+[submodule "core/tinymce"]
+	path = core/tinymce
+	url = git://github.com/minichate/tinymce.git
