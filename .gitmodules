@@ -22,3 +22,6 @@
 [submodule "modules/User"]
 	path = modules/User
 	url = git@github.com:minichate/user.git
+[submodule "modules/Templater"]
+	path = modules/Templater
+	url = git@github.com:minichate/templater.git
