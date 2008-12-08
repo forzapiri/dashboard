@@ -36,6 +36,11 @@ class DBColumnTextBox extends DBColumn {
 	}
 }
 
+class DBColumnTinytext extends DBColumn {
+	function type() {return "tinytext";}
+	function suggestedMysql() {return "tinytext";}
+}
+
 class DBColumnsLongText extends DBColumn {
 	function type() {return 'longtext';}
 	function prepareCode() {return 's';} // TODO: NOT SURE YET "b" or "s" ??
@@ -50,8 +55,9 @@ class DBColumnInteger extends DBColumn {
 		$value = 0;
 		$label = $this->label();
 		extract($args);
-		$el = $form->addElement ('integer', $id, $label);
+		$el = $form->addElement ('text', $id, $label);
 		$el->setValue($value);
+		$form->addRule($id, 'Integer required', 'integer', null, 'client');
 		return $el;
 	}
 	function suggestedMysql() {return "int(11)";}
@@ -144,18 +150,6 @@ class DBColumnId extends DBColumnInteger {
 	function suggestedMysql() {return "int(10) unsigned";}
 }
 
-class DBColumnDBImage extends DBColumnInteger {
-	function type() {return "dbimage";}
-	function addElementTo($args) {
-		$value = null;
-		extract ($args);
-		$el = $form->addElement ('file', $id, $this->label());
-		$el->setValue($value);
-		return $el;
-	}
-	function suggestedMysql() {return "int(10) unsigned";}
-}
-
 class DBColumnTinyMCE extends DBColumnsLongText {
 	function type() {return "tinymce";}
 	function addElementTo($args) {
@@ -200,19 +194,6 @@ class DBColumnTimestamp extends DBColumnText {
 	function suggestedMysql() {return "timestamp";}
 }
 
-class DBColumnDateTime extends DBColumnTimestamp {
-	function type() {return "datetime";}
-	function addElementTo ($args) {
-		$value = null;
-		extract ($args);
-		$label = $this->label();
-		$el = $form->addElement ('date', $id, $label, array('format'=>'d-M-Y H:i:s'));
-		$el->setValue($value);
-		return $el;
-	}
-	function suggestedMysql() {return "datetime";}
-}
-
 class DBColumnDate extends DBColumnTimestamp {
 	function type() {return "date";}
 	function toDB($obj) {$date = $obj ? $obj : new NDate(); return $date->get(MYSQL_DATE);}
@@ -254,6 +235,15 @@ class DBColumnLatLon extends DBColumnText {
 function type() {return "latlon";}
 public function __toString($item,$key) {
 		return '<a href="http://maps.google.ca/maps?f=q&hl=en&geocode=&q=' . urlencode($item->get($key)) . '">' . $item->get($key) . '</a>';
+	}
+}
+
+class DBColumnCancel extends DBColumn {
+	function type() {return "cancel";}	
+	function ignored() {return true;}
+	function addElementTo($args) {
+		extract ($args);
+		return $form->addElement('button','cancel','Cancel',array("onClick"=> "window.location.href='Monthly.php'"));
 	}
 }
 
