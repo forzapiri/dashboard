@@ -97,11 +97,11 @@ class Page {
 		return 'error '.$type;
 	}
 	
-	public function &renderer(Array $renderer) {
+	public function &renderer($smarty, $template) {
 		if (isset($this->actionspointer)) {
-			$this->renderer[$this->pointer][$this->actionspointer] = $renderer;
+			$this->renderer[$this->pointer][$this->actionspointer] = array($smarty, $template);
 		} else {
-			$this->renderer[$this->pointer] = $renderer;
+			$this->renderer[$this->pointer] = array($smarty, $template);
 		}
 		return $this;
 	}
@@ -143,6 +143,12 @@ class Page {
 				}
 				if (!$form->isProcessed()) {
 					if ($this->user->hasPerm($this->pointer, 'addedit')) {
+						if (isset($this->renderer[$this->pointer][$this->actionspointer])) {
+							$r = $this->renderer[$this->pointer][$this->actionspointer];
+							$r[0]->assign('item', $i);
+							$r[0]->assign('form', $form);
+							return $r[0]->fetch($r[1]);
+						}
 						return $form->display();
 					}
 				}
@@ -185,7 +191,8 @@ class Page {
 			$where .= ' order by ' . $this->order[$this->pointer];
 		}
 		
-		if (!isset($_REQUEST['X-DataLimit'])) {
+		$this->perPage = isset($_REQUEST['X-DataLimit']) ? $_REQUEST['X-DataLimit'] : $this->perPage;
+		
 			$sql = 'select count(id) as count from ' . (call_user_func(array($this->pointer, 'createTable'))->name()) . ' ' . $where;
 			$r = Database::singleton()->query_fetch($sql);
 			
@@ -205,7 +212,6 @@ class Page {
 			
 			list($from, $to) = $pager->getOffsetByPageId();
 			$where .= ' limit ' . ($from - 1) . ', ' . ($this->perPage);
-		}
 		$items = call_user_func(array($this->pointer, 'getAll'), $where);
 
 		switch ($type) {
@@ -287,7 +293,7 @@ class Page {
 		}
 		
 		if (isset($this->showcreate[$this->pointer]) && $this->showcreate[$this->pointer] && $this->user->hasPerm($this->pointer, 'addedit')) {
-			$html .= '<div id="header">
+			$html .= '<br /><div id="header">
 				<ul id="primary">
 					<li><a href="/admin/' . $_REQUEST['module'] . '&amp;section=' . $this->pointer . '&amp;action=add' . @$add . '" title="Create ' . $this->getName() .'">Create ' . $this->getName() . '</a></li>
 				</ul></div>';
@@ -348,10 +354,10 @@ class Page {
 			}
 			
 			if ($this->user->hasPerm($this->pointer, 'delete')) {
-				$html .= '<form action="/admin/' . $_REQUEST['module'] . '" method="post" style="float: left;"';
+				$html .= '<form action="/admin/' . $_REQUEST['module'] . '" class="norexui_delete" method="post" style="float: left;"';
 				
 				if (!isset($this->ajax['delete']) || $this->ajax['addedit'] == true) {
-					$html .= ' class="norexui_delete"';
+					//$html .= ' class="norexui_delete"';
 				}
 				
 				$html .= '>
