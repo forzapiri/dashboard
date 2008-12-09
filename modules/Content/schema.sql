@@ -86,6 +86,15 @@ CREATE TABLE `content_rel` (
   KEY `revision_id` (`revision_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
+INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`)
+VALUES
+('view','ContentPage','View Content Pages','',1,1),
+	('addedit','ContentPage','Add / Edit Content Pages','',1,1),
+	('delete','ContentPage','Delete Content Pages','',1,1),
+	('view','ContentPageRevision','View Content Page Revisions','',1,1),
+	('addedit','ContentPageRevision','Add / Edit Content Page Revisions','',1,1),
+	('delete','ContentPageRevision','Delete Content Page Revisions','',1,1);
+
 --
 -- Dumping data for table `content_rel`
 --
