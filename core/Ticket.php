@@ -11,6 +11,7 @@ class Ticket {
 		<state>error</state>
 		<tag>' . $_SERVER['SERVER_NAME'] . '</tag>
 		</ticket>';
+		
 		$fp = fsockopen("norex.lighthouseapp.com", 80, $errno, $errstr, 30);
 		if (!$fp) {
 		    //echo "$errstr ($errno)<br />\n";
