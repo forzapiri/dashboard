@@ -42,8 +42,6 @@
  * @version    SVN: $Id: phpunit_coverage.php 3662 2008-08-30 09:32:34Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.2.10
- *
- *TEsT
  */
 
 require_once 'PHPUnit/Util/CodeCoverage.php';
