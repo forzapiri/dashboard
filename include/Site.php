@@ -26,6 +26,20 @@ $startTime = microtime(true);
 
 define('SITE_ROOT', realpath(dirname(__FILE__) . '/../'));
 set_include_path(get_include_path() . PATH_SEPARATOR . SITE_ROOT . '/core' . PATH_SEPARATOR . SITE_ROOT . '/core/PEAR' . PATH_SEPARATOR . '/usr/share/php/');
+
+function error_handler($errno, $errstr, $errfile, $errline) {
+	require_once('Ticket.php');
+	$t = new Ticket();
+	$t->errno = $errno;
+	$t->errstr = $errstr;
+	$t->errfile = $errfile;
+	$t->errline = $errline;
+		
+	$t->submit();
+}
+// set to the user defined error handler
+$old_error_handler = set_error_handler('error_handler', E_ERROR | E_PARSE);
+
 include_once(SITE_ROOT . '/core/libs/Smarty.class.php');
 include_once(SITE_ROOT . '/core/libs/Smarty_Compiler.class.php');
 include_once(SITE_ROOT . '/include/fb.php');
