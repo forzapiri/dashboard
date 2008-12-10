@@ -27,18 +27,20 @@ class Module_Search extends Module {
 	function getUserInterface($params) {
 		$s = e($_REQUEST['search']);
 		$sql = 'SELECT id, MATCH(content) AGAINST (\'' . $s . '\') as Relevance FROM content_page_data WHERE MATCH
-				(content) AGAINST(\'' . $s . '\'  WITH QUERY EXPANSION) and status=1 HAVING Relevance > 0.2 ORDER
+				(content) AGAINST(\'' . $s . '\'  WITH QUERY EXPANSION) and status=1 ORDER
 				BY Relevance DESC';
 		$cr = Database::singleton()->query_fetch_all($sql);
 		foreach ($cr as &$c) {
 			$rel = $c['Relevance'];
-			$c = new CMSPageRevision($c['id']);
-			$c->parent = new CMSPage($c->getParentId());
+			$c = new ContentPageRevision($c['id']);
+			$c->parent = new ContentPage($c->get('parent'));
 			$c->resulttype = 'Content';
 			$c->relevance = $rel;
 		}
 		
-		return $this->smarty->fetch( 'test.tpl' );
+		$this->smarty->assign('query', $s);
+		$this->smarty->assign('results', $cr);
+		return $this->smarty->fetch( 'results.tpl' );
 	}
 
 }
