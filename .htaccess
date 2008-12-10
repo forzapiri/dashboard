@@ -31,3 +31,22 @@ RewriteRule ^gallery/(.*)? /index.php?module=Gallery&page=$1 [NC,L]
 
 RewriteRule ^sitemap.xml$ /index.php?module=SEO [NC,L]
 RewriteRule ^sitemap.xml.gz$ /index.php?module=SEO&encoding=gz [NC,L]
+RewriteRule ^sitemap.xml.gz$ /index.php?module=SEO&encoding=gz [NC,L]
+
+RewriteRule ^calendar/?$ /index.php?module=Calendar [NC,L]
+RewriteRule ^calendar/([0-9]+)/([a-zA-z]+)$ /index.php?module=Calendar&calendar_id=$1 [NC,L]
+RewriteRule ^calendar/xml/?(([0-9]+)/([0-9]+))? /index.php?module=Calendar&section=xml&year=$2&month=$3 [NC,L]
+RewriteRule ^calendar/([0-9]+)/([0-9]+)/([0-9]+)/([0-9]+) /index.php?module=Calendar&calendar_id=$1&year=$2&month=$3&day=$4 [NC,L]
+RewriteRule ^calendar/([0-9]+)/([0-9]+)/([0-9]+) /index.php?module=Calendar&year=$1&month=$2&day=$3 [NC,L]
+
+RewriteRule ^donate/([a-zA-Z]+)? /index.php?module=Donate&section=$1 [NC,L]
+
+RewriteRule ^(sign|volunteer)/([a-zA-Z]+)? /index.php?module=Contacts&section=$1&page=$2 [NC,L]
+
+RewriteRule ^forum/create /index.php?module=Forums&page=create [NC,L]
+RewriteRule ^forum/cat/([0-9]+)?-?([a-z\-]+)? /index.php?module=Forums&section=cat&page=$1 [NC,L]
+RewriteRule ^forum/([0-9]+)?-?([a-z\-]+)? /index.php?module=Forums&page=$1 [NC,L]
+
+RewriteRule ^search/? /index.php?module=Search
+
+ErrorDocument 404 /index.php?module=Content&page=_ERROR_
