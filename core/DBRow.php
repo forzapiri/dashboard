@@ -271,7 +271,13 @@ abstract class DBRow {
 				if ($column->noForm()) continue;
 				$name = $column->name();
 				$value = $form->exportValue($this->quickformPrefix() . $name);
-				$this->set($name, $column->fromForm($value));
+				if ($column->type() == 'checkbox' || $column->type() == 'status') {
+					$value = @$_REQUEST[$this->quickformPrefix() . $name] ? 1 : 0;
+					$this->set($name, $value);
+				} else {
+					$this->set($name, $column->fromForm($value));
+				}
+				
 			}
 			$this->save();
 			$form->setProcessed();
