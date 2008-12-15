@@ -11,7 +11,7 @@ class UITest extends PHPUnit_Extensions_SeleniumTestCase {
         'name'    => 'Firefox on MacOS X',
         'browser' => '*firefox',
         'host'    => 'localhost',
-        'port'    => 4444,
+        'port'    => 8888,
         'timeout' => 30000,
       )/*,
       array(
