@@ -9,7 +9,7 @@ class UITest extends PHPUnit_Extensions_SeleniumTestCase {
     public static $browsers = array(
       array(
         'name'    => 'Firefox on MacOS X',
-        'browser' => '*firefox',
+        'browser' => 'Firefox on OS X',
         'host'    => 'localhost',
         'port'    => 8888,
         'timeout' => 30000,
