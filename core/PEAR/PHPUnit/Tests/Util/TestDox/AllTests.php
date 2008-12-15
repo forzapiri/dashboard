@@ -62,7 +62,7 @@ PHPUnit_Util_Filter::$filterPHPUnit = FALSE;
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.5
+ * @version    Release: 3.3.7
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.1.0
  */

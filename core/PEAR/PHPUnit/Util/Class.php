@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Class.php 3164 2008-06-08 12:22:29Z sb $
+ * @version    SVN: $Id: Class.php 3945 2008-11-04 19:12:23Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.1.0
  */
@@ -56,7 +56,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.1
+ * @version    Release: 3.3.7
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.1.0
  */
@@ -206,19 +206,34 @@ class PHPUnit_Util_Class
      * Returns the class hierarchy for a given class.
      *
      * @param  string  $className
+     * @param  boolean $asReflectionObjects
      * @return array
      */
-    public static function getHierarchy($className)
+    public static function getHierarchy($className, $asReflectionObjects = FALSE)
     {
-        $classes = array($className);
+        if ($asReflectionObjects) {
+            $classes = array(new ReflectionClass($className));
+        } else {
+            $classes = array($className);
+        }
+
         $done    = FALSE;
 
         while (!$done) {
-            $class  = new ReflectionClass($classes[count($classes)-1]);
+            if ($asReflectionObjects) {
+                $class = new ReflectionClass($classes[count($classes)-1]->getName());
+            } else {
+                $class = new ReflectionClass($classes[count($classes)-1]);
+            }
+
             $parent = $class->getParentClass();
 
             if ($parent !== FALSE) {
-                $classes[] = $parent->getName();
+                if ($asReflectionObjects) {
+                    $classes[] = $parent;
+                } else {
+                    $classes[] = $parent->getName();
+                }
             } else {
                 $done = TRUE;
             }
@@ -228,9 +243,34 @@ class PHPUnit_Util_Class
     }
 
     /**
+     * Returns the signature of a function.
+     *
+     * @param  ReflectionFunction $function
+     * @return string
+     * @since  Method available since Release 3.3.2
+     * @todo   Find a better place for this method.
+     */
+    public static function getFunctionSignature(ReflectionFunction $function)
+    {
+        if ($function->returnsReference()) {
+            $reference = '&';
+        } else {
+            $reference = '';
+        }
+
+        return sprintf(
+          'function %s%s(%s)',
+
+          $reference,
+          $function->getName(),
+          self::getMethodParameters($function)
+        );
+    }
+
+    /**
      * Returns the signature of a method.
      *
-     * @param  ReflectionClass $method
+     * @param  ReflectionMethod $method
      * @return string
      * @since  Method available since Release 3.2.0
      */
@@ -269,13 +309,13 @@ class PHPUnit_Util_Class
     }
 
     /**
-     * Returns the parameters of a method.
+     * Returns the parameters of a function or method.
      *
-     * @param  ReflectionClass $method
+     * @param  ReflectionFunction|ReflectionMethod $method
      * @return string
      * @since  Method available since Release 3.2.0
      */
-    public static function getMethodParameters(ReflectionMethod $method)
+    public static function getMethodParameters($method)
     {
         $parameters = array();
 
@@ -373,7 +413,7 @@ class PHPUnit_Util_Class
 
         if (strpos($className, ':') !== FALSE) {
             $result['namespace'] = self::arrayToName(
-              explode('::', $className), '::'
+              explode('\\', $className), '\\'
             );
         }
 
@@ -396,7 +436,7 @@ class PHPUnit_Util_Class
 
         if (empty($result['fullPackage'])) {
             $result['fullPackage'] = self::arrayToName(
-              explode('_', str_replace('::', '_', $className)), '.'
+              explode('_', str_replace('\\', '_', $className)), '.'
             );
         }
 

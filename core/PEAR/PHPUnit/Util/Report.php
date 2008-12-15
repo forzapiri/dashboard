@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Report.php 3254 2008-06-26 10:09:33Z sb $
+ * @version    SVN: $Id: Report.php 4219 2008-12-10 08:56:57Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.0.0
  */
@@ -61,7 +61,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.1
+ * @version    Release: 3.3.7
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.0.0
  * @abstract
@@ -100,7 +100,13 @@ abstract class PHPUnit_Util_Report
         $items                   = self::buildDirectoryStructure($files);
 
         unset($codeCoverageInformation);
-        $name = $result->topTestSuite()->getName();
+
+        $topTestSuite = $result->topTestSuite();
+
+        if ($topTestSuite instanceof PHPUnit_Framework_TestSuite) {
+            $name = $topTestSuite->getName();
+        }
+
         unset($result);
 
         $root = new PHPUnit_Util_Report_Node_Directory($commonPath, NULL);

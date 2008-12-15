@@ -39,12 +39,13 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Fileloader.php 3164 2008-06-08 12:22:29Z sb $
+ * @version    SVN: $Id: Fileloader.php 4064 2008-11-20 18:21:05Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.3.0
  */
 
 require_once 'PHPUnit/Util/Filter.php';
+require_once 'PHPUnit/Util/Filesystem.php';
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
 
@@ -56,7 +57,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.1
+ * @version    Release: @package_version@
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.3.0
  */
@@ -105,22 +106,29 @@ class PHPUnit_Util_Fileloader
      * Loads a PHP sourcefile.
      *
      * @param  string $filename
+     * @return mixed
      * @since  Method available since Release 3.0.0
      */
-    protected static function load($filename)
+    public static function load($filename)
     {
-        $oldVariableNames = array_keys(get_defined_vars());
+        $filename = PHPUnit_Util_Filesystem::fileExistsInIncludePath($filename);
 
-        include_once $filename;
+        if ($filename) {
+            $oldVariableNames = array_keys(get_defined_vars());
 
-        $newVariables     = get_defined_vars();
-        $newVariableNames = array_diff(array_keys($newVariables), $oldVariableNames);
+            include_once $filename;
 
-        foreach ($newVariableNames as $variableName) {
-            if ($variableName != 'oldVariableNames') {
-                $GLOBALS[$variableName] = $newVariables[$variableName];
+            $newVariables     = get_defined_vars();
+            $newVariableNames = array_diff(array_keys($newVariables), $oldVariableNames);
+
+            foreach ($newVariableNames as $variableName) {
+                if ($variableName != 'oldVariableNames') {
+                    $GLOBALS[$variableName] = $newVariables[$variableName];
+                }
             }
         }
+
+        return $filename;
     }
 
     /**
@@ -155,18 +163,15 @@ class PHPUnit_Util_Fileloader
     protected static function syntaxCheck($filename)
     {
         if (self::$phpBinary === NULL) {
-            if (is_readable('/Applications/MAMP/bin/php5/bin/php')) {
-                self::$phpBinary = '/Applications/MAMP/bin/php5/bin/php';
+            if (is_readable('@php_bin@')) {
+                self::$phpBinary = '@php_bin@';
             }
 
-            else if (PHP_SAPI == 'cli' && isset($_SERVER['_'])) {
-                self::$phpBinary = $_SERVER['_'];
-
-                if (strpos(self::$phpBinary, 'phpunit') !== FALSE) {
-                    $file            = file(self::$phpBinary);
-                    $tmp             = explode(' ', $file[0]);
-                    self::$phpBinary = trim($tmp[1]);
-                }
+            else if (PHP_SAPI == 'cli' && isset($_SERVER['_']) &&
+                     strpos($_SERVER['_'], 'phpunit') !== FALSE) {
+                $file            = file($_SERVER['_']);
+                $tmp             = explode(' ', $file[0]);
+                self::$phpBinary = trim($tmp[1]);
             }
 
             if (!is_readable(self::$phpBinary)) {

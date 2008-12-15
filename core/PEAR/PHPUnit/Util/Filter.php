@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Filter.php 3707 2008-09-03 08:46:03Z sb $
+ * @version    SVN: $Id: Filter.php 3833 2008-10-12 05:54:33Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.0.0
  */
@@ -54,7 +54,7 @@ require_once 'PHPUnit/Util/FilterIterator.php';
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.1
+ * @version    Release: 3.3.7
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.0.0
  */
@@ -402,9 +402,11 @@ class PHPUnit_Util_Filter
 
         $eTrace = $e->getTrace();
 
-        array_unshift(
-          $eTrace, array('file' => $e->getFile(), 'line' => $e->getLine())
-        );
+        if (!self::frameExists($eTrace, $e->getFile(), $e->getLine())) {
+            array_unshift(
+              $eTrace, array('file' => $e->getFile(), 'line' => $e->getLine())
+            );
+        }
 
         foreach ($eTrace as $frame) {
             if (!self::$filter || (isset($frame['file']) && !self::isFiltered($frame['file'], $filterTests, TRUE))) {
@@ -533,6 +535,25 @@ class PHPUnit_Util_Filter
     public static function getCoveredFiles()
     {
         return self::$coveredFiles;
+    }
+
+    /**
+     * @param  array  $trace
+     * @param  string $file
+     * @param  int    $line
+     * @return boolean
+     * @since  Method available since Release 3.3.2
+     */
+    public static function frameExists(array $trace, $file, $line)
+    {
+        foreach ($trace as $frame) {
+            if (isset($frame['file']) && $frame['file'] == $file &&
+                isset($frame['line']) && $frame['line'] == $line) {
+                return TRUE;
+            }
+        }
+        
+        return FALSE;
     }
 }
 

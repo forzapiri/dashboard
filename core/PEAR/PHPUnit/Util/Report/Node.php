@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Node.php 3164 2008-06-08 12:22:29Z sb $
+ * @version    SVN: $Id: Node.php 3842 2008-10-15 04:01:09Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.2.0
  */
@@ -59,7 +59,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.1
+ * @version    Release: 3.3.7
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.2.0
  */
@@ -291,46 +291,74 @@ abstract class PHPUnit_Util_Report_Node
         );
     }
 
-    protected function doRenderItem(array $data, $lowUpperBound, $highLowerBound, $template = 'item.html')
+    protected function doRenderItem(array $data, $lowUpperBound, $highLowerBound, $template = NULL)
     {
+        if ($template === NULL) {
+            if ($this instanceof PHPUnit_Util_Report_Node_Directory) {
+                $template = 'directory_item.html';
+            } else {
+                $template = 'file_item.html';
+            }
+        }
+
         $itemTemplate = new PHPUnit_Util_Template(
           PHPUnit_Util_Report::$templatePath . $template
         );
 
-        list($classesColor, $classesLevel) = $this->getColorLevel(
-          $data['calledClassesPercent'], $lowUpperBound, $highLowerBound
-        );
+        if ($data['numClasses'] > 0) {
+            list($classesColor, $classesLevel) = $this->getColorLevel(
+              $data['calledClassesPercent'], $lowUpperBound, $highLowerBound
+            );
 
-        list($methodsColor, $methodsLevel) = $this->getColorLevel(
-          $data['calledMethodsPercent'], $lowUpperBound, $highLowerBound
-        );
+            $classesNumber = $data['numCalledClasses'] . ' / ' . $data['numClasses'];
+        } else {
+            $classesColor  = 'snow';
+            $classesLevel  = 'None';
+            $classesNumber = '&nbsp;';
+        }
+
+        if ($data['numMethods'] > 0) {
+            list($methodsColor, $methodsLevel) = $this->getColorLevel(
+              $data['calledMethodsPercent'], $lowUpperBound, $highLowerBound
+            );
+
+            $methodsNumber = $data['numCalledMethods'] . ' / ' . $data['numMethods'];
+        } else {
+            $methodsColor  = 'snow';
+            $methodsLevel  = 'None';
+            $methodsNumber = '&nbsp;';
+        }
 
         list($linesColor, $linesLevel) = $this->getColorLevel(
           $data['executedLinesPercent'], $lowUpperBound, $highLowerBound
         );
 
+        if ($data['name'] == '<b><a href="#0">*</a></b>') {
+            $functions = TRUE;
+        } else {
+            $functions = FALSE;
+        }
+
         $itemTemplate->setVar(
           array(
-            'name'                     => $data['name'],
+            'name'                     => $functions ? 'Functions' : $data['name'],
             'itemClass'                => isset($data['itemClass']) ? $data['itemClass'] : 'coverItem',
             'classes_color'            => $classesColor,
-            'classes_level'            => $classesLevel,
+            'classes_level'            => $functions ? 'None' : $classesLevel,
             'classes_called_width'     => floor($data['calledClassesPercent']),
-            'classes_called_percent'   => $data['calledClassesPercent'],
+            'classes_called_percent'   => !$functions && $data['numClasses'] > 0 ? $data['calledClassesPercent'] . '%' : '&nbsp;',
             'classes_not_called_width' => 100 - floor($data['calledClassesPercent']),
-            'num_classes'              => $data['numClasses'],
-            'num_called_classes'       => $data['numCalledClasses'],
+            'classes_number'           => $functions ? '&nbsp;' : $classesNumber,
             'methods_color'            => $methodsColor,
             'methods_level'            => $methodsLevel,
             'methods_called_width'     => floor($data['calledMethodsPercent']),
-            'methods_called_percent'   => $data['calledMethodsPercent'],
+            'methods_called_percent'   => $data['numMethods'] > 0 ? $data['calledMethodsPercent'] . '%' : '&nbsp;',
             'methods_not_called_width' => 100 - floor($data['calledMethodsPercent']),
-            'num_methods'              => $data['numMethods'],
-            'num_called_methods'       => $data['numCalledMethods'],
+            'methods_number'           => $methodsNumber,
             'lines_color'              => $linesColor,
             'lines_level'              => $linesLevel,
             'lines_executed_width'     => floor($data['executedLinesPercent']),
-            'lines_executed_percent'   => $data['executedLinesPercent'],
+            'lines_executed_percent'   => $data['executedLinesPercent'] . '%',
             'lines_not_executed_width' => 100 - floor($data['executedLinesPercent']),
             'num_executable_lines'     => $data['numExecutableLines'],
             'num_executed_lines'       => $data['numExecutedLines']

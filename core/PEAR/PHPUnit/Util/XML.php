@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: XML.php 3773 2008-09-09 10:17:53Z sb $
+ * @version    SVN: $Id: XML.php 3984 2008-11-08 14:19:59Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.2.0
  */
@@ -56,7 +56,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.1
+ * @version    Release: 3.3.7
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.2.0
  */
@@ -91,20 +91,21 @@ class PHPUnit_Util_XML
      */
     public static function isUtf8($string)
     {
-        // See http://www.w3.org/International/questions/qa-forms-utf-8.en.php
-        return preg_match(
-            '%^(?:
-            [\x09\x0A\x0D\x20-\x7E]            # ASCII
-          | [\xC2-\xDF][\x80-\xBF]             # non-overlong 2-byte
-          |  \xE0[\xA0-\xBF][\x80-\xBF]        # excluding overlongs
-          | [\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}  # straight 3-byte
-          |  \xED[\x80-\x9F][\x80-\xBF]        # excluding surrogates
-          |  \xF0[\x90-\xBF][\x80-\xBF]{2}     # planes 1-3
-          | [\xF1-\xF3][\x80-\xBF]{3}          # planes 4-15
-          |  \xF4[\x80-\x8F][\x80-\xBF]{2}     # plane 16
-          )*$%xs',
-          $string
-        );
+        $length = strlen($string);
+
+        for ($i = 0; $i < $length; $i++) {
+            if      (ord($string[$i]) < 0x80)          $n = 0;
+            elseif ((ord($string[$i]) & 0xE0) == 0xC0) $n = 1;
+            elseif ((ord($string[$i]) & 0xF0) == 0xE0) $n = 2;
+            elseif ((ord($string[$i]) & 0xF0) == 0xF0) $n = 3;
+            else   return FALSE;
+
+            for ($j = 0; $j < $n; $j++) {
+                if ((++$i == $length) || ((ord($string[$i]) & 0xC0) != 0x80)) return FALSE;
+            }
+        }
+
+        return TRUE;
     }
 
     /**

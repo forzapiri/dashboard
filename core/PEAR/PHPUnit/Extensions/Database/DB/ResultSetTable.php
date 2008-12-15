@@ -60,7 +60,7 @@ require_once 'PHPUnit/Extensions/Database/DataSet/AbstractTable.php';
  * @author     Mike Lively <m@digitalsandwich.com>
  * @copyright  2008 Mike Lively <m@digitalsandwich.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.5
+ * @version    Release: 3.3.7
  * @link       http://www.phpunit.de/
  * @deprecated The PHPUnit_Extension_Database_DataSet_QueryTable should be used instead
  * @see        PHPUnit_Extension_Database_DataSet_QueryTable

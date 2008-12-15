@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Configuration.php 3611 2008-08-24 06:47:10Z sb $
+ * @version    SVN: $Id: Configuration.php 3854 2008-10-16 07:25:03Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.2.0
  */
@@ -57,8 +57,8 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * <code>
  * <?xml version="1.0" encoding="utf-8" ?>
  *
- * <phpunit ansi="false"
- *          bootstrap="/path/to/bootstrap.php"
+ * <phpunit bootstrap="/path/to/bootstrap.php"
+ *          colors="false"
  *          convertErrorsToExceptions="true"
  *          convertNoticesToExceptions="true"
  *          convertWarningsToExceptions="true"
@@ -162,7 +162,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.1
+ * @version    Release: 3.3.7
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.2.0
  */
@@ -399,8 +399,15 @@ class PHPUnit_Util_Configuration
     {
         $result = array();
 
-        if ($this->document->documentElement->hasAttribute('ansi')) {
-            $result['ansi'] = $this->getBoolean(
+        if ($this->document->documentElement->hasAttribute('colors')) {
+            $result['colors'] = $this->getBoolean(
+              (string)$this->document->documentElement->getAttribute('colors'),
+              FALSE
+            );
+        }
+
+        else if ($this->document->documentElement->hasAttribute('ansi')) {
+            $result['colors'] = $this->getBoolean(
               (string)$this->document->documentElement->getAttribute('ansi'),
               FALSE
             );

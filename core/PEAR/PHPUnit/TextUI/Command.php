@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Command.php 4059 2008-11-19 08:44:25Z sb $
+ * @version    SVN: $Id: Command.php 4228 2008-12-10 20:41:07Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.0.0
  */
@@ -65,7 +65,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.5
+ * @version    Release: 3.3.7
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.0.0
  */
@@ -91,10 +91,6 @@ class PHPUnit_TextUI_Command
         if ($suite->testAt(0) instanceof PHPUnit_Framework_Warning &&
             strpos($suite->testAt(0)->getMessage(), 'No tests found in class') !== FALSE) {
             require_once 'PHPUnit/Util/Skeleton/Test.php';
-
-            if (isset($arguments['bootstrap'])) {
-                PHPUnit_Util_Fileloader::load($arguments['bootstrap']);
-            }
 
             $skeleton = new PHPUnit_Util_Skeleton_Test(
                 $arguments['test'],
@@ -238,6 +234,7 @@ class PHPUnit_TextUI_Command
                 case '--ansi':
                 case '--colors': {
                     $arguments['colors'] = TRUE;
+                    PHPUnit_Util_Fileloader::load($arguments['bootstrap']);
                 }
                 break;
 
@@ -443,10 +440,6 @@ class PHPUnit_TextUI_Command
                     if (isset($arguments['test']) && $arguments['test'] !== FALSE) {
                         PHPUnit_TextUI_TestRunner::printVersionString();
 
-                        if (isset($arguments['bootstrap'])) {
-                            PHPUnit_Util_Fileloader::load($arguments['bootstrap']);
-                        }
-
                         if ($option[0] == '--skeleton-class') {
                             require_once 'PHPUnit/Util/Skeleton/Class.php';
 
@@ -571,9 +564,7 @@ class PHPUnit_TextUI_Command
             if (!isset($arguments['test'])) {
                 $configuration->handlePHPConfiguration();
 
-                if (isset($arguments['bootstrap'])) {
-                    PHPUnit_Util_Fileloader::load($arguments['bootstrap']);
-                } else {
+                if (!isset($arguments['bootstrap'])) {
                     $phpunitConfiguration = $configuration->getPHPUnitConfiguration();
 
                     if ($phpunitConfiguration['bootstrap']) {

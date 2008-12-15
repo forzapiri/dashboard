@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: PhptTestCase.php 3454 2008-07-14 21:37:16Z sb $
+ * @version    SVN: $Id: PhptTestCase.php 4219 2008-12-10 08:56:57Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.1.4
  */
@@ -69,7 +69,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.5
+ * @version    Release: 3.3.7
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.1.4
  */
@@ -141,6 +141,14 @@ class PHPUnit_Extensions_PhptTestCase implements PHPUnit_Framework_Test, PHPUnit
     {
         if (!class_exists('PEAR_RunTest', FALSE)) {
             throw new RuntimeException('Class PEAR_RunTest not found.');
+        }
+
+        if (isset($GLOBALS['_PEAR_destructor_object_list']) &&
+            is_array($GLOBALS['_PEAR_destructor_object_list']) &&
+            !empty($GLOBALS['_PEAR_destructor_object_list'])) {
+            $pearDestructorObjectListCount = count($GLOBALS['_PEAR_destructor_object_list']);
+        } else {
+            $pearDestructorObjectListCount = 0;
         }
 
         if ($result === NULL) {
@@ -222,6 +230,18 @@ class PHPUnit_Extensions_PhptTestCase implements PHPUnit_Framework_Test, PHPUnit
         }
 
         $result->endTest($this, $time);
+
+        // Do not invoke PEAR's destructor mechanism for PHP 4
+        // as it raises an E_STRICT.
+        if ($pearDestructorObjectListCount == 0) {
+            unset($GLOBALS['_PEAR_destructor_object_list']);
+        } else {
+            $count = count($GLOBALS['_PEAR_destructor_object_list']) - $pearDestructorObjectListCount;
+
+            for ($i = 0; $i < $count; $i++) {
+                array_pop($GLOBALS['_PEAR_destructor_object_list']);
+            }
+        }
 
         return $result;
     }

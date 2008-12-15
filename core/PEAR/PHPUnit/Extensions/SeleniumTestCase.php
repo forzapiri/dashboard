@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: SeleniumTestCase.php 3657 2008-08-29 08:09:52Z sb $
+ * @version    SVN: $Id: SeleniumTestCase.php 4140 2008-11-25 17:51:13Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.0.0
  */
@@ -62,7 +62,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.5
+ * @version    Release: 3.3.7
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.0.0
  */
@@ -137,7 +137,7 @@ abstract class PHPUnit_Extensions_SeleniumTestCase extends PHPUnit_Framework_Tes
         $suite->setName($className);
 
         $class            = new ReflectionClass($className);
-        $classGroups      = PHPUnit_Util_Test::getGroups($class);
+        $classGroups      = PHPUnit_Util_Test::getGroups($class->getDocComment());
         $staticProperties = $class->getStaticProperties();
 
         // Create tests from Selenese/HTML files.
@@ -181,9 +181,10 @@ abstract class PHPUnit_Extensions_SeleniumTestCase extends PHPUnit_Framework_Tes
 
                 foreach ($class->getMethods() as $method) {
                     if (PHPUnit_Framework_TestSuite::isPublicTestMethod($method)) {
-                        $name   = $method->getName();
-                        $data   = PHPUnit_Util_Test::getProvidedData($className, $name);
-                        $groups = PHPUnit_Util_Test::getGroups($method, $classGroups);
+                        $name             = $method->getName();
+                        $methodDocComment = $method->getDocComment();
+                        $data             = PHPUnit_Util_Test::getProvidedData($className, $name, $methodDocComment);
+                        $groups           = PHPUnit_Util_Test::getGroups($methodDocComment, $classGroups);
 
                         // Test method with @dataProvider.
                         if (is_array($data) || $data instanceof Iterator) {
@@ -218,9 +219,10 @@ abstract class PHPUnit_Extensions_SeleniumTestCase extends PHPUnit_Framework_Tes
         else {
             foreach ($class->getMethods() as $method) {
                 if (PHPUnit_Framework_TestSuite::isPublicTestMethod($method)) {
-                    $name   = $method->getName();
-                    $data   = PHPUnit_Util_Test::getProvidedData($className, $name);
-                    $groups = PHPUnit_Util_Test::getGroups($method, $classGroups);
+                    $name             = $method->getName();
+                    $methodDocComment = $method->getDocComment();
+                    $data             = PHPUnit_Util_Test::getProvidedData($className, $name, $methodDocComment);
+                    $groups           = PHPUnit_Util_Test::getGroups($methodDocComment, $classGroups);
 
                     // Test method with @dataProvider.
                     if (is_array($data) || $data instanceof Iterator) {

@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: AllTests.php 3671 2008-08-31 06:52:54Z sb $
+ * @version    SVN: $Id: AllTests.php 4140 2008-11-25 17:51:13Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.3.0
  */
@@ -50,6 +50,7 @@ require_once 'PHPUnit/Framework/TestSuite.php';
 
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'TestDox' . DIRECTORY_SEPARATOR . 'AllTests.php';
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ConfigurationTest.php';
+require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'TestTest.php';
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'TimerTest.php';
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'XMLTest.php';
 
@@ -63,7 +64,7 @@ PHPUnit_Util_Filter::$filterPHPUnit = FALSE;
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.5
+ * @version    Release: 3.3.7
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.0.0
  */
@@ -75,6 +76,7 @@ class Util_AllTests
 
         $suite->addTest(Util_TestDox_AllTests::suite());
         $suite->addTestSuite('Util_ConfigurationTest');
+        $suite->addTestSuite('Util_TestTest');
         $suite->addTestSuite('Util_TimerTest');
         $suite->addTestSuite('Util_XMLTest');
 

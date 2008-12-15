@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: TAP.php 3164 2008-06-08 12:22:29Z sb $
+ * @version    SVN: $Id: TAP.php 3932 2008-11-04 05:42:25Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.0.0
  */
@@ -60,7 +60,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.2
+ * @version    Release: 3.3.7
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.0.0
  */
@@ -72,9 +72,27 @@ class PHPUnit_Util_Log_TAP extends PHPUnit_Util_Printer implements PHPUnit_Frame
     protected $testNumber = 0;
 
     /**
+     * @var    integer
+     */
+    protected $testSuiteLevel = 0;
+
+    /**
      * @var    boolean
      */
     protected $testSuccessful = TRUE;
+
+    /**
+     * Constructor.
+     *
+     * @param  mixed $out
+     * @throws InvalidArgumentException
+     * @since  Method available since Release 3.3.4
+     */
+    public function __construct($out = NULL)
+    {
+        parent::__construct($out);
+        $this->write("TAP version 13\n");
+    }
 
     /**
      * An error occurred.
@@ -141,14 +159,7 @@ class PHPUnit_Util_Log_TAP extends PHPUnit_Util_Printer implements PHPUnit_Frame
      */
     public function startTestSuite(PHPUnit_Framework_TestSuite $suite)
     {
-        $this->write(
-          sprintf(
-            "1..%d\n# TestSuite \"%s\" started.\n",
-
-            count($suite),
-            $suite->getName()
-          )
-        );
+        $this->testSuiteLevel++;
     }
 
     /**
@@ -158,13 +169,11 @@ class PHPUnit_Util_Log_TAP extends PHPUnit_Util_Printer implements PHPUnit_Frame
      */
     public function endTestSuite(PHPUnit_Framework_TestSuite $suite)
     {
-        $this->write(
-          sprintf(
-            "# TestSuite \"%s\" ended.\n",
+        $this->testSuiteLevel--;
 
-            $suite->getName()
-          )
-        );
+        if ($this->testSuiteLevel == 0) {
+            $this->write(sprintf("1..%d\n", $this->testNumber));
+        }
     }
 
     /**

@@ -40,7 +40,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Mock.php 3945 2008-11-04 19:12:23Z sb $
+ * @version    SVN: $Id: Mock.php 4144 2008-11-26 06:59:30Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.0.0
  */
@@ -84,7 +84,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.5
+ * @version    Release: 3.3.7
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.0.0
  */
@@ -288,7 +288,7 @@ class PHPUnit_Framework_MockObject_Mock
         $className  = $method->getDeclaringClass()->getName();
         $methodName = $method->getName();
 
-        if ($method->isFinal() ||
+        if ($method->isFinal() || $method->isStatic() ||
             $methodName == '__construct' || $methodName == $className ||
             $methodName == '__destruct'  || $method->getName() == '__clone') {
             return FALSE;
@@ -309,10 +309,6 @@ class PHPUnit_Framework_MockObject_Mock
 
         else {
             $modifier = 'public';
-        }
-
-        if ($method->isStatic()) {
-            $modifier .= ' static';
         }
 
         if ($method->returnsReference()) {
