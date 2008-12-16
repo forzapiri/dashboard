@@ -36,7 +36,7 @@ class testSuite extends PHPUnit_Framework_TestSuite {
 		
 		$this->setName ( 'CMS Core Test Suite' );
 		
-		$this->addTestSuite ( 'DBColumnTextTest' );
+		$this->addTestSuite ( 'DBColumnTest' );
 		$this->addTestSuite ( 'DatabaseTest' );
 		$this->addTestSuite ( 'DBTableTest' );
 		$this->addTestSuite ( 'UserTest' );
