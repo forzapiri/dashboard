@@ -39,7 +39,7 @@ class Module_Content extends Module implements linkable {
 			 	'Created' => 'timestamp',
 			 	'Published' => 'status'))
 			 ->name('Content Page')
-			 ->pre($this->smarty->fetch('admin/pages.tpl'))
+			// ->pre($this->smarty->fetch('admin/pages.tpl'))
 			 ->on('addedit')->action('ContentPageRevision');
 			 
 		$page->with('ContentPageRevision')
