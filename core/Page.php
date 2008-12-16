@@ -16,7 +16,6 @@ class Page {
 	public $ajax = array();
 	public $renderer = array();
 	public $order = array();
-	public $pageActions = array();
 	
 	public $perPage = 10;
 	
@@ -79,46 +78,6 @@ class Page {
 		return $this;
 	}
 	
-	public function &pageAction($action){
-		$this->pageActions[$action] = array();
-		$this->pageActions[$action]['perm'] = $action;
-		$this->pageActions[$action]['icon'] = '';
-		$this->pageActions[$action]['callback'] = '';
-		$this->pageActions[$action]['restrict'] = array();
-		$this->pageActions[$action]['show'] = true;
-		return $this;
-	}
-	
-	public function &icon($icon){
-		end($this->pageActions);
-		$this->pageActions[key($this->pageActions)]['icon'] = $icon;
-		return $this;
-	}
-	
-	public function &callback($function){
-		end($this->pageActions);
-		$this->pageActions[key($this->pageActions)]['callback'] = $function;
-		return $this;
-	}
-	
-	public function &restrict(Array $restriction){
-		end($this->pageActions);
-		$this->pageActions[key($this->pageActions)]['restrict'] = $restriction;
-		return $this;
-	}
-	
-	public function &usePerm($perm){
-		end($this->pageActions);
-		$this->pageActions[key($this->pageActions)]['perm'] = $perm;
-		return $this;
-	}
-	
-	public function &toggleShow(){
-		end($this->pageActions);
-		$this->pageActions[key($this->pageActions)]['show'] = !$this->pageActions[key($this->pageActions)]['show'];
-		return $this;
-	}
-	
 	public function &pre($html) {
 		$this->pre[$this->pointer] = $html;
 		return $this;
@@ -138,11 +97,11 @@ class Page {
 		return 'error '.$type;
 	}
 	
-	public function &renderer(Array $renderer) {
+	public function &renderer($smarty, $template) {
 		if (isset($this->actionspointer)) {
-			$this->renderer[$this->pointer][$this->actionspointer] = $renderer;
+			$this->renderer[$this->pointer][$this->actionspointer] = array($smarty, $template);
 		} else {
-			$this->renderer[$this->pointer] = $renderer;
+			$this->renderer[$this->pointer] = array($smarty, $template);
 		}
 		return $this;
 	}
@@ -150,19 +109,6 @@ class Page {
 	public function getName() {
 		if (isset($this->names[$this->pointer])) return $this->names[$this->pointer];
 		return $this->pointer;
-	}
-	
-	public function restricted($action, $item){
-		if(key_exists('restrict', $this->pageActions[$action])){
-			foreach($this->tables[$this->pointer] as $column){
-				if(key_exists($column, $this->pageActions[$action]['restrict'])){
-					$value = call_user_func(array($item, 'get'), $column);
-					if($this->pageActions[$action]['restrict'][$column] == $value) return true;
-					else if(is_array($this->pageActions[$action]['restrict'][$column]) && in_array($value, $this->pageActions[$action]['restrict'][$column])) return true;
-				}
-			}
-		}
-		return false;
 	}
 	
 	public function catchActions() {
@@ -182,11 +128,31 @@ class Page {
 		
 		$idField = call_user_func(array($type, 'quickformPrefix'));
 		$i = call_user_func(array($type, 'make'), $type, @$_REQUEST[$idField . 'id']);
-		
-		if(array_key_exists($_REQUEST['action'], $this->pageActions) && is_callable(array($i, $this->pageActions[$_REQUEST['action']]['callback']))){
-			if($this->user->hasPerm($this->pointer, $this->pageActions[$_REQUEST['action']]['perm'])){
-				call_user_func(array($i, $this->pageActions[$_REQUEST['action']]['callback']));
-			}
+		switch(@$_REQUEST['action']) {
+			case 'toggle':
+				if ($this->user->hasPerm($this->pointer, 'addedit')) $i->toggle();
+				break;
+			case 'delete':
+				if ($this->user->hasPerm($this->pointer, 'delete')) $i->delete();
+				break;
+			case 'add':
+			case 'addedit':
+				$form = $i->getAddEditForm('/admin/' . $_REQUEST['module']);
+				if ($i->get('id') == null) {
+					$el =& $form->removeElement($idField . 'id');
+				}
+				if (!$form->isProcessed()) {
+					if ($this->user->hasPerm($this->pointer, 'addedit')) {
+						if (isset($this->renderer[$this->pointer][$this->actionspointer])) {
+							$r = $this->renderer[$this->pointer][$this->actionspointer];
+							$r[0]->assign('item', $i);
+							$r[0]->assign('form', $form);
+							return $r[0]->fetch($r[1]);
+						}
+						return $form->display();
+					}
+				}
+				break;
 		}
 		
 		return false;
@@ -209,7 +175,7 @@ class Page {
 				$where .= $this->link[$this->pointer][0] . '=' . $_REQUEST[$prefix . $this->link[$this->pointer][0]];
 			} else {
 				$prefix = call_user_func(array($this->pointer, 'quickformPrefix'));
-				$n = DBRow::make($this->pointer, $_REQUEST[$prefix . 'id']);
+				$n = new $this->pointer($_REQUEST[$prefix . 'id']);
 				$where .= $this->link[$this->pointer][0] . '=' . $n->get($this->link[$this->pointer][0]);
 			}
 			
@@ -225,7 +191,8 @@ class Page {
 			$where .= ' order by ' . $this->order[$this->pointer];
 		}
 		
-		if (!isset($_REQUEST['X-DataLimit'])) {
+		$this->perPage = isset($_REQUEST['X-DataLimit']) ? $_REQUEST['X-DataLimit'] : $this->perPage;
+		
 			$sql = 'select count(id) as count from ' . (call_user_func(array($this->pointer, 'createTable'))->name()) . ' ' . $where;
 			$r = Database::singleton()->query_fetch($sql);
 			
@@ -245,7 +212,6 @@ class Page {
 			
 			list($from, $to) = $pager->getOffsetByPageId();
 			$where .= ' limit ' . ($from - 1) . ', ' . ($this->perPage);
-		}
 		$items = call_user_func(array($this->pointer, 'getAll'), $where);
 
 		switch ($type) {
@@ -279,7 +245,7 @@ class Page {
 			$prefix = call_user_func(array($class, 'quickformPrefix'));
 			if (isset($_REQUEST[$prefix . 'id'])) {
 				$r = $this->catchActions();
-				$i = DBRow::make($class, $_REQUEST[$prefix . 'id']);
+				$i = new $class($_REQUEST[$prefix . 'id']);
 				$i->getAddEditForm('/admin/' . $_REQUEST['module']);
 				$i->__construct($i->getId());
 				$f = $i->getAddEditForm('/admin/' . $_REQUEST['module']);
@@ -327,7 +293,7 @@ class Page {
 		}
 		
 		if (isset($this->showcreate[$this->pointer]) && $this->showcreate[$this->pointer] && $this->user->hasPerm($this->pointer, 'addedit')) {
-			$html .= '<div id="header">
+			$html .= '<br /><div id="header">
 				<ul id="primary">
 					<li><a href="/admin/' . $_REQUEST['module'] . '&amp;section=' . $this->pointer . '&amp;action=add' . @$add . '" title="Create ' . $this->getName() .'">Create ' . $this->getName() . '</a></li>
 				</ul></div>';
@@ -359,7 +325,7 @@ class Page {
 				if (!is_array($name)) {
 					$html .= $item->table()->column($name)->__toString($item,$name);
 				} else {
-					$tmp = DBRow::make($name[1][0], $item->table()->column($name[0])->__toString($item,$name[0]));
+					$tmp = new $name[1][0]($item->table()->column($name[0])->__toString($item,$name[0]));
 					
 					for ($i = 1; $i < count($name[1]); $i++) {
 						$html .= call_user_func(array($tmp, $name[1][$i])) . ' ';
@@ -367,24 +333,42 @@ class Page {
 				}
 				$html .= '</td>';
 			}
+			if ($this->user->hasPerm($this->pointer, 'addedit') || $this->user->hasPerm($this->pointer, 'delete')) {
 			$html .= '<td>';
-			foreach($this->pageActions as $name => $data){
-				if($this->user->hasPerm($this->pointer, $this->pageActions[$name]['perm']) && !$this->restricted($name, $item) && $this->pageActions[$name]['show']){
-					$html .= '<form action="/admin/' . $_REQUEST['module'] . '" method="post" style="float: left;"';
+			
+			if ($this->user->hasPerm($this->pointer, 'addedit')) {
+			
+				$html .= '<form action="/admin/' . $_REQUEST['module'] . '" method="post" style="float: left;"';
 				
-					if (!isset($this->ajax[$name]) || $this->ajax[$name] == true) {
-						$html .= ' class="norexui_'.$name.'"';
-					}
-					
-					$html .= '>
-							<input type="hidden" name="section" value="' . get_class($item) . '" />
-							<input type="hidden" name="action" value="' . $name . '" />
-							<input type="hidden" name="' . $item->quickformPrefix() . 'id" value="' . $item->get('id') . '" />
-							<input type="image" src="' . $data['icon'] . '" />
-						</form>';
+				if (!isset($this->ajax['addedit']) || $this->ajax['addedit'] == true) {
+					$html .= ' class="norexui_addedit"';
 				}
+				
+				$html .= '>
+						<input type="hidden" name="section" value="' . get_class($item) . '" />
+						<input type="hidden" name="action" value="addedit" />
+						<input type="hidden" name="' . $item->quickformPrefix() . 'id" value="' . $item->get('id') . '" />
+						<input type="image" src="/images/admin/pencil.png" />
+					</form>';
+				
+			}
+			
+			if ($this->user->hasPerm($this->pointer, 'delete')) {
+				$html .= '<form action="/admin/' . $_REQUEST['module'] . '" class="norexui_delete" method="post" style="float: left;"';
+				
+				if (!isset($this->ajax['delete']) || $this->ajax['addedit'] == true) {
+					//$html .= ' class="norexui_delete"';
+				}
+				
+				$html .= '>
+						<input type="hidden" name="section" value="' . get_class($item) . '" />
+						<input type="hidden" name="action" value="delete" />
+						<input type="hidden" name="' . $item->quickformPrefix() . 'id" value="' . $item->get('id') . '" />
+						<input type="image" src="/images/admin/page_delete.png" />
+					</form>';
 			}
 			$html .= '</td>';
+			}
 			$html .= '</tr>';
 		}
 		$html .= '</tbody>';

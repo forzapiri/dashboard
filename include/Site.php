@@ -96,8 +96,8 @@ function authHTML() {
 
 	$content = $smarty->fetch('login.tpl');
 	$smarty->content['User'] = $content;
-	$smarty->render('login.tpl');
-	//$smarty->render('db:site.tpl');
+
+	$smarty->render('db:site.tpl');
 }
 
 function authInlineHTML() {
@@ -166,7 +166,7 @@ class SmartySite extends Smarty {
 			$this->title = SiteConfig::get('Content::defaultPageTitle');
 		}
 		$this->assign_by_ref('title', $this->title);
-		
+
 		global $memory;
 		global $startTime;
 		

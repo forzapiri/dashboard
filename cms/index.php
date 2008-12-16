@@ -32,7 +32,6 @@ if ($auth->checkAuth()) {
 	$smarty->assign('norex', SiteConfig::norex());
 	
 	$config = Config::singleton();
-	
 	foreach($config->getActiveModules() as $m) {
 		$name = $m['module'];
 		
