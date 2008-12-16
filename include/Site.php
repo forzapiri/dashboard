@@ -96,8 +96,7 @@ function authHTML() {
 
 	$content = $smarty->fetch('login.tpl');
 	$smarty->content['User'] = $content;
-	$smarty->render('login.tpl');
-	//$smarty->render('db:site.tpl');
+	$smarty->render('db:site.tpl');
 }
 
 function authInlineHTML() {
