@@ -9,12 +9,7 @@
 
 /* DANGER: SPECIAL FUNCTIONS LIKE __serialize ARE INTERCEPTED BY __call. */
 define ('DUMMY_INIT_ROW', -1);
-include_once dirname(__FILE__) . '/../modules/DBTable/include/TableColumn.php';
-require_once 'DBColumn.php';
-require_once 'DBColumns.php';
-require_once 'include/fb.php';
-require_once 'PEAR/Event/Notification.php';
-require_once 'PEAR/Event/Dispatcher.php';
+include_once SITE_ROOT . '/modules/DBTable/include/TableColumn.php';
 
 function underscore2uccamel($text) { // 'menu_item' => 'MenuItem'
 	return implode (array_map ('ucfirst', explode ('_', $text)));
@@ -62,7 +57,8 @@ abstract class DBRow {
 
 	static function make($class, $id) {
 		if ($id === null || $id === DUMMY_INIT_ROW) return new $class($id);
-		$table = self::$tables[$class]; 
+		$table = @self::$tables[$class];
+		if (!$table ) return new $class($id); // DOES NOT YET CACHE non-DBRow CLASSES
 		$result = $table->getCache($id);
 		if ($result) return $result;
 		$result = new $class ($id);
@@ -126,9 +122,11 @@ abstract class DBRow {
 		} else if (substr($name, -3) === '_id') { // Setting blah_id and blah
 			$column = $this->column ($name);
 			$class = $column->type();
-			$obj = new $class($value);
 			$this->values[$name] = $value;
-			$this->values[substr($name, 0, strlen($name)-3)] = $obj;
+			if (class_exists ($class)) {
+				$obj = DBRow::make($class,$value);
+				$this->values[substr($name, 0, strlen($name)-3)] = $obj;
+			}
 		} else {
 			$this->values[$name] = $value;
 		}

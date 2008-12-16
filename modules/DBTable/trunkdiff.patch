@@ -1,0 +1,43 @@
+Index: DBTable.php
+===================================================================
+--- DBTable.php	(revision 9924)
++++ DBTable.php	(working copy)
+@@ -31,11 +31,14 @@
+ 		return array ('tables' => $tables, 'rows' => $rows, 'col' => @$col); 
+ 	}
+ 	
++	private static $dbtables = false;
+ 	private function tableExists ($table) {
++		error_log("Can you use MysqlTable::tableExists instead of DBTable.php's ??");
+ 		// TODO: Code duplicated in MysqlTable.  Use it.
+-		$query = new Query("show tables", '');
+-		array_flatten ($query->fetchAll(), 0, $dbtables);
+-		return !!array_search ($table, $dbtables);
++		if (!self::$dbtables) {
++			$query = new Query("show tables", '');
++			array_flatten ($query->fetchAll(), 0, $dbtables);
++		} else return !!array_search ($table, self::$dbtables);
+ 	}
+ 	
+ 	private function loadTableInfo ($table) { // $table is a string
+Index: include/MysqlTable.php
+===================================================================
+--- include/MysqlTable.php	(revision 9924)
++++ include/MysqlTable.php	(working copy)
+@@ -11,10 +11,13 @@
+ 		$this->loadTableInfo();
+ 	}
+ 
++	private static $dbtables = false;
+ 	public function exists () {
+-		$query = new Query("show tables", '');
+-		array_flatten ($query->fetchAll(), 0, $dbtables);
+-		return array_search ($this->name, $dbtables) !== false;
++		if (!self::$dbtables) {
++			$query = new Query("show tables", '');
++			array_flatten ($query->fetchAll(), 0, self::$dbtables);
++		}
++		return !!array_search ($this->name, self::$dbtables);
+ 	}
+ 	
+ 	private function loadTableInfo () {

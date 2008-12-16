@@ -1,4 +1,14 @@
 <?php
+if (!function_exists('var_log')) {
+	function var_log($var, $prefix="") {
+		if ($prefix) $prefix .= ': ';
+		if ($var === null) $var = 'NULL';
+		elseif ($var === true) $var = 'true';
+		elseif ($var === false) $var = 'false';
+		error_log ($prefix . print_r($var, true));
+		return $var;
+	}
+}
 
 /**
  * Database
@@ -101,6 +111,7 @@ class Database {
 	 * @return Query
 	 */
 	public function query($sql) {
+		/*  THIS DEBUGGING CODE IS PROBLEMATIC IF THE QUERY SHOULD ONLY BE EXECUTED ONCE...
 		if (@DEBUG) {
 			require_once('Debug.php');
 			$describe = 'describe ' . $sql;
@@ -109,6 +120,7 @@ class Database {
 			$m = var_export(@$this->fetch_all($result), true);
 			Debug::singleton()->addMessage($sql, $m, 'sql');
 		}
+		*/
 		$result = mysqli_query($this->link, $sql);
 		if (!$result) {
 			$error = $this->link->error;

@@ -228,7 +228,7 @@ class SiteConfig {
 			$form->addElement('html', 'Types are: ' . SiteConfigType::getTypeList() . '.<br/>An example of enum is "enum(yes, no, maybe)".'		);
 			$form->addElement('text', 'siteconfig_module', 'Module')->setValue($this->getModule());
 			$form->addElement('text', 'siteconfig_name', 'Name')->setValue($this->getName());
-			$form->addElement('text', 'siteconfig_description', 'Description')->setValue($this->getDescription());
+			$form->addElement('text', 'siteconfig_description', 'Description', array('size' => 40))->setValue($this->getDescription());
 			$form->addElement('text', 'siteconfig_type', 'Type')->setValue($this->getRawType());
 			$form->addElement('text', 'siteconfig_sort', 'Sort')->setValue($this->getSort());
 			SiteConfigType::setFormField($form, $this);
@@ -243,13 +243,13 @@ class SiteConfig {
 				$this->setType($form->exportValue('siteconfig_type'));
 				$this->setSort($form->exportValue('siteconfig_sort'));
 			}
-			$this->setValue($form->exportValue('siteconfig_value'));
+			$this->setValue(SiteConfigType::getFormValue($form, $this));
 			$this->save();
 		}
 		return $form;
 		
 	}
-	
+
 	/** 
 	 * Return an array of all existing objects of this type in the database
 	 */
