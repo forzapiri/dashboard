@@ -142,14 +142,12 @@ abstract class DBRow {
 			$obj = &$this;
 		}
 		if (!$obj->get('id')) return $this;
-		fb(get_class($obj). ' pre-delete', 'Event Notification', FirePHP::INFO);
 		$n = Event_Dispatcher::getInstance(get_class($obj))->post(&$obj, 'onPreDelete');
 		if ($n->isNotificationCancelled()) {
 			return $this;
 		}
 		
 		$obj->table()->deleteRow($obj->get('id'));
-		fb(get_class($obj). ' delete', 'Event Notification', FirePHP::INFO);
 		$n = Event_Dispatcher::getInstance(get_class($obj))->post(&$obj, 'onDelete');
 
 		return $this;
@@ -161,7 +159,6 @@ abstract class DBRow {
 		} else {
 			$obj = &$this;
 		}
-		fb(get_class($obj). ' pre-toggle', 'Event Notification', FirePHP::INFO);
 		$n = Event_Dispatcher::getInstance(get_class($obj))->post(&$obj, 'onPreToggle');
 		if ($n->isNotificationCancelled()) {
 			return $this;
@@ -172,7 +169,6 @@ abstract class DBRow {
 		} else {
 			$obj->set('status', 1)->save();
 		}
-		fb(get_class($obj). ' toggle', 'Event Notification', FirePHP::INFO);
 		$n = Event_Dispatcher::getInstance(get_class($obj))->post(&$obj, 'onToggle');
 		
 		return $this;
@@ -208,7 +204,6 @@ abstract class DBRow {
 		$sql = trim ($sql, ',');
 		if (!$sql) {trigger_error ("NO DATA IN DBRow! Class was " . get_class($this) . ":", E_USER_NOTICE); return;} // Maybe wanted to just create an empty row?
 		
-		fb(get_class($obj). ' pre-save', 'Event Notification', FirePHP::INFO);
 		$n = Event_Dispatcher::getInstance(get_class($obj))->post(&$obj, 'onPreSave');
 		if ($n->isNotificationCancelled()) {
 			return $this;
@@ -228,7 +223,6 @@ abstract class DBRow {
 			$query = new Query ($sql, $types);
 			$query->query($params);
 		}
-		fb(get_class($obj). ' save', 'Event Notification', FirePHP::INFO);
 		$n = Event_Dispatcher::getInstance(get_class($obj))->post(&$obj, 'onSave');
 		return $this;
 	}
