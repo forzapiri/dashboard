@@ -1,7 +1,4 @@
 <?php
-
-require_once('Query.php');
-
 class DBTable {
 	private $name; 
 	private $columns;

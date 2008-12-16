@@ -9,12 +9,7 @@
 
 /* DANGER: SPECIAL FUNCTIONS LIKE __serialize ARE INTERCEPTED BY __call. */
 define ('DUMMY_INIT_ROW', -1);
-include_once dirname(__FILE__) . '/../modules/DBTable/include/TableColumn.php';
-require_once 'DBColumn.php';
-require_once 'DBColumns.php';
-require_once 'include/fb.php';
-require_once 'PEAR/Event/Notification.php';
-require_once 'PEAR/Event/Dispatcher.php';
+include_once SITE_ROOT . '/modules/DBTable/include/TableColumn.php';
 
 function underscore2uccamel($text) { // 'menu_item' => 'MenuItem'
 	return implode (array_map ('ucfirst', explode ('_', $text)));
