@@ -52,5 +52,44 @@ class DBColumnTest extends PHPUnit_Framework_TestCase {
 	public function testOptions() {
 		$this->assertEquals(count($this->DBColumn->options()), 1);
 	}
+	
+	public function testName() {
+		$this->assertEquals('Test', $this->DBColumn->name());
+	}
+	
+	public function testHidden() {
+		$this->assertFalse($this->DBColumn->hidden());
+	}
+	
+	public function testRequired() {
+		$this->assertFalse($this->DBColumn->required());
+	}
+	
+	public function testNoForm() {
+		$this->assertFalse($this->DBColumn->noForm());
+	}
+	
+	public function testDisplay() {
+		$this->assertNull($this->DBColumn->display(null));
+	}
+	
+	public function testToDB() {
+		$this->assertNull($this->DBColumn->toDB(null));
+	}
 
+	public function testToForm() {
+		$this->assertNull($this->DBColumn->toForm(null));
+	}
+	
+	public function testFromForm() {
+		$this->assertNull($this->DBColumn->fromForm(null));
+	}
+	
+	public function testSuggestedMySQL() {
+		$this->assertEquals('text', $this->DBColumn->suggestedMysql());
+	}
+	
+	public function testGetType() {
+		$this->assertGreaterThan(0, count(DBColumn::getTypes()));
+	}
 }
