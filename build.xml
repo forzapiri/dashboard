@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+
 <project name="Norex Core Web Development CMS" default="build" basedir=".">
 	<property name="src" value="." />
 	<property name="buildtools" value="${basedir}/buildtools" />
