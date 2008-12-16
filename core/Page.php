@@ -1,6 +1,6 @@
 <?php
 
-class Page {
+class Page extends defaultPageActs {
 	
 	public $tables = array();
 	public $pointer = null;
@@ -20,7 +20,7 @@ class Page {
 	
 	public $perPage = 10;
 	
-	private $user = null;
+	public $user = null;
 	
 	public function __construct() {
 		$this->user =& $_SESSION['authenticated_user'];
@@ -138,11 +138,11 @@ class Page {
 		return 'error '.$type;
 	}
 	
-	public function &renderer(Array $renderer) {
+	public function &renderer($smarty, $template) {
 		if (isset($this->actionspointer)) {
-			$this->renderer[$this->pointer][$this->actionspointer] = $renderer;
+			$this->renderer[$this->pointer][$this->actionspointer] = array($smarty, $template);
 		} else {
-			$this->renderer[$this->pointer] = $renderer;
+			$this->renderer[$this->pointer] = array($smarty, $template);
 		}
 		return $this;
 	}
@@ -155,6 +155,9 @@ class Page {
 	public function restricted($action, $item){
 		if(key_exists('restrict', $this->pageActions[$action])){
 			foreach($this->tables[$this->pointer] as $column){
+				if(is_array($column)){
+					$column = $column[1][1];
+				}
 				if(key_exists($column, $this->pageActions[$action]['restrict'])){
 					$value = call_user_func(array($item, 'get'), $column);
 					if($this->pageActions[$action]['restrict'][$column] == $value) return true;
@@ -180,19 +183,28 @@ class Page {
 			return;
 		}
 		
+		$received = null;
 		$idField = call_user_func(array($type, 'quickformPrefix'));
 		$i = call_user_func(array($type, 'make'), $type, @$_REQUEST[$idField . 'id']);
 		
-		if(array_key_exists($_REQUEST['action'], $this->pageActions) && is_callable(array($i, $this->pageActions[$_REQUEST['action']]['callback']))){
+		if(array_key_exists('action', $_REQUEST) && array_key_exists($_REQUEST['action'], $this->pageActions)){
 			if($this->user->hasPerm($this->pointer, $this->pageActions[$_REQUEST['action']]['perm'])){
-				call_user_func(array($i, $this->pageActions[$_REQUEST['action']]['callback']));
+				if(method_exists($i, $this->pageActions[$_REQUEST['action']]['callback'])){
+					$received = call_user_func(array($i, $this->pageActions[$_REQUEST['action']]['callback']));
+				} else if(method_exists($this, 'default_' . $this->pageActions[$_REQUEST['action']]['callback'])){
+					$received = call_user_func(array($this, 'default_' . $this->pageActions[$_REQUEST['action']]['callback']), $i, $idField);
+				}
 			}
 		}
-		
+		if(is_string($received) && !empty($received)) return $received;
 		return false;
 	}
 	
 	public function render() {
+		if(count($this->pageActions) < 1){
+			$this->initDefaultActs();
+		}
+		
 		$type = isset($_REQUEST['X-ResultType']) ? $_REQUEST['X-ResultType'] : 'html';
 
 		if ($r = $this->catchActions()) return $r;
@@ -209,7 +221,7 @@ class Page {
 				$where .= $this->link[$this->pointer][0] . '=' . $_REQUEST[$prefix . $this->link[$this->pointer][0]];
 			} else {
 				$prefix = call_user_func(array($this->pointer, 'quickformPrefix'));
-				$n = DBRow::make($this->pointer, $_REQUEST[$prefix . 'id']);
+				$n = new $this->pointer($_REQUEST[$prefix . 'id']);
 				$where .= $this->link[$this->pointer][0] . '=' . $n->get($this->link[$this->pointer][0]);
 			}
 			
@@ -225,8 +237,8 @@ class Page {
 			$where .= ' order by ' . $this->order[$this->pointer];
 		}
 		
-		if (!isset($_REQUEST['X-DataLimit'])) {
-			$sql = 'select count(id) as count from ' . (call_user_func(array($this->pointer, 'createTable'))->name()) . ' ' . $where;
+		$this->perPage = isset($_REQUEST['X-DataLimit']) ? $_REQUEST['X-DataLimit'] : $this->perPage;
+		$sql = 'select count(id) as count from ' . (call_user_func(array($this->pointer, 'createTable'))->name()) . ' ' . $where;
 			$r = Database::singleton()->query_fetch($sql);
 			
 			$currentPage = @$_REQUEST['pageID'];
@@ -245,7 +257,6 @@ class Page {
 			
 			list($from, $to) = $pager->getOffsetByPageId();
 			$where .= ' limit ' . ($from - 1) . ', ' . ($this->perPage);
-		}
 		$items = call_user_func(array($this->pointer, 'getAll'), $where);
 
 		switch ($type) {
@@ -343,7 +354,14 @@ class Page {
 		foreach ($this->tables[$this->pointer] as $key => $name) {
 			$html .= '<th valign="middle">' . $key . '</th>';
 		}
-		if ($this->user->hasPerm($this->pointer, 'addedit') || $this->user->hasPerm($this->pointer, 'delete')) $html .= '<th valign="middle">Actions</th>';
+		$insertTd = false;
+		foreach($this->pageActions as $action => $data){
+			if ($this->user->hasPerm($this->pointer, $action)){
+				$html .= '<th valign="middle">Actions</th>';
+				$insertTd = true;
+				break;
+			}
+		}
 		$html .= '</tr>';
 		
 		foreach ($items as $key => $item) {
@@ -367,7 +385,7 @@ class Page {
 				}
 				$html .= '</td>';
 			}
-			$html .= '<td>';
+			if($insertTd) $html .= '<td>';
 			foreach($this->pageActions as $name => $data){
 				if($this->user->hasPerm($this->pointer, $this->pageActions[$name]['perm']) && !$this->restricted($name, $item) && $this->pageActions[$name]['show']){
 					$html .= '<form action="/admin/' . $_REQUEST['module'] . '" method="post" style="float: left;"';
@@ -384,7 +402,7 @@ class Page {
 						</form>';
 				}
 			}
-			$html .= '</td>';
+			if($insertTd) $html .= '</td>';
 			$html .= '</tr>';
 		}
 		$html .= '</tbody>';
