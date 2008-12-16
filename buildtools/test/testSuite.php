@@ -12,6 +12,7 @@ require_once 'ImageTest.php';
 require_once 'GroupTest.php';
 require_once 'DBTableTest.php';
 require_once 'DBColumnsTest.php';
+require_once 'DBRowTest.php';
 
 /**
  * Static test suite.
@@ -36,6 +37,7 @@ class testSuite extends PHPUnit_Framework_TestSuite {
 		
 		$this->setName ( 'testSuite' );
 		
+		$this->addTestSuite ( 'DBRowTest' );
 		$this->addTestSuite ( 'DBColumnTest' );
 		$this->addTestSuite ( 'DatabaseTest' );
 		$this->addTestSuite ( 'DBTableTest' );
