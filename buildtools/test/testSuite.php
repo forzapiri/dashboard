@@ -57,7 +57,7 @@ class testSuite extends PHPUnit_Framework_TestSuite {
 						continue;
 					}
 					require_once($dataDir . $file . '/tests/' . $testName);
-					$this->addTestSuite ( trim($testName, '.php') );
+					//$this->addTestSuite ( trim($testName, '.php') );
 				}
 			}
 			if (file_exists($dataDir . $fileName . '/schema.sql')) {
