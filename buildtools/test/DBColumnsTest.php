@@ -48,5 +48,9 @@ class DBColumnTextTest extends PHPUnit_Framework_TestCase {
 	public function testType() {
 		$this->assertEquals($this->DBColumnText->type(), 'text');
 	}
+	
+	public function testOptions() {
+		$this->assertNull($this->DBColumnText->options());
+	}
 
 }
