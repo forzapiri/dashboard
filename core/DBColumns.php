@@ -62,6 +62,8 @@ class DBColumnInteger extends DBColumn {
 	}
 	function suggestedMysql() {return "int(11)";}
 }
+class DBColumnSort extends DBColumnInteger {function type() {return 'sort';}}
+
 
 class DBColumnEmail extends DBColumnText {
 	function type() {return "email";}
@@ -198,13 +200,15 @@ class DBColumnDate extends DBColumnTimestamp {
 	function type() {return "date";}
 	function toDB($obj) {$date = $obj ? $obj : new NDate(); return $date->get(MYSQL_DATE);}
 	function addElementTo ($args) {
+		$value = $this->toDB(new NDate());
+		$label = $this->label();
+		extract ($args);
+		$date = new NDate($value);
 		$date_options = array(
 			'language' => 'en',
 			'format' => 'M d Y',
-			'maxYear' => $end->get('%Y')+5,
-			'minYear' => $end->get('%Y')-2);
-		$value = $this->toDB(new NDate());
-		extract ($args);
+			'maxYear' => $date->get('%Y')+5,
+			'minYear' => $date->get('%Y')-2);
 		$el = $form->addElement('date', $id, $label, array_merge($date_options, $this->options()));
 		$el->setValue($value);
 		return $el;

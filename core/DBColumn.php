@@ -94,9 +94,9 @@ abstract class DBColumn {
 
 	static function make($fullType, $name=null, $label=null, $options = null, $modifier = null) {
 		if (preg_match ('/^()([a-zA-Z_]+)(\(.*\))?:([a-zA-Z_]+)/', $fullType, $matches)) {
-			// Do nothing
+			// Do nothing.  Type name is of the form 'text:ignore'
 		} else if (preg_match ('/^([!?\/]*)([a-zA-Z_]+)(\(.*\))?([!?\/]*)/', $fullType, $matches)) {
-			// Do nothing
+			// Do nothing.  Type name is of the form '//text'
 		} else	{
 			error_log ("Mal-formed type name $fullType");
 			die();
@@ -107,11 +107,6 @@ abstract class DBColumn {
 			$options = trim($matches[3], '()');
 			$options = array_map('trim', explode(",", $options));
 		}
-		/*
-		if (is_array($name)) {
-			return new DBColumnClass($type, $name[0], $name[1], $label, $modifier, $options);
-		}
-		*/
 		if ('A' <= $type[0] and $type[0] <= 'Z') {
 			return new DBColumnClass($type, $name, $label, $modifier, $options);
 		}

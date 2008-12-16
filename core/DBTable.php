@@ -1,4 +1,8 @@
 <?php
+define('SANITY_CHECK', true);
+if (SANITY_CHECK) {// todo: See if SANITY CHECK is on
+	require_once SITE_ROOT . '/modules/DBTable/include/MysqlTable.php';
+}
 class DBTable {
 	private $name; 
 	private $columns;
@@ -6,10 +10,12 @@ class DBTable {
 	private $deleteQuery;
 	private $select; // "select `col1`, `col2` from `tablename`"
 	private $rows = array(); // Cache for maintaining loaded rows of the DB
-	private $allRowsLoaded = false;
 	function DBTable($dbname, $classname, $columns) {
 		$this->name = $dbname;
 		$this->classname = $classname;
+		if (SANITY_CHECK) {// todo: See if SANITY CHECK is on
+			$mysqlTable = new MysqlTable("$dbname");
+		}
 		foreach ($columns as $key => $column) {
 			if (is_string ($column)) {
 				$column = DBColumn::make($column);
@@ -18,6 +24,14 @@ class DBTable {
 			$sql = "select `" . $column->name() . "` from `$dbname` where id=";
 			$column->setLoadSQL ($sql);
 			$column->setLoadQuery (new Query ("$sql?", "i"));
+			if (SANITY_CHECK) {// todo: See if SANITY CHECK is on
+				$type = $mysqlTable->getType($column->name());
+				// var_log ("$dbname." . $column->name() . " type=$type and delayLoad is " . ($column->delayLoad() ? 'true' : 'false'));
+				if (!$column->delayLoad() && in_array($type, array('mediumtext', 'longtext'))) {
+					error_log ("WARNING:  Table $dbname column " . $column->name()
+							   . " has a mediumtext or longtext field.  Delay load required due to mysqli bug.");
+				}
+			}
 		}
 		$select = "select " . $this->loadColumnNames() . " from `$dbname`";
 		$this->select = $select;
@@ -30,6 +44,7 @@ class DBTable {
 	function getCache($id) {return @$this->rows[$id];}
 	function deleteRow ($id) {
 		$this->deleteQuery->query($id);
+		$this->rowsWhere = array(); // RESET CACHE
 		$this->rows[$id] = false;
 	}
 	function fetchRow ($id) {
@@ -47,8 +62,10 @@ class DBTable {
 		}
 		return trim($sql, ', ');
 	}
-
+	
+	private $rowsWhere = array();
 	function getAllRows($where = null) {
+		if (@$this->rowsWhere[$where]) {return $this->rowsWhere[$where];}
 		$name = $this->name();
 		$class = $this->classname;
 		$select = $this->select;
@@ -58,7 +75,7 @@ class DBTable {
 			$result = new $class ($result);
 			$this->rows[$result->get('id')] = $result;
 		}
-		if (!$where) $this->allRowsLoaded = true;
+		$this->rowsWhere[$where] = $results;
 		return $results;
 	}
 }

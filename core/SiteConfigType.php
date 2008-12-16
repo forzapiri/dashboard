@@ -5,7 +5,7 @@ abstract class SiteConfigType {
 	function _getValue($val) {return (string) $val;}  // Return a convenient php value, reflecting the type.
 	function _setValue($config, $value) {$config->setValue($value);}
 	function _getDisplayString($val) {return (string) $val;} // Return the string which will be displayed in the admin page
-
+	function _getFormValue($form) {return $form->exportValue('siteconfig_value');}
 	function _setFormField ($form, $config) {         // Set the form field siteconfig_value and add any required rules. 
 		$form->addElement('text', 'siteconfig_value', NOREX ? 'Value' : '');
 	}
@@ -30,6 +30,9 @@ abstract class SiteConfigType {
 	}
 	static function setFormField ($form, $siteConfig) {
 		return SiteConfigType::getType($siteConfig)->_setFormField($form, $siteConfig);
+	}
+	static function getFormValue($form, $siteConfig) {
+		return SiteConfigType::getType($siteConfig)->_getFormValue($form);
 	}
 	static function get($typeName) {
 		global $types;
@@ -101,9 +104,32 @@ class SiteConfigListType extends SiteConfigType {
 	function _setValue($config, $value) {
 		$config->setValue(implode (", ", array_map ('trim', $value)));
 	}
+	function _setFormField ($form, $config) {         // Set the form field siteconfig_value and add any required rules. 
+		$form->addElement('text', 'siteconfig_value', (NOREX ? 'Value' : ''), array('size' => 60));
+	}
 	function _getDisplayString($val) {return implode ($this->_getValue($val), ", ");}
 }
 SiteConfigType::register(new SiteConfigListType());
+/*  ----------------------------------------------------------- */
+class SiteConfigImageType extends SiteConfigType {
+	function _getName() {return 'image';}
+	function _setFormField($form, $config) {
+		$val = $config->getRawValue();
+		$form->addElement('file', 'siteconfig_value', 'Image');
+		$form->addRule('siteconfig_value', 'Please upload an image file', 'uploadedfile');
+		if ($val) $form->addElement('html', "<h2>Previous Image:</h2><img src='/image/$val'/>");
+	}
+	// function _getValue($val) {return new Image((integer) $val);}
+	function _getFormValue($form) {
+		$image = new Image();
+		$el = $form->getElement('siteconfig_value');
+		if ($el->isUploadedFile()) {
+			$image->insert($_FILES['siteconfig_value']);
+		}
+		return $image->getId();
+	}
+}
+SiteConfigType::register(new SiteConfigImageType());
 /*  ----------------------------------------------------------- */
 class SiteConfigPhpType extends SiteConfigType {
 	function _getName() {return 'php';}

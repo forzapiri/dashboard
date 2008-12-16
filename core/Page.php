@@ -175,7 +175,7 @@ class Page {
 				$where .= $this->link[$this->pointer][0] . '=' . $_REQUEST[$prefix . $this->link[$this->pointer][0]];
 			} else {
 				$prefix = call_user_func(array($this->pointer, 'quickformPrefix'));
-				$n = new $this->pointer($_REQUEST[$prefix . 'id']);
+				$n = DBRow::make($this->pointer, $_REQUEST[$prefix . 'id']);
 				$where .= $this->link[$this->pointer][0] . '=' . $n->get($this->link[$this->pointer][0]);
 			}
 			
@@ -245,7 +245,7 @@ class Page {
 			$prefix = call_user_func(array($class, 'quickformPrefix'));
 			if (isset($_REQUEST[$prefix . 'id'])) {
 				$r = $this->catchActions();
-				$i = new $class($_REQUEST[$prefix . 'id']);
+				$i = DBRow::make($class, $_REQUEST[$prefix . 'id']);
 				$i->getAddEditForm('/admin/' . $_REQUEST['module']);
 				$i->__construct($i->getId());
 				$f = $i->getAddEditForm('/admin/' . $_REQUEST['module']);
@@ -325,7 +325,7 @@ class Page {
 				if (!is_array($name)) {
 					$html .= $item->table()->column($name)->__toString($item,$name);
 				} else {
-					$tmp = new $name[1][0]($item->table()->column($name[0])->__toString($item,$name[0]));
+					$tmp = DBRow::make($name[1][0], $item->table()->column($name[0])->__toString($item,$name[0]));
 					
 					for ($i = 1; $i < count($name[1]); $i++) {
 						$html .= call_user_func(array($tmp, $name[1][$i])) . ' ';
