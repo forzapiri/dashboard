@@ -519,10 +519,11 @@ class Auth {
 
         // #10729 - Regenerate session id here if we are generating it on every
         //          page load.
+        
         if ($this->regenerateSessionId) {
             session_regenerate_id(true);
         }
-
+		
         $this->assignData();
         if (!$this->checkAuth() && $this->allowLogin) {
             $this->login();
@@ -578,7 +579,7 @@ class Auth {
                 call_user_func_array($this->loginFailedCallback, array($this->username, &$this));
             }
         }
-
+		
         if ((empty($this->username) || !$login_ok) && $this->showLogin) {
             $this->log('Rendering Login Form.', AUTH_LOG_INFO);
             if (is_callable($this->loginFunction)) {
