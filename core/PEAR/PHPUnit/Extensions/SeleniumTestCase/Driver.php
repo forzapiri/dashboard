@@ -700,7 +700,6 @@ class PHPUnit_Extensions_SeleniumTestCase_Driver
                               'PHPUNIT_SELENIUM_TEST_ID=' . $this->testId,
                               'path=/'
                             );
-                            $_SESSION['PHPUNIT_SELENIUM_TEST_ID'] = $this->testId;
                         }
                     }
                     break;
