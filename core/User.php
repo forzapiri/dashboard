@@ -1,5 +1,8 @@
 <?php
 
+require_once('DBRow.php');
+require_once('Group.php');
+
 class User extends DBRow {
 	function createTable() {
 		$cols = array(

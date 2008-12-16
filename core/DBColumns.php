@@ -1,4 +1,7 @@
 <?php
+
+require_once 'core/NDate.php';
+
 /*
  * Suggested naming convention for new types:
  * lowerCaseCamel is a raw type, while UpperCaseCamel is a reference to an object.

@@ -1,5 +1,7 @@
 <?php
 
+require_once('Database.php');
+
 class Query {
 	protected $stmt;
 	private $obj, $types, $params = array(null, null), $args = null;

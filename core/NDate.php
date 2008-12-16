@@ -1,4 +1,7 @@
 <?php
+
+require_once 'core/PEAR/Date.php';
+
 /**
  * Norex Extended Date class
  * @author David Wolfe <wolfe@norex.ca>
