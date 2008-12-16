@@ -11,6 +11,7 @@ require_once 'AddressTest.php';
 require_once 'ImageTest.php';
 require_once 'GroupTest.php';
 require_once 'DBTableTest.php';
+require_once 'DBColumnsTest.php';
 
 /**
  * Static test suite.
@@ -35,6 +36,7 @@ class testSuite extends PHPUnit_Framework_TestSuite {
 		
 		$this->setName ( 'CMS Core Test Suite' );
 		
+		$this->addTestSuite ( 'DBColumnTextTest' );
 		$this->addTestSuite ( 'DatabaseTest' );
 		$this->addTestSuite ( 'DBTableTest' );
 		$this->addTestSuite ( 'UserTest' );
