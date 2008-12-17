@@ -12,15 +12,6 @@ class defaultPageActs {
 			$this->pageActions[$this->pointer]['add']['show'] = false;
 		}
 		
-		if(!array_key_exists('delete', $this->pageActions[$this->pointer])){
-			$this->pageActions[$this->pointer]['delete']['perm'] = 'delete';
-			$this->pageActions[$this->pointer]['delete']['class'] = 'delete';
-			$this->pageActions[$this->pointer]['delete']['icon'] = '/images/admin/cross.png';
-			$this->pageActions[$this->pointer]['delete']['callback'] = 'delete';
-			$this->pageActions[$this->pointer]['delete']['restrict'] = array();
-			$this->pageActions[$this->pointer]['delete']['show'] = true;
-		}
-	
 		if(!array_key_exists('addedit', $this->pageActions[$this->pointer])){
 			$this->pageActions[$this->pointer]['addedit']['perm'] = 'addedit';
 			$this->pageActions[$this->pointer]['addedit']['class'] = 'addedit';
@@ -30,6 +21,15 @@ class defaultPageActs {
 			$this->pageActions[$this->pointer]['addedit']['show'] = true;
 		}
 		
+		if(!array_key_exists('delete', $this->pageActions[$this->pointer])){
+			$this->pageActions[$this->pointer]['delete']['perm'] = 'delete';
+			$this->pageActions[$this->pointer]['delete']['class'] = 'delete';
+			$this->pageActions[$this->pointer]['delete']['icon'] = '/images/admin/cross.png';
+			$this->pageActions[$this->pointer]['delete']['callback'] = 'delete';
+			$this->pageActions[$this->pointer]['delete']['restrict'] = array();
+			$this->pageActions[$this->pointer]['delete']['show'] = true;
+		}
+	
 		if(!array_key_exists('toggle', $this->pageActions[$this->pointer])){
 			$this->pageActions[$this->pointer]['toggle']['perm'] = 'addedit';
 			$this->pageActions[$this->pointer]['toggle']['class'] = '';
