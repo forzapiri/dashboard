@@ -393,7 +393,6 @@ class Page extends defaultPageActs {
 			}
 		}
 		$html .= '</tr>';
-		
 		foreach ($items as $key => $item) {
 			$html .= '<tr class="';
 			if ($key & 1) {
