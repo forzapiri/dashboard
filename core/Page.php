@@ -17,6 +17,8 @@ class Page extends defaultPageActs {
 	public $renderer = array();
 	public $order = array();
 	public $pageActions = array();
+	public $useDefaultActions = true;
+	public $showLink = array();
 	
 	public $perPage = 10;
 	
@@ -66,6 +68,14 @@ class Page extends defaultPageActs {
 	
 	public function &link(Array $link) {
 		$this->link[$this->pointer] = $link;
+		if(!array_key_exists($this->pointer, $this->showLink)) $this->showLink(true);
+		return $this;
+	}
+	
+	public function &showLink($bool) {
+		if(is_bool($bool)){
+			$this->showLink[$this->pointer] = $bool;
+		}
 		return $this;
 	}
 	
@@ -80,42 +90,56 @@ class Page extends defaultPageActs {
 	}
 	
 	public function &pageAction($action){
-		$this->pageActions[$action] = array();
-		$this->pageActions[$action]['perm'] = $action;
-		$this->pageActions[$action]['icon'] = '';
-		$this->pageActions[$action]['callback'] = '';
-		$this->pageActions[$action]['restrict'] = array();
-		$this->pageActions[$action]['show'] = true;
+		$this->pageActions[$this->pointer][$action] = array();
+		$this->pageActions[$this->pointer][$action]['perm'] = $action;
+		$this->pageActions[$this->pointer][$action]['class'] = $action;
+		$this->pageActions[$this->pointer][$action]['icon'] = '';
+		$this->pageActions[$this->pointer][$action]['callback'] = '';
+		$this->pageActions[$this->pointer][$action]['restrict'] = array();
+		$this->pageActions[$this->pointer][$action]['show'] = true;
 		return $this;
 	}
 	
 	public function &icon($icon){
-		end($this->pageActions);
-		$this->pageActions[key($this->pageActions)]['icon'] = $icon;
+		end($this->pageActions[$this->pointer]);
+		$this->pageActions[$this->pointer][key($this->pageActions[$this->pointer])]['icon'] = $icon;
 		return $this;
 	}
 	
 	public function &callback($function){
-		end($this->pageActions);
-		$this->pageActions[key($this->pageActions)]['callback'] = $function;
+		end($this->pageActions[$this->pointer]);
+		$this->pageActions[$this->pointer][key($this->pageActions[$this->pointer])]['callback'] = $function;
 		return $this;
 	}
 	
 	public function &restrict(Array $restriction){
-		end($this->pageActions);
-		$this->pageActions[key($this->pageActions)]['restrict'] = $restriction;
+		end($this->pageActions[$this->pointer]);
+		$this->pageActions[$this->pointer][key($this->pageActions[$this->pointer])]['restrict'] = $restriction;
 		return $this;
 	}
 	
 	public function &usePerm($perm){
-		end($this->pageActions);
-		$this->pageActions[key($this->pageActions)]['perm'] = $perm;
+		end($this->pageActions[$this->pointer]);
+		$this->pageActions[$this->pointer][key($this->pageActions[$this->pointer])]['perm'] = $perm;
+		return $this;
+	}
+	
+	public function &setClass($class){
+		end($this->pageActions[$this->pointer]);
+		$this->pageActions[$this->pointer][key($this->pageActions[$this->pointer])]['class'] = $class;
 		return $this;
 	}
 	
 	public function &toggleShow(){
-		end($this->pageActions);
-		$this->pageActions[key($this->pageActions)]['show'] = !$this->pageActions[key($this->pageActions)]['show'];
+		end($this->pageActions[$this->pointer]);
+		$this->pageActions[$this->pointer][key($this->pageActions[$this->pointer])]['show'] = !$this->pageActions[$this->pointer][key($this->pageActions[$this->pointer])]['show'];
+		return $this;
+	}
+	
+	public function &defaultPageActions($bool){
+		if(is_bool($bool)){
+			$this->useDefaultActions = $bool;
+		}
 		return $this;
 	}
 	
@@ -153,15 +177,15 @@ class Page extends defaultPageActs {
 	}
 	
 	public function restricted($action, $item){
-		if(key_exists('restrict', $this->pageActions[$action])){
+		if(key_exists('restrict', $this->pageActions[$this->pointer][$action])){
 			foreach($this->tables[$this->pointer] as $column){
 				if(is_array($column)){
 					$column = $column[1][1];
 				}
-				if(key_exists($column, $this->pageActions[$action]['restrict'])){
+				if(key_exists($column, $this->pageActions[$this->pointer][$action]['restrict'])){
 					$value = call_user_func(array($item, 'get'), $column);
-					if($this->pageActions[$action]['restrict'][$column] == $value) return true;
-					else if(is_array($this->pageActions[$action]['restrict'][$column]) && in_array($value, $this->pageActions[$action]['restrict'][$column])) return true;
+					if($this->pageActions[$this->pointer][$action]['restrict'][$column] == $value) return true;
+					else if(is_array($this->pageActions[$this->pointer][$action]['restrict'][$column]) && in_array($value, $this->pageActions[$this->pointer][$action]['restrict'][$column])) return true;
 				}
 			}
 		}
@@ -174,25 +198,31 @@ class Page extends defaultPageActs {
 		if (isset($_REQUEST['section'])) {
 			$this->pointer = $_REQUEST['section'];
 			$type = $_REQUEST['section'];
+			if($this->useDefaultActions){
+				$this->initDefaultActs();
+			}
 		} else {
 			$type = $this->pointer;
 		}
 		
 		if (isset($this->actions[$this->pointer][@$_REQUEST['action']])) {
 			$this->pointer = $this->actions[$this->pointer][$_REQUEST['action']];
+			if($this->useDefaultActions){
+				$this->initDefaultActs();
+			}
 			return;
 		}
 		
 		$received = null;
 		$idField = call_user_func(array($type, 'quickformPrefix'));
 		$i = call_user_func(array($type, 'make'), $type, @$_REQUEST[$idField . 'id']);
-		
-		if(array_key_exists('action', $_REQUEST) && array_key_exists($_REQUEST['action'], $this->pageActions)){
-			if($this->user->hasPerm($this->pointer, $this->pageActions[$_REQUEST['action']]['perm'])){
-				if(method_exists($i, $this->pageActions[$_REQUEST['action']]['callback'])){
-					$received = call_user_func(array($i, $this->pageActions[$_REQUEST['action']]['callback']));
-				} else if(method_exists($this, 'default_' . $this->pageActions[$_REQUEST['action']]['callback'])){
-					$received = call_user_func(array($this, 'default_' . $this->pageActions[$_REQUEST['action']]['callback']), $i, $idField);
+
+		if(array_key_exists('action', $_REQUEST) && array_key_exists($_REQUEST['action'], $this->pageActions[$this->pointer])){
+			if($this->user->hasPerm($this->pointer, $this->pageActions[$this->pointer][$_REQUEST['action']]['perm'])){
+				if(method_exists($i, $this->pageActions[$this->pointer][$_REQUEST['action']]['callback'])){
+					$received = call_user_func(array($i, $this->pageActions[$this->pointer][$_REQUEST['action']]['callback']));
+				} else if(method_exists($this, 'default_' . $this->pageActions[$this->pointer][$_REQUEST['action']]['callback'])){
+					$received = call_user_func(array($this, 'default_' . $this->pageActions[$this->pointer][$_REQUEST['action']]['callback']), $i, $idField);
 				}
 			}
 		}
@@ -201,7 +231,7 @@ class Page extends defaultPageActs {
 	}
 	
 	public function render() {
-		if(count($this->pageActions) < 1){
+		if($this->useDefaultActions){
 			$this->initDefaultActs();
 		}
 		
@@ -262,7 +292,7 @@ class Page extends defaultPageActs {
 		switch ($type) {
 		case 'html':
 		default:
-		if (isset($this->link[$this->pointer])) {
+		if (isset($this->link[$this->pointer]) && $this->showLink[$this->pointer]) {
 			$linked = $this->link[$this->pointer][1][0];
 			$prefix = call_user_func(array($linked, 'quickformPrefix'));
 			
@@ -285,7 +315,7 @@ class Page extends defaultPageActs {
 			$html .= '</div>';
 		}
 		
-		if (isset($this->link[$this->pointer])) {
+		if (isset($this->link[$this->pointer]) && $this->showLink[$this->pointer]) {
 			$class = $this->link[$this->pointer][1][0];
 			$prefix = call_user_func(array($class, 'quickformPrefix'));
 			if (isset($_REQUEST[$prefix . 'id'])) {
@@ -313,7 +343,7 @@ class Page extends defaultPageActs {
 			
 			if (count($items) == 0) {
 				$html .= '<p>No ' . $this->getName() . 's Created.';
-				if ($this->user->hasPerm($this->pointer, 'addedit')) {
+				if ($this->user->hasPerm($this->pointer, $this->pageActions[$this->pointer]['add']['perm'])) {
 					$html .= ' Would you like to <a href="/admin/' . $_REQUEST['module'] . '&amp;section=' . $this->pointer . '&amp;action=add' . @$add . '">make one</a>?</p>';
 				}
 			}
@@ -337,7 +367,7 @@ class Page extends defaultPageActs {
 			}
 		}
 		
-		if (isset($this->showcreate[$this->pointer]) && $this->showcreate[$this->pointer] && $this->user->hasPerm($this->pointer, 'addedit')) {
+		if (isset($this->showcreate[$this->pointer]) && $this->showcreate[$this->pointer] && $this->user->hasPerm($this->pointer, $this->pageActions[$this->pointer]['add']['perm'])) {
 			$html .= '<div id="header">
 				<ul id="primary">
 					<li><a href="/admin/' . $_REQUEST['module'] . '&amp;section=' . $this->pointer . '&amp;action=add' . @$add . '" title="Create ' . $this->getName() .'">Create ' . $this->getName() . '</a></li>
@@ -355,8 +385,8 @@ class Page extends defaultPageActs {
 			$html .= '<th valign="middle">' . $key . '</th>';
 		}
 		$insertTd = false;
-		foreach($this->pageActions as $action => $data){
-			if ($this->user->hasPerm($this->pointer, $action)){
+		foreach($this->pageActions[$this->pointer] as $action => $data){
+			if ($this->user->hasPerm($this->pointer, $data['perm'])){
 				$html .= '<th valign="middle">Actions</th>';
 				$insertTd = true;
 				break;
@@ -386,12 +416,12 @@ class Page extends defaultPageActs {
 				$html .= '</td>';
 			}
 			if($insertTd) $html .= '<td>';
-			foreach($this->pageActions as $name => $data){
-				if($this->user->hasPerm($this->pointer, $this->pageActions[$name]['perm']) && !$this->restricted($name, $item) && $this->pageActions[$name]['show']){
+			foreach($this->pageActions[$this->pointer] as $name => $data){
+				if($this->user->hasPerm($this->pointer, $this->pageActions[$this->pointer][$name]['perm']) && !$this->restricted($name, $item) && $this->pageActions[$this->pointer][$name]['show']){
 					$html .= '<form action="/admin/' . $_REQUEST['module'] . '" method="post" style="float: left;"';
 				
 					if (!isset($this->ajax[$name]) || $this->ajax[$name] == true) {
-						$html .= ' class="norexui_'.$name.'"';
+						$html .= ' class="norexui_'.$data['class'].'"';
 					}
 					
 					$html .= '>
