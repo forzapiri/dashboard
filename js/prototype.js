@@ -206,11 +206,11 @@ var Class = (function() {
   }
 
   function isString(object) {
-    return typeof object === "string";
+    return typeof (object && object.valueOf()) === "string";
   }
 
   function isNumber(object) {
-    return typeof object === "number";
+    return typeof (object && object.valueOf()) === "number";
   }
 
   function isUndefined(object) {
@@ -2859,36 +2859,93 @@ Element.addMethods = function(methods) {
 
 document.viewport = {
   getDimensions: function() {
-    var dimensions = { }, B = Prototype.Browser;
-    $w('width height').each(function(d) {
-      var D = d.capitalize();
-      if (B.WebKit && !document.evaluate) {
-        // Safari <3.0 needs self.innerWidth/Height
-        dimensions[d] = self['inner' + D];
-      } else if (B.Opera && parseFloat(window.opera.version()) < 9.5) {
-        // Opera <9.5 needs document.body.clientWidth/Height
-        dimensions[d] = document.body['client' + D]
-      } else {
-        dimensions[d] = document.documentElement['client' + D];
-      }
-    });
-    return dimensions;
-  },
-
-  getWidth: function() {
-    return this.getDimensions().width;
-  },
-
-  getHeight: function() {
-    return this.getDimensions().height;
+    return { width: this.getWidth(), height: this.getHeight() };
   },
 
   getScrollOffsets: function() {
     return Element._returnOffset(
       window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft,
-      window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop);
+      window.pageYOffset || document.documentElement.scrollTop  || document.body.scrollTop);
   }
 };
+
+(function(viewport) {
+  var B = Prototype.Browser, doc = document, element, property = {};
+
+  function getRootElement() {
+    // Older versions of Safari.
+    if (B.WebKit && !doc.evaluate)
+      return document;
+
+    // Older versions of Opera.
+    if (B.Opera && window.parseFloat(window.opera.version()) < 9.5)
+      return document.body;
+
+    return document.documentElement;
+  }
+
+  function define(D) {
+    if (!element) element = getRootElement();
+
+    property[D] = 'client' + D;
+
+    viewport['get' + D] = function() { return element[property[D]] };
+    return viewport['get' + D]();
+  }
+
+  viewport.getWidth  = define.curry('Width');
+  viewport.getHeight = define.curry('Height');
+})(document.viewport);
+
+
+Element.Storage = {
+  UID: 1
+};
+
+Element.addMethods({
+  getStorage: function(element) {
+    if (!(element = $(element))) return;
+
+    var uid;
+    if (element === window) {
+      uid = 0;
+    } else {
+      if (Object.isUndefined(element._prototypeUID))
+        element._prototypeUID = [Element.Storage.UID++];
+      uid = element._prototypeUID[0];
+    }
+
+    if (!Element.Storage[uid])
+      Element.Storage[uid] = $H();
+
+    return Element.Storage[uid];
+  },
+
+  store: function(element, key, value) {
+    if (!(element = $(element))) return;
+
+    if (arguments.length === 2) {
+      // Assume we've been passed an object full of key/value pairs.
+      element.getStorage().update(key);
+    } else {
+      element.getStorage().set(key, value);
+    }
+
+    return element;
+  },
+
+  retrieve: function(element, key, defaultValue) {
+    if (!(element = $(element))) return;
+    var hash = Element.getStorage(element), value = hash.get(key);
+
+    if (Object.isUndefined(value)) {
+      hash.set(key, defaultValue);
+      value = defaultValue;
+    }
+
+    return value;
+  }
+});
 /* Portions of the Selector class are derived from Jack Slocum's DomQuery,
  * part of YUI-Ext version 0.40, distributed under the terms of an MIT-style
  * license.  Please see http://www.yui-ext.com/ for more information. */
@@ -4140,67 +4197,61 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
     Event.extend = Prototype.K;
   }
 
-  function _getEventID(element) {
-    if (element._prototypeEventID) return element._prototypeEventID[0];
-    return element._prototypeEventID = [++_getEventID.id];
-  }
-  _getEventID.id = 1;
-
-  function _getDOMEventName(eventName) {
-    if (eventName && eventName.include(':')) return 'dataavailable';
-    return eventName;
-  }
-
-  function _getCacheForID(id) {
-    return Event.cache[id] = Event.cache[id] || { };
-  }
-
-  function _getRespondersForEvent(id, eventName) {
-    var c = _getCacheForID(id);
-    return c[eventName] = c[eventName] || [];
-  }
-
   function _createResponder(element, eventName, handler) {
-    var id = _getEventID(element), r = _getRespondersForEvent(id, eventName);
+    // We don't set a default on the call to Element#retrieve so that we can
+    // handle the element's "virgin" state.
+    var registry = Element.retrieve(element, 'prototype_event_registry');
+
+    if (Object.isUndefined(registry)) {
+      // First time we've handled this element. Put it into the cache.
+      CACHE.push(element);
+      registry = Element.retrieve(element, 'prototype_event_registry', $H());
+    }
+
+    var respondersForEvent = registry.get(eventName);
+    if (Object.isUndefined()) {
+      respondersForEvent = [];
+      registry.set(eventName, respondersForEvent);
+    }
 
     // Work around the issue that permits a handler to be attached more than
     // once to the same element & event type.
-    if (r.pluck('handler').include(handler)) return false;
+    if (respondersForEvent.pluck('handler').include(handler)) return false;
 
-    var responder = function(event) {
-      if (!Event || !Event.extend ||
-      // If it's a custom event, but not the _correct_ custom event, ignore it.
-       (!Object.isUndefined(event.eventName) && event.eventName !== eventName))
-        return false;
+    var responder;
+    if (eventName.include(":")) {
+      // Custom event.
+      responder = function(event) {
+        // If it's not a custom event, ignore it.
+        if (Object.isUndefined(event.eventName))
+          return false;
 
-      Event.extend(event);
-      handler.call(element, event);
-    };
+        // If it's a custom event, but not the _correct_ custom event, ignore it.
+        if (event.eventName !== eventName)
+          return false;
+
+        Event.extend(event);
+        handler.call(element, event);
+      };
+    } else {
+      // Ordinary event.
+      responder = function(event) {
+        Event.extend(event);
+        handler.call(element, event);
+      };
+    }
 
     responder.handler = handler;
-    r.push(responder);
+    respondersForEvent.push(responder);
     return responder;
   }
 
-  function _findResponder(id, eventName, handler) {
-    var r = _getRespondersForEvent(id, eventName);
-    return r.find(function(responder) {
-      return responder.handler === handler;
-    });
-  }
-
-  function _destroyResponder(id, eventName, handler) {
-    var c = _getCacheForID(id);
-    if (Object.isUndefined(c[eventName])) return false;
-    c[eventName] = c[eventName].without(_findResponder(id, eventName, handler));
-  }
-
   function _destroyCache() {
-    for (var id in Event.cache) {
-      for (var eventName in Event.cache[id])
-        Event.cache[id][eventName] = null;
-    }
+    for (var i = 0, length = CACHE.length; i < length; i++)
+      Event.stopObserving(CACHE[i]);
   }
+
+  var CACHE = [];
 
   // Internet Explorer needs to remove event handlers on page unload
   // in order to avoid memory leaks.
@@ -4216,54 +4267,94 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
 
   function observe(element, eventName, handler) {
     element = $(element);
-    var name = _getDOMEventName(eventName),
-     responder = _createResponder(element, eventName, handler);
+
+    var responder = _createResponder(element, eventName, handler);
 
     if (!responder) return element;
 
-    if (element.addEventListener)
-      element.addEventListener(name, responder, false);
-    else
-      element.attachEvent("on" + name, responder);
+    if (eventName.include(':')) {
+      // Custom event.
+      if (element.addEventListener)
+        element.addEventListener("dataavailable", responder, false);
+      else {
+        // We observe two IE-proprietarty events: one for custom events that
+        // bubble and one for custom events that do not bubble.
+        element.attachEvent("ondataavailable", responder);
+        element.attachEvent("onfilterchange", responder);
+      }
+    } else {
+      // Ordinary event.
+      if (element.addEventListener)
+        element.addEventListener(eventName, responder, false);
+      else
+        element.attachEvent("on" + eventName, responder);
+    }
 
     return element;
   }
 
   function stopObserving(element, eventName, handler) {
     element = $(element);
-    var id = _getEventID(element), name = _getDOMEventName(eventName);
+
+    var registry = Element.retrieve(element, 'prototype_event_registry');
+
+    if (Object.isUndefined(registry)) return element;
 
     if (eventName && !handler) {
       // If an event name is passed without a handler, we stop observing all
       // handlers of that type.
-      _getRespondersForEvent(id, eventName).each(function(r) {
-        element.stopObserving(eventName, r.handler);
+      var responders = registry.get(eventName);
+
+      if (Object.isUndefined(responders)) return element;
+
+      responders.each( function(r) {
+        Element.stopObserving(element, eventName, r.handler);
       });
       return element;
     } else if (!eventName) {
       // If both the event name and the handler are omitted, we stop observing
       // _all_ handlers on the element.
-      Object.keys(_getCacheForID(id)).each(function(eventName) {
-        element.stopObserving(eventName);
+      registry.each( function(pair) {
+        var eventName = pair.key, responders = pair.value;
+
+        responders.each( function(r) {
+          Element.stopObserving(element, eventName, r.handler);
+        });
       });
       return element;
     }
 
-    var responder = _findResponder(id, eventName, handler);
+    var responders = registry.get(eventName);
+    var responder = responders.find( function(r) { return r.handler === handler; });
     if (!responder) return element;
 
-    if (element.removeEventListener)
-      element.removeEventListener(name, responder, false);
-    else
-      element.detachEvent('on' + name, responder);
+    if (eventName.include(':')) {
+      // Custom event.
+      if (element.removeEventListener)
+        element.removeEventListener("dataavailable", responder, false);
+      else {
+        element.detachEvent("ondataavailable", responder);
+        element.detachEvent("onfilterchange",  responder);
+      }
+    } else {
+      // Ordinary event.
+      if (element.removeEventListener)
+        element.removeEventListener(eventName, responder, false);
+      else
+        element.detachEvent('on' + eventName, responder);
+    }
 
-    _destroyResponder(id, eventName, handler);
+    registry.set(eventName, responders.without(responder));
 
     return element;
   }
 
-  function fire(element, eventName, memo) {
+  function fire(element, eventName, memo, bubble) {
     element = $(element);
+
+    if (Object.isUndefined(bubble))
+      bubble = true;
+
     if (element == document && document.createEvent && !element.dispatchEvent)
       element = document.documentElement;
 
@@ -4273,7 +4364,7 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
       event.initEvent('dataavailable', true, true);
     } else {
       event = document.createEventObject();
-      event.eventType = 'ondataavailable';
+      event.eventType = bubble ? 'ondataavailable' : 'onfilterchange';
     }
 
     event.eventName = eventName;
@@ -4310,49 +4401,49 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
   });
 
   // Export to the global scope.
-  if (window.Event) Object.extend(window.Event, Event)
+  if (window.Event) Object.extend(window.Event, Event);
   else window.Event = Event;
 })();
 
 (function() {
   /* Support for the DOMContentLoaded event is based on work by Dan Webb,
-     Matthias Miller, Dean Edwards and John Resig. */
+     Matthias Miller, Dean Edwards, John Resig, and Diego Perini. */
 
-  var _timer;
+  var timer;
 
-  function _fireContentLoadedEvent() {
+  function fireContentLoadedEvent() {
     if (document.loaded) return;
-    if (_timer) window.clearInterval(_timer);
-
-    document.fire("dom:loaded");
+    if (timer) window.clearTimeout(timer);
     document.loaded = true;
+    document.fire('dom:loaded');
   }
 
-  function _webkitContentLoadedCheck() {
-    var s = document.readyState;
-    if (s === "loaded" || s === "complete")
-      _fireContentLoadedEvent();
-  }
-
-  function _IEContentLoadedCheck() {
-    if (this.readyState == "complete") {
-      this.onreadystatechange = null;
-      _fireContentLoadedEvent();
+  function checkReadyState() {
+    if (document.readyState === 'complete') {
+      document.stopObserving('readystatechange', checkReadyState);
+      fireContentLoadedEvent();
     }
+  }
+
+  function pollDoScroll() {
+    try { document.documentElement.doScroll('left'); }
+    catch(e) {
+      timer = pollDoScroll.defer();
+      return;
+    }
+    fireContentLoadedEvent();
   }
 
   if (document.addEventListener) {
-    if (Prototype.Browser.WebKit) {
-      _timer = window.setInterval(_webkitContentLoadedCheck, 0);
-      Event.observe(window, "load", _fireContentLoadedEvent);
-    } else {
-      document.addEventListener("DOMContentLoaded",
-        _fireContentLoadedEvent, false);
-    }
+    document.addEventListener('DOMContentLoaded', fireContentLoadedEvent, false);
   } else {
-    document.write("<script id=__onDOMContentLoaded defer src=//:><\/script>");
-    $("__onDOMContentLoaded").onreadystatechange = _IEContentLoadedCheck;
+    document.observe('readystatechange', checkReadyState);
+    if (window === top)
+      timer = pollDoScroll.defer();
   }
+
+  // Worst-case fallback
+  Event.observe(window, 'load', fireContentLoadedEvent);
 })();
 
 /*------------------------------- DEPRECATED -------------------------------*/
