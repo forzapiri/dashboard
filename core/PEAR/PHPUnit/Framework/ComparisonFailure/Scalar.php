@@ -40,7 +40,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Scalar.php 1985 2007-12-26 18:11:55Z sb $
+ * @version    SVN: $Id: Scalar.php 4287 2008-12-16 21:51:53Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.0.0
  */
@@ -59,7 +59,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.7
+ * @version    Release: 3.3.8
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.0.0
  */
@@ -71,7 +71,7 @@ class PHPUnit_Framework_ComparisonFailure_Scalar extends PHPUnit_Framework_Compa
      */
     public function toString()
     {
-        if (is_int($this->expected) || is_float($this->expected)) {
+        if (is_numeric($this->expected) && is_numeric($this->actual)) {
             $type             = gettype($this->expected);
             $expectedString   = print_r($this->expected, TRUE);
             $actualString     = print_r($this->actual, TRUE);

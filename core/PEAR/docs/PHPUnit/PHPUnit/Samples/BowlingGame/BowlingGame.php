@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: BowlingGame.php 3423 2008-07-10 18:09:10Z sb $
+ * @version    SVN: $Id: BowlingGame.php 3422 2008-07-10 18:06:50Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.3.0
  */
