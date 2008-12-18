@@ -24,7 +24,7 @@ CREATE TABLE `images_cache` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `image_id` int(11) NOT NULL,
   `hash` varchar(40) NOT NULL,
-  `data` blob NOT NULL,
+  `data` mediumblob NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `hash_2` (`hash`)
 ) ENGINE=MyISAM AUTO_INCREMENT=44 DEFAULT CHARSET=latin1;
