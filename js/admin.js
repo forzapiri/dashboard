@@ -143,8 +143,8 @@ var NorexUI = Class.create(Facebox, {
 			});
 			args = {onComplete: function(transport) {ui.updateContent(transport.responseText);}};
 			switch (el.tagName) {
-			case 'FORM': return el.request(args);
-			case 'A': return new Ajax.Request(el.href, args);
+			case 'FORM': return el.request({});
+			case 'A': return new Ajax.Request(el.href, {});
 			}
 		} else {
 			event.stop(event);
