@@ -1,6 +1,7 @@
 // Deprecated Code --- Use
 //		class="norexui_delete"
 //		class="norexui_addedit"
+//      rather than deleteConfirm
 
 function deleteConfirm(form) {
 	if (confirm("Delete?")) {
@@ -11,6 +12,7 @@ function deleteConfirm(form) {
 	}
 	return true;
 }
+
 ////////////////////////////////////////////////
 var Message = Class.create({
   type: 'success',
@@ -75,6 +77,29 @@ var NorexUI = Class.create(Facebox, {
 		$$('li.norexui_delete').invoke('observe', 'click', this.deleteConfirm);
 		
 		$$('div#header ul#primary:not(ul.plain) li:not(li.plain)').invoke('observe', 'click', this.addedit);
+
+		// To make a sortable admin list, use <tbody id="foo" class="sortable">
+		// A PhP template looks like:
+		// case 'sort':
+		//	foreach (getSerializedRequest() as $i => $j) {
+		//		$item = new Foo($j);
+		//		$item->setSort($i);
+		//		$item->save();
+		//	}
+
+		$$('tbody.sortable').each(function (e) {
+				id = e.identify();
+				Sortable.create(id, {
+					tag: 'tr',
+							onUpdate: function() {
+							new Ajax.Request ("/admin/Property", {
+								method: "post",
+										parameters: { action: 'sort', data: Sortable.serialize(id) }
+								});
+						}
+					});
+			}
+		);
 	},
 	
 	addedit: function(event) {
@@ -155,7 +180,7 @@ var NorexUI = Class.create(Facebox, {
 var ui;
 Event.observe(window, 'load', function(e) {
 	ui = new NorexUI();
-});
+	});
 
 var myCustomOnChangeHandler = function(inst) {
 	$(inst.id).value = inst.getBody().innerHTML;

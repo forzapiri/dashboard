@@ -10,6 +10,8 @@
  */
 error_reporting(E_ALL);
 
+date_default_timezone_set("America/Halifax");
+
 function var_log($var, $prefix="") {
 	if ($prefix) $prefix .= ': ';
    	if ($var === null) $var = 'NULL';
@@ -48,6 +50,14 @@ session_start();
 
 //date_default_timezone_set('America/Halifax');
 define('DISPLAY_TYPE_TABLE', 'table');
+
+function getSerializedRequest() {
+	// Returns first serialized variable from $_REQUEST
+	parse_str ($_REQUEST['data'], $var);
+	foreach ($var as $result) {
+		return $result;
+	}
+}
 
 // To avoid having 'require' and 'include' all over the place, try
 // and autoload the class from the core directory.
