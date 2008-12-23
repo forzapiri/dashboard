@@ -12,6 +12,19 @@ class DBColumnText extends DBColumn {
 	}
 }
 
+class DBFileUpload extends DBColumn {
+	function type() { return 'fileupload'; }
+	
+	function addElementTo($args) {
+		$value = '';
+		$label = $this->label();
+		extract($args);
+		$el = $form->addElement ('file', $id, $label);
+		$el->setValue($value);
+		return $el;
+	}
+}
+
 class DBColumnPassword extends DBColumn {
 	function type() {return "password";}
 	function addElementTo ($args) {

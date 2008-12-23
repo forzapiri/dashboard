@@ -46,7 +46,6 @@
  *   DATE_FORMAT_TIMESTAMP              20080905151534
  *   DATE_FORMAT_UNIXTIME               1220638534
  */
-error_reporting(E_ALL);
 require_once 'Date.php';
 
 // Choosing high numbers to distinguish from PEAR's Date.
