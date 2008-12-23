@@ -146,6 +146,7 @@ abstract class DBRow {
 		}
 		
 		$obj->table()->deleteRow($obj->get('id'));
+		$obj->table()->resetWhereCache();
 		$n = Event_Dispatcher::getInstance(get_class($obj))->post(&$obj, 'onDelete');
 
 		return $this;
@@ -213,7 +214,7 @@ abstract class DBRow {
 			$query = new Query ($sql, $types);
 			$id = $query->insert($params);
 			$obj->values['id'] = $id;
-			return $id;
+			$obj->table()->setCache($id, $obj);
 		} else {
 			$sql = "update `$table` set" . $sql . " where id=?";
 			$params[] = $update;
@@ -221,6 +222,7 @@ abstract class DBRow {
 			$query = new Query ($sql, $types);
 			$query->query($params);
 		}
+		$obj->table()->resetWhereCache();
 		$n = Event_Dispatcher::getInstance(get_class($obj))->post(&$obj, 'onSave');
 		return $this;
 	}

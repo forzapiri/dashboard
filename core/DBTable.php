@@ -42,9 +42,10 @@ class DBTable {
 	}
 	function setCache($id, $obj) {$this->rows[$id] = $obj;}
 	function getCache($id) {return @$this->rows[$id];}
+	function resetWhereCache() {$this->rowsWhere = array();}
 	function deleteRow ($id) {
 		$this->deleteQuery->query($id);
-		$this->rowsWhere = array(); // RESET CACHE
+		$this->resetWhereCache();
 		$this->rows[$id] = false;
 	}
 	function fetchRow ($id) {
