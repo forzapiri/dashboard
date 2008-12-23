@@ -1,7 +1,6 @@
 <?php
 
 require_once('Database.php');
-error_reporting(E_ALL);
 class Image {
 	
 	public $id;

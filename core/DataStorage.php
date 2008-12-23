@@ -1,7 +1,5 @@
 <?php
 
-// error_reporting(E_ALL);
-
 class DataStorage {
 	
 	protected $id = null;
