@@ -49,6 +49,12 @@ class DBColumnTextBox extends DBColumn {
 	}
 }
 
+class DBColumnString extends DBColumn {
+	function type() {return "string";}
+	function suggestedMysql() {return "varchar(255)";}
+}
+
+
 class DBColumnTinytext extends DBColumn {
 	function type() {return "tinytext";}
 	function suggestedMysql() {return "tinytext";}
