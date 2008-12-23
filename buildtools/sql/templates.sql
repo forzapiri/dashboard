@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `templates` (
   PRIMARY KEY  (`id`),
   KEY `path` (`path`),
   KEY `timestamp` (`timestamp`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6;
 
 --
 -- Dumping data for table `templates`
