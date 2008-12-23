@@ -128,8 +128,8 @@ abstract class Module {
 			}
 		}
 		
-		public function addCSS($url) {
-			$this->smarty->addCSS($url);
+		public function addCSS($url, $mediaType = null) {
+			$this->smarty->addCSS($url, $mediaType);
 		}
 		
 		public function addJS($url) {

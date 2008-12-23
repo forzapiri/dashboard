@@ -190,14 +190,15 @@ class SmartySite extends Smarty {
 			$memory = 'Page generated in ' . (microtime(true) - $startTime) . ' seconds | Memory Usage: ' . ($memory);
 			if (DEBUG) Debug::singleton()->addMessage('Load Time', $memory);
 		}
-		
+
 		echo trim(@$output);
 		
 	}
 
-	function addCSS($url) {
-		if (!in_array($url, $this->css)) {
-			$this->css[] = $url;
+	function addCSS($url, $mediaType = null) {
+		if(is_null($mediaType)) $mediaType = 'norm';
+		if (!array_key_exists($mediaType, $this->css) || !in_array($url, $this->css[$mediaType])) {
+			$this->css[$mediaType][] = $url;
 		}
 	}
 
