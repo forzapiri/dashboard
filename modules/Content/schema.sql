@@ -72,26 +72,6 @@ INSERT INTO `content_pages` VALUES (1,'Home','2007-12-15 23:23:33',1,'public','h
 /*!40000 ALTER TABLE `content_pages` ENABLE KEYS */;
 UNLOCK TABLES;
 
---
--- Table structure for table `content_rel`
---
-
-DROP TABLE IF EXISTS `content_rel`;
-CREATE TABLE `content_rel` (
-  `revision_id` int(11) NOT NULL,
-  `child_type` enum('block','menu') default 'block',
-  `child_id` int(11) NOT NULL,
-  `sort` int(11) NOT NULL,
-  `module` varchar(100) default 'Content',
-  KEY `revision_id` (`revision_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `content_rel`
---
-
-LOCK TABLES `content_rel` WRITE;
-/*!40000 ALTER TABLE `content_rel` DISABLE KEYS */;
 INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`)
 VALUES
 	('view','ContentPage','View Content Pages','',1,1),
@@ -100,7 +80,6 @@ VALUES
 	('view','ContentPageRevision','View Content Page Revisions','',1,1),
 	('addedit','ContentPageRevision','Add / Edit Content Page Revisions','',1,1),
 	('delete','ContentPageRevision','Delete Content Page Revisions','',1,1);
-/*!40000 ALTER TABLE `content_rel` ENABLE KEYS */;
 UNLOCK TABLES;
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
