@@ -28,7 +28,7 @@ class Module_DBTable extends Module {
 				$col = $row;
 			}
 		}
-		return array ('tables' => $tables, 'rows' => $rows, 'col' => @$col); 
+		return array ('tables' => $tables, 'rows' => $rows, 'col' => @$col);
 	}
 	
 	private static $dbtables = false;

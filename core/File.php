@@ -1,37 +1,35 @@
 <?php
-define (DATA_STORAGE_DIR, '/files/');
+define ('DATA_STORAGE_DIR', 'files/');
 class File extends DBRow {
-	// IMAGES: id, data, content_type, filename, filesize
-	// DATASTORAGE: id, data, content_type, filename, filesize, description
-	// PROPOSED:  id, location, type, filename, description
-	// List of extensions at end of file
 	function createTable() {
 		$cols = array(
-			'id?',
-			DBColumn::make('//string','type'),
-			DBColumn::make('//string','filename'),
-			DBColumn::make('text','description')
+			DBColumn::make('id?'),
+			DBColumn::make('//string','type', 'Type'),
+			DBColumn::make('//string','filename', 'Filename'),
+			DBColumn::make('text','description', 'Description'),
+			DBColumn::make('//enum(public,private)','permission', 'Permission')
 			);
 		return parent::createTable ('files', __CLASS__, $cols);
 	}
 
 	static function make($id = null) {return parent::make(__CLASS__, $id);}
 	static function getAll($where = null) {return self::$tables[__CLASS__]->getAllRows($where);}
-	function getSize() {return filesize($this->getDirectoryFile());}
+
+	function getLink() {return "/" . DATA_STORAGE_DIR . $this->getPath() . $this->getLocalFilename();}
 	function getDirectoryFile() {return $this->getDirectory() . $this->getFilename();}
-	function getDirectory() {
+	function getSize() {return filesize($this->getDirectoryFile());}
+	function getDirectory() {return SITE_ROOT . "/" . DATA_STORAGE_DIR . $this->getPath();}
+	function getPath() {
 		$id = (string) $this->getId();
 		if (1&strlen($id)) $id = "0$id";
-		$path = implode('/', $str_split($id,2));
-		return DATA_STORAGE_DIR . "$path/";
+		$path = implode('/', str_split($id,2));
+		return "$path/";
 	}
-
 	function getLocalFilename() {
 		// Replaces the extension with one matching the mime type, if available
 		$filename = $this->getFilename();
 		if (!$filename) return "file.tmp";
-
-		$pos = strrpos ('.', $filename);
+		$pos = strrpos ($filename, '.');
 		if ($pos === false) return "$filename.tmp";
 		$type = $this->getType();
 		$ext = @$extensions[$type];
@@ -61,7 +59,7 @@ class File extends DBRow {
 		}
 		$dir = $this->getDirectory();
 		$file = $this->getLocalFilename();
-		mkdir($dir,777,true);
+		mkdir($dir,0777,true);
 		if (!move_uploaded_file ($data['tmp_name'], $dir.$file)) {
 			error_log ("Upload of file $tmp to $loc failed.");
 			return false;
@@ -70,6 +68,15 @@ class File extends DBRow {
 
 	function getAddEditFormHook($form) {
 		$form->addElement ('file', 'upload_file', 'Upload file');
+	}
+
+	function setPublic() {$this->setPermission('public');}
+	function setPrivate() {$this->setPermission('private');}
+	function setPermission($perm) {
+		$this->permission = $perm;
+		$file = $this->getDirectory() . 'public';
+		if ($perm == 'public') touch($file);
+		else unlink($file);
 	}
 	
 	function getAddEditFormSaveHook($form) {

@@ -228,7 +228,7 @@ abstract class DBRow {
 	}
 
 	function getAddEditFormHook($form) {}
-	
+	function getAddEditFormSaveHook($form) {}
 	function getAddEditForm($target = null) {
 		if (!$target){
 			$target = '/admin/' . get_class($this);
@@ -278,6 +278,7 @@ abstract class DBRow {
 				}
 				
 			}
+			$this->getAddEditFormSaveHook($form);
 			$this->save();
 			$form->setProcessed();
 		}
