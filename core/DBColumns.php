@@ -23,6 +23,7 @@ class DBFileUpload extends DBColumn {
 		$el->setValue($value);
 		return $el;
 	}
+	function suggestedMysql() {return "integer";}
 }
 
 class DBColumnPassword extends DBColumn {
