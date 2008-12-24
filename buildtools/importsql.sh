@@ -24,8 +24,11 @@ dbConf="../include/db-config.php"
 echo MySQL user
 read mysqlUser
 
-echo MySQL pass
+echo MySQL password
+stty_orig=`stty -g`
+stty -echo
 read mysqlPass
+stty $stty_orig
 
 echo Database
 read mysqlDb
