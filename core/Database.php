@@ -249,7 +249,7 @@ class Database {
 	}
 
 	public function __destruct() {
-		mysqli_close($this->link);
+		@mysqli_close($this->link);
 		unset($this);
 	}
 }
