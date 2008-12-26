@@ -144,7 +144,9 @@ class Database {
 		        if (mysqli_more_results($this->link)) {
 		        }
 		    } while (mysqli_next_result($this->link));
+		    return true;
 		}
+		return false;
 	}
 
 	/**

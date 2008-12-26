@@ -1,0 +1,32 @@
+<form action="/buildtools/install/install.php" method="post">
+{assign var=valid value=1}
+{if $checks}
+<table width="100%" class="checks" cellpadding="0" cellspacing="0">
+{foreach from=$checks item=check key=title}
+{if !$check}{assign var=valid value=0}{/if}
+<tr{if $check} class="pass"{else} class="fail"{/if}>
+	<td>{$title}</td>
+	<td>{if $check}<img src="/images/admin/tick.png">{else}<img src="/images/admin/cross.png">{/if}</td>
+</tr>
+{/foreach}
+</table>
+{/if}
+
+{if $fields}
+<table width="100%" class="checks" cellpadding="0" cellspacing="0">
+{foreach from=$fields item=field key=title}
+<tr>
+	<td>{$title}</td>
+	<td>{$field}</td>
+</tr>
+{/foreach}
+</table>
+{/if}
+
+{if $valid}
+<br />
+<input type="hidden" name="step" value="{$curstep+1}" />
+<input type="submit" name="submit" value="continue to step {$curstep+2}" />
+{/if}
+
+</form>

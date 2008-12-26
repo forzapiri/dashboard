@@ -1,0 +1,3 @@
+<p>Checking to see if the folder and file permissions are set correctly.</p>
+
+{include file="checks.htpl"}

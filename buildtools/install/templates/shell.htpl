@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Norex Dashboard :: Installer</title>
+<link rel="stylesheet" href="/buildtools/install/style.css" type="text/css" />
+<style>{literal}
+@CHARSET "UTF-8";
+
+body {
+	margin: 0;
+	padding: 0;
+	background-image: url(/buildtools/install/bg.png);
+}
+
+div#wrapper {
+	width: 700px;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: #fff;
+}
+
+div#header {
+	background-image: url(/images/admin/norex_logo.png);
+	height: 65px;
+	background-repeat: no-repeat;
+	margin: 0 0 10px 10px;
+}
+
+div#nav {
+	clear: both;
+	float: left;
+	width: 160px;
+	border-right: 1px solid #ccc;
+}
+
+div#nav ol {
+	color: #bbb;
+	font-family: sans-serif;
+	font-size: 0.7em;
+}
+
+div#nav ol li {
+	margin-bottom: 5px;
+}
+
+div#nav ol li.current {
+	font-weight: bolder;
+	color: #333;
+}
+
+div#content {
+	float: left;
+	width: 520px;
+	font-size: 0.8em;
+	padding: 0px 5px 0 5px;
+	font-family: sans-serif;
+	color: #333;
+}
+
+div#content p {
+	padding: 0;
+	margin: 10px 0 5px 0;
+}
+
+div#content table.checks td {
+	padding: 4px;
+	margin: 0;
+}
+
+div#content table.checks tr.pass {
+	color: green;
+	background-color: #B3EFB3;
+}
+
+div#content table.checks tr.fail {
+	color: red;
+	background-color: pink;
+}
+
+div#footer {
+	clear: both;
+}
+{/literal}</style>
+</head>
+<body>
+
+<div id="wrapper">
+<div id="header">&nbsp;</div>
+<div id="cols">
+	<div id="nav">
+		<ol>
+			{foreach from=$steps item=step key=i}
+			<li{if $i==$curstep} class="current"{/if}>{$step}</li>
+			{/foreach}
+		</ol>
+	</div>
+	<div id="content">{$content}</div>
+</div>
+<div id="footer">&nbsp;</div>
+</div>
+
+</body>
+</html>

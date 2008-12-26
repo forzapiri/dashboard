@@ -1,0 +1,6 @@
+<p>Welcome to the Norex Core Web Development Installer. This interface should allow you to customize the installation for the specific
+site that you are working on, including setting up the database and permissions.</p>
+
+<p>For starters, please verify that all the steps below have executed properly.</p>
+
+{include file="checks.htpl"}
