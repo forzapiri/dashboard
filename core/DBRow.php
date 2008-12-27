@@ -237,10 +237,13 @@ abstract class DBRow {
 		$els = array();
 		
 		$form = new Form($formName, 'post', $target);
-		$form->setConstants (array ('action' => @$_REQUEST['action'], 'section' => @$_REQUEST['section']));
+		$form->setConstants (array ('action' => @$_REQUEST['action'],
+									'section' => @$_REQUEST['section'],
+									'uniqid' => uniqid()));
 		$form->addElement ('hidden', 'action');
 		$form->addElement ('hidden', 'section');
-
+		$form->addElement ('hidden', 'uniqid');
+		
 		foreach ($this->columns() as $column) {
 			if ($column->noForm()) continue;
 			$name = $column->name();
@@ -266,6 +269,12 @@ abstract class DBRow {
 		$this->getAddEditFormHook($form);
 		$form->addElement('submit', $this->quickformPrefix() . 'submit', 'Submit');
 		if ($form->isSubmitted() && isset($_REQUEST[$this->quickformPrefix() . 'submit']) && $form->validate()) {
+			$uniqid = $form->exportValue('uniqid');
+			if (@$_SESSION['form_uniqids'][$uniqid]) {
+				$form->setProcessed();
+				return $form;
+			}
+			$_SESSION['form_uniqids'][$uniqid] = 'submitted';
 			foreach ($this->columns() as $column) {
 				if ($column->noForm()) continue;
 				$name = $column->name();
