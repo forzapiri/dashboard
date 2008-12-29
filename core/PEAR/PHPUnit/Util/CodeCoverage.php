@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: CodeCoverage.php 4270 2008-12-14 16:10:34Z sb $
+ * @version    SVN: $Id: CodeCoverage.php 4370 2008-12-23 16:43:42Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.1.0
  */
@@ -56,7 +56,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.8
+ * @version    Release: 3.3.9
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.1.0
  * @abstract
@@ -297,6 +297,10 @@ abstract class PHPUnit_Util_CodeCoverage
         $result = array();
 
         foreach ($data as $file => $coverage) {
+            if (empty($coverage)) {
+                continue;
+            }
+
             $maxLine = max(array_keys($coverage));
 
             if ($maxLine == 0) {
