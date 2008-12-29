@@ -75,31 +75,31 @@ class Config {
 	 * @static 
 	 */
 	public static function getActiveModules() {
-		// Nifty little bit of caching to save a database query or two (or fifty). If the active
-		// modules are not already stored then get them from the DB and cache them using the
-		// static keyword variable.
+		// A module Foo is reported as active if
+		// (1)  It is listed in the modules table
+		// (2)  The file modules/Foo/Foo.php is readable, and
+		// (3)  You are norex() OR the module is listed in SiteConfig::modules
 		$norex = SiteConfig::norex();
-		if ($norex) {
-			foreach (scandir(SITE_ROOT . '/modules/') as $file) {
-				if (is_readable (SITE_ROOT . '/modules/' . "$file/$file.php"))
-					$modules[] = $file;
+		if ($norex || is_null(self::$activeModules)) { // WHEN YOU FIRST LOG IN AS NOREX, CAN'T USE CACHED COPY
+			if ($norex) {
+				$modules = scandir(SITE_ROOT . '/modules/');
+			} else {
+				$modules = SiteConfig::get('modules');
 			}
-		} else {
-			$modules = SiteConfig::get('modules');
-		}
-		self::$modules_flipped = array_flip($modules);
-		$sql = '';
-		foreach ($modules as $module) {
-			$sql .= " or module='$module'";
-		}
-		$sql = substr ($sql, 3);
-		if (is_null(self::$activeModules)) {
+			self::$modules_flipped = array_flip($modules);
+			$sql = '';
+			foreach ($modules as $module) {
+				$sql .= " or module='$module'";
+			}
+			$sql = substr ($sql, 3); // REMOVE INITIAL "or"
 			$sql = "select * from modules where $sql";
 			$modules = Database::singleton()->query_fetch_all($sql);
 			
 			$active = array();
 			foreach ($modules as $mod) {
-				$active[$mod['id']] = $mod;
+				$name = $mod['module'];
+				if (is_readable (SITE_ROOT . '/modules/' . "$name/$name.php"))				
+					$active[$mod['id']] = $mod;
 			}
 			usort($active, array('Config', 'compare'));
 			if ($norex) {
