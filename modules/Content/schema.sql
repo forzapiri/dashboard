@@ -72,6 +72,7 @@ INSERT INTO `content_pages` VALUES (1,'Home','2007-12-15 23:23:33',1,'public','h
 /*!40000 ALTER TABLE `content_pages` ENABLE KEYS */;
 UNLOCK TABLES;
 
+LOCK TABLES `permissions` WRITE;
 INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`)
 VALUES
 	('view','ContentPage','View Content Pages','',1,1),
