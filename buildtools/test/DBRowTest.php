@@ -35,7 +35,7 @@ class DBRowTest extends PHPUnit_Framework_TestCase {
 	}
 	
 	public function testMake() {
-		$row = DBRow::make('User');
+		$row = DBRow::make('User', null);
 		$this->assertNull($row->get('id'));
 		
 		$row = DBRow::make('User', 1);

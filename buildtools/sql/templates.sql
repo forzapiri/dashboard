@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `templates` (
 -- Dumping data for table `templates`
 --
 
-LOCK TABLES `templates` WRITE;
+
 /*!40000 ALTER TABLE `templates` DISABLE KEYS */;
 INSERT INTO `templates` (`module`, `path`, `data`, `timestamp`, `id`, `name`) VALUES
 ('Module_Content', 'content.tpl', '<script type="text/javascript">genFlash(''/flash/leftCol.swf?pagetitle={$content->getPageTitle()}'', 615, 35, '''', ''transparent'');</script>\r\n{$content->getContent()}', '2008-07-28 20:26:32', 1, NULL),
@@ -45,7 +45,6 @@ INSERT INTO `templates` (`module`, `path`, `data`, `timestamp`, `id`, `name`) VA
 ('CMS', 'site.tpl', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\r\n<html xmlns="http://www.w3.org/1999/xhtml">\r\n<head>\r\n<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />\r\n<meta name="keywords" content="{$metaKeywords}" />\r\n<meta name="description" content="{$metaDescription}" />\r\n<meta name="title" content="{$metaTitle}" />\r\n<title>{$title}</title>\r\n<link rel="stylesheet" href="/css/style.css,/css/cssMenus.css{if $css.norm|@count > 0}{foreach from=$css.norm item=cssUrl},{$cssUrl}{/foreach}{/if}" type="text/css" />\r\n{if $css.print|@count > 0}\r\n	<link rel="stylesheet" href="{foreach from=$css.print item=cssUrl}{$cssUrl}{if $css.print|@key < $css.print|@count},{/if}{/foreach}" type="text/css" media="print" />\r\n{/if}\r\n{if $css.screen|@count > 0}\r\n	<link rel="stylesheet" href="{foreach from=$css.screen item=cssUrl}{$cssUrl}{if $css.screen|@key < $css.screen|@count},{/if}{/foreach}" type="text/css" media="screen" />\r\n{/if}\r\n\r\n<script type="text/javascript" src="/js/prototype.js{foreach from=$js item=jsUrl},{$jsUrl}{/foreach}"></script>\r\n\r\n</head>\r\n\r\n<body>\r\n\r\n<h1>{$title}</h1>\r\n\r\n{module class="Menu"}\r\n	\r\n{if $user}<a href="/user/logout">Logout</a>{else}<a href="/user/login">Login</a>{/if}\r\n\r\n{module class=$module}\r\n\r\n</body>\r\n</html>\r\n', '2008-12-23 14:18:02', 5, NULL);
 
 /*!40000 ALTER TABLE `templates` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
