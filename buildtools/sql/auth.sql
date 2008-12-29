@@ -2,7 +2,7 @@
 --
 -- Host: localhost    Database: trunk
 -- ------------------------------------------------------
--- Server version	5.0.41-log
+-- Server version	5.0.41
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -32,7 +32,7 @@ CREATE TABLE `auth` (
   `email` varchar(255) NOT NULL,
   `status` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `auth`
@@ -40,7 +40,7 @@ CREATE TABLE `auth` (
 
 LOCK TABLES `auth` WRITE;
 /*!40000 ALTER TABLE `auth` DISABLE KEYS */;
-INSERT INTO `auth` VALUES (1,'norex','0188127235a7cf49b79a46f31d77b135','norexcms49340bf2c7fff6.82647904',1,'2008-07-20 21:56:56','Norex','Development','bugs@norex.ca',1);
+INSERT INTO `auth` VALUES (1,'norex','0188127235a7cf49b79a46f31d77b135','norexcms49340bf2c7fff6.82647904',1,'2008-07-20 21:56:56','Norex','Development','bugs@norex.ca',1),(22,'admin','f93077a467ac40a77e4f89d8e6010e1c','norexcms495801d5e2aeb0.87084163',1,'2008-12-28 22:41:04','Norex','Administrator','wolfe@norex.ca',1);
 /*!40000 ALTER TABLE `auth` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2008-12-01 16:08:44
+-- Dump completed on 2008-12-28 22:49:45

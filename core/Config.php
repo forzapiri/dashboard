@@ -61,6 +61,13 @@ class Config {
 		
 		return self::$instance;
 	}
+
+	
+	private static $modules_flipped;
+	private static function compare($a,$b) {
+		return self::$modules_flipped[$a['module']]
+			 - self::$modules_flipped[$b['module']];
+	}
 	/**
 	 * Get currently active modules
 	 *
@@ -71,17 +78,33 @@ class Config {
 		// Nifty little bit of caching to save a database query or two (or fifty). If the active
 		// modules are not already stored then get them from the DB and cache them using the
 		// static keyword variable.
+		if (SiteConfig::norex()) {
+			foreach (scandir(SITE_ROOT . '/modules/') as $file) {
+				if (preg_match ('/[A-Z].*/', $file))
+					$modules[] = $file;
+			}
+		} else {
+			$modules = SiteConfig::get('modules');
+		}
+		var_log ($modules);
+		self::$modules_flipped = array_flip($modules);
+		$sql = '';
+		foreach ($modules as $module) {
+			$sql .= "or module='$module'";
+		}
+		$sql = substr ($sql, 3);
 		if (is_null(self::$activeModules)) {
-			$sql = 'select * from modules where status="active" order by sort_order asc';
+			$sql = "select * from modules where $sql";
 			$modules = Database::singleton()->query_fetch_all($sql);
 			
 			$active = array();
 			foreach ($modules as $mod) {
 				$active[$mod['id']] = $mod;
 			}
+			usort($active, array('Config', 'compare'));
 			self::$activeModules = $active;
 		}
-		
+		// var_dump (self::$activeModules);
 		return self::$activeModules;
 	}
 
