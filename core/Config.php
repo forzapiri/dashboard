@@ -40,7 +40,7 @@ class Config {
 	 * @var array
 	 * @static
 	 */
-	public static $activeModules = null;
+	private static $activeModules = null;
 
 
 	/**
@@ -78,19 +78,19 @@ class Config {
 		// Nifty little bit of caching to save a database query or two (or fifty). If the active
 		// modules are not already stored then get them from the DB and cache them using the
 		// static keyword variable.
-		if (SiteConfig::norex()) {
+		$norex = SiteConfig::norex();
+		if ($norex) {
 			foreach (scandir(SITE_ROOT . '/modules/') as $file) {
-				if (preg_match ('/[A-Z].*/', $file))
+				if (is_readable (SITE_ROOT . '/modules/' . "$file/$file.php"))
 					$modules[] = $file;
 			}
 		} else {
 			$modules = SiteConfig::get('modules');
 		}
-		var_log ($modules);
 		self::$modules_flipped = array_flip($modules);
 		$sql = '';
 		foreach ($modules as $module) {
-			$sql .= "or module='$module'";
+			$sql .= " or module='$module'";
 		}
 		$sql = substr ($sql, 3);
 		if (is_null(self::$activeModules)) {
@@ -102,9 +102,14 @@ class Config {
 				$active[$mod['id']] = $mod;
 			}
 			usort($active, array('Config', 'compare'));
+			if ($norex) {
+				foreach ($active as &$module) {
+					$module['display_name'] = $module['module'];
+				}
+			}
 			self::$activeModules = $active;
 		}
-		// var_dump (self::$activeModules);
+			
 		return self::$activeModules;
 	}
 
