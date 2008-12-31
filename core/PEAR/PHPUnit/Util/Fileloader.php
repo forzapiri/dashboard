@@ -57,7 +57,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: @package_version@
+ * @version    Release: 3.3.9
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.3.0
  */
@@ -163,8 +163,8 @@ class PHPUnit_Util_Fileloader
     protected static function syntaxCheck($filename)
     {
         if (self::$phpBinary === NULL) {
-            if (is_readable('@php_bin@')) {
-                self::$phpBinary = '@php_bin@';
+            if (is_readable('/Applications/MAMP/bin/php5/bin/php')) {
+                self::$phpBinary = '/Applications/MAMP/bin/php5/bin/php';
             }
 
             else if (PHP_SAPI == 'cli' && isset($_SERVER['_']) &&
