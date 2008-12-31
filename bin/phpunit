@@ -37,8 +37,6 @@
  * $Id: pear-phpunit 2805 2008-04-14 16:52:19Z sb $
  */
 
-set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__) . '/../' . '/core' . PATH_SEPARATOR . dirname(__FILE__) . '/../' . '/core/PEAR' . PATH_SEPARATOR . '/usr/share/php/');
-
 require_once 'PHPUnit/Util/Filter.php';
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
