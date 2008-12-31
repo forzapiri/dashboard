@@ -74,7 +74,7 @@ if (!isset($_GET['image']))
 define('MEMORY_TO_ALLOCATE',	'100M');
 define('DEFAULT_QUALITY',		90);
 define('CURRENT_DIR',			dirname(__FILE__));
-define('CACHE_DIR_NAME',		'/../imagecache/');
+define('CACHE_DIR_NAME',		'/../cache/images/');
 define('CACHE_DIR',				CURRENT_DIR . CACHE_DIR_NAME);
 define('DOCUMENT_ROOT',			$_SERVER['DOCUMENT_ROOT']);
 

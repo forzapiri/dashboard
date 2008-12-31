@@ -34,7 +34,7 @@ class Debug {
 		if (file_exists(SITE_ROOT . '/templates/local')) {
 			$smarty->template_dir = SITE_ROOT . '/templates/local';
 		}
-		$smarty->compile_dir = SITE_ROOT . '/templates_c';
+		$smarty->compile_dir = SITE_ROOT . '/cache';
 		$smarty->plugins_dir[] = SITE_ROOT . '/core/plugins';
 		
 		$string = '<script type="text/javascript">
