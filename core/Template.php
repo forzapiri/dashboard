@@ -26,7 +26,7 @@ class Template extends DBRow {
 			DBColumn::make('text', 'module', 'Module'),
 			DBColumn::make('text', 'path', 'Path'),
 			DBColumn::make('longtext', 'data', 'Data'),
-			DBColumn::make('timestamp', 'timestamp', 'Time'),
+			'//timestamp',
 			DBColumn::make('text', 'name', 'Name')
 			);
 		$table = new DBTable("templates", __CLASS__, $cols);
