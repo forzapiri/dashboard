@@ -93,7 +93,7 @@ function array_flatten($array, $preserve_keys = 1, &$newArray = Array()) {
 function authHTML() {
 	global $smarty;
 	 $smarty->template_dir = SITE_ROOT . '/templates';
-	 $smarty->compile_dir = SITE_ROOT . '/templates_c';
+	 $smarty->compile_dir = SITE_ROOT . '/cache/templates';
 	 $smarty->plugins_dir[] = SITE_ROOT . '/core/plugins';
 	 
 	$config = Config::singleton();
@@ -304,7 +304,7 @@ $smarty->assign_by_ref('config', $config);
 if (file_exists(SITE_ROOT . '/templates/local')) {
 	$smarty->template_dir = SITE_ROOT . '/templates/local';
 }
-$smarty->compile_dir = SITE_ROOT . '/templates_c';
+$smarty->compile_dir = SITE_ROOT . '/cache/templates';
 $smarty->plugins_dir[] = SITE_ROOT . '/core/plugins';
 
 require_once 'Event/Dispatcher.php';

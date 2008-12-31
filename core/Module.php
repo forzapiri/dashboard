@@ -105,7 +105,7 @@ abstract class Module {
 				if (file_exists(SITE_ROOT . '/modules/' . $name . '/plugins')) {
 					$module->smarty->plugins_dir[] = SITE_ROOT . '/modules/' . $name . '/plugins';
 				}
-				$module->smarty->compile_dir = SITE_ROOT . '/templates_c';
+				$module->smarty->compile_dir = SITE_ROOT . '/cache/templates';
 				$module->smarty->plugins_dir[] = SITE_ROOT . '/core/plugins';
 				$module->smarty->compile_id = $classname;
 				

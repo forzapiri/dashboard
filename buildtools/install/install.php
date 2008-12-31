@@ -1,12 +1,13 @@
 <?php
 
 require_once('../../core/libs/Smarty.class.php');
+function isReadWriteDir($file) {return is_readable($file) && is_writable($file) && is_dir ($file);}
 
 define('SITE_ROOT', (dirname(__FILE__) . '/../../'));
 
 $s = new Smarty();
 $s->template_dir = dirname(__FILE__) . '/templates';
-$s->compile_dir = SITE_ROOT . '/templates_c';
+$s->compile_dir = SITE_ROOT . '/cache/templates';
 
 $step = isset($_REQUEST['step']) ? $_REQUEST['step'] : 0;
 
@@ -15,6 +16,10 @@ $steps = array(
 );
 $s->assign('curstep', $step);
 
+
+										 
+	
+									 
 switch ($step) {
 	case 0:
 		$checks = array(
@@ -27,11 +32,12 @@ switch ($step) {
 		break;
 	case 1:
 		$checks = array(
-			'templates directory is readable' => is_readable(SITE_ROOT . '/templates') ? 1 : 0,
-			'templates_c directory is readable' => is_readable(SITE_ROOT . '/templates_c') ? 1 : 0,
-			'templates_c directory is writeable' => is_writable(SITE_ROOT . '/templates_c') ? 1 : 0,
-			'js/cache directory is readable' => is_readable(SITE_ROOT . '/js/cache') ? 1 : 0,
-			'js/cache directory is writeable' => is_writable(SITE_ROOT . '/js/cache') ? 1 : 0
+			'templates directory is readable' => is_readable(SITE_ROOT . '/templates') && is_dir(SITE_ROOT . '/templates'),
+			'cache/templates directory is a read/write directory' => isReadWriteDir(SITE_ROOT . '/cache/templates'),
+			'js/cache soft links to cache/js' => is_link(SITE_ROOT . '/js/cache') && readlink(SITE_ROOT . '/js/cache') === '../cache/js',
+			'cache/js directory is a read/write directory' => isReadWriteDir(SITE_ROOT . '/cache/js'),
+			'cache/images directory is a read/write directory' => isReadWriteDir(SITE_ROOT . '/cache/images'),
+			'cache/pages directory is a read/write directory' => isReadWriteDir(SITE_ROOT . '/cache/pages')
 		);
 		$s->assign('checks', $checks);
 		$content = $s->fetch('step1.htpl');
