@@ -15,16 +15,13 @@ $steps = array(
 	'Welcome', 'Checking permissions', 'Database', 'Install Schemas'
 );
 $s->assign('curstep', $step);
-
-
-										 
 	
 									 
 switch ($step) {
 	case 0:
 		$checks = array(
-			'PHP 5.2 or better installed' => version_compare(PHP_VERSION, '5.2', '>') ? 1 : 0,
-			'MySQL 5.0 or better installed' => version_compare(mysqli_get_client_info(), '5.0', '>') ? 1 : 0,
+			'PHP 5.2 or better installed' => version_compare(PHP_VERSION, '5.2', '>'),
+			'MySQL 5.0 or better installed' => version_compare(mysqli_get_client_info(), '5.0', '>'),
 		);
 		
 		$s->assign('checks', $checks);
