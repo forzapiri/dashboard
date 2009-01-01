@@ -22,7 +22,6 @@ function var_log($var, $prefix="") {
 }
 
 define('DEBUG', isset($_REQUEST['DEBUG']));
-define('NOREX', isset($_REQUEST['NOREX']));
 
 $startTime = microtime(true);
 
@@ -41,6 +40,23 @@ function error_handler($errno, $errstr, $errfile, $errline) {
 }
 // set to the user defined error handler
 $old_error_handler = set_error_handler('error_handler', E_ERROR | E_PARSE);
+
+
+/*
+ * Check if there is a cached copy of the request.
+ */
+require_once('Cache/Lite.php');
+define ('CACHED_PAGE_INDEX', $_SERVER['REQUEST_URI']); // I think it's reasonable to treat this string as the index to cache by
+$options = array(
+    'cacheDir' => SITE_ROOT . '/cache/pages/',
+    'lifeTime' => 60*60*24*7 // 1 week
+);
+$pageCache = new Cache_Lite($options);
+if ($data = $pageCache->get(CACHED_PAGE_INDEX)) {
+	echo $data;
+	die();
+}
+
 
 include_once(SITE_ROOT . '/core/libs/Smarty.class.php');
 include_once(SITE_ROOT . '/core/libs/Smarty_Compiler.class.php');
@@ -160,7 +176,7 @@ class SmartySite extends Smarty {
     	echo $this->dispErr(500, Module::factory('Content'), null, $error_msg);
     }
 
-	function render($template, $override = null) {
+	function render($template, $override = null, $display = true) {
 		if(!$override==null){
                $this->templateOverride($override);
         }
@@ -179,10 +195,10 @@ class SmartySite extends Smarty {
 
 		global $memory;
 		global $startTime;
-		
-		if (!empty($this->templateOverride)) {
-                $this->display($this->templateOverride);
-        } else $this->display($template);
+
+		if (!empty($this->templateOverride)) $template = $this->templateOverride;
+		if ($display) $this->display($template);
+		else $result = $this->fetch($template);
 
 		if (function_exists('memory_get_peak_usage') && function_exists('memory_get_usage')) {
 			$memory .= 'Peak: ' . number_format(memory_get_peak_usage() / 1024, 0, '.', ',') . " KB \n";
@@ -192,7 +208,7 @@ class SmartySite extends Smarty {
 		}
 
 		echo trim(@$output);
-		
+		if (!$display) return $result;
 	}
 
 	function addCSS($url, $mediaType = null) {

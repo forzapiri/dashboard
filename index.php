@@ -12,6 +12,7 @@
  * Kicks things off with initiliziation of the general framework infrastructure.
  */
 include_once 'include/Site.php';
+// NOTE that Site.php now checks for cached copy and die() is called if found
 
 /*
  * Assess whether we are logging in on this page request.
@@ -49,6 +50,15 @@ if ( $ajaxHelper->isAJAX () ){
 	if (isset($_SESSION['authenticated_user'])) {
 		$smarty->assign_by_ref ( 'user', $_SESSION['authenticated_user'] );
 	}
-	$smarty->render ( 'db:site.tpl', $smarty->templateOverride);
+	$cachedModules = SiteConfig::get('cachedModules');
+	if ($cachedModules
+		&& (in_array ($_REQUEST['module'], $cachedModules)
+			|| in_array ('all', $cachedModules))) {
+			$result = $smarty->render ('db:site.tpl', $smarty->templateOverride, false);
+			$pageCache->save($result, CACHED_PAGE_INDEX);
+			echo $result;
+	} else {
+		$smarty->render ( 'db:site.tpl', $smarty->templateOverride);
+	}
 }
 ?>
