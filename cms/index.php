@@ -14,6 +14,12 @@
  * Require the site initialization file
  */
 require_once (dirname(__FILE__) . "/../include/Site.php");
+
+/* Aggressively clear cache just in case this admin request changes static web pages.
+ * 
+ */
+$pageCache->clean();
+
 $auth_container = new CMSAuthContainer();
 $auth = new Auth($auth_container, null, 'authHTML');
 $auth->start();
