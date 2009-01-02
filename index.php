@@ -56,6 +56,7 @@ if ( $ajaxHelper->isAJAX () ){
 		&& !in_array ('all', $uncachedModules)) {
 			$result = $smarty->render ('db:site.tpl', $smarty->templateOverride, false);
 			$pageCache->save($result, CACHED_PAGE_INDEX);
+			var_log ("Caching");
 			echo $result;
 	} else {
 		$smarty->render ( 'db:site.tpl', $smarty->templateOverride);
