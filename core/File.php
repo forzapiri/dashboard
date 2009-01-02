@@ -147,5 +147,13 @@ class File extends DBRow {
 		'/image/wbmp' => 'wbmp',
 		'/text/css' => 'css',
 		);
+		
+	public function toArray($where = null) {
+		$array = array();
+		foreach (self::getAll($where) as $s) {
+			$array[$s->get('id')] = $s->get('filename');
+		}
+		return $array;
+	}
 }
 DBRow::init('File');
