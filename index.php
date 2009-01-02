@@ -50,12 +50,13 @@ if ( $ajaxHelper->isAJAX () ){
 	if (isset($_SESSION['authenticated_user'])) {
 		$smarty->assign_by_ref ( 'user', $_SESSION['authenticated_user'] );
 	}
-	$cachedModules = SiteConfig::get('cachedModules');
-	if ($cachedModules
-		&& (in_array ($_REQUEST['module'], $cachedModules)
-			|| in_array ('all', $cachedModules))) {
+	$uncachedModules = SiteConfig::get('cacheNotTheseModules');
+	if (!is_null($uncachedModules)
+		&& !in_array ($_REQUEST['module'], $uncachedModules)
+		&& !in_array ('all', $uncachedModules)) {
 			$result = $smarty->render ('db:site.tpl', $smarty->templateOverride, false);
 			$pageCache->save($result, CACHED_PAGE_INDEX);
+			var_log ("Caching");
 			echo $result;
 	} else {
 		$smarty->render ( 'db:site.tpl', $smarty->templateOverride);
