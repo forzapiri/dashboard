@@ -287,7 +287,6 @@ class Page extends defaultPageActs {
 			
 			list($from, $to) = $pager->getOffsetByPageId();
 			$where .= ' limit ' . ($from - 1) . ', ' . ($this->perPage);
-			var_dump(call_user_func(array($this->pointer, 'getAll'), $where));
 			$items = call_user_func(array($this->pointer, 'getAll'), $where);
 		
 		switch ($type) {
