@@ -151,6 +151,54 @@ var NorexUI = Class.create(Facebox, {
 		});
 	},
 	
+	createHandler: function(item, type) {
+		if ($F(item) != 'new') return;
+		
+		new Ajax.Request('/admin/DMS', {
+			method: 'post',
+			parameters: { 'X-CreateClass': type },
+			onSuccess: function(transport) {
+				ui.loading();
+				ui.reveal(transport.responseText);
+				
+				var displaybox = $$('div#facebox div.content')[0]; 
+				var form = displaybox.down('form');
+				$(form).observe('submit', function(event){
+			  		form.request({
+			  			onSuccess: function(transport) {
+			  				val = transport.responseText.evalJSON();
+			  				var all = val.all;
+			  				
+			  				var menu = item;
+			  				
+			  				for( var key in menu.options ) {
+			  					menu.options[key] = null;
+			  					menu.remove(key);
+			  				}
+			  				
+			  				var i = 2;
+			  				var inserted = 0;
+			  				menu.appendChild(new Option('-- NONE --', 0));
+			  				menu.appendChild(new Option('-- Create New --', 'new'));
+			  				all.each(function(el) {
+			  					var opt = new Option(el.value, el.key);
+			  					if (el.key == val.created) {
+			  						inserted = i;
+			  						opt.selected = true;
+			  					}
+			  					menu.appendChild(opt);
+			  					i++;
+			  				});
+			  				ui.close();
+			  			}
+			  		});
+			  		Event.stop(event);
+			 	});
+			}
+		});
+		
+	},
+	
 	updateContent: function(content) {
 		$('module_content').update(content);
 		$('module_content').fire('norexui:update');
