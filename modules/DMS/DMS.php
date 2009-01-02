@@ -40,7 +40,8 @@ class Module_DMS extends Module {
 					'created' => $item->get('id'),
 					'all' => $all 
 				);
-				return json_encode($array);
+				echo json_encode($array);
+				die();
 			}
 			
 			return $form->display();
