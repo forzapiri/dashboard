@@ -287,8 +287,9 @@ class Page extends defaultPageActs {
 			
 			list($from, $to) = $pager->getOffsetByPageId();
 			$where .= ' limit ' . ($from - 1) . ', ' . ($this->perPage);
-		$items = call_user_func(array($this->pointer, 'getAll'), $where);
-
+			var_dump(call_user_func(array($this->pointer, 'getAll'), $where));
+			$items = call_user_func(array($this->pointer, 'getAll'), $where);
+		
 		switch ($type) {
 		case 'html':
 		default:
@@ -342,7 +343,9 @@ class Page extends defaultPageActs {
 				
 			
 			if (count($items) == 0) {
-				$html .= '<p>No ' . $this->getName() . 's Created.';
+				if(substr($this->getName(), 0, -1) == 's') $pfix = 'es';
+				else $pfix = 's';
+				$html .= '<p>No ' . $this->getName() . $pfix . ' Created.';
 				if ($this->user->hasPerm($this->pointer, $this->pageActions[$this->pointer]['add']['perm'])) {
 					$html .= ' Would you like to <a href="/admin/' . $_REQUEST['module'] . '&amp;section=' . $this->pointer . '&amp;action=add' . @$add . '">make one</a>?</p>';
 				}
