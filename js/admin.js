@@ -150,6 +150,63 @@ var NorexUI = Class.create(Facebox, {
 			}
 		});
 	},
+	createDone: function(item) {
+		result=window.frames["filetarget"].document.body.innerHTML;
+		val = result.evalJSON();
+			var all = val.all;
+			
+			var menu = $(item);
+			
+			for( var key in menu.options ) {
+				menu.options[key] = null;
+				menu.remove(key);
+			}
+			
+			var i = 2;
+			var inserted = 0;
+			menu.appendChild(new Option('-- NONE --', 0));
+			menu.appendChild(new Option('-- Create New --', 'new'));
+			all.each(function(el) {
+				var opt = new Option(el.value, el.key);
+				if (el.key == val.created) {
+					inserted = i;
+					opt.selected = true;
+				}
+				menu.appendChild(opt);
+				i++;
+			});
+			ui.close();
+			$('filetarget').remove();
+	},
+	
+	createHandler: function(item, type) {
+		if ($F(item) != 'new') return;
+		
+		new Ajax.Request('/admin/DMS', {
+			method: 'post',
+			parameters: { 'X-CreateClass': type },
+			onSuccess: function(transport) {
+				ui.loading();
+				ui.reveal(transport.responseText);
+				
+				var displaybox = $$('div#facebox div.content')[0]; 
+				var form = displaybox.down('form');
+				
+				var iframe = Builder.node('iframe', {name: 'filetarget', id: 'filetarget'});
+				
+				iframe.hide();
+				displaybox.appendChild(iframe);
+				form.target = iframe.name;
+				
+				$(form).observe('submit', function(event){
+					iframe.onload = function() {
+						setTimeout('ui.createDone("' + item.identify() + '")', 10);
+					}
+			 	});
+			}
+		});
+		
+	},
 	
 	updateContent: function(content) {
 		$('module_content').update(content);

@@ -156,10 +156,12 @@ class DBColumnClass extends DBColumnId { // A column type for an id, where the i
 		$col = $this->options();
 		$col = $col ? $col[0] : 'id';
 		if ($col) {
+			$options[0] = '-- NONE --';
+			$options['new'] = '-- Create New --';
 			foreach ($rows as $row) {
 				$options[$row->get('id')] = $row->get($col);
 			}
-			$el = $form->addElement ('select', $id, $label, $options);
+			$el = $form->addElement ('select', $id, $label, $options, array('onchange' => 'ui.createHandler(this, \'' . $this->class . '\')'));
 			$el->setValue($value);
 			return $el;
 		}
