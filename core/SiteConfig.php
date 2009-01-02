@@ -207,9 +207,8 @@ class SiteConfig {
 		$form = new Form('SiteConfig_addedit', 'post', $target);
 		$norex = self::norex();
 		
-		$form->setConstants( array ( 'action' => 'addedit', 'NOREX' => $norex  ) );
+		$form->setConstants( array ( 'action' => 'addedit') );
 		$form->addElement( 'hidden', 'action' );
-		if ($norex) {$form->addElement('hidden', 'NOREX');}
 		
 		if (!is_null($this->getId())) {
 			$form->setConstants( array ( 'siteconfig_id' => $this->getId() ) );

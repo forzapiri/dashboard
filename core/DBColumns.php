@@ -271,6 +271,32 @@ class DBColumnCancel extends DBColumn {
 	}
 }
 
+class DBColumnURL extends DBColumnText {
+	function type() {return 'url';}
+	function addElementTo ($args) {
+		$label = $this->label();
+		extract($args);
+		if (!@$value) $value = "http://";
+		$el = $form->addElement ('text', $id, $label, array('size'=>'80'));
+		$el->setValue($value);
+		$chars = "a-z0-9_"; // Legal chars in the url
+		$form->addRule($id, 'URL required, e.g., http://www.norex.ca', 'regex', "!http(s)?://[$chars]+!", 'client');
+		return $el;
+	}
+}
+
+class DBColumnCode extends DBColumn{
+	function type() {return 'code';}	
+	function addElementTo($args) {
+		$value = null;
+		extract ($args);
+		$label = $this->label();
+		$el = $form->addElement ('textarea', $id, $label, array('rows' => 15, 'cols' => 70));
+		$el->setValue($value);
+		return $el;
+	}
+}
+
 /* ----------------------------- PUT NEW CLASSES ABOVE THIS LINE! ---------------------- */
 DBColumn::registerClasses();
 /* ------------------------------------------------------------------------------------- */

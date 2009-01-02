@@ -31,7 +31,7 @@ CREATE TABLE `config_options` (
   `editable` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `name` USING HASH (`name`,`module`)
-) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `config_options`
@@ -39,7 +39,8 @@ CREATE TABLE `config_options` (
 
 LOCK TABLES `config_options` WRITE;
 /*!40000 ALTER TABLE `config_options` DISABLE KEYS */;
-INSERT INTO `config_options` VALUES (1,'Content','defaultPageTitle','Default Page Title','string','Edit Page Title Using Site Config',0,'1'),
+INSERT INTO `config_options` VALUES
+(1,'Content','defaultPageTitle','Default Page Title','string','Edit Page Title Using Site Config',0,'1'),
 (2,'Blog','frontPage','Blogs to show on Front Page (list of user ids)','list','1',10,'1'),
 (3,'Blog','feedTitle','Title of RSS Feed','string','Green Party of Nova Scotia',10,'1'),
 (4,'Calendar','frontPage','Calendar ID to show as main calendar','string','1',10,'0'),
@@ -52,7 +53,7 @@ INSERT INTO `config_options` VALUES (1,'Content','defaultPageTitle','Default Pag
 (13,'Menu','numberWithSubmenus','Number of main menus which have submenus','int','1',0,'0'),
 (14,'Menu','templates','Templates which are selectable by the Client','list','menu_rendertop',0,'0'),
 (15,NULL,'modules','Active modules in display order','list','Content, Menu, User, Block, Analytics',0,'0'),
-(16,NULL,'activeModules','Modules ordered for display in admin','list','Content, Support, User, Analytics, SiteConfig',0,'0');
+(16,NULL,'cacheNotTheseModules','Modules that should not use caching layer','list','',0,'0');
 /*!40000 ALTER TABLE `config_options` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -65,4 +66,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2008-12-28 22:42:52
+-- Dump completed on 2009-01-02 15:26:56

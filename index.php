@@ -12,6 +12,7 @@
  * Kicks things off with initiliziation of the general framework infrastructure.
  */
 include_once 'include/Site.php';
+// NOTE that Site.php now checks for cached copy and die() is called if found
 
 /*
  * Assess whether we are logging in on this page request.
@@ -41,7 +42,7 @@ if ( $ajaxHelper->isAJAX () ){
 	$smarty->content[$_REQUEST['module']] = Module::factory($_REQUEST['module'], $smarty)->getUserInterface($_REQUEST);
 
 	$smarty->template_dir = SITE_ROOT . '/templates/';
-	$smarty->compile_dir = SITE_ROOT . '/templates_c';
+	$smarty->compile_dir = SITE_ROOT . '/cache/templates';
 	$smarty->plugins_dir[] = SITE_ROOT . '/core/plugins';
 	$smarty->compile_id = 'CMS';
 	
@@ -49,6 +50,15 @@ if ( $ajaxHelper->isAJAX () ){
 	if (isset($_SESSION['authenticated_user'])) {
 		$smarty->assign_by_ref ( 'user', $_SESSION['authenticated_user'] );
 	}
-	$smarty->render ( 'db:site.tpl', $smarty->templateOverride);
+	$uncachedModules = SiteConfig::get('cacheNotTheseModules');
+	if (!is_null($uncachedModules) && is_array($uncachedModules)
+		&& !in_array ($_REQUEST['module'], $uncachedModules)
+		&& !in_array ('all', $uncachedModules)) {
+			$result = $smarty->render ('db:site.tpl', $smarty->templateOverride, false);
+			$pageCache->save($result, CACHED_PAGE_INDEX);
+			echo $result;
+	} else {
+		$smarty->render ( 'db:site.tpl', $smarty->templateOverride);
+	}
 }
 ?>

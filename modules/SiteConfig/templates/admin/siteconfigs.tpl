@@ -1,5 +1,5 @@
 {if $norex}
-<p style="width: 100%; text-align: right;"><a href="/admin/SiteConfig&amp;action=addedit&amp;NOREX">Create new configuration variable</a></p>
+<p style="width: 100%; text-align: right;"><a href="/admin/SiteConfig&amp;action=addedit">Create new configuration variable</a></p>
 {/if}
 
 <table border="0" cellspacing="0" cellpadding="0" class="adminList" style="clear: both; float: left;">
@@ -40,14 +40,12 @@
 {/if}
 		<form action="/admin/SiteConfig" method="post">
 			<input type="hidden" name="action" value="addedit" />
-{if $norex} <input type="hidden" name="NOREX" value="1" /> {/if}
 			<input type="hidden" name="siteconfig_id" value="{$siteconfig->getId()}" />
 			<input type="image" src="/images/admin/pencil.gif" />
 		</form>
 {if $norex}
 		<form action="/admin/SiteConfig" method="post" onsubmit="return !deleteConfirm({$siteconfig->getId()});">
             <input type="hidden" name="action" value="delete" />
-			<input type="hidden" name="NOREX" value="1" />
 			<input type="hidden" name="siteconfig_id" value="{$siteconfig->getId()}" />
 			<input type="image" src="/images/admin/page_delete.gif" /></td>
 		</form>

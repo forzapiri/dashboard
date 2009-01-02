@@ -20,7 +20,8 @@ class File extends DBRow {
 		$link = $this->getImageLink($arg);
 		if (!$alt) $alt = htmlspecialchars($this->getDescription(), ENT_QUOTES);
 		if (!$alt) $alt = htmlspecialchars($this->getFilename());
-		return "<img src='$link' alt='$alt'/>";
+		$string = "<img src='$link' alt='$alt' />";
+		return $string;
 	}
 	function getImageLink($args = array()) {
 		// $arg is either array(width => 100, height => 200, ...) OR
