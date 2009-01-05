@@ -53,7 +53,7 @@ INSERT INTO `config_options` VALUES
 (13,'Menu','numberWithSubmenus','Number of main menus which have submenus','int','1',0,'0'),
 (14,'Menu','templates','Templates which are selectable by the Client','list','menu_rendertop',0,'0'),
 (15,NULL,'modules','Active modules in display order','list','Content, Menu, User, Block, Analytics',0,'0'),
-(16,NULL,'cacheNotTheseModules','Modules that should not use caching layer','list','',0,'0');
+(16,NULL,'cacheNotTheseModules','Modules that should not use caching layer','list','User',0,'0');
 /*!40000 ALTER TABLE `config_options` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
