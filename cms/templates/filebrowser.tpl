@@ -1,8 +1,12 @@
 <html>
 <head>
-{foreach from=$css item=cssUrl}
-<link rel="stylesheet" href="{$cssUrl}" type="text/css"/>
-{/foreach}
+<link rel="stylesheet" href="{foreach from=$css.norm item=cssUrl}{$cssUrl},{/foreach}/css/tiny_mce_filebrowser.css" type="text/css" />
+{if $css.print|@count > 0}
+	<link rel="stylesheet" href="{foreach from=$css.print item=cssUrl}{$cssUrl}{if $css.print|@key < $css.print|@count},{/if}{/foreach}" type="text/css" media="print" />
+{/if}
+{if $css.screen|@count > 0}
+	<link rel="stylesheet" href="{foreach from=$css.screen item=cssUrl}{$cssUrl}{if $css.screen|@key < $css.screen|@count},{/if}{/foreach}" type="text/css" media="screen" />
+{/if}
 <script type="text/javascript" src="/js/prototype.js"></script>
 {foreach from=$js item=jsUrl}
 <script type="text/javascript" src="{$jsUrl}"></script>
@@ -63,19 +67,19 @@ var fileInfo = function(el) {
 <td valign="top">
 	{if $type == 'image'}
 		{foreach from=$images item=image}
-			<div onclick="doSubmit({$image->getId()}, 'image');" onmouseover="fileInfo(this);" class="filebrowsericon"/>
-				<img src="/images/image.php?id={$image->getId()}&clipw=48" />
+			<div onclick="doSubmit({$image.id}, 'image');" onmouseover="fileInfo(this);" class="filebrowsericon"/>
+				<img src="/images/image.php?id={$image.id}&clipw=48" />
 				<br />
-				{math equation="x / 1024" x=$image->filesize assign=size}
+				{math equation="x / 1024" x=$image.filesize assign=size}
 				{$image->content_type}
 				<br />
 				{$size|string_format:"%.1f"} KB
 				<div class="fileinfo">
 				
-				<img src="/images/image.php?id={$image->getId()}&w=125" /> <br />
-				<strong>Name:</strong> {$image->filename}<br />
-				<strong>Type:</strong> {$image->content_type}<br />
-				<strong>Size:</strong> {$image->filesize} bytes<br />
+				<img src="/images/image.php?id={$image.id}&w=125" /> <br />
+				<strong>Name:</strong> {$image.filename}<br />
+				<strong>Type:</strong> {$image.content_type}<br />
+				<strong>Size:</strong> {$image.filesize} bytes<br />
 				</div>
 			</div>
 		{/foreach}
