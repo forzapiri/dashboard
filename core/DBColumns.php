@@ -192,8 +192,19 @@ class DBColumnSelect extends DBColumnText {
 		$value = null;
 		$label = $this->label();
 		extract ($args);
-
-		$el = $form->addElement ('select', $id, $label, $this->options());
+		$options = $this->options();
+		var_log ($options);
+ 		switch (count($options)) {
+		case 0: break;
+		case 1:
+			$value = array_keys($options);
+			$value = $value[0];
+			$el = $form->addElement ('hidden', $id);
+			break;
+		default:
+			$el = $form->addElement ('select', $id, $label, $options);
+			break;
+		}
 		$el->setValue($value);
 		return $el;
 	}
