@@ -20,8 +20,8 @@ class ContentPageRevision extends DBRow {
 			'id?',
 			DBColumn::make('integer?', 'parent', 'Parent'),
 			DBColumn::make('text', 'page_title', 'Page Title'),
-			DBColumn::make('tinymce', 'content', 'Page Content'),
 			DBColumn::make('select', 'page_template', 'Page Template', Template::toArray('CMS')),
+			DBColumn::make('tinymce', 'content', 'Page Content'),
 			'timestamp',
 			'status',
 			
