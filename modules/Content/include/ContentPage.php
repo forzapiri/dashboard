@@ -60,12 +60,7 @@ class ContentPage extends DBRow {
 		}
 	}
 	
-	function checkForHomeName($elVal){
-		if(!is_null($elVal) && ucfirst($elVal) != 'Home'){
-			return true;
-		}
-		return false;
-	}
+	function checkForHomeName($elVal){return (!is_null($elVal) && ucfirst($elVal) != 'Home');}
 	
 	public static function checkForHome(&$n){
 		fb('disable');
