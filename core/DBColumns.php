@@ -213,7 +213,7 @@ class DBColumnSelect extends DBColumnText {
 
 class DBColumnTimestamp extends DBColumnText {
 	function type() {return "timestamp";}
-	function toDB($obj) {$date = $obj ? $obj : new NDate(); return $date->get(MYSQL_TIMESTAMP);}
+	function toDB($obj) {$date = is_object($obj) ? $obj : new NDate($obj); return $date->get(MYSQL_TIMESTAMP);}
 	function fromDB($obj) {return new NDate($obj);}
 	function toForm($obj) {return $this->toDB($obj);}
 	function fromForm($obj) {return $this->fromDB($obj);}
@@ -229,7 +229,7 @@ class DBColumnTimestamp extends DBColumnText {
 
 class DBColumnDate extends DBColumnTimestamp {
 	function type() {return "date";}
-	function toDB($obj) {$date = $obj ? $obj : new NDate(); return $date->get(MYSQL_DATE);}
+	function toDB($obj) {$date = is_object($obj) ? $obj : new NDate($obj); return $date->get(MYSQL_TIMESTAMP);}
 	function addElementTo ($args) {
 		$value = $this->toDB(new NDate());
 		$label = $this->label();
