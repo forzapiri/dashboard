@@ -321,10 +321,10 @@ class Page extends defaultPageActs {
 			if (isset($_REQUEST[$prefix . 'id'])) {
 				$r = $this->catchActions();
 				$i = DBRow::make($_REQUEST[$prefix . 'id'], $class);
-				$i->getAddEditForm('/admin/' . $_REQUEST['module']);
-				$i->__construct($i->getId());
 				$f = $i->getAddEditForm('/admin/' . $_REQUEST['module']);
-				$html .= $f->display();
+				// BUG:  CHRIS THINKS THIS WAS INSERTED TO MASK A BUG IN DBROW, PERHAPS...  WE SHALL SEE.
+				// $f = $i->getAddEditForm('/admin/' . $_REQUEST['module']);
+				// $html .= $f->display();
 			}
 		}
 		if (!$this->user->hasPerm($this->pointer, 'view')) {
