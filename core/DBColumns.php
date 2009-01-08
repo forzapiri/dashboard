@@ -193,7 +193,6 @@ class DBColumnSelect extends DBColumnText {
 		$label = $this->label();
 		extract ($args);
 		$options = $this->options();
-		var_log ($options);
  		switch (count($options)) {
 		case 0: break;
 		case 1:
