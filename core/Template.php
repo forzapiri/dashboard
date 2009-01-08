@@ -38,7 +38,7 @@ class Template extends DBRow {
 		return $table; 
 	}
 	
-	static function make($id = null) {return parent::make(__CLASS__, $id);}
+	static function make($id = null) {return parent::make($id, __CLASS__);}
 	static function getAll($where = null) {return self::$tables[__CLASS__]->getAllRows($where);}
 	
 	public static function getRevision($module, $path) {

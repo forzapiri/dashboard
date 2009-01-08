@@ -57,7 +57,13 @@ abstract class DBRow {
 	}
 
 	static $makeFlag = false;
-	static function make($class, $id) {
+	static function make($id, $class) {
+		if (!class_exists ($class)) {
+			$append = class_exists($id) ? "  Swap arguments!" : "";
+			trigger_error (class_exists($id)
+						   ? "Swap arguments to DBRow::make($id, id) so id comes first"
+						   : "Class $class does not exist in DBRow::make()");
+		}
 		if ($id === null || $id === DUMMY_INIT_ROW) {
 			self::$makeFlag = true;
 			return new $class($id);
@@ -136,7 +142,7 @@ abstract class DBRow {
 			$class = $column->type();
 			$this->values[$name] = $value;
 			if (class_exists ($class)) {
-				$obj = DBRow::make($class,$value);
+				$obj = DBRow::make($value,$class);
 				$this->values[substr($name, 0, strlen($name)-3)] = $obj;
 			}
 		} else {

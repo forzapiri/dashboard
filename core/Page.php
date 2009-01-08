@@ -320,7 +320,7 @@ class Page extends defaultPageActs {
 			$prefix = call_user_func(array($class, 'quickformPrefix'));
 			if (isset($_REQUEST[$prefix . 'id'])) {
 				$r = $this->catchActions();
-				$i = DBRow::make($class, $_REQUEST[$prefix . 'id']);
+				$i = DBRow::make($_REQUEST[$prefix . 'id'], $class);
 				$i->getAddEditForm('/admin/' . $_REQUEST['module']);
 				$i->__construct($i->getId());
 				$f = $i->getAddEditForm('/admin/' . $_REQUEST['module']);
@@ -408,8 +408,8 @@ class Page extends defaultPageActs {
 				if (!is_array($name)) {
 					$html .= $item->table()->column($name)->__toString($item,$name);
 				} else {
-					$tmp = DBRow::make($name[1][0], $item->table()->column($name[0])->__toString($item,$name[0]));
-					
+					$tmp = DBRow::make($item->table()->column($name[0])->__toString($item,$name[0]),
+									   $name[1][0]);
 					for ($i = 1; $i < count($name[1]); $i++) {
 						$html .= call_user_func(array($tmp, $name[1][$i])) . ' ';
 					}

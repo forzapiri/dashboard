@@ -20,7 +20,7 @@ class Module_Content extends Module implements linkable {
 		$pageid = ContentPage::keytoid($_REQUEST['page']);
 		$revid = ContentPage::activeRev($pageid['id']);
 		if(!is_null($revid)){
-			$rev = new ContentPageRevision($revid['id']);
+			$rev = ContentPageRevision::make($revid['id']);
 			$this->smarty->assign('content',$rev);
 			$this->parentSmarty->templateOverride = 'db:' . $rev->getPageTemplate();
 			$this->setPageTitle($rev->get('page_title'));
@@ -69,7 +69,7 @@ class Module_Content extends Module implements linkable {
 	}
 	
 	public function getLinkable($id){
-		$page = new ContentPage($id);
+		$page = ContentPage::make($id);
 		return '/content/' . $page->get('url_key');
 	}
 }

@@ -28,7 +28,7 @@ class CMSAuthContainer extends Auth_Container
     	$sql = "SELECT * FROM auth WHERE username = '". e($username) ."' AND status = 1";
         $token = Database::singleton()->query_fetch($sql);
         if ((md5($password . md5($token['salt']))) == $token['password']) {
-        	$_SESSION['authenticated_user'] = User::make('User', $token['id']);    
+        	$_SESSION['authenticated_user'] = User::make($token['id']);    
         	return true;
         } else {
         	unset($_SESSION['authenticated_user']);

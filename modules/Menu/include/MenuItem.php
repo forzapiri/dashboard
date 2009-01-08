@@ -80,7 +80,7 @@ class MenuItem extends DBRow {
 	}
 	
 	static function getAll($where = null) {return self::$tables[__CLASS__]->getAllRows("$where");}
-	static function make($id = null) {return parent::make(__CLASS__, $id);}
+	static function make($id = null) {return parent::make($id, __CLASS__);}
 	function quickformPrefix() {return 'menuitem_';}
 
 	public function getLinkTarget() {

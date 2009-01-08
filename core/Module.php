@@ -116,7 +116,7 @@ abstract class Module {
 				// a shared connection.
 				$module->db = Database::singleton();
 				if (@isset($_SESSION['authenticated_user'])) {
-					$module->user = User::make('User', $_SESSION['authenticated_user']->getId());
+					$module->user = User::make($_SESSION['authenticated_user']->getId());
 					$module->smarty->assign_by_ref('user', $module->user);
 					
 				} 

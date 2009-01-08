@@ -27,7 +27,7 @@ class Module_DMS extends Module {
 	function getAdminInterface() {
 		
 		if (isset($_REQUEST['X-CreateClass'])) {
-			$item = DBRow::make($_REQUEST['X-CreateClass'], null);
+			$item = DBRow::make(null, $_REQUEST['X-CreateClass']);
 			$form = $item->getAddEditForm('/admin/DMS');
 			$form->addElement('hidden', 'X-CreateClass', $_REQUEST['X-CreateClass']);
 			
