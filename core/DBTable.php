@@ -73,8 +73,9 @@ class DBTable {
 		$query = $where ? new Query ("$select $where", "") : $this->fetchAllQuery;
 		$results = $query->fetchAll();
 		foreach ($results as &$result) {
-			$result = new $class ($result);
-			$this->rows[$result->get('id')] = $result;
+			$result = DBRow::make ($class, $result);
+			// Caching now done in DBRow::make.  Calling it for consistency.
+			// $this->rows[$result->get('id')] = $result;  
 		}
 		$this->rowsWhere[$where] = $results;
 		return $results;

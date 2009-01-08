@@ -27,6 +27,7 @@ class ContentPage extends DBRow {
 		return new DBTable("content_pages", __CLASS__, $cols);
 	}
 	static function getAll($where = null) {return self::$tables[__CLASS__]->getAllRows($where);}
+	static function make($id = null) {return parent::make(__CLASS__, $id);}
 	function quickformPrefix() {return 'content_pages_';}
 	
 	function keytoid($name){

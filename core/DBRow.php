@@ -39,6 +39,7 @@ abstract class DBRow {
 		return $result;
 	}
 	static function init($class) {
+		self::$makeFlag = true;
 		if (!isset (self::$tables[$class])) {
 			$dummy = new $class(DUMMY_INIT_ROW);
 			self::$tables[$class] = $dummy->createTable();
@@ -55,18 +56,29 @@ abstract class DBRow {
 		}
 	}
 
+	static $makeFlag = false;
 	static function make($class, $id) {
-		if ($id === null || $id === DUMMY_INIT_ROW) return new $class($id);
+		if ($id === null || $id === DUMMY_INIT_ROW) {
+			self::$makeFlag = true;
+			return new $class($id);
+		}
 		$table = @self::$tables[$class];
 		if (!$table ) return new $class($id); // DOES NOT YET CACHE non-DBRow CLASSES
-		$result = $table->getCache($id);
+		$result = $table->getCache(is_array($id) ? $id['id'] : $id);
 		if ($result) return $result;
+		self::$makeFlag = true;
 		$result = new $class ($id);
-		$table->setCache($id, $result);
+		$table->setCache(is_array($id) ? $id['id'] : $id, $result);
 		return $result;
 	}
 	
 	function __construct($id = null) {
+		if (!self::$makeFlag) {
+			// $trace = debug_backtrace();
+			trigger_error("Warning: running constructor without make");
+		} else {
+			self::$makeFlag = false;
+		}
 		if ($id === DUMMY_INIT_ROW) {return;}
 		if (is_array ($id)) {
 			$result = $id;

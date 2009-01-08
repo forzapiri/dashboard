@@ -38,7 +38,7 @@ class Module_Menu extends Module {
 		
 		switch (@$_REQUEST['section']) {
 			case 'menuitem':
-				$item = new MenuItem(@$_REQUEST['menuitem_id']);
+				$item = MenuItem::make(@$_REQUEST['menuitem_id']);
 				switch (@$_REQUEST['action']) {
 					case 'linkables':
 						header('Content-type: application/javascript');
@@ -75,7 +75,7 @@ class Module_Menu extends Module {
 			case 'menutype':
 				switch (@$_REQUEST['action']) {
 					case 'addedit':
-						$item = new MenuType(@$_REQUEST['menutype_id']);
+						$item = MenuType::make(@$_REQUEST['menutype_id']);
 						$form = $item->getAddEditForm('/admin/Menu');
 						if (!$form->isProcessed()) {
 							return $item->getAddEditForm('/admin/Menu')->display();
@@ -83,7 +83,7 @@ class Module_Menu extends Module {
 						break;
 					case 'deleteMenu' : // This one deletes an entire menu, not just one item.
 						$id = (integer) $_REQUEST['menutype_id'];
-						$m = new MenuType($id);
+						$m = MenuType::make($id);
 						$m->delete();
 						$sql = "delete from content_rel where child_type='menu' and child_id=$id";
 						Database::singleton()->query($sql);
@@ -107,10 +107,10 @@ class Module_Menu extends Module {
 		
 		if (isset($params['id'])) {
 			$menu = new Menu($params['id'], true );
-			$type = new MenuType($params['id']);
+			$type = MenuType::make($params['id']);
 		} else {
 			$menu = new Menu(1, true );
-			$type = new MenuType(1);
+			$type = MenuType::make(1);
 		}
 
 		$this->smarty->assign( 'menu', $menu->getRoots() );

@@ -22,7 +22,7 @@ class Menu {
 		$this->followContentMenus = $followContentMenus;
 
 		$this->menu_id = $menu_id;
-		if ($this->menu) $this->menu = new MenuItem($id);
+		if ($this->menu) $this->menu = MenuItem::make($id);
 		$this->roots = $this->getChildren($menu_id);
 	}
 	
@@ -41,7 +41,7 @@ class Menu {
 		/* Breadth First Search required so that circular references don't look silly
 		 * (Circular references are only possible of we are traversing Content blocks.)
 		 */
-		$root = new MenuItem();
+		$root = MenuItem::make();
 		$root->setId(0);
 		$root->setMenuid($menu_id);
 		$root->setParentid(0);
@@ -60,7 +60,7 @@ class Menu {
 			 * as in pk branch of content module.
 			*/
 			if ($id != 0 && $this->followContentMenus) {
-				$item = new MenuItem($id);
+				$item = MenuItem::make($id);
 				if ($this->getModInfo($item->module_id) == 'Content' && $this->followContentMenus) {
 					include_once(SITE_ROOT . '/modules/Content/include/CMSPage.php');
 					$page = new CMSPage($item->getLinkId());
@@ -80,7 +80,7 @@ class Menu {
 				}
 				$id = $child['id'];
 				if (isset($this->nodes[$id])) {continue;}
-				$child = new MenuItem ($id);
+				$child = MenuItem::make($id);
 				$child->parentItem = $v;
 				$child->setParentid($v === 0 ? 0 : $v->getId(0));
 				$n = count ($v->children);
