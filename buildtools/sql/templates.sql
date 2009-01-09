@@ -19,7 +19,8 @@
 -- Table structure for table `templates`
 --
 
-CREATE TABLE IF NOT EXISTS `templates` (
+DROP TABLE IF EXISTS `templates`;
+CREATE TABLE `templates` (
   `module` varchar(32) NOT NULL default '',
   `path` varchar(64) NOT NULL,
   `data` longtext NOT NULL,
