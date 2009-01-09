@@ -1,19 +1,4 @@
 <?php
-/**
- * Blocks
- * @author Christopher Troup <chris@norex.ca>
- * @package CMS
- * @version 2.0
- */
-
-/**
- * DETAILED CLASS TITLE
- *
- * DETAILED DESCRIPTION OF THE CLASS
- * @package CMS
- * @subpackage Core
- */
-
 class ContentPage extends DBRow {
 	function createTable() {
 		
@@ -21,6 +6,7 @@ class ContentPage extends DBRow {
 			'id?',
 			DBColumn::make('text', 'name', 'Page Name'),
 			DBColumn::make('text', 'url_key', 'URL Key'),
+			DBColumn::make('select', 'page_template', 'Page Template', Template::toArray('CMS')),
 			'//timestamp',
 			'//status'
 			);
@@ -36,7 +22,7 @@ class ContentPage extends DBRow {
 		return $id;
 	}
 	
-	function activeRev($id){
+	function activeRev($id) {
 			$sql = 'select id from content_page_data where parent="'.$id.'" and status="1"';
 			$revs = Database::singleton()->query_fetch($sql);
 			return $revs;
@@ -45,6 +31,12 @@ class ContentPage extends DBRow {
 	public function getAddEditFormHook($form){
 		$form->registerRule('checkName', 'function', 'checkForHomeName', get_class($this));
 		$form->addRule($this->quickformPrefix().'name', "Cannot create another Home page", 'checkName', null, 'client');
+		if ($this->getId()) {
+			$form->removeElement($this->quickformPrefix().'page_template');
+			$el = $form->addElement('hidden', $this->quickformPrefix() . 'page_template');
+			$el->setValue($this->getPageTemplate());
+			$el = $form->addElement('html', "<b>Site Template:</b> " . $this->getPageTemplate());
+		}
 		if($this->get('name') == 'Home'){
 			switch($_REQUEST['action']){
 				//Disables home page from having name change
@@ -73,7 +65,26 @@ class ContentPage extends DBRow {
 			$n->cancelNotification();
 		}
 	}
-	
+
+	function getSmartyResource() {
+		if ($t = $this->getPageTemplate()) {return "db:" . $t;}
+		else return null;
+	}
+
+	function getRequirements($smarty) {
+		$name = $this->getPageTemplate();
+		if (!$name) return false;
+		$template = Template::getRevision('CMS', $name);
+		if (!$template) return false;
+		$requirements = preg_match_all('/{\* ?[A-Z]+ ?\((.*)\): (.*) \*}/', $template->getData(), $matches, PREG_SET_ORDER);
+		if (!$requirements) return false;
+		foreach ($matches as $req) {
+			$x = &$results[];
+			$x['label'] = $req[1];
+			$x['types'] = array_map ('trim', split (',', $req[2]));
+		}
+		return $results;
+	}
 }
 DBRow::init('ContentPage');
 ?>

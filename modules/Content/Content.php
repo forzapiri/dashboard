@@ -18,11 +18,14 @@ class Module_Content extends Module implements linkable {
 		include ('include/ContentPage.php');
 		include ('include/ContentPageRevision.php');
 		$pageid = ContentPage::keytoid($_REQUEST['page']);
-		$revid = ContentPage::activeRev($pageid['id']);
+		$pageid = $pageid['id'];
+		$revid = ContentPage::activeRev($pageid);
+		$revid = @$revid['id'];
 		if(!is_null($revid)){
-			$rev = ContentPageRevision::make($revid['id']);
+			$rev = ContentPageRevision::make($revid);
 			$this->smarty->assign('content',$rev);
-			$this->parentSmarty->templateOverride = 'db:' . $rev->getPageTemplate();
+			$page = ContentPage::make($pageid);
+			$this->parentSmarty->templateOverride = $page->getSmartyResource();
 			$this->setPageTitle($rev->get('page_title'));
 		} else {
 			return $this->smarty->dispErr('404', &$this);
