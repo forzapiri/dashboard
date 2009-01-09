@@ -51,7 +51,8 @@ if ( $ajaxHelper->isAJAX () ){
 		$smarty->assign_by_ref ( 'user', $_SESSION['authenticated_user'] );
 	}
 	$uncachedModules = SiteConfig::get('cacheNotTheseModules');
-	if (!is_null($uncachedModules) && is_array($uncachedModules)
+	if (!SiteConfig::norex()
+		&& !is_null($uncachedModules) && is_array($uncachedModules)
 		&& !in_array ($_REQUEST['module'], $uncachedModules)
 		&& !in_array ('all', $uncachedModules)) {
 			$result = $smarty->render ('db:site.tpl', $smarty->templateOverride, false);
