@@ -215,7 +215,7 @@ class Page extends defaultPageActs {
 		
 		$received = null;
 		$idField = call_user_func(array($type, 'quickformPrefix'));
-		$i = call_user_func(array($type, 'make'), $type, @$_REQUEST[$idField . 'id']);
+		$i = call_user_func(array('DBRow', 'make'), @$_REQUEST[$idField . 'id'], $type);
 
 		if(array_key_exists('action', $_REQUEST) && array_key_exists($_REQUEST['action'], $this->pageActions[$this->pointer])){
 			if($this->user->hasPerm($this->pointer, $this->pageActions[$this->pointer][$_REQUEST['action']]['perm'])){
