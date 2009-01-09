@@ -80,7 +80,6 @@ abstract class DBRow {
 	
 	function __construct($id = null) {
 		if (!self::$makeFlag) {
-			// $trace = debug_backtrace();
 			trigger_error("Warning: running constructor without make");
 		} else {
 			self::$makeFlag = false;
