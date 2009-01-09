@@ -251,7 +251,7 @@ class Page extends defaultPageActs {
 				$where .= $this->link[$this->pointer][0] . '=' . $_REQUEST[$prefix . $this->link[$this->pointer][0]];
 			} else {
 				$prefix = call_user_func(array($this->pointer, 'quickformPrefix'));
-				$n = new $this->pointer($_REQUEST[$prefix . 'id']);
+				$n = DBRow::make($_REQUEST[$prefix . 'id'], $this->pointer);
 				$where .= $this->link[$this->pointer][0] . '=' . $n->get($this->link[$this->pointer][0]);
 			}
 			
