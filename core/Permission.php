@@ -14,6 +14,7 @@ class Permission extends DBRow {
 			);
 		return new DBTable("permissions", __CLASS__, $cols);
 	}
+	static function make($id = null) {return parent::make($id, __CLASS__);}
 	static function getAll($where = null) {
 		$perms = self::$tables[__CLASS__]->getAllRows($where);
 		return $perms;

@@ -22,7 +22,7 @@ class UserTest extends PHPUnit_Framework_TestCase {
 	protected function setUp() {
 		parent::setUp ();
 
-		$this->User = new User();
+		$this->User = User::make();
 		$this->stub = $this->getMock('Notification', array('getNotificationObject'));
         $this->stub->expects($this->any())
              ->method('getNotificationObject')

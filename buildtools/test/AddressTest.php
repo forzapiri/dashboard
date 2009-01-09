@@ -42,7 +42,7 @@ class AddressTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new Address;
+        $this->object = Address::make();
         
         $this->object->setCity('Halifax');
         $this->object->setCountry(31);
@@ -189,7 +189,7 @@ class AddressTest extends PHPUnit_Framework_TestCase
         $id = $this->object->getId();
         
         $id = $this->object->getId();
-        $obj = new Address($id);
+        $obj = Address::make($id);
         
         $obj->save();
         $this->assertEquals($obj->getId(), $id);
@@ -204,9 +204,9 @@ class AddressTest extends PHPUnit_Framework_TestCase
     	$id = $this->object->getId();
     	
         $this->object->delete();
-        $obj = new Address($id);
+        $obj = Address::make($id);
         
-        $this->assertEquals($obj, new Address);
+        $this->assertEquals($obj, Address::make());
     }
 
     /**

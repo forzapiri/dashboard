@@ -30,7 +30,7 @@ class GroupTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
     	parent::setUp ();
-        $this->object = new Group;
+        $this->object = Group::make();
         $this->stub = $this->getMock('Notification', array('getNotificationObject'));
         $this->stub->expects($this->any())
              ->method('getNotificationObject')
@@ -92,12 +92,12 @@ class GroupTest extends PHPUnit_Framework_TestCase
     		$this->fail();
     	}
     	
-    	$this->assertEquals($this->object, new Group($this->object->getId()));
+    	$this->assertEquals($this->object, Group::make($this->object->getId()));
     	
     	$this->object->setName('testgroup2');
     	$this->object->save(&$this->stub);
     	
-    	$this->assertEquals($this->object, new Group($this->object->getId()));
+    	$this->assertEquals($this->object, Group::make($this->object->getId()));
     }
 
     /**
@@ -107,7 +107,7 @@ class GroupTest extends PHPUnit_Framework_TestCase
 		$this->object->setName('testgroup');
 		$this->object->save(&$this->stub);
     	$this->object->delete(&$this->stub);
-        $this->assertEquals(new Group(), new Group($this->object->getId()));
+        $this->assertEquals(Group::make(), Group::make($this->object->getId()));
     }
     
     /**

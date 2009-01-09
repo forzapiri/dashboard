@@ -42,7 +42,7 @@ class BlocksTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new Block;
+        $this->object = Block::make();
     }
 
     /**

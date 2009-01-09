@@ -32,8 +32,8 @@ class Module_Search extends Module {
 		$cr = Database::singleton()->query_fetch_all($sql);
 		foreach ($cr as &$c) {
 			$rel = $c['Relevance'];
-			$c = new ContentPageRevision($c['id']);
-			$c->parent = new ContentPage($c->get('parent'));
+			$c = ContentPageRevision::make($c['id']);
+			$c->parent = ContentPage::make($c->get('parent'));
 			$c->resulttype = 'Content';
 			$c->relevance = $rel;
 		}

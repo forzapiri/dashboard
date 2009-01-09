@@ -49,7 +49,7 @@ class Module_DBTable extends Module {
 		foreach ($cols as $c) {
 			$name = $c['Field'];
 			if ($name == 'id') continue;
-			$col = new TableColumn ();
+			$col = TableColumn::make();
 			$col->set('table', $table);
 			$col->set('name', $name);
 			$col->set('type', 'text'); // TODO: Guess the field type?  Don't bother?
@@ -68,7 +68,7 @@ class Module_DBTable extends Module {
 		$action = @$_REQUEST['action'];
 		switch ($action) {
 			case 'createTable':
-				$col = new TableColumn ();
+				$col = TableColumn::make();
 				$form = $col->createTableForm('/admin/DBTable');
 				if (!$form->isProcessed()) {
 					return $form->display();
@@ -80,7 +80,7 @@ class Module_DBTable extends Module {
 				break;
 			case 'addColumn':
 			case 'addedit':
-				if (!$id) $col = new TableColumn ();
+				if (!$id) $col = TableColumn::make();
 				$col->set('table', $name);
 				$form = $col->getAddEditForm('/admin/DBTable');
 				if (!$form->isProcessed()) {

@@ -17,6 +17,7 @@ class Address extends DBRow {
 			);
 		return new DBTable("address", __CLASS__, $cols);
 	}
+	static function make($id = null) {return parent::make($id, __CLASS__);}
 	static function getAll($where = null) {return self::$tables[__CLASS__]->getAllRows($where);}
 	function quickformPrefix() {return 'address_';}
 	
