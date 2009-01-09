@@ -74,7 +74,7 @@ abstract class DBColumn {
 	function fromDB($obj) {return $obj;}
 	function toForm($obj) {return $obj;}
 	function fromForm($obj) {return $obj;}
-	function suggestedMysql() {return "text";}
+	function suggestedMysql() {return "varchar(256)";}
 	function addElementTo ($args) {
 		$value = null;
 		$label = $this->label();

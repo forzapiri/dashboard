@@ -215,7 +215,7 @@ class Page extends defaultPageActs {
 		
 		$received = null;
 		$idField = call_user_func(array($type, 'quickformPrefix'));
-		$i = call_user_func(array($type, 'make'), $type, @$_REQUEST[$idField . 'id']);
+		$i = call_user_func(array('DBRow', 'make'), @$_REQUEST[$idField . 'id'], $type);
 
 		if(array_key_exists('action', $_REQUEST) && array_key_exists($_REQUEST['action'], $this->pageActions[$this->pointer])){
 			if($this->user->hasPerm($this->pointer, $this->pageActions[$this->pointer][$_REQUEST['action']]['perm'])){
@@ -251,7 +251,7 @@ class Page extends defaultPageActs {
 				$where .= $this->link[$this->pointer][0] . '=' . $_REQUEST[$prefix . $this->link[$this->pointer][0]];
 			} else {
 				$prefix = call_user_func(array($this->pointer, 'quickformPrefix'));
-				$n = new $this->pointer($_REQUEST[$prefix . 'id']);
+				$n = DBRow::make($_REQUEST[$prefix . 'id'], $this->pointer);
 				$where .= $this->link[$this->pointer][0] . '=' . $n->get($this->link[$this->pointer][0]);
 			}
 			
@@ -320,10 +320,11 @@ class Page extends defaultPageActs {
 			$prefix = call_user_func(array($class, 'quickformPrefix'));
 			if (isset($_REQUEST[$prefix . 'id'])) {
 				$r = $this->catchActions();
-				$i = DBRow::make($class, $_REQUEST[$prefix . 'id']);
-				$i->getAddEditForm('/admin/' . $_REQUEST['module']);
-				$i->__construct($i->getId());
+				$i = DBRow::make($_REQUEST[$prefix . 'id'], $class);
 				$f = $i->getAddEditForm('/admin/' . $_REQUEST['module']);
+				// BUG:  CHRIS THINKS THIS WAS INSERTED TO MASK A BUG IN DBROW, PERHAPS...  WE SHALL SEE.
+				// $i->__construct($i->getId());
+				// $f = $i->getAddEditForm('/admin/' . $_REQUEST['module']);
 				$html .= $f->display();
 			}
 		}
@@ -408,8 +409,8 @@ class Page extends defaultPageActs {
 				if (!is_array($name)) {
 					$html .= $item->table()->column($name)->__toString($item,$name);
 				} else {
-					$tmp = DBRow::make($name[1][0], $item->table()->column($name[0])->__toString($item,$name[0]));
-					
+					$tmp = DBRow::make($item->table()->column($name[0])->__toString($item,$name[0]),
+									   $name[1][0]);
 					for ($i = 1; $i < count($name[1]); $i++) {
 						$html .= call_user_func(array($tmp, $name[1][$i])) . ' ';
 					}

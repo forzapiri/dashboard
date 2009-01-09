@@ -38,18 +38,19 @@ class Template extends DBRow {
 		return $table; 
 	}
 	
+	static function make($id = null) {return parent::make($id, __CLASS__);}
 	static function getAll($where = null) {return self::$tables[__CLASS__]->getAllRows($where);}
 	
 	public static function getRevision($module, $path) {
 		$result = self::$revisionQuery->fetch($module, $path);
-		$result = new Template($result);
+		$result = Template::make($result);
 		return $result;
 	}
 	
 	public function getRevisions() {
 		$results = self::$revisionsQuery->fetchAll($this->getModule(), $this->getPath());
 		foreach ($results as &$result) {
-			$result = new Template($result);
+			$result = Template::make($result);
 		}
 		return $results;
 	}
@@ -64,7 +65,7 @@ class Template extends DBRow {
 	public static function getAllTemplates($where = null) {
 		$results = self::$allTemplatesQuery->fetchAll();
 		foreach ($results as &$result) {
-			$result = new Template($result);
+			$result = Template::make($result);
 		}
 		return $results;
 	}

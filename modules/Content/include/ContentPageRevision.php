@@ -1,36 +1,20 @@
 <?php
-/**
- * Blocks
- * @author Christopher Troup <chris@norex.ca>
- * @package CMS
- * @version 2.0
- */
-
-/**
- * DETAILED CLASS TITLE
- *
- * DETAILED DESCRIPTION OF THE CLASS
- * @package CMS
- * @subpackage Core
- */
-
 class ContentPageRevision extends DBRow {
 	function createTable() {
 		$cols = array(
 			'id?',
 			DBColumn::make('integer?', 'parent', 'Parent'),
 			DBColumn::make('text', 'page_title', 'Page Title'),
-			DBColumn::make('select', 'page_template', 'Page Template', Template::toArray('CMS')),
 			DBColumn::make('tinymce', 'content', 'Page Content'),
 			'timestamp',
 			'status',
-			
 			);
 		return new DBTable("content_page_data", __CLASS__, $cols);
 	}
 	static function getAll($where = null) {return self::$tables[__CLASS__]->getAllRows($where);}
+	static function make($id = null) {return parent::make($id, __CLASS__);}
 	function quickformPrefix() {return 'content_page_data_';}
-	
+
 	public static function disableOthers(&$n) {
 		fb('disable');
 		if(@!$o = $n->getNotificationObject()){
@@ -43,7 +27,13 @@ class ContentPageRevision extends DBRow {
 			}
 		}
 	}
-	
+	public function getSubContent() {return getSubContentFor($this->getId());}
+	public function getAddEditFormSaveHook($form) {
+		if (1 == $form->exportValue($this->quickformPrefix() . 'status')){
+			ContentPageRevision::disableOthers($this);
+		}
+	}
+
 	public function getAddEditForm($target = null) {
 		$this->set('timestamp', null);
 		if (isset($_REQUEST[$this->quickformPrefix() . 'parent'])) {
@@ -51,12 +41,8 @@ class ContentPageRevision extends DBRow {
 		}
 		$form = parent::getAddEditForm($target);
 		$el =& $form->removeElement($this->quickformPrefix() . 'id');
-		if($form->isProcessed() && $form->exportValue($this->quickformPrefix() . 'status') == 1){
-			ContentPageRevision::disableOthers($this);
-		}
 		return $form;
 	}
-
 }
 DBRow::init('ContentPageRevision');
 ?>

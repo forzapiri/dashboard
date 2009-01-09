@@ -12,7 +12,7 @@ class File extends DBRow {
 		return parent::createTable ('files', __CLASS__, $cols);
 	}
 
-	static function make($id = null) {return parent::make(__CLASS__, $id);}
+	static function make($id = null) {return parent::make($id, __CLASS__);}
 	static function getAll($where = null) {return self::$tables[__CLASS__]->getAllRows($where);}
 
 	function getLink() {return "/" . DATA_STORAGE_DIR . $this->getPath() . $this->getLocalFilename();}

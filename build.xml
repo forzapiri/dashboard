@@ -8,8 +8,10 @@
 	<property name="logs" value="${buildtools}/logs" />
 
 	<target name="prepare">
-		<chmod perm="777" dir="${basedir}/templates_c" />
-		<chmod perm="777" dir="${basedir}/js/cache" />
+<!--
+	<chmod perm="777" dir="${basedir}/templates_c" />
+	<chmod perm="777" dir="${basedir}/js/cache" />
+-->
 	</target>
 			
 	<target name="checkout">  

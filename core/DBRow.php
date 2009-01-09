@@ -39,6 +39,7 @@ abstract class DBRow {
 		return $result;
 	}
 	static function init($class) {
+		self::$makeFlag = true;
 		if (!isset (self::$tables[$class])) {
 			$dummy = new $class(DUMMY_INIT_ROW);
 			self::$tables[$class] = $dummy->createTable();
@@ -55,18 +56,34 @@ abstract class DBRow {
 		}
 	}
 
-	static function make($class, $id) {
-		if ($id === null || $id === DUMMY_INIT_ROW) return new $class($id);
+	static $makeFlag = false;
+	static function make($id, $class) {
+		if (!class_exists ($class)) {
+			$append = class_exists($id) ? "  Swap arguments!" : "";
+			trigger_error (class_exists($id)
+						   ? "Swap arguments to DBRow::make($id, id) so id comes first"
+						   : "Class $class does not exist in DBRow::make()");
+		}
+		if ($id === null || $id === DUMMY_INIT_ROW) {
+			self::$makeFlag = true;
+			return new $class($id);
+		}
 		$table = @self::$tables[$class];
 		if (!$table ) return new $class($id); // DOES NOT YET CACHE non-DBRow CLASSES
-		$result = $table->getCache($id);
+		$result = $table->getCache(is_array($id) ? $id['id'] : $id);
 		if ($result) return $result;
+		self::$makeFlag = true;
 		$result = new $class ($id);
-		$table->setCache($id, $result);
+		$table->setCache(is_array($id) ? $id['id'] : $id, $result);
 		return $result;
 	}
 	
 	function __construct($id = null) {
+		if (!self::$makeFlag) {
+			trigger_error("Warning: running constructor without make");
+		} else {
+			self::$makeFlag = false;
+		}
 		if ($id === DUMMY_INIT_ROW) {return;}
 		if (is_array ($id)) {
 			$result = $id;
@@ -97,12 +114,7 @@ abstract class DBRow {
 			case 'get': return $this->get($getset[1]);
 			case 'set': return $this->set($getset[1], $args[0]);
 			default:
-				$trace = debug_backtrace();
- 				trigger_error(
-					'Undefined property via __get(): ' . $name .
-					' in ' . $trace[0]['file'] .
-					' on line ' . $trace[0]['line'],
-					E_USER_NOTICE);
+ 				trigger_error("Undefined property via __get(): $name");
 				return null;
 		}
 	}
@@ -124,7 +136,7 @@ abstract class DBRow {
 			$class = $column->type();
 			$this->values[$name] = $value;
 			if (class_exists ($class)) {
-				$obj = DBRow::make($class,$value);
+				$obj = DBRow::make($value,$class);
 				$this->values[substr($name, 0, strlen($name)-3)] = $obj;
 			}
 		} else {

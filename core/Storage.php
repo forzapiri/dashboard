@@ -15,7 +15,7 @@ class Storage extends DBRow implements StorageInterface {
 			);
 		return new DBTable("storage", __CLASS__, $cols);
 	}
-	
+	static function make($id = null) {return parent::make($id, __CLASS__);}
 	public function type() {
 		return 'blob';
 	}

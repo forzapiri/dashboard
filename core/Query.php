@@ -47,7 +47,7 @@ class Query {
 		$error = $mysqli->error;
 		$pstmt = $this->preparedStmt;
 		if ($error) {
-			error_log ("(Query.php $pstmt) $message: $error");
+			trigger_error ("(Query.php $pstmt) $message: $error");
 			printf("MySQL Error:  Check php error log");
 			die();
 		}

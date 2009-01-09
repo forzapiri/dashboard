@@ -80,6 +80,7 @@ class MenuItem extends DBRow {
 	}
 	
 	static function getAll($where = null) {return self::$tables[__CLASS__]->getAllRows("$where");}
+	static function make($id = null) {return parent::make($id, __CLASS__);}
 	function quickformPrefix() {return 'menuitem_';}
 
 	public function getLinkTarget() {
@@ -108,7 +109,7 @@ class MenuItem extends DBRow {
 		// var_dump ("Moving " . $this->getId() . " $direction $old => " . $this->getSort());
 		$sql = 'select id from menu where menuid=' . e($this->getMenuid()) . ' and parentid=' . e($this->getParentid()) . ' and sort=' . e($this->getSort());
 		$r = Database::singleton()->query_fetch($sql);
-		$r = new MenuItem($r['id']);
+		$r = MenuItem::make($r['id']);
 		$r->setSort($old);
 		// var_dump ($this);
 		// var_dump ($r);
