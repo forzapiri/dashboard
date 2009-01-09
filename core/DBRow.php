@@ -114,12 +114,7 @@ abstract class DBRow {
 			case 'get': return $this->get($getset[1]);
 			case 'set': return $this->set($getset[1], $args[0]);
 			default:
-				$trace = debug_backtrace();
- 				trigger_error(
-					'Undefined property via __get(): ' . $name .
-					' in ' . $trace[0]['file'] .
-					' on line ' . $trace[0]['line'],
-					E_USER_NOTICE);
+ 				trigger_error("Undefined property via __get(): $name");
 				return null;
 		}
 	}
