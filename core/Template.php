@@ -34,7 +34,7 @@ class Template extends DBRow {
 		$sql = $table->loadColumnNames(); // This just returns a comma-separated list of those column names that are not delay loaded.
 		self::$revisionQuery = new Query ("select $sql from templates where module=? and path=? order by timestamp desc limit 1", "ss");
 		self::$revisionsQuery = new Query ("select $sql from templates where module=? and path=? order by timestamp desc", "ss");
-		self::$allTemplatesQuery = new Query("select $sql from (select $sql from templates order by `timestamp` desc) b group by path order by module, path");
+		self::$allTemplatesQuery = new Query("select $sql from (select $sql from templates order by `timestamp` desc) templates group by path order by module, path");
 		return $table; 
 	}
 	

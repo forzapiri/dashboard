@@ -268,7 +268,7 @@ class Page extends defaultPageActs {
 		}
 		
 		$this->perPage = isset($_REQUEST['X-DataLimit']) ? $_REQUEST['X-DataLimit'] : $this->perPage;
-		$sql = 'select count(id) as count from ' . (call_user_func(array($this->pointer, 'createTable'))->name()) . ' ' . $where;
+		$sql = 'select count(' . (call_user_func(array($this->pointer, 'createTable'))->name()) . '.id) as count from ' . (call_user_func(array($this->pointer, 'createTable'))->name()) . ' ' . $where;
 			$r = Database::singleton()->query_fetch($sql);
 			
 			$currentPage = @$_REQUEST['pageID'];

@@ -59,7 +59,7 @@ class DBTable {
 		$sql = "";
 		foreach ($this->columns as $column) {
 			if ($column->delayLoad() || $column->ignored()) continue;
-			else $sql .= "`" . $column->name() . '`, ';
+			else $sql .= $this->name . ".`" . $column->name() . '`, ';
 		}
 		return trim($sql, ', ');
 	}
