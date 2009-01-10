@@ -34,7 +34,19 @@ CREATE TABLE `modules` (
 
 LOCK TABLES `modules` WRITE;
 /*!40000 ALTER TABLE `modules` DISABLE KEYS */;
-INSERT INTO `modules` VALUES (1,'Content','Site Content'),(5,'Menu','Menu Management'),(8,'User','User'),(17,'Block','Blocks Management'),(21,'Gallery','Photo Gallery'),(22,'Templater','Templater'),(23,'Analytics','Google Analytics'),(24,'SiteConfig','Site Config'),(25,'SEO','SEO'),(26,'Search','Search');
+INSERT INTO `modules` VALUES
+(1,'Content','Site Content'),
+(5,'Menu','Menu Management'),
+(8,'User','User'),
+(17,'Block','Blocks Management'),
+(21,'Gallery','Photo Gallery'),
+(22,'Templater','Templater'),
+(23,'Analytics','Google Analytics'),
+(24,'SiteConfig','Site Config'),
+(25,'SEO','SEO'),
+(26,'Search','Search'),
+(27,'DBTable','DBTable')
+;
 /*!40000 ALTER TABLE `modules` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
