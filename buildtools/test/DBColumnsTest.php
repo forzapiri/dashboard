@@ -86,7 +86,7 @@ class DBColumnTest extends PHPUnit_Framework_TestCase {
 	}
 	
 	public function testSuggestedMySQL() {
-		$this->assertEquals('text', $this->DBColumn->suggestedMysql());
+		$this->assertEquals('varchar(256)', $this->DBColumn->suggestedMysql());
 	}
 	
 	public function testGetType() {

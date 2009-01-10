@@ -147,6 +147,9 @@ class DBColumnClass extends DBColumnId { // A column type for an id, where the i
 		$this->class = $class;
 		parent::__construct($name, $label, $modifier, $options);
 	}
+	function getValues() {
+		return call_user_func(array($this->class, 'getAll'));
+	}
 	function addElementTo($args) {
 		$value = null;
 		$label = $this->label();

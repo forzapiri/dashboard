@@ -194,12 +194,12 @@ class DBColumnSelect extends DBColumnText {
 		extract ($args);
 		$options = $this->options();
  		switch (count($options)) {
-		case 0: break;
+		/*case 0: break;
 		case 1:
 			$value = array_keys($options);
 			$value = $value[0];
 			$el = $form->addElement ('hidden', $id);
-			break;
+			break;*/
 		default:
 			$el = $form->addElement ('select', $id, $label, $options);
 			break;
