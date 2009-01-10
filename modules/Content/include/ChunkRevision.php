@@ -9,6 +9,7 @@ class ChunkRevision extends DBRow {
 		$id = $obj->getId();
 		$sql = "select type,content from chunk,chunk_revision r where chunk_revision_id=r.id and parent=$id and parent_class='$class'";
 		$results = Database::singleton()->query_fetch_all($sql);
+		$contents = array();
 		foreach ($results as $result) {
 			$type = $result['type'];
 			$content = $result['content'];
