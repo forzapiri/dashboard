@@ -17,6 +17,7 @@ class Module_Content extends Module implements linkable {
 	function getUserInterface() {
 		include ('include/ContentPage.php');
 		include ('include/ContentPageRevision.php');
+		include ('include/Chunk.php');
 		$pageid = ContentPage::keytoid($_REQUEST['page']);
 		$pageid = $pageid['id'];
 		$revid = ContentPage::activeRev($pageid);
@@ -27,6 +28,9 @@ class Module_Content extends Module implements linkable {
 			$page = ContentPage::make($pageid);
 			$this->parentSmarty->templateOverride = $page->getSmartyResource();
 			$this->setPageTitle($rev->get('page_title'));
+			/* CHUNKS:  Move this code to Module somehow with a check for $this->chunkable() ?? */
+			// $this->smarty->assign ('chunks', Chunk::get($rev));
+			$this->smarty->assign ('chunks', ChunkRevision::getAllContentFor($rev));
 		} else {
 			return $this->smarty->dispErr('404', &$this);
 		}

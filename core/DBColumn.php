@@ -71,7 +71,7 @@ abstract class DBColumn {
 
 	function display($obj) {return $obj;}
 	function toDB($obj) {return $obj;}
-	function fromDB($obj) {return $obj;}
+	static function fromDB($obj) {return $obj;}
 	function toForm($obj) {return $obj;}
 	function fromForm($obj) {return $obj;}
 	function suggestedMysql() {return "varchar(256)";}
@@ -115,6 +115,7 @@ abstract class DBColumn {
 		return new $class($name, $label, $modifier, $options);
 	}
 	static public $types = array();
+	static public function getType($type) {return self::$types[$type];}
 	static function register($column) {
 		$type = (is_object ($column)) ? $column : new $column;
 		self::$types[$type->type()] = $column;

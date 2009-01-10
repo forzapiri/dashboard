@@ -28,10 +28,28 @@ class ContentPageRevision extends DBRow {
 		}
 	}
 	public function getSubContent() {return getSubContentFor($this->getId());}
+
+	function __construct($id = null) {
+		/* CHUNKS:  Move this code to DBRow() with a check for $this->chunkable() ?? */
+		$this->chunkManager = new ChunkManager();
+		parent::__construct($id);
+	}
+	
 	public function getAddEditFormSaveHook($form) {
 		if (1 == $form->exportValue($this->quickformPrefix() . 'status')){
 			ContentPageRevision::disableOthers($this);
 		}
+		/* CHUNKS:  Move this code to DBRow() with a check for $this->chunkable() ?? */
+		$this->chunkManager->saveFormFields($form, $this);
+	}
+
+	public function getAddEditFormHook($form) {
+		/* CHUNKS:  Move this code to DBRow() with a check for $this->chunkable() ?? */
+		$page = ContentPage::make($this->getParent());
+		$name = $page->getPageTemplate();
+		$template = Template::getRevision('CMS', $name);
+		$this->chunkManager->setTemplate($template);
+		$this->chunkManager->getFormFields($form);
 	}
 
 	public function getAddEditForm($target = null) {

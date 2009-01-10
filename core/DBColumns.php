@@ -152,7 +152,7 @@ class DBColumnCheckbox extends DBColumnInteger {
 		return $el;
 	}
 	function toDB($obj) {return $obj ? 1 : 0;}
-	function fromDB($obj) {return !!$obj;}
+	static function fromDB($obj) {return !!$obj;}
 	
 	function toForm($obj) {return $obj ? 1 : 0;}
 	// checkboxes appear to return '1' (checked) or true (not checked) !!
@@ -213,7 +213,7 @@ class DBColumnSelect extends DBColumnText {
 class DBColumnTimestamp extends DBColumnText {
 	function type() {return "timestamp";}
 	function toDB($obj) {$date = is_object($obj) ? $obj : new NDate($obj); return $date->get(MYSQL_TIMESTAMP);}
-	function fromDB($obj) {return new NDate($obj);}
+	static function fromDB($obj) {return new NDate($obj);}
 	function toForm($obj) {return $this->toDB($obj);}
 	function fromForm($obj) {return $this->fromDB($obj);}
 	function addElementTo ($args) {
