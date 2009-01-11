@@ -7,9 +7,7 @@
 
 class DBColumnText extends DBColumn {
 	function type() {return "text";}
-	function addElementTo ($args) {
-		parent::addElementTo($args);
-	}
+	function addElementTo ($args) {return parent::addElementTo($args);}
 }
 
 class DBFileUpload extends DBColumn {
@@ -151,12 +149,12 @@ class DBColumnCheckbox extends DBColumnInteger {
 		$el->setValue($value);
 		return $el;
 	}
-	function toDB($obj) {return $obj ? 1 : 0;}
+	static function toDB($obj) {return $obj ? 1 : 0;}
 	static function fromDB($obj) {return !!$obj;}
 	
-	function toForm($obj) {return $obj ? 1 : 0;}
+	static function toForm($obj) {return $obj ? 1 : 0;}
 	// checkboxes appear to return '1' (checked) or true (not checked) !!
-	function fromForm($obj) {return '1' === $obj;}
+	static function fromForm($obj) {return '1' === $obj;}
 	function suggestedMysql() {return "tinyint(1)";}
 }
 
@@ -179,6 +177,8 @@ class DBColumnTinyMCE extends DBColumnsLongText {
 		extract ($args);
 		$label = $this->label();
 		$el = $form->addElement ('tinymce', $id, $label);
+		var_log ($el);
+		var_log ($value);
 		$el->setValue($value);
 		return $el;
 	}
@@ -212,10 +212,10 @@ class DBColumnSelect extends DBColumnText {
 
 class DBColumnTimestamp extends DBColumnText {
 	function type() {return "timestamp";}
-	function toDB($obj) {$date = is_object($obj) ? $obj : new NDate($obj); return $date->get(MYSQL_TIMESTAMP);}
+	static function toDB($obj) {$date = is_object($obj) ? $obj : new NDate($obj); return $date->get(MYSQL_TIMESTAMP);}
 	static function fromDB($obj) {return new NDate($obj);}
-	function toForm($obj) {return $this->toDB($obj);}
-	function fromForm($obj) {return $this->fromDB($obj);}
+	static function toForm($obj) {return self::toDB($obj);}
+	static function fromForm($obj) {return self::fromDB($obj);}
 	function addElementTo ($args) {
 		$value = null;
 		extract ($args);
@@ -228,9 +228,9 @@ class DBColumnTimestamp extends DBColumnText {
 
 class DBColumnDate extends DBColumnTimestamp {
 	function type() {return "date";}
-	function toDB($obj) {$date = is_object($obj) ? $obj : new NDate($obj); return $date->get(MYSQL_TIMESTAMP);}
+	static function toDB($obj) {$date = is_object($obj) ? $obj : new NDate($obj); return $date->get(MYSQL_TIMESTAMP);}
 	function addElementTo ($args) {
-		$value = $this->toDB(new NDate());
+		$value = self::toDB(new NDate());
 		$label = $this->label();
 		extract ($args);
 		$date = new NDate($value);

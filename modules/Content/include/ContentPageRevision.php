@@ -27,11 +27,10 @@ class ContentPageRevision extends DBRow {
 			}
 		}
 	}
-	public function getSubContent() {return getSubContentFor($this->getId());}
 
 	function __construct($id = null) {
 		/* CHUNKS:  Move this code to DBRow() with a check for $this->chunkable() ?? */
-		$this->chunkManager = new ChunkManager();
+		$this->chunkManager = new ChunkManager($this);
 		parent::__construct($id);
 	}
 	
@@ -49,7 +48,7 @@ class ContentPageRevision extends DBRow {
 		$name = $page->getPageTemplate();
 		$template = Template::getRevision('CMS', $name);
 		$this->chunkManager->setTemplate($template);
-		$this->chunkManager->getFormFields($form);
+		$this->chunkManager->insertFormFields($form);
 	}
 
 	public function getAddEditForm($target = null) {

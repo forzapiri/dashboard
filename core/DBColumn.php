@@ -70,10 +70,10 @@ abstract class DBColumn {
 	}
 
 	function display($obj) {return $obj;}
-	function toDB($obj) {return $obj;}
+	static function toDB($obj) {return $obj;}
 	static function fromDB($obj) {return $obj;}
-	function toForm($obj) {return $obj;}
-	function fromForm($obj) {return $obj;}
+	static function toForm($obj) {return $obj;}
+	static function fromForm($obj) {return $obj;}
 	function suggestedMysql() {return "varchar(256)";}
 	function addElementTo ($args) {
 		$value = null;

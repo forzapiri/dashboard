@@ -4,32 +4,39 @@
    NOTE:  modules/Content/chunk.sql has the chunk tables and the dbtable.  LOAD AFTER buildtools/sql/dbtable.sql
    DONE:  Template is parsed, and chunks are filled in
    DONE:  Admin interface presents correct fields
-
+   DONE:  Form fields are populated
+   
    TODO:  Update chunks and revisions on save
         - Every save creates a new revision
    TODO:  Add "role" -- specified in the template, parsed below in getChunksFromTemplate
    TODO:  Add "name" -- only specifiable NEW fields which have roles; thereafter, readonly
    TODO:  Add select to select those "named" which have a matching role.
-   TODO:  A save of a "named" revision updates all Chunks whith match both "name" and "role" to point to that revision.
+   TODO:  A save of a "named" revision updates all Chunks which match both "name" and "role" to point to that revision.
    TODO:  Once working, do an egrep 'CHUNK' to find suggested structural improvements, and move from Content module to core. 
   */
 class ChunkManager {
 	private $fields = array();
-	function setFormFields($fields) {
-		$this->fields =  array(DBColumn::make('text', '', 'Description'),
-							   DBColumn::make('tinymce', '', 'Contents')); // STUB
-	}
-	function getFormFields($form) {
-		$i=0;
+	private $content = array();
+	private $object = null;
+
+	function __construct($obj) {$this->object = $obj;}
+	
+	function insertFormFields($form) {
+		$this->content = ChunkRevision::getAllContentFor($this->object, false);
+		$i=-1;
 		foreach ($this->fields as $field) {
 			$i++;
-			$field->addElementTo(array ('form' => $form, 'id' => "chunk_$i"));
+			$el = $field->addElementTo(array ('form' => $form, 'id' => "_chunk_$i"));
+			$item= @$this->content[$i]; // A value, DBColumn-class pair
+			if (!$item) continue;
+			$value = call_user_func (array ($item['class'], 'toForm'), $item['value']);
+			$el->setValue($value);
 		}
 	}
 
-	function saveFormFields($form, $obj) {
-		$class = get_class($obj);
-		$id = $obj->getId();
+	function saveFormFields($form) {
+		$class = get_class($this->object);
+		$id = $this->object->getId();
 		$i=0;
 		/* CENTRALIZE AND LOAD 
 		foreach ($this->fields as $field) {
