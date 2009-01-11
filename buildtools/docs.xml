@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.docbook.org/xml/4.4/docbookx.dtd">
+<book>
+    <bookinfo>
+        <title>Dashboard Framework Developer Documentation</title>
+        <author>
+            <firstname>Christopher</firstname>
+            <surname>Troup</surname>
+            <email>chris@norex.ca</email></author>
+        <author><firstname>David</firstname><surname>Wolfe</surname><email>wolfe@norex.ca</email></author>
+    </bookinfo>
+    <chapter>
+        <title>Installation</title>
+        <sect1>
+            <title>Getting Dashboard</title>
+            <para>The best way to get the latest sources for Dashboard Framework is through
+                GIT.</para>
+            <para><prompt>git clone git@github.com:minichate/dashboard.git</prompt></para>
+            <para><prompt>cd dashboard.git</prompt></para>
+            <para><prompt>git submodule update</prompt></para>
+            <para>This will download an installation of Dashboard complete with relevent submodules,
+                etc. You should now set up your webserver to serve from this document root. In the
+                following examples, we will assume that you have a virtual host set up at <ulink
+                    url="http://dashboard/">http://dashboard/</ulink>.</para>
+        </sect1>
+        <sect1>
+            <title>Web Installer</title>
+            <para>Point your browser to <ulink url="http://dashboard/buildtools/install/install.php"
+                    >http://dashboard/buildtools/install/install.php</ulink>. The first couple steps
+                will verify that you have the nessasary components to allow Dashboard to run properly.<itemizedlist>
+                    <listitem>
+                        <para>PHP 5.2 or greater</para>
+                    </listitem>
+                    <listitem>
+                        <para>MySQL 5.0 or greater</para>
+                    </listitem>
+                </itemizedlist>It will also verify that the proper permissions have been set up. If
+                any of the checks do not pass, please correct them before continuing onto the next
+                step.</para>
+            <para>The database set will attempt to create a database and create the nessasary tables
+                for a minimal set up. Enter the database name, username, password and hostname that
+                Dashboard should attempt to connect to.<warning>
+                    <para>This executes a <command>DROP TABLE</command> command, so it will remove
+                        old tables. Do not run the web installer if you have data that should not be
+                        deleted.</para>
+                </warning>Once the installer has completed, you should be able to visit <ulink
+                    url="http://dashboard/">http://dashboard/</ulink> and see some basic example
+                text.</para>
+            <para>Access the administration interface through <ulink url="http://dashboard/admin"
+                    >http://dashboard/admin</ulink>. The default administration username is norex,
+                and the password is D3vP@ss</para>
+        </sect1>
+    </chapter>
+</book>
