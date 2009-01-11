@@ -51,4 +51,71 @@
                 and the password is D3vP@ss</para>
         </sect1>
     </chapter>
+    <chapter>
+        <title>Templating</title>
+        <sect1>
+            <title>Admin Interface</title>
+            <para>Site templating in Dashboard is done through a Web GUI. The Templater module is
+                accessible via <ulink url="http://dashboard/admin/Templater"
+                    >http://dashboard/admin/Templater</ulink></para>
+        </sect1>
+        <sect1>
+            <title>Programming API</title>
+            <para>
+                <table frame="all">
+                    <title>Database Schema: Template Table</title>
+                    <tgroup cols="3" align="left" colsep="1" rowsep="1">
+                        <colspec colname="name"/>
+                        
+                        <colspec colname="type"/>
+                        <colspec colname="description"/>
+                        <thead>
+                            <row>
+                                <entry>Column Name</entry>
+                                <entry>Type</entry>
+                                <entry>Description</entry>
+                            </row>
+                        </thead>
+                        <tfoot>
+                            <row>
+                                <entry>Table name:</entry>
+                                <entry>templates</entry>
+                                <entry/>
+                            </row>
+                        </tfoot>
+                        <tbody>
+                            <row>
+                                <entry>module</entry>
+                                <entry>text</entry>
+                                <entry>The module name which the template belongs to</entry>
+                            </row>
+                            <row>
+                                <entry>path</entry>
+                                <entry>text</entry>
+                                <entry>The name of the template. Example: <filename
+                                        >site.tpl</filename> or <filename
+                                    >admin/list.tpl</filename></entry>
+                            </row>
+                            <row>
+                                <entry>data</entry>
+                                <entry>longtext</entry>
+                                <entry>The actual contents of the template.</entry>
+                            </row>
+                            <row>
+                                <entry>timestamp</entry>
+                                <entry>timestamp</entry>
+                                <entry>The date and time the template was last edited.</entry>
+                            </row>
+                            <row>
+                                <entry>name</entry>
+                                <entry>text</entry>
+                                <entry>The human readable name of the template. Example: Site
+                                    Template</entry>
+                            </row>
+                        </tbody>
+                    </tgroup>
+                </table>
+            </para>
+        </sect1>
+    </chapter>
 </book>
