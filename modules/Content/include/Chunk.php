@@ -7,8 +7,12 @@ class Chunk extends DBRow {
 	static function getAllFor($obj) {
 		$class = get_class($obj);
 		$id = $obj->getId();
-		$results = $this->getAll("where class=$class and parent=$id order by sort");
+		return ($class && $id)
+			? self::getAll("where parent_class='$class' and parent=$id")
+			: array();
 	}
-  }
+	function getRawContent($active = true) {return $active ? $this->getActiveRevision()->getContent() : $this->getDraftRevision()->getContent();}
+	function getContent($active = true) {return DBRow::fromDB($this->getType(), $this->getRawContent($active));}
+}
 DBRow::init('Chunk');
 ?>

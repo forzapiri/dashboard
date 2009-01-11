@@ -177,8 +177,6 @@ class DBColumnTinyMCE extends DBColumnsLongText {
 		extract ($args);
 		$label = $this->label();
 		$el = $form->addElement ('tinymce', $id, $label);
-		var_log ($el);
-		var_log ($value);
 		$el->setValue($value);
 		return $el;
 	}

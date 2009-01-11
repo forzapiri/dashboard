@@ -142,6 +142,7 @@ include_once 'DBColumns.php';
 
 class DBColumnClass extends DBColumnId { // A column type for an id, where the intended object is new Typename ($id);
 	function type() {return $this->class;}
+	// function delayLoad() {return true;} // TODO:  Make these delay load; otherwise circularity problems
 	static private $classes = array();
 	public $class;
 	function DBColumnClass($class, $name=null, $label = null, $modifier = "", $options = null) {

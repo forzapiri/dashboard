@@ -57,7 +57,8 @@ class ContentPageRevision extends DBRow {
 			$this->set('parent', $_REQUEST[$this->quickformPrefix() . 'parent']);
 		}
 		$form = parent::getAddEditForm($target);
-		$el =& $form->removeElement($this->quickformPrefix() . 'id');
+		// CHUNK:  DISABLE NOTION OF REVISION HISTORY
+		// $el =& $form->removeElement($this->quickformPrefix() . 'id');
 		return $form;
 	}
 }

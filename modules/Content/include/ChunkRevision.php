@@ -8,13 +8,12 @@ class ChunkRevision extends DBRow {
 		$class = get_class($obj);
 		$id = $obj->getId();
 		if (!$id) return array();
-		$sql = "select type,content from chunk,chunk_revision r where chunk_revision_id=r.id and parent=$id and parent_class='$class'";
+		$sql = "select type,content from chunk c,chunk_revision r where active_revision_id=r.id and c.parent=$id and parent_class='$class' order by sort";
 		$results = Database::singleton()->query_fetch_all($sql);
 		$contents = array();
 		foreach ($results as $result) {
 			$type = $result['type'];
-			$class = DBColumn::getType($type);
-			$content = call_user_func (array($class, 'fromDB'), $result['content']);
+			$content = DBRow::fromDB($type, $result['content']);
 			$contents[] = $contentOnly ? $content : array ('value' => $content, 'class' => $class);
 		}
 		return $contents;

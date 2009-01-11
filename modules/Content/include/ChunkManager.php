@@ -7,50 +7,76 @@
    DONE:  Form fields are populated
    
    TODO:  Update chunks and revisions on save
-        - Every save creates a new revision
+        - Every save (optional: which changed the block) creates a new revision
+		- Every change of the active block redirects all other matching (non-null role + non-null name) pointers
    TODO:  Add "role" -- specified in the template, parsed below in getChunksFromTemplate
    TODO:  Add "name" -- only specifiable NEW fields which have roles; thereafter, readonly
    TODO:  Add select to select those "named" which have a matching role.
    TODO:  A save of a "named" revision updates all Chunks which match both "name" and "role" to point to that revision.
-   TODO:  Once working, do an egrep 'CHUNK' to find suggested structural improvements, and move from Content module to core. 
+   TODO:  Once working, do an egrep 'CHUNK' to find suggested structural improvements, and move from Content module to core.
+   TODO:  Small buttons to go backward and forward in chunk revision history ??
   */
 class ChunkManager {
 	private $fields = array();
-	private $content = array();
+	private $contents = array();
+	private $chunks = array();
 	private $object = null;
 
 	function __construct($obj) {$this->object = $obj;}
 	
 	function insertFormFields($form) {
-		$this->content = ChunkRevision::getAllContentFor($this->object, false);
+		$this->chunks = Chunk::getAllFor($this->object);
 		$i=-1;
 		foreach ($this->fields as $field) {
 			$i++;
 			$el = $field->addElementTo(array ('form' => $form, 'id' => "_chunk_$i"));
-			$item= @$this->content[$i]; // A value, DBColumn-class pair
-			if (!$item) continue;
-			$value = call_user_func (array ($item['class'], 'toForm'), $item['value']);
-			$el->setValue($value);
+			$chunk= @$this->chunks[$i];
+			if ($chunk) $el->setValue(DBRow::toForm($chunk->getType(), $chunk->getContent()));
 		}
 	}
 
 	function saveFormFields($form) {
 		$class = get_class($this->object);
 		$id = $this->object->getId();
-		$i=0;
-		/* CENTRALIZE AND LOAD 
+		$i=-1;
 		foreach ($this->fields as $field) {
 			$i++;
-			$chunk = $rel->getChunk($class, $id, $i);
-			$chunk->setType($field->type());
-			$chunk->setLabel($field->label());
-			if ($chunk->getRevisionId())
-				$rev = $chunk->getChunkRevision();
-			else
+			$chunk = @$this->chunks[$i];
+			$type = $field->type();
+			$value = $form->exportValue("_chunk_$i");
+
+			if ($chunk) {
+				$changed = DBRow::toDB($type, $value) != $chunk->getRawContent();
+				$rev = $chunk->getActiveRevision();
+			}
+			if (!$chunk) {
+				$chunk = Chunk::make();
+				$chunk->setRevision(999);
+				$chunk->save(); // So it has an id
+			}
+			if (!$chunk || $changed) {
+				$prev = $rev;
 				$rev = ChunkRevision::make();
-			if ($chunk->get
+				$rev->setParent($chunk->getId());
+				$rev->setRevision($changed ? 1+$prev->getRevision() : 0);
+				$rev->save(); // So it has an id
+				$chunk->setActiveRevisionId($rev->getId());
+			}
+			$chunk->setType ($field->type()); // TODO: move
+			$chunk->setLabel($field->label()); // TODO: move
+			$chunk->setParentClass($class);
+			$chunk->setParent($id);
+			$rev->setContent(DBRow::toDB($field->type(), $value));
+			$chunk->save();
+			$rev->save();
+			/*
+			$value = call_user_func (array ($class, 'fromForm'), $value);
+			$oldValue = $item['value'];
+			$unchanged = call_user_func (array ($class, 'toDB'), $value)
+				      == call_user_func (array ($class, 'toDB'), $oldValue);
+			if ($unchanged) continue;
+			*/
 		}
-		*/
 	}
 	
 	function setTemplate($template) {

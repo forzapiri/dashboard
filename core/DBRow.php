@@ -317,4 +317,14 @@ abstract class DBRow {
 			default: return null;
 		}
 	}
+	private static function apply ($func, $type, $value) {
+		$class = @DBColumn::getType($type);
+		if (!$class && class_exists($class)) $class = $type;
+		if (!$class) trigger_error ("$type is Neither a DBColumn type nor a DBColumn class");
+		return call_user_func (array (DBColumn::getType($type), $func), $value);
+	}
+	public static function     toDB($type, $value) {return self::apply('toDB',     $type, $value);}
+	public static function   fromDB($type, $value) {return self::apply('fromDB',   $type, $value);}
+	public static function   toForm($type, $value) {return self::apply('toForm',   $type, $value);}
+	public static function fromForm($type, $value) {return self::apply('fromForm', $type, $value);}
 }
