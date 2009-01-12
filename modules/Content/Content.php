@@ -29,7 +29,6 @@ class Module_Content extends Module implements linkable {
 			$this->parentSmarty->templateOverride = $page->getSmartyResource();
 			$this->setPageTitle($rev->get('page_title'));
 			/* CHUNKS:  Move this code to Module somehow with a check for $this->chunkable() ?? */
-			// $this->smarty->assign ('chunks', Chunk::get($rev));
 			$this->smarty->assign ('chunks', ChunkRevision::getAllContentFor($rev));
 		} else {
 			return $this->smarty->dispErr('404', &$this);

@@ -34,7 +34,7 @@ class ContentPageRevision extends DBRow {
 		parent::__construct($id);
 	}
 	
-	public function getAddEditFormSaveHook($form) {
+	public function getAddEditFormAfterSaveHook($form) {
 		if (1 == $form->exportValue($this->quickformPrefix() . 'status')){
 			ContentPageRevision::disableOthers($this);
 		}

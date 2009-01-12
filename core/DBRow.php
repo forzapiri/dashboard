@@ -213,7 +213,13 @@ abstract class DBRow {
 			}
 		}
 		$sql = trim ($sql, ',');
-		if (!$sql) {trigger_error ("NO DATA IN DBRow! Class was " . get_class($this) . ":", E_USER_NOTICE); return;} // Maybe wanted to just create an empty row?
+		if (!$sql) {
+			// Maybe wanted to just create an empty row?
+			trigger_error ("NO DATA IN DBRow! Class was " . get_class($this) . ":", E_USER_WARNING);
+			if ($update) return $this;
+		} else {
+			$sql = " set $sql";
+		}
 		
 		$n = Event_Dispatcher::getInstance(get_class($obj))->post(&$obj, 'onPreSave');
 		if ($n->isNotificationCancelled()) {
@@ -222,13 +228,13 @@ abstract class DBRow {
 		
 		$table = $obj->table()->name();
 		if ($update === false) {
-			$sql = "insert into `$table` set" . $sql;
+			$sql = "insert into `$table`" . $sql;
 			$query = new Query ($sql, $types);
 			$id = $query->insert($params);
 			$obj->values['id'] = $id;
 			$obj->table()->setCache($id, $obj);
 		} else {
-			$sql = "update `$table` set" . $sql . " where id=?";
+			$sql = "update `$table`" . $sql . " where id=?";
 			$params[] = $update;
 			$types .= 'i';
 			$query = new Query ($sql, $types);
@@ -241,6 +247,8 @@ abstract class DBRow {
 
 	function getAddEditFormHook($form) {}
 	function getAddEditFormSaveHook($form) {}
+	function getAddEditFormBeforeSaveHook($form) {return $this->getAddEditFormSaveHook($form);} // Provided for backward compatability
+	function getAddEditFormAfterSaveHook($form) {}
 	function getAddEditForm($target = null) {
 		if (!$target){
 			$target = '/admin/' . get_class($this);
@@ -299,8 +307,9 @@ abstract class DBRow {
 				}
 				
 			}
-			$this->getAddEditFormSaveHook($form);
+			$this->getAddEditFormBeforeSaveHook($form);
 			$this->save();
+			$this->getAddEditFormAfterSaveHook($form);
 			$form->setProcessed();
 		}
 		return $form;
