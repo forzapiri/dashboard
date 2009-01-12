@@ -131,7 +131,7 @@ class ChunkManager {
 							PREG_SET_ORDER)) return array();
 		foreach ($matches as $req) {
 			$label = $req[1];
-			$args = split(',', trim($req[2]));
+			$args = split(';', trim($req[2]));
 			$role = null;
 			$type = null;
 			foreach ($args as $arg) {
