@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.docbook.org/xml/4.4/docbookx.dtd">
 <?xml-stylesheet type="text/css" href="driver.css"?>
+<?xml-stylesheet type="text/css" href="driver.css"?>
 <book>
     <bookinfo>
         <title>Dashboard Framework Developer Documentation</title>
@@ -21,9 +22,15 @@
             <title>Getting Dashboard</title>
             <para>The best way to get the latest sources for Dashboard Framework is through
                 GIT.</para>
-            <para><prompt>git clone git@github.com:minichate/dashboard.git</prompt></para>
-            <para><prompt>cd dashboard.git</prompt></para>
-            <para><prompt>git submodule update</prompt></para>
+            <para>
+                <screen><prompt>git clone git@github.com:minichate/dashboard.git</prompt></screen>
+            </para>
+            <para>
+                <screen><prompt>cd dashboard.git</prompt></screen>
+            </para>
+            <para>
+                <screen><prompt>git submodule update</prompt></screen>
+            </para>
             <para>This will download an installation of Dashboard complete with relevent submodules,
                 etc. You should now set up your webserver to serve from this document root. In the
                 following examples, we will assume that you have a virtual host set up at <ulink
@@ -135,17 +142,13 @@ $templates = Template::toArray('CMS'); // list of all templates associated to CM
                     </funcsynopsis></para>
                 <para>
                     <example>
-                        <title>Quick Example</title>
-                        <programlisting>&lt;?php
-
-class Example extends DBRow {
+                        <title>Simple Example Class</title>
+                        <programlisting>class Example extends DBRow {
     public function createTable() {
         return parent::createTable ('example_table', __CLASS__);
     }
 }
-DBRow::init('Example');
-
-?></programlisting>
+DBRow::init('Example');</programlisting>
                     </example>
                 </para>
             </sect2>
@@ -156,18 +159,61 @@ DBRow::init('Example');
                     </funcsynopsis></para>
                 <para>
                     <example>
-                        <title>Quick Example</title>
-                        <programlisting>&lt;?php
-                            
-$user = DBRow::make(1, 'User'); // $user is now populated with the user object
+                        <title>Get and set a user's first name</title>
+                        <programlisting>$user = DBRow::make(1, 'User'); // $user is now populated with the user object
                                 // that has the ID of 1.
 echo $user->get('name'); // Prints out the users first name
 $user->set('name', 'NewFirstName'); // Sets the first name to 'NewFirstNane'
-$user->save(); // Save the changes
-                            
-?></programlisting>
+$user->save(); // Save the changes</programlisting>
+                    </example>
+                    <example>
+                        <title>Create a new User</title>
+                        <programlisting>$user = DBRow::make(null, 'User');
+$user->set('name', 'Joe');
+$user->set('last_name', 'Blo');
+$user->set('username', 'joeblo');
+$user->set('password', 'changeme');
+$user->save();</programlisting>
                     </example>
                 </para>
+            </sect2>
+            <sect2>
+                <title>save</title>
+                <para><funcsynopsis>
+                        <funcsynopsisinfo>Save the object.</funcsynopsisinfo>
+                    </funcsynopsis><example>
+                        <title>Change a password</title>
+                        <programlisting>$user = DBRow::make(1, 'User');
+$user->set('password', 'supersecret');
+$user->save();</programlisting>
+                    </example></para>
+            </sect2>
+            <sect2>
+                <title>delete</title>
+                <para><funcsynopsis>
+                        <funcsynopsisinfo>Delete the object.</funcsynopsisinfo>
+                    </funcsynopsis><example>
+                        <title>Delete a user</title>
+                        <programlisting>$user = DBRow::make(200, 'User');
+$user->delete();</programlisting>
+                    </example></para>
+            </sect2>
+            <sect2>
+                <title>getAddEditForm</title>
+                <para><funcsynopsis>
+                        <funcsynopsisinfo>Generate a form that can be used to change/update the object.</funcsynopsisinfo>
+                    </funcsynopsis><example>
+                        <title>Web update of User object</title>
+                        <programlisting>// This example assumes that it is called from http://<emphasis>site_url</emphasis>/user/update
+$user = DBRow::make(1, 'User');
+$form = $user->getAddEditForm('/user/update'); // Form will submit to http://<emphasis>site_url</emphasis>/user/update
+if ($form->isProcessed()) {
+    // DBRow automatically updates and saves the object based on the $_REQUEST variables
+    echo 'Your record has been updated';
+} else {
+    echo $form->display();
+}</programlisting>
+                    </example></para>
             </sect2>
         </sect1>
     </chapter>
