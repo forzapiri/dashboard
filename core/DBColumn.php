@@ -43,6 +43,8 @@ abstract class DBColumn {
 	protected abstract function type();
 	function name() {return $this->_name;}
 	function label() {return $this->_label;}
+	function getLabel() {return $this->_label;}
+	function setLabel($label) {$this->_label = $label;}
 	function options() {return $this->_options;}
 
 	function hidden() {return $this->_modifier == 'hidden';}

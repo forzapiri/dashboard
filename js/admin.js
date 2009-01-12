@@ -13,6 +13,18 @@ function deleteConfirm(form) {
 	return true;
 }
 
+function linkSelectText(div) {
+	div = $(div);
+	select = div.down('select');
+	text = div.down('input');
+	text.hide();
+	function onChangeSelect() {
+		if (select.value == '__new__') text.show();
+		else text.hide();
+	}
+	select.observe('change', onChangeSelect.bind(this));
+}
+
 ////////////////////////////////////////////////
 var Message = Class.create({
   type: 'success',
@@ -207,7 +219,7 @@ var NorexUI = Class.create(Facebox, {
 		});
 		
 	},
-	
+
 	updateContent: function(content) {
 		$('module_content').update(content);
 		$('module_content').fire('norexui:update');

@@ -7,7 +7,7 @@ class ContentPageRevision extends DBRow {
 			DBColumn::make('text', 'page_title', 'Page Title'),
 			DBColumn::make('tinymce', 'content', 'Page Content'),
 			'timestamp',
-			'status',
+			DBColumn::make('status', 'status', 'Make live'),
 			);
 		return new DBTable("content_page_data", __CLASS__, $cols);
 	}
@@ -48,7 +48,12 @@ class ContentPageRevision extends DBRow {
 		$name = $page->getPageTemplate();
 		$template = Template::getRevision('CMS', $name);
 		$this->chunkManager->setTemplate($template);
-		$this->chunkManager->insertFormFields($form);
+		if ($this->chunkManager->insertFormFields($form)) { // Makes sense in ContentPageRevision only; a hack
+			$form->removeElement($this->quickformPrefix() . 'content');
+			$form->removeElement($this->quickformPrefix() . 'page_title');
+			$form->addElement('hidden',$this->quickformPrefix() . 'content');
+			$form->addElement('hidden',$this->quickformPrefix() . 'page_title');
+		}
 	}
 
 	public function getAddEditForm($target = null) {

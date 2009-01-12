@@ -102,6 +102,12 @@ class Query {
 	private function bindParams() {
 		$this->params[0] = $this->stmt;
 		$this->params[1] = $this->types;
+		foreach ($this->params as $key => $param) {
+			if (!(is_string ($param) || is_integer($param) || ($key==0))) {
+				trigger_error ("Parameter not a string: ");
+				var_log ($param);
+			}
+		}
 		call_user_func_array('mysqli_stmt_bind_param', $this->params);
 		$this->checkError ($this->stmt, "Binding params");
 	}
