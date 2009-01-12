@@ -215,8 +215,9 @@ abstract class DBRow {
 		$sql = trim ($sql, ',');
 		if (!$sql) {
 			// Maybe wanted to just create an empty row?
-			trigger_error ("NO DATA IN DBRow! Class was " . get_class($this) . ":", E_USER_WARNING);
-			if ($update) return $this;
+			// trigger_error ("NO DATA IN DBRow! Class was " . get_class($this) . ":", E_USER_WARNING);
+			$sql .= " () values ()";   // MYSQL's weird syntax for not specifying any columns
+			if ($update) return $this; // NO CHANGES REQUIRED
 		} else {
 			$sql = " set $sql";
 		}
