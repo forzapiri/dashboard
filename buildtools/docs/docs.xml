@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.docbook.org/xml/4.4/docbookx.dtd">
+<?xml-stylesheet type="text/css" href="driver.css"?>
 <book>
     <bookinfo>
         <title>Dashboard Framework Developer Documentation</title>
         <author>
             <firstname>Christopher</firstname>
             <surname>Troup</surname>
-            <email>chris@norex.ca</email></author>
-        <author><firstname>David</firstname><surname>Wolfe</surname><email>wolfe@norex.ca</email></author>
+            <email>chris@norex.ca</email>
+        </author>
+        <author>
+            <firstname>David</firstname>
+            <surname>Wolfe</surname>
+            <email>wolfe@norex.ca</email>
+        </author>
     </bookinfo>
     <chapter>
         <title>Installation</title>
@@ -64,26 +70,20 @@
             <para>
                 <table frame="all">
                     <title>Database Schema: Template Table</title>
-                    <tgroup cols="3" align="left" colsep="1" rowsep="1">
-                        <colspec colname="name"/>
-                        
-                        <colspec colname="type"/>
-                        <colspec colname="description"/>
-                        <thead>
+                    <tgroup cols="3" align="left" colsep="1" rowsep="1"><colspec colname="name"
+                            /><colspec colname="type"/><colspec colname="description"/><thead>
                             <row>
                                 <entry>Column Name</entry>
                                 <entry>Type</entry>
                                 <entry>Description</entry>
                             </row>
-                        </thead>
-                        <tfoot>
+                        </thead><tfoot>
                             <row>
                                 <entry>Table name:</entry>
                                 <entry>templates</entry>
                                 <entry/>
                             </row>
-                        </tfoot>
-                        <tbody>
+                        </tfoot><tbody>
                             <row>
                                 <entry>module</entry>
                                 <entry>text</entry>
@@ -112,10 +112,63 @@
                                 <entry>The human readable name of the template. Example: Site
                                     Template</entry>
                             </row>
-                        </tbody>
-                    </tgroup>
+                        </tbody></tgroup>
                 </table>
             </para>
+            <para>
+                <example>
+                    <title>Getting A List of Templates</title>
+                    <programlisting language="php">$templates = Template::toArray(); // this will get a list of all templates
+$templates = Template::toArray('CMS'); // list of all templates associated to CMS module</programlisting>
+                </example>
+            </para>
+        </sect1>
+    </chapter>
+    <chapter>
+        <title>DBRow</title>
+        <sect1>
+            <title>Programming API</title>
+            <sect2>
+                <title>init</title>
+                <para><funcsynopsis>
+                        <funcsynopsisinfo>Initialize an object type. This function must be called on each class before the class can be used. It takes the class name of the object as its only parameter.</funcsynopsisinfo>
+                    </funcsynopsis></para>
+                <para>
+                    <example>
+                        <title>Quick Example</title>
+                        <programlisting>&lt;?php
+
+class Example extends DBRow {
+    public function createTable() {
+        return parent::createTable ('example_table', __CLASS__);
+    }
+}
+DBRow::init('Example');
+
+?></programlisting>
+                    </example>
+                </para>
+            </sect2>
+            <sect2>
+                <title>make</title>
+                <para><funcsynopsis>
+                        <funcsynopsisinfo>Fetches an object from the database and prepares it for display or editing.</funcsynopsisinfo>
+                    </funcsynopsis></para>
+                <para>
+                    <example>
+                        <title>Quick Example</title>
+                        <programlisting>&lt;?php
+                            
+$user = DBRow::make(1, 'User'); // $user is now populated with the user object
+                                // that has the ID of 1.
+echo $user->get('name'); // Prints out the users first name
+$user->set('name', 'NewFirstName'); // Sets the first name to 'NewFirstNane'
+$user->save(); // Save the changes
+                            
+?></programlisting>
+                    </example>
+                </para>
+            </sect2>
         </sect1>
     </chapter>
 </book>

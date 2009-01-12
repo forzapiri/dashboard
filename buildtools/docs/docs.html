@@ -1,0 +1,113 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Dashboard Framework Developer Documentation</title><meta name="generator" content="DocBook XSL-NS Stylesheets V1.74.0"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="d4e1"></a>Dashboard Framework Developer Documentation</h1></div><div><div class="author"><h3 class="author"><span class="firstname">Christopher</span> <span class="surname">Troup</span></h3><code class="email">&lt;<a class="email" href="mailto:chris@norex.ca">chris@norex.ca</a>&gt;</code></div></div><div><div class="author"><h3 class="author"><span class="firstname">David</span> <span class="surname">Wolfe</span></h3><code class="email">&lt;<a class="email" href="mailto:wolfe@norex.ca">wolfe@norex.ca</a>&gt;</code></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#d4e12">1. Installation</a></span></dt><dd><dl><dt><span class="sect1"><a href="#d4e14">Getting Dashboard</a></span></dt><dt><span class="sect1"><a href="#d4e25">Web Installer</a></span></dt></dl></dd><dt><span class="chapter"><a href="#d4e41">2. Templating</a></span></dt><dd><dl><dt><span class="sect1"><a href="#d4e43">Admin Interface</a></span></dt><dt><span class="sect1"><a href="#d4e47">Programming API</a></span></dt></dl></dd><dt><span class="chapter"><a href="#d4e93">3. DBRow</a></span></dt><dd><dl><dt><span class="sect1"><a href="#d4e95">Programming API</a></span></dt><dd><dl><dt><span class="sect2"><a href="#d4e97">init</a></span></dt><dt><span class="sect2"><a href="#d4e113">make</a></span></dt></dl></dd></dl></dd></dl></div><div class="list-of-tables"><p><b>List of Tables</b></p><dl><dt>2.1. <a href="#d4e50">Database Schema: Template Table</a></dt></dl></div><div class="list-of-examples"><p><b>List of Examples</b></p><dl><dt>2.1. <a href="#d4e90">Getting A List of Templates</a></dt><dt>3.1. <a href="#d4e110">Quick Example</a></dt><dt>3.2. <a href="#d4e126">Quick Example</a></dt></dl></div>
+    
+    <div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="d4e12"></a>Chapter&nbsp;1.&nbsp;Installation</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#d4e14">Getting Dashboard</a></span></dt><dt><span class="sect1"><a href="#d4e25">Web Installer</a></span></dt></dl></div>
+        
+        <div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d4e14"></a>Getting Dashboard</h2></div></div></div>
+            
+            <p>The best way to get the latest sources for Dashboard Framework is through
+                GIT.</p>
+            <p><code class="prompt">git clone git@github.com:minichate/dashboard.git</code></p>
+            <p><code class="prompt">cd dashboard.git</code></p>
+            <p><code class="prompt">git submodule update</code></p>
+            <p>This will download an installation of Dashboard complete with relevent submodules,
+                etc. You should now set up your webserver to serve from this document root. In the
+                following examples, we will assume that you have a virtual host set up at <a class="ulink" href="http://dashboard/" target="_top">http://dashboard/</a>.</p>
+        </div>
+        <div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d4e25"></a>Web Installer</h2></div></div></div>
+            
+            <p>Point your browser to <a class="ulink" href="http://dashboard/buildtools/install/install.php" target="_top">http://dashboard/buildtools/install/install.php</a>. The first couple steps
+                will verify that you have the nessasary components to allow Dashboard to run properly.</p><div class="itemizedlist"><ul type="disc"><li>
+                        <p>PHP 5.2 or greater</p>
+                    </li><li>
+                        <p>MySQL 5.0 or greater</p>
+                    </li></ul></div><p>It will also verify that the proper permissions have been set up. If
+                any of the checks do not pass, please correct them before continuing onto the next
+                step.</p>
+            <p>The database set will attempt to create a database and create the nessasary tables
+                for a minimal set up. Enter the database name, username, password and hostname that
+                Dashboard should attempt to connect to.</p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Warning</h3>
+                    <p>This executes a <span class="command"><strong>DROP TABLE</strong></span> command, so it will remove
+                        old tables. Do not run the web installer if you have data that should not be
+                        deleted.</p>
+                </div><p>Once the installer has completed, you should be able to visit <a class="ulink" href="http://dashboard/" target="_top">http://dashboard/</a> and see some basic example
+                text.</p>
+            <p>Access the administration interface through <a class="ulink" href="http://dashboard/admin" target="_top">http://dashboard/admin</a>. The default administration username is norex,
+                and the password is D3vP@ss</p>
+        </div>
+    </div>
+    <div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="d4e41"></a>Chapter&nbsp;2.&nbsp;Templating</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#d4e43">Admin Interface</a></span></dt><dt><span class="sect1"><a href="#d4e47">Programming API</a></span></dt></dl></div>
+        
+        <div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d4e43"></a>Admin Interface</h2></div></div></div>
+            
+            <p>Site templating in Dashboard is done through a Web GUI. The Templater module is
+                accessible via <a class="ulink" href="http://dashboard/admin/Templater" target="_top">http://dashboard/admin/Templater</a></p>
+        </div>
+        <div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d4e47"></a>Programming API</h2></div></div></div>
+            
+            <p>
+                </p><div class="table"><a name="d4e50"></a><p class="title"><b>Table&nbsp;2.1.&nbsp;Database Schema: Template Table</b></p><div class="table-contents">
+                    
+                    <table summary="Database Schema: Template Table" border="1"><colgroup><col align="left"><col align="left"><col align="left"></colgroup><thead><tr><th align="left">Column Name</th><th align="left">Type</th><th align="left">Description</th></tr></thead><tfoot><tr><th align="left">Table name:</th><th align="left">templates</th><th align="left">&nbsp;</th></tr></tfoot><tbody><tr><td align="left">module</td><td align="left">text</td><td align="left">The module name which the template belongs to</td></tr><tr><td align="left">path</td><td align="left">text</td><td align="left">The name of the template. Example: <code class="filename">site.tpl</code> or <code class="filename">admin/list.tpl</code></td></tr><tr><td align="left">data</td><td align="left">longtext</td><td align="left">The actual contents of the template.</td></tr><tr><td align="left">timestamp</td><td align="left">timestamp</td><td align="left">The date and time the template was last edited.</td></tr><tr><td align="left">name</td><td align="left">text</td><td align="left">The human readable name of the template. Example: Site
+                                    Template</td></tr></tbody></table>
+                </div></div><p><br class="table-break">
+            </p>
+            <p>
+                </p><div class="example"><a name="d4e90"></a><p class="title"><b>Example&nbsp;2.1.&nbsp;Getting A List of Templates</b></p><div class="example-contents">
+                    
+                    <pre class="programlisting">$templates = Template::toArray(); // this will get a list of all templates
+$templates = Template::toArray('CMS'); // list of all templates associated to CMS module</pre>
+                </div></div><p><br class="example-break">
+            </p>
+        </div>
+    </div>
+    <div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="d4e93"></a>Chapter&nbsp;3.&nbsp;DBRow</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#d4e95">Programming API</a></span></dt><dd><dl><dt><span class="sect2"><a href="#d4e97">init</a></span></dt><dt><span class="sect2"><a href="#d4e113">make</a></span></dt></dl></dd></dl></div>
+        
+        <div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d4e95"></a>Programming API</h2></div></div></div>
+            
+            <div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d4e97"></a>init</h3></div></div></div>
+                
+                <div class="funcsynopsis"><pre class="funcsynopsisinfo">Initialize an object type. This function must be called on each class before the class can be used. It takes the class name of the object as its only parameter.</pre><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">void
+                                <b class="fsfunc">init</b>(</code></td><td><var class="pdparam">classname</var><code>)</code>;</td><td>&nbsp;</td></tr></table><div class="paramdef-list"><code>string
+                                <var class="pdparam">classname</var></code>;</div><div class="funcprototype-spacer">&nbsp;</div></div>
+                <p>
+                    </p><div class="example"><a name="d4e110"></a><p class="title"><b>Example&nbsp;3.1.&nbsp;Quick Example</b></p><div class="example-contents">
+                        
+                        <pre class="programlisting">&lt;?php
+
+class Example extends DBRow {
+    public function createTable() {
+        return parent::createTable ('example_table', __CLASS__);
+    }
+}
+DBRow::init('Example');
+
+?&gt;</pre>
+                    </div></div><p><br class="example-break">
+                </p>
+            </div>
+            <div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d4e113"></a>make</h3></div></div></div>
+                
+                <div class="funcsynopsis"><pre class="funcsynopsisinfo">Initialize an object type. This function must be called on each class before the class can be used. It takes the class name of the object as its only parameter.</pre><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">void
+                                <b class="fsfunc">init</b>(</code></td><td><var class="pdparam">classname</var><code>)</code>;</td><td>&nbsp;</td></tr></table><div class="paramdef-list"><code>string
+                                <var class="pdparam">classname</var></code>;</div><div class="funcprototype-spacer">&nbsp;</div></div>
+                <p>
+                    </p><div class="example"><a name="d4e126"></a><p class="title"><b>Example&nbsp;3.2.&nbsp;Quick Example</b></p><div class="example-contents">
+                        
+                        <pre class="programlisting">&lt;?php
+                            
+                            class Example extends DBRow {
+                            public function createTable() {
+                            return parent::createTable ('example_table', __CLASS__);
+                            }
+                            }
+                            DBRow::init('Example');
+                            
+                            ?&gt;</pre>
+                    </div></div><p><br class="example-break">
+                </p>
+            </div>
+        </div>
+    </div>
+</div></body></html>
