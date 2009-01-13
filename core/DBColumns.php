@@ -36,17 +36,24 @@ class DBColumnPassword extends DBColumn {
 	}
 }
 
-class DBColumnTextBox extends DBColumn {
-	function type() {return "textbox";}
+class DBColumnTextArea extends DBColumn {
+	function type() {return "textarea";}
 	function addElementTo ($args) {
 		$value = '';
 		$label = $this->label();
 		extract($args);
-		$el = $form->addElement ('textarea', $id, $label);
+		$options = $this->options();
+		if ((count($options) == 2)
+			&& is_string($options[0]) && ($options[0] > 0)
+			&& is_string($options[1]) && ($options[1] > 0)) {
+			$options = array ('rows' => $options[0], 'cols' => $options[1]);
+		}
+		$el = $form->addElement ('textarea', $id, $label, $options);
 		$el->setValue($value);
 		return $el;
 	}
 }
+class DBColumnTextBox extends DBColumnTextArea {function type() {return "textbox";}} // Synonym for textarea
 
 class DBColumnString extends DBColumn {
 	function type() {return "string";}

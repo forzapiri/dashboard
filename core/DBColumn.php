@@ -113,7 +113,7 @@ abstract class DBColumn {
 			return new DBColumnClass($type, $name, $label, $modifier, $options);
 		}
 		$class = @self::$types[$type];
-		if (!$class) error_log ("Type '$type' is not registered");
+		if (!$class) trigger_error ("Type '$type' is not registered");
 		return new $class($name, $label, $modifier, $options);
 	}
 	static public $types = array();
