@@ -47,6 +47,7 @@
 class ChunkManager {
 	private $fields = array();
 	private $roles = array();
+	private $previews = array();
 	private $chunks = array();
 	private $object = null;
 
@@ -70,7 +71,12 @@ class ChunkManager {
 			}
 			$el = $field->addElementTo(array ('form' => $form, 'id' => "_chunk_$i"));
 			$field->setLabel($label);
-			if ($chunk = @$this->chunks[$i]) $el->setValue(DBRow::toForm($chunk->getType(), $chunk->getContent()));
+			$chunk = @$this->chunks[$i];
+			if ($chunk && ($chunk->getId() || $chunk->getContent())) {
+				$el->setValue(DBRow::toForm($chunk->getType(), $chunk->getContent()));
+			} else {
+				$el->setValue($this->previews[$i]);
+			}
 		}
 		return ++$i; // Returns the number of form fields which were added
 	}
@@ -102,6 +108,7 @@ class ChunkManager {
 				$chunk->setActiveRevisionId($rev->getId());
 			}
 			$chunk->setRole ($this->roles[$i]);
+			$chunk->setSort($i);
 			if ($chunk->getRole()) {
 				$pair = $form->exportValue("_chunk_name_$i");
 				switch ($pair['select']) {
@@ -119,6 +126,27 @@ class ChunkManager {
 			$rev->save();
 		}
 	}
+
+	private static $previewCodes
+		= array ("h1" => "<h1>Title</h1>",
+				 "h2" => "<h2>Major Heading</h2>",
+				 "h3" => "<h3>Heading</h3>",
+				 "h4" => "<h4>Heading</h4>",
+				 "h5" => "<h5>Heading</h5>",
+				 "ul" => "<ul>\n<li>Item 1</li>\n<li>Item 2</li></ul>",
+				 "jpg" => "/images/foo.jpg",
+				 "p" => "<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nunc ligula nisl, egestas non, pharetra vel, scelerisque accumsan, lacus. Proin nibh. Aenean dapibus</p>");
+	
+	function convertPreview($preview) {
+		if (!trim($preview)) return "";
+		$list = array_map ("trim", split(",", $preview));
+		foreach ($list as &$x) {
+			$preview = self::$previewCodes[$x];
+			if (!$preview) {trigger_error ("Preview code '$x' not recognized in ChunkManager.php");}
+			$x = $preview;
+		}
+		return implode("\n",$list);
+	}
 	
 	function setTemplate($template) {
 		if (!$template) return array();
@@ -131,18 +159,20 @@ class ChunkManager {
 							PREG_SET_ORDER)) return array();
 		foreach ($matches as $req) {
 			$label = $req[1];
-			$args = split(';', trim($req[2]));
+			$args = explode(';', trim($req[2]));
 			$role = null;
 			$type = null;
+			$preview = "";
 			foreach ($args as $arg) {
-				$pair = split(':', trim($arg));
+				$pair = explode('=', trim($arg));
 				$var = $pair[0];
-				if (in_array ($var, array ("type", "role")))
+				if (in_array ($var, array ("type", "role", "preview")))
 					$$var = $pair[1];
 				else trigger_error ("Variable $var not recognized in ChunkManager::setTemplate()");
 			}
 			$this->fields[] = DBColumn::make($type, '', $label);
 			$this->roles[] = $role;
+			$this->previews[] = $this->convertPreview($preview);
 		}
 	}
 }
