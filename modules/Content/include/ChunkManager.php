@@ -2,7 +2,7 @@
   /*
    NOTE:  modules/Content/chunk.sql has the chunk tables and the dbtable.  LOAD AFTER buildtools/sql/dbtable.sql
 
-   DONE:  Template is parsed, and chunks are filled in
+   DONE:  Template is parsed, and chunks are filled in.  Chunks can specify a type, a role, and a preview code
    DONE:  Admin interface presents correct fields, though no "name" select and edit
    DONE:  Form fields are populated
    
