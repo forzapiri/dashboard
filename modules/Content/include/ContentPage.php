@@ -70,29 +70,6 @@ class ContentPage extends DBRow {
 		if ($t = $this->getPageTemplate()) {return "db:" . $t;}
 		else return null;
 	}
-
-	/*
-	function getRequirements($smarty) {
-		var_log ('here');
-		$name = $this->getPageTemplate();
-		if (!$name) return false;
-		$template = Template::getRevision('CMS', $name);
-		if (!$template) return false;
-		// $requirements = preg_match_all('/{\* ?[A-Z]+ ?\((.*)\): (.*) \*}/', $template->getData(), $matches, PREG_SET_ORDER);
-		var_log ('here');
-		$requirements = preg_match_all('/{\$chunks->get\(.*\)}/',
-									   $template,
-									   $matches,
-									   PREG_SET_ORDER);
-		if (!$requirements) return false;
-		foreach ($matches as $req) {
-			$x = &$results[];
-			$x['label'] = $req[1];
-			$x['types'] = array_map ('trim', split (',', $req[2]));
-		}
-		return $results;
-	}
-	*/
 }
 DBRow::init('ContentPage');
 ?>

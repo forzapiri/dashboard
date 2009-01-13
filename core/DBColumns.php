@@ -44,9 +44,12 @@ class DBColumnTextArea extends DBColumn {
 		extract($args);
 		$options = $this->options();
 		if ((count($options) == 2)
-			&& is_string($options[0]) && ($options[0] > 0)
-			&& is_string($options[1]) && ($options[1] > 0)) {
+			&& is_string(@$options[0]) && (@$options[0] > 0)
+			&& is_string(@$options[1]) && (@$options[1] > 0))
+		{
 			$options = array ('rows' => $options[0], 'cols' => $options[1]);
+		} else if (!$options) {
+			$options = array ('rows' => 10, 'cols' => 50);
 		}
 		$el = $form->addElement ('textarea', $id, $label, $options);
 		$el->setValue($value);

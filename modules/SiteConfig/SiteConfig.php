@@ -69,23 +69,4 @@ class Module_SiteConfig extends Module {
 		return $this->smarty->fetch( 'admin/siteconfigs.tpl' );
 	}
 }
-/*
-SiteConfig::set('php test', array('A', 'B', 23, array('a', 'b')));
-var_log(SiteConfig::get('list test'));
-SiteConfig::set('list test', array('a', 'b'));
-var_log(SiteConfig::get('list test'));
-SiteConfig::set('list test', array());
-var_log(SiteConfig::get('list test'));
-var_log(SiteConfig::get('email'));
-SiteConfig::set('email', 'wolfe@g.a');
-var_log(SiteConfig::get('email'));
-SiteConfig::set('email', 'wolfe@norex.ca');
-var_log(SiteConfig::get('project types'));
-SiteConfig::set('list test', array('A', 'B', 23));
-var_log(SiteConfig::get('list test'));
-SiteConfig::set('list test', array('a', 'b', 'c'));
-var_log(SiteConfig::get('list test'));
-SiteConfig::set('php test', array('A', 'B', 23, array('a', 'b')));
-var_log (SiteConfig::get('php test'));
-*/
 ?>

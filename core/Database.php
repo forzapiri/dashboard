@@ -1,15 +1,4 @@
 <?php
-if (!function_exists('var_log')) {
-	function var_log($var, $prefix="") {
-		if ($prefix) $prefix .= ': ';
-		if ($var === null) $var = 'NULL';
-		elseif ($var === true) $var = 'true';
-		elseif ($var === false) $var = 'false';
-		error_log ($prefix . print_r($var, true));
-		return $var;
-	}
-}
-
 /**
  * Database
  * @package CMS
