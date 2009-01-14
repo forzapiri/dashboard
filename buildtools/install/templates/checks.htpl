@@ -23,7 +23,7 @@
 </table>
 {/if}
 
-{if $valid}
+{if $valid && !$complete}
 <br />
 <input type="hidden" name="step" value="{$curstep+1}" />
 <input type="submit" name="submit" value="continue to step {$curstep+2}" />

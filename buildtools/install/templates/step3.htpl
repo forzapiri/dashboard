@@ -1,4 +1,3 @@
-<p>You do not have to create the database or tables. This script should be able to create them for you. If the script fails, check your
-configuration and run the import scripts manually.</p>
-
+<p>You do not have to create the database or tables.</p>
 {include file="checks.htpl"}
+{if $db_exists}<p style="color: red">Warning: Clicking continue will overwrite existing data.</p>{/if}
