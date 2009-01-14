@@ -1,9 +1,10 @@
 <?php
-
+if (!defined('SITE_ROOT')) define('SITE_ROOT', (dirname(__FILE__) . '/../../'));
+require_once ('clearcaches.php');
+clearCacheDirectories();
 require_once('../../core/libs/Smarty.class.php');
 function isReadWriteDir($file) {return is_readable($file) && is_writable($file) && is_dir ($file);}
 
-define('SITE_ROOT', (dirname(__FILE__) . '/../../'));
 define ('DB_CONFIG', SITE_ROOT . '/include/db-config.php');
 
 $s = new Smarty();
