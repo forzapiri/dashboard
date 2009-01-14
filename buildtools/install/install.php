@@ -39,9 +39,7 @@ switch ($step) {
 		$content = $s->fetch('step1.htpl');
 		break;
 	case 2:
-		if (is_readable(DB_CONFIG)) {
-			include_once (DB_CONFIG);
-		} else {
+		if (is_readable(DB_CONFIG)) {include_once (DB_CONFIG);} else {
 			$dbhost = "localhost";
 			$dbuser = "";
 			$dbpass = "";
@@ -80,7 +78,7 @@ switch ($step) {
 			'Can connect to MySQL Database' => !!$link,
 			'DB has data' => $db_exists
 		);
-		if ($link && $step == 4) {
+		if ($link) {
 			$db_config = fopen(DB_CONFIG, 'w');
 			fwrite($db_config, '<?php 
 				$dbhost = "' . $dbhost . '";
@@ -88,10 +86,10 @@ switch ($step) {
 				$dbpass = "' . $dbpass . '";
 				$dbase = "' . $dbase . '";
 			?>');
+		}
 		
-		
+		if ($link && $step == 4) {
 			require_once(SITE_ROOT . '/core/Database.php');
-			
 			$sqlDir = dirname(__FILE__).'/../sql/';
 			$dir  = new DirectoryIterator($sqlDir);
 			foreach ($dir as $file) {

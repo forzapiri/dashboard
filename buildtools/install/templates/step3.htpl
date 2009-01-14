@@ -1,3 +1,7 @@
-<p>You do not have to create the database or tables.</p>
+<p>Use this page to enter authentication information for your database
+and (if necessary) create a new database.</p>
 {include file="checks.htpl"}
-{if $db_exists}<p style="color: red">Warning: Clicking continue will overwrite existing data.</p>{/if}
+{if $db_exists}
+<p>The next page should create database tables for you.</p>
+<p style="color: red">Warning: Clicking continue will overwrite existing data.</p>
+{/if}
