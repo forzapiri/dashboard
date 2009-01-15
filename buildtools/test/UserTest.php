@@ -138,5 +138,10 @@ class UserTest extends PHPUnit_Framework_TestCase {
 	public function testQuickFormPrefix() {
 		$this->assertEquals('user_', $this->User->quickformPrefix());
 	}
+	
+	public function testToArray() {
+		$a = User::toArray();
+		$this->assertArrayHasKey(1, $a);
+	}
 }
 
