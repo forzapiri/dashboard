@@ -134,5 +134,9 @@ class UserTest extends PHPUnit_Framework_TestCase {
 		$this->assertTrue(!!$this->User->hasPerm('CMS', 'admin'));
 		$this->assertFalse(!!$this->User->hasPerm('CMS', 'made_up_permission_string'));
 	}
+	
+	public function testQuickFormPrefix() {
+		$this->assertEquals('user_', $this->User->quickformPrefix());
+	}
 }
 
