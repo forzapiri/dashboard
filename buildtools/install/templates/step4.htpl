@@ -1,0 +1,5 @@
+<p>You do not have to create the database or tables. This script
+should have create them for you. If the script fails, check your
+configuration and run the import scripts manually.</p>
+
+{include file="checks.htpl"}

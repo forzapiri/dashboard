@@ -1,5 +1,2 @@
-*.php
-*.tpl
-*.gz
-*.js
-*.css
+*
+!.gitignore
