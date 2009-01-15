@@ -47,6 +47,15 @@ class DBRowTest extends PHPUnit_Framework_TestCase {
 		$row = DBRow::make(1, 'User');
 		$this->assertNull($row->failfailfail());
 	}
+	
+	public function testCamelCase() {
+		$this->assertEquals('MenuItem', underscore2uccamel('menu_item'));
+	}
+	
+	public function testCreateTable() {
+		$t = DBRow::createTable('auth', 'User');
+		$this->assertType('DBTable', $t);
+	}
 
 }
 
