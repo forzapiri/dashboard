@@ -143,5 +143,10 @@ class UserTest extends PHPUnit_Framework_TestCase {
 		$a = User::toArray();
 		$this->assertArrayHasKey(1, $a);
 	}
+	
+	public function testCreateTable() {
+		$t = User::createTable();
+		$this->assertType('DBTable', $t);
+	}
 }
 
