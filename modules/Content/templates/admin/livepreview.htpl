@@ -1,5 +1,0 @@
-{$form->display()}
-
-<iframe style="width: 900px; height: 200px;" src="/">
-dfg
-</iframe>
