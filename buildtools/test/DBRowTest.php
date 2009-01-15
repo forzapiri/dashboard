@@ -54,7 +54,8 @@ class DBRowTest extends PHPUnit_Framework_TestCase {
 	
 	public function testCreateTable() {
 		$t = DBRow::createTable('auth', 'User');
-		$this->assertType('DBTable', $t);
+		$this->assertType('DBTable', $t); 
+		$this->assertNull($t->columns());
 	}
 
 }
