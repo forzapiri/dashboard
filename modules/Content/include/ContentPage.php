@@ -37,7 +37,7 @@ class ContentPage extends DBRow {
 			$el->setValue($this->getPageTemplate());
 			$el = $form->addElement('html', "<b>Site Template:</b> " . $this->getPageTemplate());
 		}
-		if($this->get('name') == 'Home'){
+		if($this->get('name') == SiteConfig::get('Content::defaultPage')){
 			switch($_REQUEST['action']){
 				//Disables home page from having name change
 				case 'addedit':
@@ -53,7 +53,7 @@ class ContentPage extends DBRow {
 		}
 	}
 	
-	function checkForHomeName($elVal){return (!is_null($elVal) && ucfirst($elVal) != 'Home');}
+	function checkForHomeName($elVal){return (!is_null($elVal) && ucfirst($elVal) != SiteConfig::get('Content::defaultPage'));}
 	
 	public static function checkForHome(&$n){
 		fb('disable');
@@ -61,7 +61,7 @@ class ContentPage extends DBRow {
 			$o = $n;
 		}
 		
-		if(ucfirst($o->get('name')) == 'Home'){
+		if(ucfirst($o->get('name')) == SiteConfig::get('Content::defaultPage')){
 			$n->cancelNotification();
 		}
 	}
