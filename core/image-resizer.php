@@ -287,6 +287,7 @@ switch ($size['mime'])
 		// This is maybe not the ideal solution, but IE6 can suck it
 		$creationFunction	= 'ImageCreateFromGif';
 		$outputFunction		= 'ImagePng';
+		$resizeFunction		= 'ImageCopyResampled';
 		$mime				= 'image/png'; // We need to convert GIFs to PNGs
 		$doSharpen			= FALSE;
 		$quality			= round(10 - ($quality / 10)); // We are converting the GIF to a PNG and PNG needs a compression level of 0 (no compression) through 9
@@ -296,6 +297,7 @@ switch ($size['mime'])
 	case 'image/png':
 		$creationFunction	= 'ImageCreateFromPng';
 		$outputFunction		= 'ImagePng';
+		$resizeFunction		= 'ImageCopyResampled';
 		$doSharpen			= FALSE;
 		$quality			= round(10 - ($quality / 10)); // PNG needs a compression level of 0 (no compression) through 9
 	break;
@@ -303,6 +305,7 @@ switch ($size['mime'])
 	default:
 		$creationFunction	= 'ImageCreateFromJpeg';
 		$outputFunction	 	= 'ImageJpeg';
+		$resizeFunction		= 'ImageCopyResized';
 		$doSharpen			= TRUE;
 	break;
 }
@@ -336,7 +339,7 @@ if (in_array($size['mime'], array('image/gif', 'image/png')))
 }
 
 // Resample the original image into the resized canvas we set up earlier
-ImageCopyResampled($dst, $src, 0, 0, $offsetX, $offsetY, $tnWidth, $tnHeight, $width, $height);
+$resizeFunction($dst, $src, 0, 0, $offsetX, $offsetY, $tnWidth, $tnHeight, $width, $height);
 
 if ($doSharpen)
 {
