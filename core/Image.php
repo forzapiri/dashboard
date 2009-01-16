@@ -99,6 +99,10 @@ class Image {
 		return $this->id;
 	}
 	
+	public function resampleFunction() {
+		return $this->content_type == "image/jpeg" ? 'ImageCopyResized' : 'ImageCopyResampled';
+	}
+
 	public function width($width) {
 		$ratio = imagesy($this->im) / imagesx($this->im);
 		$im = imagecreatetruecolor($width, $width * $ratio);
