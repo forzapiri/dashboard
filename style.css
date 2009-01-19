@@ -1,0 +1,20 @@
+@CHARSET "UTF-8";
+
+body {
+	background-color: #030000;
+}
+
+h1 {
+	color: #fff;
+	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	text-align: center;
+}
+
+div#player {
+	width: 640px;
+	height: 480px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: auto;
+	margin-bottom: auto;
+}
