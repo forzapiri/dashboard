@@ -57,6 +57,15 @@ class DBRowTest extends PHPUnit_Framework_TestCase {
 		$this->assertType('DBTable', $t); 
 		$this->assertNull($t->columns());
 	}
+	
+	public function testToggle() {
+		$row = DBRow::make(1, 'User');
+		$this->assertEquals(1, $row->get('status'));
+		$row->toggle();
+		$this->assertEquals(0, $row->get('status'));
+		$row->toggle();
+		$this->assertEquals(1, $row->get('status'));
+	}
 
 }
 
