@@ -45,7 +45,7 @@ class DBRowTest extends PHPUnit_Framework_TestCase {
 	
 	public function test__call() {
 		$row = DBRow::make(1, 'User');
-		$this->assertNull($row->failfailfail());
+		$this->assertNull(@$row->failfailfail());
 	}
 	
 	public function testCamelCase() {
