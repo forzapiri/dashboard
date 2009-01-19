@@ -58,6 +58,10 @@ abstract class DBRow {
 
 	static $makeFlag = false;
 	static function make($id, $class) {
+		if (is_string ($id) && is_string ($class) && class_exists ($class) && class_exists ($id)) {
+			trigger_error ("I bet you have a call to $id::make($id, x) which should be $id::make(x) OR DBRow::make(x, $id)");
+		}
+
 		if (!class_exists ($class)) {
 			$append = class_exists($id) ? "  Swap arguments!" : "";
 			trigger_error (class_exists($id)

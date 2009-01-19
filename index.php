@@ -24,8 +24,8 @@ if (isset($_REQUEST['username']) && isset($_REQUEST['password'])) {
 }
 
 if (!SiteConfig::norex() && !SiteConfig::get('live')) {
-	echo "Site not live";
-	die();
+	$_REQUEST['module'] = "Content";
+	$_REQUEST['page'] = "_ERROR_";
 }
 
 if (@!isset($_REQUEST['module'])) {
