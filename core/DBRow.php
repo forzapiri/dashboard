@@ -57,7 +57,7 @@ abstract class DBRow {
 		}
 	}
 	
-	static function getAll($where = null) {echo self::$__CLASS__;return self::$tables[self::$__CLASS__]->getAllRows($where);}
+	static function getAll($where = null) {return self::$tables[self::$__CLASS__]->getAllRows($where);}
 
 	static $makeFlag = false;
 	static function make($id, $class) {
