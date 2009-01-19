@@ -16,6 +16,7 @@ function underscore2uccamel($text) { // 'menu_item' => 'MenuItem'
 }
 
 abstract class DBRow {
+	protected static $__CLASS__ = __CLASS__;
 	protected static $tables = array();
 	private $values = array();
 	function createTable($table, $class, $customColumns = array()) {
@@ -55,6 +56,8 @@ abstract class DBRow {
 		default: false;
 		}
 	}
+	
+	static function getAll($where = null) {echo self::$__CLASS__;return self::$tables[self::$__CLASS__]->getAllRows($where);}
 
 	static $makeFlag = false;
 	static function make($id, $class) {
