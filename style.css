@@ -5,9 +5,25 @@ body {
 }
 
 h1 {
-	color: #fff;
+	color: rgba(255,255,255,0);
 	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 	text-align: center;
+	width: 640px;
+	height: 100px;
+	margin-right: auto;
+	margin-left: auto;
+	background-image: url(logo.png);
+}
+
+h2 {
+	color: rgba(255,255,255,0);
+	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	text-align: center;
+	width: 640px;
+	height: 100px;
+	margin-right: auto;
+	margin-left: auto;
+	background-image: url(teaser.png);
 }
 
 div#player {
