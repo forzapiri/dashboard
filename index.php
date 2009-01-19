@@ -23,6 +23,11 @@ if (isset($_REQUEST['username']) && isset($_REQUEST['password'])) {
 	$auth->start();
 }
 
+if (!SiteConfig::norex() && !SiteConfig::get('live')) {
+	echo "Site not live";
+	die();
+}
+
 if (@!isset($_REQUEST['module'])) {
 	$_REQUEST['module'] = 'Content';
 }
