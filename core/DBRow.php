@@ -55,6 +55,8 @@ abstract class DBRow {
 		default: false;
 		}
 	}
+	
+	static function getAll($where = null) {return self::$tables[get_class($this)]->getAllRows($where);}
 
 	static $makeFlag = false;
 	static function make($id, $class) {
