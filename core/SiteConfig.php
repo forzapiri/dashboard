@@ -36,8 +36,7 @@ class SiteConfig {
 	public static function norex() {
 		if (!isset(self::$norex)) {
 			$u = @$_SESSION['authenticated_user'];
-			if (!$u) return false;
-			self::$norex = $u->getUsername() == 'norex' && $u->getName() == 'Norex' && $u->getLastName() == 'Development';
+			self::$norex = $u && $u->getUsername() == 'norex' && $u->getName() == 'Norex' && $u->getLastName() == 'Development';
 		}
 		return self::$norex;
 	}
