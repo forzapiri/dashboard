@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" rel="stylesheet" type="text/css" />
+<link href="docs.css" rel="stylesheet" type="text/css" />
+<title>Documentation</title>
+</head>
+<body>
+<div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="id1428003"></a>Dashboard Framework Developer Documentation</h1></div><div><div class="author"><h3 class="author"><span class="firstname">Christopher</span> <span class="surname">Troup</span></h3><code class="email">&lt;<a class="email" href="mailto:chris@norex.ca">chris@norex.ca</a>&gt;</code></div></div><div><div class="author"><h3 class="author"><span class="firstname">David</span> <span class="surname">Wolfe</span></h3><code class="email">&lt;<a class="email" href="mailto:wolfe@norex.ca">wolfe@norex.ca</a>&gt;</code></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#id1428207">1. Installation</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id1428210">Getting Dashboard</a></span></dt><dt><span class="sect1"><a href="#id1428075">Web Installer</a></span></dt></dl></dd><dt><span class="chapter"><a href="#id1428224">2. Templating</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id1428229">Admin Interface</a></span></dt><dt><span class="sect1"><a href="#id1428247">Programming API</a></span></dt></dl></dd><dt><span class="chapter"><a href="#id1428457">3. DBRow</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id1428462">Programming API</a></span></dt><dd><dl><dt><span class="sect2"><a href="#id1428469">init</a></span></dt><dt><span class="sect2"><a href="#id1428512">make</a></span></dt><dt><span class="sect2"><a href="#id1428570">save</a></span></dt><dt><span class="sect2"><a href="#id1428575">delete</a></span></dt><dt><span class="sect2"><a href="#id1428644">getAddEditForm</a></span></dt></dl></dd></dl></dd></dl></div><div class="list-of-tables"><p><b>List of Tables</b></p><dl><dt>2.1. <a href="#id1428256">Database Schema: Template Table</a></dt></dl></div><div class="list-of-examples"><p><b>List of Examples</b></p><dl><dt>2.1. <a href="#id1428437">Getting A List of Templates</a></dt><dt>3.1. <a href="#id1428494">Simple Example Class</a></dt><dt>3.2. <a href="#id1428536">Get and set a user's first name</a></dt><dt>3.3. <a href="#id1428538">Create a new User</a></dt><dt>3.4. <a href="#id1428593">Change a password</a></dt><dt>3.5. <a href="#id1428624">Delete a user</a></dt><dt>3.6. <a href="#id1428659">Web update of User object</a></dt></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="id1428207"></a>Chapter 1. Installation</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id1428210">Getting Dashboard</a></span></dt><dt><span class="sect1"><a href="#id1428075">Web Installer</a></span></dt></dl></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id1428210"></a>Getting Dashboard</h2></div></div></div><p>The best way to get the latest sources for Dashboard Framework is through
+                GIT.</p><p>
+
+                </p><pre class="screen"><code class="prompt">git clone git@github.com:minichate/dashboard.git</code></pre><p>
+            </p><p>
+                </p><pre class="screen"><code class="prompt">cd dashboard.git</code></pre><p>
+            </p><p>
+                </p><pre class="screen"><code class="prompt">git submodule update</code></pre><p>
+            </p><p>This will download an installation of Dashboard complete with relevent submodules,
+                etc. You should now set up your webserver to serve from this document root. In the
+                following examples, we will assume that you have a virtual host set up at <a class="ulink" href="http://dashboard/" target="_top">http://dashboard/</a>.</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id1428075"></a>Web Installer</h2></div></div></div><p>Point your browser to <a class="ulink" href="http://dashboard/buildtools/install/install.php" target="_top">http://dashboard/buildtools/install/install.php</a>. The first couple steps
+                will verify that you have the nessasary components to allow Dashboard to run properly.</p><div class="itemizedlist"><ul type="disc"><li><p>PHP 5.2 or greater</p></li><li><p>MySQL 5.0 or greater</p></li></ul></div><p>It will also verify that the proper permissions have been set up. If
+                any of the checks do not pass, please correct them before continuing onto the next
+                step.</p><p>The database set will attempt to create a database and create the nessasary tables
+                for a minimal set up. Enter the database name, username, password and hostname that
+                Dashboard should attempt to connect to.</p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Warning</h3><p>This executes a <span class="command"><strong>DROP TABLE</strong></span> command, so it will remove
+                        old tables. Do not run the web installer if you have data that should not be
+                        deleted.</p></div><p>Once the installer has completed, you should be able to visit <a class="ulink" href="http://dashboard/" target="_top">http://dashboard/</a> and see some basic example
+                text.</p><p>Access the administration interface through <a class="ulink" href="http://dashboard/admin" target="_top">http://dashboard/admin</a>. The default administration username is norex,
+                and the password is D3vP@ss</p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="id1428224"></a>Chapter 2. Templating</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id1428229">Admin Interface</a></span></dt><dt><span class="sect1"><a href="#id1428247">Programming API</a></span></dt></dl></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id1428229"></a>Admin Interface</h2></div></div></div><p>Site templating in Dashboard is done through a Web GUI. The Templater module is
+                accessible via <a class="ulink" href="http://dashboard/admin/Templater" target="_top">http://dashboard/admin/Templater</a></p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id1428247"></a>Programming API</h2></div></div></div><p>
+
+                </p><div class="table"><a name="id1428256"></a><p class="title"><b>Table 2.1. Database Schema: Template Table</b></p><div class="table-contents"><table summary="Database Schema: Template Table" border="1"><colgroup><col align="left"><col align="left"><col align="left"></colgroup><thead><tr><th align="left">Column Name</th><th align="left">Type</th><th align="left">Description</th></tr></thead><tfoot><tr><th align="left">Table name:</th><th align="left">templates</th><th align="left"> </th></tr></tfoot><tbody><tr><td align="left">module</td><td align="left">text</td><td align="left">The module name which the template belongs to</td></tr><tr><td align="left">path</td><td align="left">text</td><td align="left">The name of the template. Example: <code class="filename">site.tpl</code> or <code class="filename">admin/list.tpl</code></td></tr><tr><td align="left">data</td><td align="left">longtext</td><td align="left">The actual contents of the template.</td></tr><tr><td align="left">timestamp</td><td align="left">timestamp</td><td align="left">The date and time the template was last edited.</td></tr><tr><td align="left">name</td><td align="left">text</td><td align="left">The human readable name of the template. Example: Site
+                                    Template</td></tr></tbody></table></div></div><p><br class="table-break">
+
+            </p><p>
+                </p><div class="example"><a name="id1428437"></a><p class="title"><b>Example 2.1. Getting A List of Templates</b></p><div class="example-contents"><pre class="programlisting">$templates = Template::toArray(); // this will get a list of all templates
+$templates = Template::toArray('CMS'); // list of all templates associated to CMS module</pre></div></div><p><br class="example-break">
+            </p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="id1428457"></a>Chapter 3. DBRow</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id1428462">Programming API</a></span></dt><dd><dl><dt><span class="sect2"><a href="#id1428469">init</a></span></dt><dt><span class="sect2"><a href="#id1428512">make</a></span></dt><dt><span class="sect2"><a href="#id1428570">save</a></span></dt><dt><span class="sect2"><a href="#id1428575">delete</a></span></dt><dt><span class="sect2"><a href="#id1428644">getAddEditForm</a></span></dt></dl></dd></dl></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id1428462"></a>Programming API</h2></div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id1428469"></a>init</h3></div></div></div><div class="funcsynopsis"><pre class="funcsynopsisinfo">Initialize an object type. This function must be called on each class before the class can be used. It takes the class name of the object as its only parameter.</pre></div><p>
+
+                    </p><div class="example"><a name="id1428494"></a><p class="title"><b>Example 3.1. Simple Example Class</b></p><div class="example-contents"><pre class="programlisting">class Example extends DBRow {
+    public function createTable() {
+        return parent::createTable ('example_table', __CLASS__);
+    }
+}
+DBRow::init('Example');</pre></div></div><p><br class="example-break">
+                </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id1428512"></a>make</h3></div></div></div><div class="funcsynopsis"><pre class="funcsynopsisinfo">Fetches an object from the database and prepares it for display or editing.</pre></div><p>
+                    </p><div class="example"><a name="id1428536"></a><p class="title"><b>Example 3.2. Get and set a user's first name</b></p><div class="example-contents"><pre class="programlisting">$user = DBRow::make(1, 'User'); // $user is now populated with the user object
+                                // that has the ID of 1.
+echo $user-&gt;get('name'); // Prints out the users first name
+$user-&gt;set('name', 'NewFirstName'); // Sets the first name to 'NewFirstNane'
+$user-&gt;save(); // Save the changes</pre></div></div><p><br class="example-break">
+                    </p><div class="example"><a name="id1428538"></a><p class="title"><b>Example 3.3. Create a new User</b></p><div class="example-contents"><pre class="programlisting">$user = DBRow::make(null, 'User');
+$user-&gt;set('name', 'Joe');
+$user-&gt;set('last_name', 'Blo');
+$user-&gt;set('username', 'joeblo');
+$user-&gt;set('password', 'changeme');
+$user-&gt;save();</pre></div></div><p><br class="example-break">
+
+                </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id1428570"></a>save</h3></div></div></div><div class="funcsynopsis"><pre class="funcsynopsisinfo">Save the object.</pre></div><div class="example"><a name="id1428593"></a><p class="title"><b>Example 3.4. Change a password</b></p><div class="example-contents"><pre class="programlisting">$user = DBRow::make(1, 'User');
+$user-&gt;set('password', 'supersecret');
+$user-&gt;save();</pre></div></div><p><br class="example-break"></p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id1428575"></a>delete</h3></div></div></div><div class="funcsynopsis"><pre class="funcsynopsisinfo">Delete the object.</pre></div><div class="example"><a name="id1428624"></a><p class="title"><b>Example 3.5. Delete a user</b></p><div class="example-contents"><pre class="programlisting">$user = DBRow::make(200, 'User');
+$user-&gt;delete();</pre></div></div><p><br class="example-break"></p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id1428644"></a>getAddEditForm</h3></div></div></div><div class="funcsynopsis"><pre class="funcsynopsisinfo">Generate a form that can be used to change/update the object.</pre></div><div class="example"><a name="id1428659"></a><p class="title"><b>Example 3.6. Web update of User object</b></p><div class="example-contents"><pre class="programlisting">// This example assumes that it is called from http://<span class="emphasis"><em>site_url</em></span>/user/update
+$user = DBRow::make(1, 'User');
+$form = $user-&gt;getAddEditForm('/user/update'); // Form will submit to http://<span class="emphasis"><em>site_url</em></span>/user/update
+if ($form-&gt;isProcessed()) {
+    // DBRow automatically updates and saves the object based on the $_REQUEST variables
+    echo 'Your record has been updated';
+} else {
+    echo $form-&gt;display();
+}</pre></div></div><p><br class="example-break"></p></div></div></div></div>
+
+
+
+</body>
+</html>

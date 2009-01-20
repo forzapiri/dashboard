@@ -1,0 +1,39 @@
+h1, h2 {
+	color: #fff;
+	background-image: none;
+	height: auto;
+	width: auto;
+}
+
+h3.title {
+	border-bottom-style: dotted;
+}
+
+body > div {
+	width: 760px;
+	margin-left: auto;
+	margin-right: auto;
+	color: #fff;
+	font: 0.9em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+}
+
+a {
+	color: #fff;
+}
+
+pre.screen, pre.programlisting {
+	border: 1px solid #999;
+	background-color: #000;
+	padding: 4px;
+}
+
+div.warning {
+	border-style: dotted;
+	border-width: 3px;
+	padding: 8px;
+}
+
+div.warning h3 {
+	border-style: none;
+}
+
