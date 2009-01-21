@@ -158,7 +158,7 @@ class DBColumnClass extends DBColumnId { // A column type for an id, where the i
 		$value = null;
 		$label = $this->label();
 		extract ($args);
-		$dummy = new $this->class;
+		$dummy = DBRow::make(null, $this->class);
 		$rows = $dummy->table()->getAllRows();
 		$col = $this->options();
 		$col = $col ? $col[0] : 'id';
