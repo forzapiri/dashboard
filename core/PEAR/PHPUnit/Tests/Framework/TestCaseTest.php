@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: TestCaseTest.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: TestCaseTest.php 4439 2009-01-08 15:57:56Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.0.0
  */
@@ -50,6 +50,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . '_files' . DIREC
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'Failure.php';
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'NoArgTestCaseTest.php';
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'SetupFailure.php';
+require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'Singleton.php';
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'Success.php';
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'TearDownFailure.php';
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'ThrowExceptionTestCase.php';
@@ -68,6 +69,7 @@ $_COOKIE['e']  = 'e';
 $_SERVER['f']  = 'f';
 $_FILES['g']   = 'g';
 $_REQUEST['h'] = 'h';
+$GLOBALS['i']  = 'i';
 
 /**
  *
@@ -77,12 +79,14 @@ $_REQUEST['h'] = 'h';
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.10
+ * @version    Release: @package_version@
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.0.0
  */
 class Framework_TestCaseTest extends PHPUnit_Framework_TestCase
 {
+    protected $backupGlobalsBlacklist = array('i', 'singleton');
+
     public function testCaseToString()
     {
         $this->assertEquals(
@@ -217,6 +221,7 @@ class Framework_TestCaseTest extends PHPUnit_Framework_TestCase
     public function testGlobalsBackupPre()
     {
         global $a;
+        global $i;
 
         $this->assertEquals('a', $a);
         $this->assertEquals('a', $GLOBALS['a']);
@@ -227,6 +232,8 @@ class Framework_TestCaseTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('f', $_SERVER['f']);
         $this->assertEquals('g', $_FILES['g']);
         $this->assertEquals('h', $_REQUEST['h']);
+        $this->assertEquals('i', $i);
+        $this->assertEquals('i', $GLOBALS['i']);
 
         $GLOBALS['a']   = 'aa';
         $GLOBALS['foo'] = 'bar';
@@ -237,6 +244,7 @@ class Framework_TestCaseTest extends PHPUnit_Framework_TestCase
         $_SERVER['f']   = 'ff';
         $_FILES['g']    = 'gg';
         $_REQUEST['h']  = 'hh';
+        $GLOBALS['i']   = 'ii';
 
         $this->assertEquals('aa', $a);
         $this->assertEquals('aa', $GLOBALS['a']);
@@ -248,11 +256,14 @@ class Framework_TestCaseTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('ff', $_SERVER['f']);
         $this->assertEquals('gg', $_FILES['g']);
         $this->assertEquals('hh', $_REQUEST['h']);
+        $this->assertEquals('ii', $i);
+        $this->assertEquals('ii', $GLOBALS['i']);
     }
 
     public function testGlobalsBackupPost()
     {
         global $a;
+        global $i;
 
         $this->assertEquals('a', $a);
         $this->assertEquals('a', $GLOBALS['a']);
@@ -263,8 +274,20 @@ class Framework_TestCaseTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('f', $_SERVER['f']);
         $this->assertEquals('g', $_FILES['g']);
         $this->assertEquals('h', $_REQUEST['h']);
+        $this->assertEquals('ii', $i);
+        $this->assertEquals('ii', $GLOBALS['i']);
 
         $this->assertArrayNotHasKey('foo', $GLOBALS);
+    }
+
+    public function testStaticAttributesBackupPre()
+    {
+        $GLOBALS['singleton'] = Singleton::getInstance();
+    }
+
+    public function testStaticAttributesBackupPost()
+    {
+        $this->assertNotSame($GLOBALS['singleton'], Singleton::getInstance());
     }
 
     protected function verifyError(PHPUnit_Framework_TestCase $test)

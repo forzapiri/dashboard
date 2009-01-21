@@ -36,11 +36,10 @@
  *
  * @category   Testing
  * @package    PHPUnit
- * @author     Jan Borsodi <jb@ez.no>
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Scalar.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: Scalar.php 4403 2008-12-31 09:26:51Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.0.0
  */
@@ -55,11 +54,10 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  *
  * @category   Testing
  * @package    PHPUnit
- * @author     Jan Borsodi <jb@ez.no>
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.10
+ * @version    Release: @package_version@
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.0.0
  */
@@ -71,38 +69,7 @@ class PHPUnit_Framework_ComparisonFailure_Scalar extends PHPUnit_Framework_Compa
      */
     public function toString()
     {
-        if (is_numeric($this->expected) && is_numeric($this->actual)) {
-            $type             = gettype($this->expected);
-            $expectedString   = print_r($this->expected, TRUE);
-            $actualString     = print_r($this->actual, TRUE);
-            $differenceString = print_r(abs($this->actual - $this->expected), TRUE);
-
-            $expectedLen      = strlen($expectedString);
-            $actualLen        = strlen($actualString);
-            $differenceLen    = strlen($differenceString);
-            $maxLen           = max($expectedLen, $actualLen, $differenceLen);
-
-            $expectedString   = str_pad($expectedString, $maxLen, ' ', STR_PAD_LEFT);
-            $differenceString = str_pad($differenceString, $maxLen, ' ', STR_PAD_LEFT);
-            $actualString     = str_pad($actualString, $maxLen, ' ', STR_PAD_LEFT);
-
-            return sprintf(
-              "%s%sexpected %s <%s>\n" .
-              "%sdifference%s<%s>\n" .
-              '%sgot %s      <%s>',
-
-              $this->message,
-              ($this->message != '') ? ' ' : '',
-              $type,
-              $expectedString,
-              ($this->message != '') ? str_repeat(' ', strlen($this->message) + 1) : '',
-              str_repeat(' ', strlen($type)),
-              $differenceString,
-              ($this->message != '') ? str_repeat(' ', strlen($this->message) + 1) : '',
-              $type,
-              $actualString
-            );
-        }
+        return '';
     }
 }
 ?>

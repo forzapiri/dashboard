@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Class.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: Class.php 4403 2008-12-31 09:26:51Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.3.0
  */
@@ -58,7 +58,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.10
+ * @version    Release: @package_version@
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.3.0
  */
@@ -69,16 +69,16 @@ class PHPUnit_Util_Skeleton_Class extends PHPUnit_Util_Skeleton
     /**
      * Constructor.
      *
-     * @param  string  $inClassName
-     * @param  string  $inSourceFile
+     * @param string $inClassName
+     * @param string $inSourceFile
+     * @param string $outClassName
+     * @param string $outSourceFile
      * @throws RuntimeException
      */
-    public function __construct($inClassName, $inSourceFile = '')
+    public function __construct($inClassName, $inSourceFile = '', $outClassName = '', $outSourceFile = '')
     {
         if (empty($inSourceFile)) {
-            $this->inSourceFile = $inClassName . '.php';
-        } else {
-            $this->inSourceFile = $inSourceFile;
+            $inSourceFile = $inClassName . '.php';
         }
 
         if (!is_file($this->inSourceFile)) {
@@ -93,9 +93,18 @@ class PHPUnit_Util_Skeleton_Class extends PHPUnit_Util_Skeleton
 
         $this->tokens = token_get_all(file_get_contents($this->inSourceFile));
 
+        if (empty($outClassName)) {
+            $outClassName = substr($inClassName, 0, strlen($inClassName) - 4);
+        }
+
+        if (empty($outSourceFile)) {
+            $outSourceFile = dirname($inSourceFile) . DIRECTORY_SEPARATOR . $outClassName . '.php';
+        }
+
         $this->inClassName   = $inClassName;
-        $this->outClassName  = substr($inClassName, 0, strlen($inClassName) - 4);
-        $this->outSourceFile = dirname($this->inSourceFile) . DIRECTORY_SEPARATOR . $this->outClassName . '.php';
+        $this->inSourceFile  = $inSourceFile;
+        $this->outClassName  = $outClassName;
+        $this->outSourceFile = $outSourceFile;
     }
 
     /**

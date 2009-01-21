@@ -39,12 +39,13 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Assert.php 4436 2009-01-08 15:47:17Z sb $
+ * @version    SVN: $Id: Assert.php 4483 2009-01-16 09:23:06Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.0.0
  */
 
 require_once 'PHPUnit/Framework.php';
+require_once 'PHPUnit/Util/Class.php';
 require_once 'PHPUnit/Util/Filter.php';
 require_once 'PHPUnit/Util/Type.php';
 require_once 'PHPUnit/Util/XML.php';
@@ -61,7 +62,7 @@ if (!class_exists('PHPUnit_Framework_Assert', FALSE)) {
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.10
+ * @version    Release: @package_version@
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.0.0
  * @abstract
@@ -84,7 +85,7 @@ abstract class PHPUnit_Framework_Assert
     public static function assertArrayHasKey($key, array $array, $message = '')
     {
         if (!(is_integer($key) || is_string($key))) {
-            throw new InvalidArgumentException;
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'integer or string');
         }
 
         $constraint = new PHPUnit_Framework_Constraint_ArrayHasKey($key);
@@ -103,7 +104,7 @@ abstract class PHPUnit_Framework_Assert
     public static function assertArrayNotHasKey($key, array $array, $message = '')
     {
         if (!(is_integer($key) || is_string($key))) {
-            throw new InvalidArgumentException;
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'integer or string');
         }
 
         $constraint = new PHPUnit_Framework_Constraint_Not(
@@ -133,7 +134,7 @@ abstract class PHPUnit_Framework_Assert
         }
 
         else {
-            throw new InvalidArgumentException;
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(2, 'array, iterator or string');
         }
 
         self::assertThat($haystack, $constraint, $message);
@@ -182,7 +183,7 @@ abstract class PHPUnit_Framework_Assert
         }
 
         else {
-            throw new InvalidArgumentException;
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(2, 'array, iterator or string');
         }
 
         self::assertThat($haystack, $constraint, $message);
@@ -220,7 +221,7 @@ abstract class PHPUnit_Framework_Assert
     {
         if (!(is_array($haystack) ||
             is_object($haystack) && $haystack instanceof Iterator)) {
-            throw new InvalidArgumentException;
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(2, 'array or iterator');
         }
 
         if ($isNativeType == NULL) {
@@ -270,7 +271,7 @@ abstract class PHPUnit_Framework_Assert
     {
         if (!(is_array($haystack) ||
             is_object($haystack) && $haystack instanceof Iterator)) {
-            throw new InvalidArgumentException;
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(2, 'array or iterator');
         }
 
         if ($isNativeType == NULL) {
@@ -628,7 +629,7 @@ abstract class PHPUnit_Framework_Assert
     public static function assertFileExists($filename, $message = '')
     {
         if (!is_string($filename)) {
-            throw new InvalidArgumentException;
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'string');
         }
 
         $constraint = new PHPUnit_Framework_Constraint_FileExists;
@@ -646,7 +647,7 @@ abstract class PHPUnit_Framework_Assert
     public static function assertFileNotExists($filename, $message = '')
     {
         if (!is_string($filename)) {
-            throw new InvalidArgumentException;
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'string');
         }
 
         $constraint = new PHPUnit_Framework_Constraint_Not(
@@ -712,8 +713,12 @@ abstract class PHPUnit_Framework_Assert
      */
     public static function assertClassHasAttribute($attributeName, $className, $message = '')
     {
-        if (!is_string($attributeName) || !is_string($className) || !class_exists($className, FALSE)) {
-            throw new InvalidArgumentException;
+        if (!is_string($attributeName)) {
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'string');
+        }
+
+        if (!is_string($className) || !class_exists($className, FALSE)) {
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(2, 'class name');
         }
 
         $constraint = new PHPUnit_Framework_Constraint_ClassHasAttribute($attributeName);
@@ -731,8 +736,12 @@ abstract class PHPUnit_Framework_Assert
      */
     public static function assertClassNotHasAttribute($attributeName, $className, $message = '')
     {
-        if (!is_string($attributeName) || !is_string($className) || !class_exists($className)) {
-            throw new InvalidArgumentException;
+        if (!is_string($attributeName)) {
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'string');
+        }
+
+        if (!is_string($className) || !class_exists($className, FALSE)) {
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(2, 'class name');
         }
 
         $constraint = new PHPUnit_Framework_Constraint_Not(
@@ -752,8 +761,12 @@ abstract class PHPUnit_Framework_Assert
      */
     public static function assertClassHasStaticAttribute($attributeName, $className, $message = '')
     {
-        if (!is_string($attributeName) || !is_string($className) || !class_exists($className)) {
-            throw new InvalidArgumentException;
+        if (!is_string($attributeName)) {
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'string');
+        }
+
+        if (!is_string($className) || !class_exists($className, FALSE)) {
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(2, 'class name');
         }
 
         $constraint = new PHPUnit_Framework_Constraint_ClassHasStaticAttribute($attributeName);
@@ -771,8 +784,12 @@ abstract class PHPUnit_Framework_Assert
      */
     public static function assertClassNotHasStaticAttribute($attributeName, $className, $message = '')
     {
-        if (!is_string($attributeName) || !is_string($className) || !class_exists($className)) {
-            throw new InvalidArgumentException;
+        if (!is_string($attributeName)) {
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'string');
+        }
+
+        if (!is_string($className) || !class_exists($className, FALSE)) {
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(2, 'class name');
         }
 
         $constraint = new PHPUnit_Framework_Constraint_Not(
@@ -792,8 +809,12 @@ abstract class PHPUnit_Framework_Assert
      */
     public static function assertObjectHasAttribute($attributeName, $object, $message = '')
     {
-        if (!is_string($attributeName) || !is_object($object)) {
-            throw new InvalidArgumentException;
+        if (!is_string($attributeName)) {
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'string');
+        }
+
+        if (!is_object($object)) {
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(2, 'object');
         }
 
         $constraint = new PHPUnit_Framework_Constraint_ObjectHasAttribute($attributeName);
@@ -811,8 +832,12 @@ abstract class PHPUnit_Framework_Assert
      */
     public static function assertObjectNotHasAttribute($attributeName, $object, $message = '')
     {
-        if (!is_string($attributeName) || !is_object($object)) {
-            throw new InvalidArgumentException;
+        if (!is_string($attributeName)) {
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'string');
+        }
+
+        if (!is_object($object)) {
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(2, 'object');
         }
 
         $constraint = new PHPUnit_Framework_Constraint_Not(
@@ -924,7 +949,7 @@ abstract class PHPUnit_Framework_Assert
                 throw new InvalidArgumentException;
             }
         } else {
-            throw new InvalidArgumentException;
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'string');
         }
 
         self::assertThat($actual, $constraint, $message);
@@ -957,7 +982,7 @@ abstract class PHPUnit_Framework_Assert
                 throw new InvalidArgumentException;
             }
         } else {
-            throw new InvalidArgumentException;
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'string');
         }
 
         self::assertThat($actual, $constraint, $message);
@@ -997,6 +1022,102 @@ abstract class PHPUnit_Framework_Assert
 
         $constraint = new PHPUnit_Framework_Constraint_Not(
           new PHPUnit_Framework_Constraint_PCREMatch($pattern)
+        );
+
+        self::assertThat($string, $constraint, $message);
+    }
+
+    /**
+     * Asserts that a string starts with a given prefix.
+     *
+     * @param  string $prefix
+     * @param  string $string
+     * @param  string $message
+     * @since  Method available since Release 3.4.0
+     */
+    public static function assertStringStartsWith($prefix, $string, $message = '')
+    {
+        if (!is_string($prefix)) {
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'string');
+        }
+
+        if (!is_string($string)) {
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'string');
+        }
+
+        $constraint = new PHPUnit_Framework_Constraint_StringStartsWith($prefix);
+
+        self::assertThat($string, $constraint, $message);
+    }
+
+    /**
+     * Asserts that a string starts not with a given prefix.
+     *
+     * @param  string $prefix
+     * @param  string $string
+     * @param  string $message
+     * @since  Method available since Release 3.4.0
+     */
+    public static function assertStringStartsNotWith($prefix, $string, $message = '')
+    {
+        if (!is_string($prefix)) {
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'string');
+        }
+
+        if (!is_string($string)) {
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'string');
+        }
+
+        $constraint = new PHPUnit_Framework_Constraint_Not(
+          new PHPUnit_Framework_Constraint_StringStartsWith($prefix)
+        );
+
+        self::assertThat($string, $constraint, $message);
+    }
+
+    /**
+     * Asserts that a string ends with a given prefix.
+     *
+     * @param  string $suffix
+     * @param  string $string
+     * @param  string $message
+     * @since  Method available since Release 3.4.0
+     */
+    public static function assertStringEndsWith($suffix, $string, $message = '')
+    {
+        if (!is_string($suffix)) {
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'string');
+        }
+
+        if (!is_string($suffix)) {
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'string');
+        }
+
+        $constraint = new PHPUnit_Framework_Constraint_StringEndsWith($suffix);
+
+        self::assertThat($string, $constraint, $message);
+    }
+
+    /**
+     * Asserts that a string ends not with a given prefix.
+     *
+     * @param  string $suffix
+     * @param  string $string
+     * @param  string $message
+     * @since  Method available since Release 3.4.0
+     */
+    public static function assertStringEndsNotWith($suffix, $string, $message = '')
+    {
+        if (!is_string($suffix)) {
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'string');
+        }
+
+        if (!is_string($suffix)) {
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'string');
+        }
+
+        $constraint = new PHPUnit_Framework_Constraint_Not(
+          new PHPUnit_Framework_Constraint_StringEndsWith($suffix)
         );
 
         self::assertThat($string, $constraint, $message);
@@ -1366,7 +1487,7 @@ abstract class PHPUnit_Framework_Assert
      * // Matcher that asserts that there is a "span" somewhere inside a "table".
      * $matcher = array(
      *   'tag'      => 'span',
-     *   'ascestor' => array('tag' => 'table')
+     *   'ancestor' => array('tag' => 'table')
      * );
      *
      * // Matcher that asserts that there is a "span" with at least one "em" child.
@@ -1831,6 +1952,18 @@ abstract class PHPUnit_Framework_Assert
     }
 
     /**
+     * Returns a PHPUnit_Framework_Constraint_StringStartsWith matcher object.
+     *
+     * @param  mixed $prefix
+     * @return PHPUnit_Framework_Constraint_StringStartsWith
+     * @since  Method available since Release 3.4.0
+     */
+    public static function stringStartsWith($prefix)
+    {
+        return new PHPUnit_Framework_Constraint_StringStartsWith($prefix);
+    }
+
+    /**
      * Returns a PHPUnit_Framework_Constraint_StringContains matcher object.
      *
      * @param  string  $string
@@ -1843,6 +1976,17 @@ abstract class PHPUnit_Framework_Assert
         return new PHPUnit_Framework_Constraint_StringContains($string, $case);
     }
 
+    /**
+     * Returns a PHPUnit_Framework_Constraint_StringEndsWith matcher object.
+     *
+     * @param  mixed $suffix
+     * @return PHPUnit_Framework_Constraint_StringEndsWith
+     * @since  Method available since Release 3.4.0
+     */
+    public static function stringEndsWith($suffix)
+    {
+        return new PHPUnit_Framework_Constraint_StringEndsWith($suffix);
+    }
 
     /**
      * Fails a test with the given message.
@@ -1875,14 +2019,14 @@ abstract class PHPUnit_Framework_Assert
                 throw new InvalidArgumentException;
             }
 
-            return self::getStaticAttribute(
+            return PHPUnit_Util_Class::getStaticAttribute(
               $classOrObject,
               $attributeName
             );
         }
 
         else if (is_object($classOrObject)) {
-            return self::getObjectAttribute(
+            return PHPUnit_Util_Class::getObjectAttribute(
               $classOrObject,
               $attributeName
             );
@@ -1891,147 +2035,6 @@ abstract class PHPUnit_Framework_Assert
         else {
             throw new InvalidArgumentException;
         }
-    }
-
-    /**
-     * Returns the value of a static attribute.
-     * This also works for attributes that are declared protected or private.
-     *
-     * @param  string  $className
-     * @param  string  $attributeName
-     * @return mixed
-     * @throws InvalidArgumentException
-     * @since  Method available since Release 3.1.0
-     */
-    public static function getStaticAttribute($className, $attributeName)
-    {
-        if (!is_string($className) || !class_exists($className) || !is_string($attributeName)) {
-            throw new InvalidArgumentException;
-        }
-
-        $class      = new ReflectionClass($className);
-        $attributes = $class->getStaticProperties();
-
-        if (array_key_exists($attributeName, $attributes)) {
-            return $attributes[$attributeName];
-        }
-
-        if (version_compare(PHP_VERSION, '5.2', '<')) {
-            $protectedName = "\0*\0" . $attributeName;
-        } else {
-            $protectedName = '*' . $attributeName;
-        }
-
-        if (array_key_exists($protectedName, $attributes)) {
-            return $attributes[$protectedName];
-        }
-
-        $classes = PHPUnit_Util_Class::getHierarchy($className);
-
-        foreach ($classes as $class) {
-            $privateName = sprintf(
-              "\0%s\0%s",
-
-              $class,
-              $attributeName
-            );
-
-            if (array_key_exists($privateName, $attributes)) {
-                return $attributes[$privateName];
-            }
-        }
-
-        throw new RuntimeException(
-          sprintf(
-            'Attribute "%s" not found in class.',
-
-            $attributeName
-          )
-        );
-    }
-
-    /**
-     * Returns the value of an object's attribute.
-     * This also works for attributes that are declared protected or private.
-     *
-     * @param  object  $object
-     * @param  string  $attributeName
-     * @return mixed
-     * @throws InvalidArgumentException
-     * @since  Method available since Release 3.1.0
-     */
-    public static function getObjectAttribute($object, $attributeName)
-    {
-        if (!is_object($object) || !is_string($attributeName)) {
-            throw new InvalidArgumentException;
-        }
-
-        self::assertObjectHasAttribute($attributeName, $object);
-
-        try {
-            $attribute = new ReflectionProperty($object, $attributeName);
-        }
-
-        catch (ReflectionException $e) {
-            // Workaround for http://bugs.php.net/46064
-            if (version_compare(PHP_VERSION, '5.2.7', '<')) {
-                $reflector  = new ReflectionObject($object);
-                $attributes = $reflector->getProperties();
-
-                foreach ($attributes as $_attribute) {
-                    if ($_attribute->getName() == $attributeName) {
-                        $attribute = $_attribute;
-                        break;
-                    }
-                }
-            }
-
-            $reflector = new ReflectionObject($object);
-
-            while ($reflector = $reflector->getParentClass()) {
-                try {
-                    $attribute = $reflector->getProperty($attributeName);
-                    break;
-                }
-
-                catch(ReflectionException $e) {
-                }
-            }
-        }
-
-        if ($attribute->isPublic()) {
-            return $object->$attributeName;
-        } else {
-            $array         = (array)$object;
-            $protectedName = "\0*\0" . $attributeName;
-
-            if (array_key_exists($protectedName, $array)) {
-                return $array[$protectedName];
-            } else {
-                $classes = PHPUnit_Util_Class::getHierarchy(get_class($object));
-
-                foreach ($classes as $class) {
-                    $privateName = sprintf(
-                      "\0%s\0%s",
-
-                      $class,
-                      $attributeName
-                    );
-
-                    if (array_key_exists($privateName, $array)) {
-                        return $array[$privateName];
-                    }
-                }
-            }
-        }
-
-        throw new RuntimeException(
-          sprintf(
-            'Attribute "%s" not found in object.',
-
-            $attributeName
-          )
-        );
     }
 
     /**

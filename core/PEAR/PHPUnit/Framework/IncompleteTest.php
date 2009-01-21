@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: IncompleteTest.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: IncompleteTest.php 4403 2008-12-31 09:26:51Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.0.0
  */
@@ -59,7 +59,7 @@ if (!interface_exists('PHPUnit_Framework_IncompleteTest', FALSE)) {
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.10
+ * @version    Release: @package_version@
  * @link       http://www.phpunit.de/
  * @since      Interface available since Release 2.0.0
  */

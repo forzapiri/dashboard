@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Filesystem.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: Filesystem.php 4403 2008-12-31 09:26:51Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.0.0
  */
@@ -56,14 +56,22 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.10
+ * @version    Release: @package_version@
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.0.0
  * @abstract
  */
 class PHPUnit_Util_Filesystem
 {
+    /**
+     * @var array
+     */
     protected static $buffer = array();
+
+    /**
+     * @var array
+     */
+    protected static $hasBinary = array();
 
     /**
      * Starts the collection of loaded files.
@@ -204,6 +212,66 @@ class PHPUnit_Util_Filesystem
     {
         /* characters allowed: A-Z, a-z, 0-9, _ and . */
         return preg_replace('#[^\w.]#', '_', $filename);
+    }
+
+    /**
+     * @param  string $binary
+     * @return boolean
+     * @since  Method available since Release 3.4.0
+     */
+    public static function hasBinary($binary)
+    {
+        if (!isset(self::$hasBinary[$binary])) {
+            self::$hasBinary[$binary] = FALSE;
+
+            if (substr(php_uname('s'), 0, 7) == 'Windows') {
+                $binary .= '.exe';
+            }
+
+            $openBaseDir = ini_get('open_basedir');
+
+            if (is_string($openBaseDir) && !empty($openBaseDir)) {
+                $safeModeExecDir = ini_get('safe_mode_exec_dir');
+                $var             = $openBaseDir;
+
+                if (is_string($safeModeExecDir) && !empty($safeModeExecDir)) {
+                    $var .= PATH_SEPARATOR . $safeModeExecDir;
+                }
+            } else {
+                if (isset($_ENV['PATH'])) {
+                    $var = $_ENV['PATH'];
+                }
+
+                else if (isset($_ENV['Path'])) {
+                    $var = $_ENV['Path'];
+                }
+
+                else if (isset($_SERVER['PATH'])) {
+                    $var = $_SERVER['PATH'];
+                }
+
+                else if (isset($_SERVER['Path'])) {
+                    $var = $_SERVER['Path'];
+                }
+            }
+
+            if (isset($var)) {
+                $paths = explode(PATH_SEPARATOR, $var);
+            } else {
+                $paths = array();
+            }
+
+            foreach ($paths as $path) {
+                $_path = $path . DIRECTORY_SEPARATOR . $binary;
+
+                if (file_exists($_path) && is_executable($_path)) {
+                    self::$hasBinary[$binary] = TRUE;
+                    break;
+                }
+            }
+        }
+
+        return self::$hasBinary[$binary];
     }
 
     /**

@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: TestFailureTest.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: TestFailureTest.php 4403 2008-12-31 09:26:51Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.3.0
  */
@@ -56,7 +56,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . '_files' . DIREC
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.10
+ * @version    Release: @package_version@
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.3.0
  */
@@ -324,7 +324,7 @@ class Framework_TestFailureTest extends PHPUnit_Framework_TestCase
 
         catch (PHPUnit_Framework_ExpectationFailedException $e) {
             $this->assertEquals(
-              "Failed asserting that <integer:0> matches expected value <integer:1>.\n",
+              "Failed asserting that <integer:0> matches expected <integer:1>.\n",
               PHPUnit_Framework_TestFailure::exceptionToString($e)
             );
 
@@ -344,7 +344,7 @@ class Framework_TestFailureTest extends PHPUnit_Framework_TestCase
 
         catch (PHPUnit_Framework_ExpectationFailedException $e) {
             $this->assertEquals(
-              "custom message\nFailed asserting that <integer:0> matches expected value <integer:1>.\n",
+              "custom message\nFailed asserting that <integer:0> matches expected <integer:1>.\n",
               PHPUnit_Framework_TestFailure::exceptionToString($e)
             );
 

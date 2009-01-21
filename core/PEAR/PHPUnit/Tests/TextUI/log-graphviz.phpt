@@ -8,9 +8,12 @@ $_SERVER['argv'][3] = 'BankAccountTest';
 $_SERVER['argv'][4] = '../Samples/BankAccount/BankAccountTest.php';
 
 require_once dirname(dirname(dirname(__FILE__))) . '/TextUI/Command.php';
+PHPUnit_TextUI_Command::main();
 ?>
 --EXPECTF--
 PHPUnit %s by Sebastian Bergmann.
+
+The --log-graphviz functionality is deprecated and will be removed in the future.
 
 ...digraph G {
 graph [ overlap="scale",splines="true",sep=".1",fontsize="8" ];

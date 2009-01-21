@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Report.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: Report.php 4490 2009-01-17 15:37:36Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.0.0
  */
@@ -61,7 +61,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.10
+ * @version    Release: @package_version@
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.0.0
  * @abstract
@@ -74,6 +74,7 @@ abstract class PHPUnit_Util_Report
      * Renders the report.
      *
      * @param  PHPUnit_Framework_TestResult $result
+     * @param  string                       $title
      * @param  string                       $target
      * @param  string                       $charset
      * @param  boolean                      $yui
@@ -81,7 +82,7 @@ abstract class PHPUnit_Util_Report
      * @param  integer                      $lowUpperBound
      * @param  integer                      $highLowerBound
      */
-    public static function render(PHPUnit_Framework_TestResult $result, $target, $charset = 'ISO-8859-1', $yui = TRUE, $highlight = FALSE, $lowUpperBound = 35, $highLowerBound = 70)
+    public static function render(PHPUnit_Framework_TestResult $result, $target, $title = '', $charset = 'ISO-8859-1', $yui = TRUE, $highlight = FALSE, $lowUpperBound = 35, $highLowerBound = 70)
     {
         $target = PHPUnit_Util_Filesystem::getDirectory($target);
 
@@ -101,10 +102,12 @@ abstract class PHPUnit_Util_Report
 
         unset($codeCoverageInformation);
 
-        $topTestSuite = $result->topTestSuite();
+        if ($title == '') {
+            $topTestSuite = $result->topTestSuite();
 
-        if ($topTestSuite instanceof PHPUnit_Framework_TestSuite) {
-            $name = $topTestSuite->getName();
+            if ($topTestSuite instanceof PHPUnit_Framework_TestSuite) {
+                $title = $topTestSuite->getName();
+            }
         }
 
         unset($result);
@@ -118,7 +121,7 @@ abstract class PHPUnit_Util_Report
 
         $root->render(
           $target,
-          $name,
+          $title,
           $charset,
           $lowUpperBound,
           $highLowerBound

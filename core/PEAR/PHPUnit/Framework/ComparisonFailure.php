@@ -36,11 +36,10 @@
  *
  * @category   Testing
  * @package    PHPUnit
- * @author     Jan Borsodi <jb@ez.no>
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: ComparisonFailure.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: ComparisonFailure.php 4403 2008-12-31 09:26:51Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.0.0
  */
@@ -58,11 +57,10 @@ if (!class_exists('PHPUnit_Framework_ComparisonFailure', FALSE)) {
  *
  * @category   Testing
  * @package    PHPUnit
- * @author     Jan Borsodi <jb@ez.no>
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.10
+ * @version    Release: @package_version@
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.0.0
  */
@@ -93,18 +91,13 @@ abstract class PHPUnit_Framework_ComparisonFailure extends PHPUnit_Framework_Ass
     protected $message;
 
     /**
-     * @var boolean
-     */
-    protected static $hasDiff = NULL;
-
-    /**
      * Initialises with the expected value and the actual value.
      *
      * @param mixed $expected Expected value retrieved.
      * @param mixed $actual Actual value retrieved.
      * @param boolean $identical
      * @param string $message A string which is prefixed on all returned lines
-     *                       in the difference output.
+     *                        in the difference output.
      */
     public function __construct($expected, $actual, $identical = FALSE, $message = '')
     {
@@ -138,7 +131,7 @@ abstract class PHPUnit_Framework_ComparisonFailure extends PHPUnit_Framework_Ass
      * @param mixed $expected Expected value retrieved.
      * @param mixed $actual Actual value retrieved.
      * @param string $message A string which is prefixed on all returned lines
-     *                       in the difference output.
+     *                        in the difference output.
      * @return PHPUnit_Framework_ComparisonFailure
      */
     public static function diffIdentical($expected, $actual, $message = '')
@@ -147,20 +140,24 @@ abstract class PHPUnit_Framework_ComparisonFailure extends PHPUnit_Framework_Ass
             return new PHPUnit_Framework_ComparisonFailure_Type($expected, $actual, TRUE, $message);
         }
 
-        elseif (is_string($expected)) {
-            return new PHPUnit_Framework_ComparisonFailure_String($expected, $actual, TRUE, $message);
-        }
-
-        elseif (is_null($expected) || is_scalar($expected)) {
-            return new PHPUnit_Framework_ComparisonFailure_Scalar($expected, $actual, TRUE, $message);
-        }
-
-        elseif (is_array($expected)) {
+        else if (is_array($expected) && is_array($actual)) {
             return new PHPUnit_Framework_ComparisonFailure_Array($expected, $actual, TRUE, $message);
         }
 
-        elseif (is_object($expected)) {
+        else if (is_numeric($expected) && is_numeric($actual)) {
+            return new PHPUnit_Framework_ComparisonFailure_Numeric($expected, $actual, TRUE, $message);
+        }
+
+        else if (is_object($expected) && is_object($actual)) {
             return new PHPUnit_Framework_ComparisonFailure_Object($expected, $actual, TRUE, $message);
+        }
+
+        else if (is_string($expected) && !is_object($actual)) {
+            return new PHPUnit_Framework_ComparisonFailure_String($expected, $actual, TRUE, $message);
+        }
+
+        else if (is_null($expected) || is_scalar($expected)) {
+            return new PHPUnit_Framework_ComparisonFailure_Scalar($expected, $actual, TRUE, $message);
         }
     }
 
@@ -173,111 +170,37 @@ abstract class PHPUnit_Framework_ComparisonFailure extends PHPUnit_Framework_Ass
      * @param mixed $expected Expected value retrieved.
      * @param mixed $actual Actual value retrieved.
      * @param string $message A string which is prefixed on all returned lines
-     *                       in the difference output.
+     *                        in the difference output.
      * @return PHPUnit_Framework_ComparisonFailure
      */
     public static function diffEqual($expected, $actual, $message = '')
     {
-        if (is_string($expected) && !is_object($actual)) {
-            return new PHPUnit_Framework_ComparisonFailure_String($expected, $actual, FALSE, $message);
-        }
-
-        elseif (is_null($expected) || is_scalar($expected)) {
-            return new PHPUnit_Framework_ComparisonFailure_Scalar($expected, $actual, FALSE, $message);
-        }
-
-        elseif (is_array($expected)) {
+        if (is_array($expected) && is_array($actual)) {
             return new PHPUnit_Framework_ComparisonFailure_Array($expected, $actual, FALSE, $message);
         }
 
-        elseif (is_object($expected)) {
+        else if (is_numeric($expected) && is_numeric($actual)) {
+            return new PHPUnit_Framework_ComparisonFailure_Numeric($expected, $actual, FALSE, $message);
+        }
+
+        else if (is_object($expected) && is_object($actual)) {
             return new PHPUnit_Framework_ComparisonFailure_Object($expected, $actual, FALSE, $message);
         }
-    }
 
-    protected function diff($expected, $actual)
-    {
-        $expectedFile = tempnam('/tmp', 'expected');
-        file_put_contents($expectedFile, $expected);
-
-        $actualFile = tempnam('/tmp', 'actual');
-        file_put_contents($actualFile, $actual);
-
-        $buffer = shell_exec(
-          sprintf(
-            'diff -u %s %s',
-            escapeshellarg($expectedFile),
-            escapeshellarg($actualFile)
-          )
-        );
-
-        unlink($expectedFile);
-        unlink($actualFile);
-
-        if (!empty($buffer)) {
-            $buffer = explode("\n", $buffer);
-
-            $buffer[0] = "--- Expected";
-            $buffer[1] = "+++ Actual";
-
-            $buffer = implode("\n", $buffer);
+        else if (is_string($expected) && !is_object($actual)) {
+            return new PHPUnit_Framework_ComparisonFailure_String($expected, $actual, FALSE, $message);
         }
 
-        return $buffer;
-    }
-
-    public static function hasDiff()
-    {
-        if (self::$hasDiff === NULL)
-        {
-            self::$hasDiff = FALSE;
-
-            $binary = 'diff';
-
-            if (substr(php_uname('s'), 0, 7) == 'Windows')
-            {
-                $binary .= '.exe';
-            }
-
-            if (isset($_ENV['PATH'])) {
-                $var = $_ENV['PATH'];
-            }
-
-            else if (isset($_ENV['Path'])) {
-                $var = $_ENV['Path'];
-            }
-
-            else if (isset($_SERVER['PATH'])) {
-                $var = $_SERVER['PATH'];
-            }
-
-            else if (isset($_SERVER['Path'])) {
-                $var = $_SERVER['Path'];
-            }
-
-            if (isset($var)) {
-                $paths = explode(PATH_SEPARATOR, $var);
-            } else {
-                $paths = array();
-            }
-
-            foreach ($paths as $path) {
-                if (file_exists($path . DIRECTORY_SEPARATOR . $binary) &&
-                    is_executable($path . DIRECTORY_SEPARATOR . $binary))
-                {
-                    self::$hasDiff = TRUE;
-                    break;
-                }
-            }
+        else if (is_null($expected) || is_scalar($expected)) {
+            return new PHPUnit_Framework_ComparisonFailure_Scalar($expected, $actual, FALSE, $message);
         }
-
-        return self::$hasDiff;
     }
 }
 
 }
 
 require_once 'PHPUnit/Framework/ComparisonFailure/Array.php';
+require_once 'PHPUnit/Framework/ComparisonFailure/Numeric.php';
 require_once 'PHPUnit/Framework/ComparisonFailure/Object.php';
 require_once 'PHPUnit/Framework/ComparisonFailure/Scalar.php';
 require_once 'PHPUnit/Framework/ComparisonFailure/String.php';

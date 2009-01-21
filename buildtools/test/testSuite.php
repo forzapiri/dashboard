@@ -37,15 +37,16 @@ class testSuite extends PHPUnit_Framework_TestSuite {
 		
 		$this->setName ( 'testSuite' );
 		
-		$this->addTestSuite ( 'DBRowTest' );
-		$this->addTestSuite ( 'DBColumnTest' );
+		//$this->addTestSuite ( 'DBRowTest' );
+		//$this->addTestSuite ( 'DBColumnTest' );
 		$this->addTestSuite ( 'DatabaseTest' );
 		$this->addTestSuite ( 'DBTableTest' );
 		$this->addTestSuite ( 'UserTest' );
 		$this->addTestSuite ( 'AddressTest' );
-		$this->addTestSuite ( 'ImageTest' );
-		$this->addTestSuite ( 'GroupTest' );
+		//$this->addTestSuite ( 'ImageTest' );
+		//$this->addTestSuite ( 'GroupTest' );
 
+		/*
 		$dataDir  = dirname(__FILE__).'/../../modules/';
 	
 		$dir  = new DirectoryIterator($dataDir);
@@ -66,7 +67,7 @@ class testSuite extends PHPUnit_Framework_TestSuite {
 				$sql = file_get_contents($dataDir . $fileName . '/schema.sql');
 				Database::singleton()->multi_query($sql);
 			}
-		}
+		}*/
 	}
 
 	/**

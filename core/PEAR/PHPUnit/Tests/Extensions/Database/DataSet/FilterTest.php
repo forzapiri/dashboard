@@ -39,7 +39,7 @@
  * @author     Mike Lively <m@digitalsandwich.com>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: FilterTest.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: FilterTest.php 4403 2008-12-31 09:26:51Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.2.0
  */
@@ -55,7 +55,7 @@ require_once 'PHPUnit/Extensions/Database/Constraint/DataSetIsEqual.php';
  * @author     Mike Lively <m@digitalsandwich.com>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: FilterTest.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: FilterTest.php 4403 2008-12-31 09:26:51Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.2.0
  */

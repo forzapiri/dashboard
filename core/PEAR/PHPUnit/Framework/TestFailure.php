@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: TestFailure.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: TestFailure.php 4403 2008-12-31 09:26:51Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.0.0
  */
@@ -59,7 +59,7 @@ if (!class_exists('PHPUnit_Framework_TestFailure', FALSE)) {
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.10
+ * @version    Release: @package_version@
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.0.0
  */
@@ -144,9 +144,10 @@ class PHPUnit_Framework_TestFailure
                             $buffer .= $comparisonFailure->toString() . "\n";
                         }
                     } else {
-                        if ($comparisonFailure instanceof PHPUnit_Framework_ComparisonFailure_Scalar) {
+                        if ($comparisonFailure instanceof PHPUnit_Framework_ComparisonFailure_Numeric ||
+                            $comparisonFailure instanceof PHPUnit_Framework_ComparisonFailure_Scalar) {
                             $buffer .= sprintf(
-                              "Failed asserting that %s matches expected value %s.\n",
+                              "Failed asserting that %s matches expected %s.\n",
 
                               PHPUnit_Util_Type::toString($comparisonFailure->getActual()),
                               PHPUnit_Util_Type::toString($comparisonFailure->getExpected())

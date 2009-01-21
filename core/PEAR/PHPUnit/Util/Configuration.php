@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Configuration.php 4455 2009-01-10 06:59:48Z sb $
+ * @version    SVN: $Id: Configuration.php 4501 2009-01-19 15:35:25Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.2.0
  */
@@ -57,16 +57,23 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * <code>
  * <?xml version="1.0" encoding="utf-8" ?>
  *
- * <phpunit bootstrap="/path/to/bootstrap.php"
+ * <phpunit backupGlobals="true"
+ *          backupStaticAttributes="true"
+ *          bootstrap="/path/to/bootstrap.php"
  *          colors="false"
  *          convertErrorsToExceptions="true"
  *          convertNoticesToExceptions="true"
  *          convertWarningsToExceptions="true"
- *          stopOnFailure="false">
- *   <testsuite name="My Test Suite">
- *     <directory suffix="Test.php">/path/to/files</directory>
- *     <file>/path/to/MyTest.php</file>
- *   </testsuite>
+ *          processIsolation="false"
+ *          stopOnFailure="false"
+ *          syntaxCheck="true"
+ *          testSuiteLoaderClass="PHPUnit_Runner_StandardTestSuiteLoader">
+ *   <testsuites>
+ *     <testsuite name="My Test Suite">
+ *       <directory suffix="Test.php">/path/to/files</directory>
+ *       <file>/path/to/MyTest.php</file>
+ *     </testsuite>
+ *   </testsuites>
  *
  *   <groups>
  *     <include>
@@ -96,9 +103,26 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  *     </whitelist>
  *   </filter>
  *
+ *   <listeners>
+ *     <listener class="MyListener" file="/optional/path/to/MyListener.php">
+ *       <arguments>
+ *         <array>
+ *           <element key="0">
+ *             <string>Sebastian</string>
+ *           </element>
+ *         </array>
+ *         <integer>22</integer>
+ *         <string>April</string>
+ *         <double>19.78</double>
+ *         <null/>
+ *         <object class="stdClass"/>
+ *       </arguments>
+ *     </listener>
+ *   </listeners>
+ *
  *   <logging>
- *     <log type="coverage-html" target="/tmp/report" charset="UTF-8"
- *          yui="true" highlight="false"
+ *     <log type="coverage-html" target="/tmp/report" title="My Project"
+            charset="UTF-8" yui="true" highlight="false"
  *          lowUpperBound="35" highLowerBound="70"/>
  *     <log type="coverage-clover" target="/tmp/clover.xml"/>
  *     <log type="coverage-source" target="/tmp/coverage"/>
@@ -144,6 +168,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  *
  *   <php>
  *     <ini name="foo" value="bar"/>
+ *     <const name="foo" value="bar"/>
  *     <var name="foo" value="bar"/>
  *   </php>
  *
@@ -162,12 +187,14 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.10
+ * @version    Release: @package_version@
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.2.0
  */
 class PHPUnit_Util_Configuration
 {
+    private static $instances = array();
+
     protected $document;
     protected $xpath;
 
@@ -176,10 +203,43 @@ class PHPUnit_Util_Configuration
      *
      * @param  string $filename
      */
-    public function __construct($filename)
+    protected function __construct($filename)
     {
         $this->document = PHPUnit_Util_XML::loadFile($filename);
         $this->xpath    = new DOMXPath($this->document);
+    }
+
+    /**
+     * @since  Method available since Release 3.4.0
+     */
+    private final function __clone()
+    {
+    }
+
+    /**
+     * Returns a PHPUnit configuration object.
+     *
+     * @param  string $filename
+     * @return PHPUnit_Util_Configuration
+     * @since  Method available since Release 3.4.0
+     */
+    public static function getInstance($filename) {
+        $realpath = realpath($filename);
+
+        if ($realpath === FALSE) {
+            throw new RuntimeException(
+              sprintf(
+                'Could not read "%s".',
+                $filename
+              )
+            );
+        }
+
+        if (!isset(self::$instances[$realpath])) {
+            self::$instances[$realpath] = new PHPUnit_Util_Configuration($realpath);
+        }
+ 
+        return self::$instances[$realpath];
     }
 
     /**
@@ -268,6 +328,44 @@ class PHPUnit_Util_Configuration
     }
 
     /**
+     * Returns the configuration for listeners.
+     *
+     * @return array
+     * @since  Method available since Release 3.4.0
+     */
+    public function getListenerConfiguration()
+    {
+        $result = array();
+
+        foreach ($this->xpath->query('listeners/listener') as $listener) {
+            $class     = (string)$listener->getAttribute('class');
+            $file      = '';
+            $arguments = array();
+
+            if ($listener->hasAttribute('file')) {
+                $file = (string)$listener->getAttribute('file');
+            }
+
+            if ($listener->childNodes->item(1) instanceof DOMElement &&
+                $listener->childNodes->item(1)->tagName == 'arguments') {
+                foreach ($listener->childNodes->item(1)->childNodes as $argument) {
+                    if ($argument instanceof DOMElement) {
+                        $arguments[] = PHPUnit_Util_XML::xmlToVariable($argument);
+                    }
+                }
+            }
+
+            $result[] = array(
+              'class'     => $class,
+              'file'      => $file,
+              'arguments' => $arguments
+            );
+        }
+
+        return $result;
+    }
+
+    /**
      * Returns the logging configuration.
      *
      * @return array
@@ -281,6 +379,10 @@ class PHPUnit_Util_Configuration
             $target = (string)$log->getAttribute('target');
 
             if ($type == 'coverage-html') {
+                if ($log->hasAttribute('title')) {
+                    $result['title'] = (string)$log->getAttribute('title');
+                }
+
                 if ($log->hasAttribute('charset')) {
                     $result['charset'] = (string)$log->getAttribute('charset');
                 }
@@ -342,8 +444,9 @@ class PHPUnit_Util_Configuration
     public function getPHPConfiguration()
     {
         $result = array(
-          'ini' => array(),
-          'var' => array()
+          'ini'   => array(),
+          'const' => array(),
+          'var'   => array()
         );
 
         foreach ($this->xpath->query('php/ini') as $ini) {
@@ -351,6 +454,21 @@ class PHPUnit_Util_Configuration
             $value = (string)$ini->getAttribute('value');
 
             $result['ini'][$name] = $value;
+        }
+
+        foreach ($this->xpath->query('php/const') as $const) {
+            $name  = (string)$const->getAttribute('name');
+            $value = (string)$const->getAttribute('value');
+
+            if (strtolower($value) == 'false') {
+                $value = FALSE;
+            }
+
+            else if (strtolower($value) == 'true') {
+                $value = TRUE;
+            }
+
+            $result['const'][$name] = $value;
         }
 
         foreach ($this->xpath->query('php/var') as $var) {
@@ -388,6 +506,12 @@ class PHPUnit_Util_Configuration
             ini_set($name, $value);
         }
 
+        foreach ($configuration['const'] as $name => $value) {
+            if (!defined($name)) {
+                define($name, $value);
+            }
+        }
+
         foreach ($configuration['var'] as $name => $value) {
             $GLOBALS[$name] = $value;
         }
@@ -417,6 +541,20 @@ class PHPUnit_Util_Configuration
             );
         }
 
+        if ($this->document->documentElement->hasAttribute('backupGlobals')) {
+            $result['backupGlobals'] = $this->getBoolean(
+              (string)$this->document->documentElement->getAttribute('backupGlobals'),
+              TRUE
+            );
+        }
+
+        if ($this->document->documentElement->hasAttribute('backupStaticAttributes')) {
+            $result['backupStaticAttributes'] = $this->getBoolean(
+              (string)$this->document->documentElement->getAttribute('backupStaticAttributes'),
+              TRUE
+            );
+        }
+
         if ($this->document->documentElement->hasAttribute('bootstrap')) {
             $result['bootstrap'] = (string)$this->document->documentElement->getAttribute('bootstrap');
         }
@@ -442,11 +580,33 @@ class PHPUnit_Util_Configuration
             );
         }
 
+        if ($this->document->documentElement->hasAttribute('processIsolation')) {
+            $result['processIsolation'] = $this->getBoolean(
+              (string)$this->document->documentElement->getAttribute('processIsolation'),
+              FALSE
+            );
+        }
+
         if ($this->document->documentElement->hasAttribute('stopOnFailure')) {
             $result['stopOnFailure'] = $this->getBoolean(
               (string)$this->document->documentElement->getAttribute('stopOnFailure'),
               FALSE
             );
+        }
+
+        if ($this->document->documentElement->hasAttribute('syntaxCheck')) {
+            $result['syntaxCheck'] = $this->getBoolean(
+              (string)$this->document->documentElement->getAttribute('syntaxCheck'),
+              TRUE
+            );
+        }
+
+        if ($this->document->documentElement->hasAttribute('testSuiteLoaderClass')) {
+            $result['testSuiteLoaderClass'] = (string)$this->document->documentElement->getAttribute('testSuiteLoaderClass');
+        }
+
+        if ($this->document->documentElement->hasAttribute('testSuiteLoaderFile')) {
+            $result['testSuiteLoaderFile'] = (string)$this->document->documentElement->getAttribute('testSuiteLoaderFile');
         }
 
         return $result;
@@ -534,40 +694,53 @@ class PHPUnit_Util_Configuration
      */
     public function getTestSuiteConfiguration()
     {
-        $testSuiteNode = $this->xpath->query('testsuite');
+        $testSuiteNodes = $this->xpath->query('testsuites/testsuite');
 
-        if ($testSuiteNode->length > 0) {
-            $testSuiteNode = $testSuiteNode->item(0);
+        if ($testSuiteNodes->length > 0) {
+            $suite = new PHPUnit_Framework_TestSuite;
 
-            if ($testSuiteNode->hasAttribute('name')) {
-                $suite = new PHPUnit_Framework_TestSuite(
-                  (string)$testSuiteNode->getAttribute('name')
-                );
-            } else {
-                $suite = new PHPUnit_Framework_TestSuite;
-            }
-
-            foreach ($this->xpath->query('testsuite/directory') as $directoryNode) {
-                if ($directoryNode->hasAttribute('suffix')) {
-                    $suffix = (string)$directoryNode->getAttribute('suffix');
-                } else {
-                    $suffix = 'Test.php';
-                }
-
-                $testCollector = new PHPUnit_Runner_IncludePathTestCollector(
-                  array((string)$directoryNode->nodeValue),
-                  $suffix
-                );
-
-                $suite->addTestFiles($testCollector->collectTests());
-            }
-
-            foreach ($this->xpath->query('testsuite/file') as $fileNode) {
-                $suite->addTestFile((string)$fileNode->nodeValue);
+            foreach ($testSuiteNodes as $testSuiteNode) {
+                $suite->addTestSuite($this->getTestSuite($testSuiteNode));
             }
 
             return $suite;
         }
+    }
+
+    /**
+     * @param  DOMElement $testSuiteNode
+     * @return PHPUnit_Framework_TestSuite
+     * @since  Method available since Release 3.4.0
+     */
+    protected function getTestSuite(DOMElement $testSuiteNode)
+    {
+        if ($testSuiteNode->hasAttribute('name')) {
+            $suite = new PHPUnit_Framework_TestSuite(
+              (string)$testSuiteNode->getAttribute('name')
+            );
+        } else {
+            $suite = new PHPUnit_Framework_TestSuite;
+        }
+
+        foreach ($testSuiteNode->getElementsByTagName('directory') as $directoryNode) {
+            if ($directoryNode->hasAttribute('suffix')) {
+                $suffix = (string)$directoryNode->getAttribute('suffix');
+            } else {
+                $suffix = 'Test.php';
+            }
+
+            $testCollector = new PHPUnit_Runner_IncludePathTestCollector(
+              array((string)$directoryNode->nodeValue), $suffix
+            );
+
+            $suite->addTestFiles($testCollector->collectTests());
+        }
+
+        foreach ($testSuiteNode->getElementsByTagName('file') as $fileNode) {
+            $suite->addTestFile((string)$fileNode->nodeValue);
+        }
+
+        return $suite;
     }
 
     /**

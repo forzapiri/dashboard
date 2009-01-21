@@ -39,12 +39,13 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: File.php 4447 2009-01-09 07:11:38Z sb $
+ * @version    SVN: $Id: File.php 4446 2009-01-09 07:11:09Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.2.0
  */
 
 require_once 'PHPUnit/Util/Filter.php';
+require_once 'PHPUnit/Util/File.php';
 require_once 'PHPUnit/Util/Filesystem.php';
 require_once 'PHPUnit/Util/Template.php';
 require_once 'PHPUnit/Util/Report/Node.php';
@@ -59,7 +60,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.10
+ * @version    Release: @package_version@
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.2.0
  */
@@ -451,23 +452,13 @@ class PHPUnit_Util_Report_Node_File extends PHPUnit_Util_Report_Node
                 $numCalledMethods     = $methodData['executedLines'] > 0 ?   1 : 0;
                 $calledMethodsPercent = $numCalledMethods == 1           ? 100 : 0;
 
-                if ($className == '*') {
-                    $signature = PHPUnit_Util_Class::getFunctionSignature(
-                      new ReflectionFunction($methodName)
-                    );
-                } else {
-                    $signature = PHPUnit_Util_Class::getMethodSignature(
-                      new ReflectionMethod($className, $methodName)
-                    );
-                }
-
                 $items .= $this->doRenderItem(
                   array(
                     'name'                 => sprintf(
                       '&nbsp;<a href="#%d">%s</a>',
 
                       $methodData['startLine'],
-                      $signature
+                      $methodData['signature']
                     ),
                     'numClasses'           => '',
                     'numCalledClasses'     => '',
@@ -797,52 +788,40 @@ class PHPUnit_Util_Report_Node_File extends PHPUnit_Util_Report_Node
 
     protected function processClasses()
     {
-        $classes = PHPUnit_Util_Class::getClassesInFile($this->getPath());
+        $classes = PHPUnit_Util_File::getClassesInFile($this->getPath());
 
-        foreach ($classes as $class) {
-            if (!$class->isInterface()) {
-                $className      = $class->getName();
-                $classStartLine = $class->getStartLine();
-                $classEndLine   = $class->getEndLine();
+        foreach ($classes as $className => $class) {
+            $this->classes[$className] = array(
+              'methods'         => array(),
+              'startLine'       => $class['startLine'],
+              'executableLines' => 0,
+              'executedLines'   => 0
+            );
 
-                $this->classes[$className] = array(
-                  'methods'         => array(),
-                  'startLine'       => $classStartLine,
+            $this->startLines[$class['startLine']] = &$this->classes[$className];
+            $this->endLines[$class['endLine']]     = &$this->classes[$className];
+
+            foreach ($class['methods'] as $methodName => $method) {
+                $this->classes[$className]['methods'][$methodName] = array(
+                  'signature'       => $method['signature'],
+                  'startLine'       => $method['startLine'],
                   'executableLines' => 0,
                   'executedLines'   => 0
                 );
 
-                $this->startLines[$classStartLine] = &$this->classes[$className];
-                $this->endLines[$classEndLine]     = &$this->classes[$className];
+                $this->startLines[$method['startLine']] = &$this->classes[$className]['methods'][$methodName];
+                $this->endLines[$method['endLine']]     = &$this->classes[$className]['methods'][$methodName];
 
-                foreach ($class->getMethods() as $method) {
-                    if (!$method->isAbstract() &&
-                        $method->getDeclaringClass()->getName() == $className) {
-                        $methodName      = $method->getName();
-                        $methodStartLine = $method->getStartLine();
-                        $methodEndLine   = $method->getEndLine();
-
-                        $this->classes[$className]['methods'][$methodName] = array(
-                          'startLine'       => $methodStartLine,
-                          'executableLines' => 0,
-                          'executedLines'   => 0
-                        );
-
-                        $this->startLines[$methodStartLine] = &$this->classes[$className]['methods'][$methodName];
-                        $this->endLines[$methodEndLine]     = &$this->classes[$className]['methods'][$methodName];
-
-                        $this->numMethods++;
-                    }
-                }
-
-                $this->numClasses++;
+                $this->numMethods++;
             }
+
+            $this->numClasses++;
         }
     }
 
     protected function processFunctions()
     {
-        $functions = PHPUnit_Util_Class::getFunctionsInFile($this->getPath());
+        $functions = PHPUnit_Util_File::getFunctionsInFile($this->getPath());
 
         if (count($functions) > 0 && !isset($this->classes['*'])) {
             $this->classes['*'] = array(
@@ -853,19 +832,16 @@ class PHPUnit_Util_Report_Node_File extends PHPUnit_Util_Report_Node
             );
         }
 
-        foreach ($functions as $function) {
-            $functionName      = $function->getName();
-            $functionStartLine = $function->getStartLine();
-            $functionEndLine   = $function->getEndLine();
-
+        foreach ($functions as $functionName => $function) {
             $this->classes['*']['methods'][$functionName] = array(
-              'startLine'       => $functionStartLine,
+              'signature'       => $function['signature'],
+              'startLine'       => $function['startLine'],
               'executableLines' => 0,
               'executedLines'   => 0
             );
 
-            $this->startLines[$functionStartLine] = &$this->classes['*']['methods'][$functionName];
-            $this->endLines[$functionEndLine]     = &$this->classes['*']['methods'][$functionName];
+            $this->startLines[$function['startLine']] = &$this->classes['*']['methods'][$functionName];
+            $this->endLines[$function['endLine']]     = &$this->classes['*']['methods'][$functionName];
 
             $this->numMethods++;
         }
