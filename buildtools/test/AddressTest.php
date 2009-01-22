@@ -1,8 +1,4 @@
 <?php
-// Call AddressTest::main() if this source file is executed directly.
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'AddressTest::main');
-}
 
 require_once 'PHPUnit/Framework.php';
 
@@ -217,10 +213,5 @@ class AddressTest extends PHPUnit_Framework_TestCase
           'This test has not been implemented yet.'
         );
     }
-}
-
-// Call AddressTest::main() if this source file is executed directly.
-if (PHPUnit_MAIN_METHOD == 'AddressTest::main') {
-    AddressTest::main();
 }
 ?>

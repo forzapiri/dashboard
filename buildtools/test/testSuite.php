@@ -20,9 +20,11 @@ require_once 'DBRowTest.php';
 class testSuite extends PHPUnit_Framework_TestSuite {
 
 	/**
-	 * Constructs the test suite handler.
+	 * Creates the suite.
 	 */
-	public function __construct() {
+	public static function suite() {
+		$suite = new PHPUnit_Framework_TestSuite('Dashboard Test Suite');
+		
 		$sqlDir = dirname(__FILE__).'/../sql/';
 		$dir  = new DirectoryIterator($sqlDir);
 		foreach ($dir as $file) {
@@ -35,17 +37,16 @@ class testSuite extends PHPUnit_Framework_TestSuite {
 		}
 		
 		
-		$this->setName ( 'testSuite' );
+		$suite->addTestSuite ( 'DBRowTest' );
+		$suite->addTestSuite ( 'DBColumnTest' );
+		$suite->addTestSuite ( 'DatabaseTest' );
+		$suite->addTestSuite ( 'DBTableTest' );
+		$suite->addTestSuite ( 'UserTest' );
+		$suite->addTestSuite ( 'AddressTest' );
+		$suite->addTestSuite ( 'ImageTest' );
+		$suite->addTestSuite ( 'GroupTest' );
 		
-		//$this->addTestSuite ( 'DBRowTest' );
-		//$this->addTestSuite ( 'DBColumnTest' );
-		$this->addTestSuite ( 'DatabaseTest' );
-		$this->addTestSuite ( 'DBTableTest' );
-		$this->addTestSuite ( 'UserTest' );
-		$this->addTestSuite ( 'AddressTest' );
-		//$this->addTestSuite ( 'ImageTest' );
-		//$this->addTestSuite ( 'GroupTest' );
-
+		
 		/*
 		$dataDir  = dirname(__FILE__).'/../../modules/';
 	
@@ -60,7 +61,7 @@ class testSuite extends PHPUnit_Framework_TestSuite {
 						continue;
 					}
 					require_once($dataDir . $file . '/tests/' . $testName);
-					//$this->addTestSuite ( trim($testName, '.php') );
+					//$suite->addTestSuite ( trim($testName, '.php') );
 				}
 			}
 			if (file_exists($dataDir . $fileName . '/schema.sql')) {
@@ -68,13 +69,7 @@ class testSuite extends PHPUnit_Framework_TestSuite {
 				Database::singleton()->multi_query($sql);
 			}
 		}*/
-	}
-
-	/**
-	 * Creates the suite.
-	 */
-	public static function suite() {
-		return new self ( );
+		return $suite;
 	}
 }
 
