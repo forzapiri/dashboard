@@ -17,7 +17,7 @@ require_once 'DBRowTest.php';
 /**
  * Static test suite.
  */
-class testSuite extends PHPUnit_Framework_TestSuite {
+class testSuite {
 
 	/**
 	 * Creates the suite.
