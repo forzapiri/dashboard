@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Database.php 4403 2008-12-31 09:26:51Z sb $
+ * @version    SVN: $Id: Database.php 4404 2008-12-31 09:27:18Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.1.4
  */
@@ -61,7 +61,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: @package_version@
+ * @version    Release: 3.3.10
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.1.4
  */
@@ -105,21 +105,21 @@ class PHPUnit_Util_Log_CodeCoverage_Database
 
         $this->dbh->beginTransaction();
 
-        foreach ($files as $fileName) {
-            $shortenedFileName = str_replace($commonPath, '', $fileName);
-            $fileId            = FALSE;
-            $fileMetrics       = $projectMetrics->getFile($fileName);
-            $lines             = $fileMetrics->getLines();
-            $hash              = md5_file($fileName);
+        foreach ($files as $file) {
+            $filename    = str_replace($commonPath, '', $file);
+            $fileId      = FALSE;
+            $fileMetrics = $projectMetrics->getFile($file);
+            $lines       = $fileMetrics->getLines();
+            $hash        = md5_file($file);
 
             $stmt = $this->dbh->prepare(
               'SELECT code_file_id
                  FROM code_file
-                WHERE code_file_name = :shortenedFileName
+                WHERE code_file_name = :filename
                   AND revision       = :revision;'
             );
 
-            $stmt->bindParam(':shortenedFileName', $shortenedFileName, PDO::PARAM_STR);
+            $stmt->bindParam(':filename', $filename, PDO::PARAM_STR);
             $stmt->bindParam(':revision', $revision, PDO::PARAM_INT);
             $stmt->execute();
 
@@ -132,14 +132,11 @@ class PHPUnit_Util_Log_CodeCoverage_Database
             if ($fileId == 0) {
                 $stmt = $this->dbh->prepare(
                   'INSERT INTO code_file
-                               (code_file_name, code_full_file_name,
-                                code_file_md5, revision)
-                         VALUES(:shortenedFileName, :fullFileName,
-                                :hash, :revision);'
+                               (code_file_name, code_file_md5, revision)
+                         VALUES(:filename, :hash, :revision);'
                 );
 
-                $stmt->bindParam(':shortenedFileName', $shortenedFileName, PDO::PARAM_STR);
-                $stmt->bindParam(':fullFileName', $fileName, PDO::PARAM_STR);
+                $stmt->bindParam(':filename', $filename, PDO::PARAM_STR);
                 $stmt->bindParam(':hash', $hash, PDO::PARAM_STR);
                 $stmt->bindParam(':revision', $revision, PDO::PARAM_INT);
                 $stmt->execute();
@@ -201,9 +198,9 @@ class PHPUnit_Util_Log_CodeCoverage_Database
                 foreach ($lines as $line) {
                     $covered = 0;
 
-                    if (isset($summary[$fileName][$i])) {
-                        if (is_int($summary[$fileName][$i])) {
-                            $covered = $summary[$fileName][$i];
+                    if (isset($summary[$file][$i])) {
+                        if (is_int($summary[$file][$i])) {
+                            $covered = $summary[$file][$i];
                         } else {
                             $covered = 1;
                         }
@@ -450,7 +447,7 @@ class PHPUnit_Util_Log_CodeCoverage_Database
 
             for ($lineNumber = 1; $lineNumber <= $fileLoc; $lineNumber++) {
                 $coveringTests = PHPUnit_Util_CodeCoverage::getCoveringTests(
-                  $codeCoverage, $fileName, $lineNumber
+                  $codeCoverage, $file, $lineNumber
                 );
 
                 if (is_array($coveringTests)) {
@@ -460,7 +457,7 @@ class PHPUnit_Util_Log_CodeCoverage_Database
 
                     $codeLineId      = (int)$stmt->fetchColumn(0);
                     $oldCoverageFlag = (int)$stmt->fetchColumn(1);
-                    $newCoverageFlag = isset($summary[$fileName][$lineNumber]) ? 1 : 0;
+                    $newCoverageFlag = isset($summary[$file][$lineNumber]) ? 1 : 0;
 
                     if (($oldCoverageFlag == 0 && $newCoverageFlag != 0) ||
                         ($oldCoverageFlag <  0 && $newCoverageFlag >  0)) {

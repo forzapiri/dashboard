@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: AllTests.php 4403 2008-12-31 09:26:51Z sb $
+ * @version    SVN: $Id: AllTests.php 4404 2008-12-31 09:27:18Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.0.0
  */
@@ -49,7 +49,6 @@ require_once 'PHPUnit/Util/Filter.php';
 PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
 require_once 'PHPUnit/Framework/TestSuite.php';
-require_once 'PHPUnit/Extensions/PhptTestSuite.php';
 
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'AssertTest.php';
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ComparisonFailureTest.php';
@@ -71,7 +70,7 @@ PHPUnit_Util_Filter::$filterPHPUnit = FALSE;
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: @package_version@
+ * @version    Release: 3.3.10
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.0.0
  */
@@ -90,7 +89,6 @@ class Framework_AllTests
         $suite->addTestSuite('Framework_TestFailureTest');
         $suite->addTestSuite('Framework_TestImplementorTest');
         $suite->addTestSuite('Framework_TestListenerTest');
-        $suite->addTest(new PHPUnit_Extensions_PhptTestSuite(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'MockObject'));
 
         return $suite;
     }

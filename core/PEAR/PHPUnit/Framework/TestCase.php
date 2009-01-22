@@ -39,21 +39,19 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: TestCase.php 4497 2009-01-19 10:00:45Z sb $
+ * @version    SVN: $Id: TestCase.php 4404 2008-12-31 09:27:18Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.0.0
  */
 
 require_once 'PHPUnit/Framework.php';
-require_once 'PHPUnit/Framework/MockObject/Generator.php';
+require_once 'PHPUnit/Framework/MockObject/Mock.php';
 require_once 'PHPUnit/Framework/MockObject/Matcher/InvokedAtLeastOnce.php';
 require_once 'PHPUnit/Framework/MockObject/Matcher/InvokedAtIndex.php';
 require_once 'PHPUnit/Framework/MockObject/Matcher/InvokedCount.php';
 require_once 'PHPUnit/Framework/MockObject/Stub.php';
 require_once 'PHPUnit/Runner/BaseTestRunner.php';
 require_once 'PHPUnit/Util/Filter.php';
-require_once 'PHPUnit/Util/PHP.php';
-require_once 'PHPUnit/Util/Template.php';
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
 
@@ -110,7 +108,7 @@ if (!class_exists('PHPUnit_Framework_TestCase', FALSE)) {
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: @package_version@
+ * @version    Release: 3.3.10
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.0.0
  * @abstract
@@ -129,45 +127,7 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
     /**
      * @var    array
      */
-    protected $backupGlobalsBlacklist = array();
-
-    /**
-     * @var    array
-     */
     protected $globalsBackup = array();
-
-    /**
-     * Enable or disable the backup and restoration of static attributes.
-     * Overwrite this attribute in a child class of TestCase.
-     * Setting this attribute in setUp() has no effect!
-     *
-     * @var    boolean
-     */
-    protected $backupStaticAttributes = NULL;
-
-    /**
-     * @var    array
-     */
-    protected $backupStaticAttributesBlacklist = array();
-
-    /**
-     * @var    array
-     */
-    protected $staticAttributesBackup = array();
-
-    /**
-     * Whether or not this test is to be run in a separate PHP process.
-     *
-     * @var    boolean
-     */
-    protected $runTestInSeparateProcess = NULL;
-
-    /**
-     * Whether or not this test is running in a separate PHP process.
-     *
-     * @var    boolean
-     */
-    protected $inIsolation = FALSE;
 
     /**
      * @var    array
@@ -213,11 +173,6 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
      * @var    string
      */
     protected $name = NULL;
-
-    /**
-     * @var    array
-     */
-    protected $dependencies = array();
 
     /**
      * @var    string
@@ -283,11 +238,6 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
       'HTTP_SERVER_VARS',
       'HTTP_POST_FILES'
     );
-
-    /**
-     * @var PHPUnit_Framework_TestResult
-     */
-    protected $result;
 
     /**
      * Constructs a test case with the given name.
@@ -373,29 +323,6 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
     }
 
     /**
-     * @since  Method available since Release 3.4.0
-     */
-    protected function setExpectedExceptionFromAnnotation()
-    {
-        try {
-            $method            = new ReflectionMethod(get_class($this), $this->name);
-            $methodDocComment  = $method->getDocComment();
-            $expectedException = PHPUnit_Util_Test::getExpectedException($methodDocComment);
-
-            if ($expectedException !== FALSE) {
-                $this->setExpectedException(
-                  $expectedException['class'],
-                  $expectedException['message'],
-                  $expectedException['code']
-                );
-            }
-        }
-
-        catch (ReflectionException $e) {
-        }
-    }
-
-    /**
      * Returns the status of this test.
      *
      * @return integer
@@ -445,97 +372,7 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
             $result = $this->createResult();
         }
 
-        $this->setExpectedExceptionFromAnnotation();
-
-        $this->result = $result;
-
-        if ($this->runTestInSeparateProcess === TRUE &&
-            $this->inIsolation !== TRUE &&
-            !$this instanceof PHPUnit_Extensions_SeleniumTestCase &&
-            !$this instanceof PHPUnit_Extensions_PhptTestCase) {
-            $class                          = new ReflectionClass($this);
-            $collectCodeCoverageInformation = $result->getCollectCodeCoverageInformation();
-
-            $template = new PHPUnit_Util_Template(
-              sprintf(
-                '%s%sProcess%sTestCaseMethod.tpl',
-
-                dirname(__FILE__),
-                DIRECTORY_SEPARATOR,
-                DIRECTORY_SEPARATOR,
-                DIRECTORY_SEPARATOR
-              )
-            );
-
-            $template->setVar(
-              array(
-                'filename'                       => $class->getFileName(),
-                'className'                      => $class->getName(),
-                'methodName'                     => $this->name,
-                'data'                           => addcslashes(serialize($this->data), "'"),
-                'dataName'                       => $this->dataName,
-                'collectCodeCoverageInformation' => $collectCodeCoverageInformation ? 'TRUE' : 'FALSE',
-                'globals'                        => $this->getGlobalsAsString(),
-                'include_path'                   => addslashes(get_include_path())
-              )
-            );
-
-            $job = $template->render();
-            $result->startTest($this);
-
-            $jobResult = PHPUnit_Util_PHP::runJob($job);
-
-            if (!empty($jobResult['stderr'])) {
-                $time = 0;
-                $result->addError($this, new RuntimeException(trim($jobResult['stderr'])), $time);
-            } else {
-                $childResult = @unserialize($jobResult['stdout']);
-
-                if ($childResult !== FALSE) {
-                    $this->numAssertions = $childResult['numAssertions'];
-                    $childResult         = $childResult['result'];
-
-                    if ($collectCodeCoverageInformation) {
-                        $codeCoverageInformation = $childResult->getRawCodeCoverageInformation();
-
-                        $result->appendCodeCoverageInformation(
-                          $this, $codeCoverageInformation[0]['data']
-                        );
-                    }
-
-                    $time           = $childResult->time();
-                    $notImplemented = $childResult->notImplemented();
-                    $skipped        = $childResult->skipped();
-                    $errors         = $childResult->errors();
-                    $failures       = $childResult->failures();
-
-                    if (!empty($notImplemented)) {
-                        $result->addError($this, $notImplemented[0]->thrownException(), $time);
-                    }
-
-                    else if (!empty($skipped)) {
-                        $result->addError($this, $skipped[0]->thrownException(), $time);
-                    }
-
-                    else if (!empty($errors)) {
-                        $result->addError($this, $errors[0]->thrownException(), $time);
-                    }
-
-                    else if (!empty($failures)) {
-                        $result->addFailure($this, $failures[0]->thrownException(), $time);
-                    }
-                } else {
-                    $time = 0;
-                    $result->addError($this, new RuntimeException(trim($jobResult['stdout'])), $time);
-                }
-            }
-
-            $result->endTest($this, $time);
-        } else {
-            $result->run($this);
-        }
-
-        $this->result = NULL;
+        $result->run($this);
 
         return $result;
     }
@@ -548,37 +385,9 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
     {
         $this->numAssertions = 0;
 
-        if (!empty($this->dependencies)) {
-            $className = get_class($this);
-            $passed    = $this->result->passed();
-
-            foreach ($this->dependencies as $dependency) {
-                if (strpos($dependency, '::') === FALSE) {
-                    $dependency = $className . '::' . $dependency;
-                }
-
-                if (!isset($passed[$dependency])) {
-                    $this->markTestSkipped(
-                      sprintf(
-                        'This test depends on "%s" to pass.',
-
-                        $dependency
-                      )
-                    );
-                }
-            }
-        }
-
-        // Backup the $GLOBALS array and static attributes.
-        if ($this->runTestInSeparateProcess !== TRUE && $this->inIsolation !== TRUE) {
-            if ($this->backupGlobals === NULL || $this->backupGlobals === TRUE) {
-                $this->backupGlobals();
-            }
-
-            if (version_compare(PHP_VERSION, '5.3', '>') &&
-               ($this->backupStaticAttributes === NULL || $this->backupStaticAttributes === TRUE)) {
-                $this->backupStaticAttributes();
-            }
+        // Backup the $GLOBALS array.
+        if ($this->backupGlobals === NULL || $this->backupGlobals === TRUE) {
+            $this->backupGlobals();
         }
 
         // Set up the fixture.
@@ -630,16 +439,9 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
         // Clean up stat cache.
         clearstatcache();
 
-        // Restore the $GLOBALS array and static attributes.
-        if ($this->runTestInSeparateProcess !== TRUE && $this->inIsolation !== TRUE) {
-            if ($this->backupGlobals === NULL || $this->backupGlobals === TRUE) {
-                $this->restoreGlobals();
-            }
-
-            if (version_compare(PHP_VERSION, '5.3', '>') &&
-               ($this->backupStaticAttributes === NULL || $this->backupStaticAttributes === TRUE)) {
-                $this->restoreStaticAttributes();
-            }
+        // Restore the $GLOBALS array.
+        if ($this->backupGlobals === NULL || $this->backupGlobals === TRUE) {
+            $this->restoreGlobals();
         }
 
         // Clean up INI settings.
@@ -735,17 +537,6 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
     }
 
     /**
-     * Sets the dependencies of a TestCase.
-     *
-     * @param  array $dependencies
-     * @since  Method available since Release 3.4.0
-     */
-    public function setDependencies(array $dependencies)
-    {
-        $this->dependencies = $dependencies;
-    }
-
-    /**
      * Calling this method in setUp() has no effect!
      *
      * @param  boolean $backupGlobals
@@ -755,49 +546,6 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
     {
         if (is_null($this->backupGlobals) && is_bool($backupGlobals)) {
             $this->backupGlobals = $backupGlobals;
-        }
-    }
-
-    /**
-     * Calling this method in setUp() has no effect!
-     *
-     * @param  boolean $backupStaticAttributes
-     * @since  Method available since Release 3.4.0
-     */
-    public function setBackupStaticAttributes($backupStaticAttributes)
-    {
-        if (is_null($this->backupStaticAttributes) && is_bool($backupStaticAttributes)) {
-            $this->backupStaticAttributes = $backupStaticAttributes;
-        }
-    }
-
-    /**
-     * @param  boolean $runTestInSeparateProcess
-     * @throws InvalidArgumentException
-     * @since  Method available since Release 3.4.0
-     */
-    public function setRunTestInSeparateProcess($runTestInSeparateProcess)
-    {
-        if (is_bool($runTestInSeparateProcess)) {
-            if ($this->runTestInSeparateProcess === NULL) {
-                $this->runTestInSeparateProcess = $runTestInSeparateProcess;
-            }
-        } else {
-            throw new InvalidArgumentException;
-        }
-    }
-
-    /**
-     * @param  boolean $inIsolation
-     * @throws InvalidArgumentException
-     * @since  Method available since Release 3.4.0
-     */
-    public function setInIsolation($inIsolation)
-    {
-        if (is_bool($inIsolation)) {
-            $this->inIsolation = $inIsolation;
-        } else {
-            throw new InvalidArgumentException;
         }
     }
 
@@ -826,7 +574,7 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
     protected function iniSet($varName, $newValue)
     {
         if (!is_string($varName)) {
-            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'string');
+            throw new InvalidArgumentException;
         }
 
         $currentValue = ini_set($varName, $newValue);
@@ -859,15 +607,7 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
         $category = $args[0];
         $locale   = $args[1];
 
-        $categories = array(
-          LC_ALL, LC_COLLATE, LC_CTYPE, LC_MONETARY, LC_NUMERIC, LC_TIME
-        );
-
-        if (defined('LC_MESSAGES')) {
-            $categories[] = LC_MESSAGES;
-        }
-
-        if (!in_array($category, $categories)) {
+        if (!in_array($category, array(LC_ALL, LC_COLLATE, LC_CTYPE, LC_MONETARY, LC_NUMERIC, LC_TIME, LC_MESSAGES))) {
             throw new InvalidArgumentException;
         }
 
@@ -901,31 +641,18 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
      * @return object
      * @since  Method available since Release 3.0.0
      */
-    protected function getMock($originalClassName, $methods = array(), array $arguments = array(), $mockClassName = '', $callOriginalConstructor = TRUE, $callOriginalClone = TRUE, $callAutoload = TRUE)
+    protected function getMock($className, $methods = array(), array $arguments = array(), $mockClassName = '', $callOriginalConstructor = TRUE, $callOriginalClone = TRUE, $callAutoload = TRUE)
     {
-        if (!is_string($originalClassName)) {
-            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'string');
-        }
-
-        if (!is_string($mockClassName)) {
-            throw PHPUnit_Util_InvalidArgumentHelper::factory(4, 'string');
+        if (!is_string($className) || !is_string($mockClassName)) {
+            throw new InvalidArgumentException;
         }
 
         if (!is_array($methods) && !is_null($methods)) {
             throw new InvalidArgumentException;
         }
 
-        if ($mockClassName != '' && class_exists($mockClassName, FALSE)) {
-            throw new RuntimeException(
-              sprintf(
-                'Class "%s" already exists.',
-                $mockClassName
-              )
-            );
-        }
-
-        $mock = PHPUnit_Framework_MockObject_Generator::generate(
-          $originalClassName,
+        $mock = PHPUnit_Framework_MockObject_Mock::generate(
+          $className,
           $methods,
           $mockClassName,
           $callOriginalConstructor,
@@ -933,64 +660,16 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
           $callAutoload
         );
 
-        if (!class_exists($mock['mockClassName'], FALSE)) {
-            eval($mock['code']);
-        }
-
-        if ($callOriginalConstructor) {
-            if (count($arguments) == 0) {
-                $mockObject = new $mock['mockClassName'];
-            } else {
-                $mockClass  = new ReflectionClass($mock['mockClassName']);
-                $mockObject = $mockClass->newInstanceArgs($arguments);
-            }
+        if (count($arguments) == 0) {
+            $mockObject = new $mock->mockClassName;
         } else {
-            // Use a trick to create a new object of a class
-            // without invoking its constructor.
-            $mockObject = unserialize(
-              sprintf('O:%d:"%s":0:{}', strlen($mock['mockClassName']), $mock['mockClassName'])
-            );
+            $mockClass  = new ReflectionClass($mock->mockClassName);
+            $mockObject = $mockClass->newInstanceArgs($arguments);
         }
 
         $this->mockObjects[] = $mockObject;
 
         return $mockObject;
-    }
-
-    /**
-     * Returns a mock object based on the given WSDL file.
-     *
-     * @param  string  $wsdlFile
-     * @param  string  $originalClassName
-     * @param  string  $mockClassName
-     * @param  array   $methods
-     * @param  boolean $callOriginalConstructor
-     * @return object
-     * @since  Method available since Release 3.4.0
-     */
-    protected function getMockFromWsdl($wsdlFile, $originalClassName = '', $mockClassName = '', array $methods = array(), $callOriginalConstructor = TRUE)
-    {
-        if ($originalClassName === '') {
-            $originalClassName = str_replace(
-              '.wsdl', '', basename($wsdlFile)
-            );
-        }
-
-        eval(
-          PHPUnit_Framework_MockObject_Generator::generateClassFromWsdl(
-            $wsdlFile, $originalClassName, $methods
-          )
-        );
-
-        return $this->getMock(
-          $originalClassName,
-          $methods,
-          array('', array()),
-          $mockClassName,
-          $callOriginalConstructor,
-          FALSE,
-          FALSE
-        );
     }
 
     /**
@@ -1254,6 +933,11 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
      */
     protected function assertPostConditions()
     {
+        // assertPostConditions() was named sharedAssertions() in
+        // PHPUnit 3.0.0-3.2.7.
+        if (method_exists($this, 'sharedAssertions')) {
+            $this->sharedAssertions();
+        }
     }
 
     /**
@@ -1270,17 +954,21 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
     protected function backupGlobals()
     {
         $this->globalsBackup = array();
-        $superGlobalArrays   = $this->getSuperGlobalArrays();
+
+        if (ini_get('register_long_arrays') == '1') {
+            $superGlobalArrays = array_merge(
+              self::$superGlobalArrays, self::$superGlobalArraysLong
+            );
+        } else {
+            $superGlobalArrays = self::$superGlobalArrays;
+        }
 
         foreach ($superGlobalArrays as $superGlobalArray) {
-            if (!in_array($superGlobalArray, $this->backupGlobalsBlacklist)) {
-                $this->backupSuperGlobalArray($superGlobalArray);
-            }
+            $this->backupSuperGlobalArray($superGlobalArray);
         }
 
         foreach (array_keys($GLOBALS) as $key) {
-            if ($key != 'GLOBALS' && !in_array($key, $superGlobalArrays) &&
-                !in_array($key, $this->backupGlobalsBlacklist)) {
+            if ($key != 'GLOBALS' && !in_array($key, $superGlobalArrays)) {
                 $this->globalsBackup['GLOBALS'][$key] = serialize($GLOBALS[$key]);
             }
         }
@@ -1300,14 +988,11 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
         }
 
         foreach ($superGlobalArrays as $superGlobalArray) {
-            if (!in_array($superGlobalArray, $this->backupGlobalsBlacklist)) {
-                $this->restoreSuperGlobalArray($superGlobalArray);
-            }
+            $this->restoreSuperGlobalArray($superGlobalArray);
         }
 
         foreach (array_keys($GLOBALS) as $key) {
-            if ($key != 'GLOBALS' && !in_array($key, $superGlobalArrays) &&
-                !in_array($key, $this->backupGlobalsBlacklist)) {
+            if ($key != 'GLOBALS' && !in_array($key, $superGlobalArrays)) {
                 if (isset($this->globalsBackup['GLOBALS'][$key])) {
                     $GLOBALS[$key] = unserialize($this->globalsBackup['GLOBALS'][$key]);
                 } else {
@@ -1343,103 +1028,6 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
         }
 
         $this->globalsBackup[$superGlobalArray] = array();
-    }
-
-    protected function getGlobalsAsString()
-    {
-        $result            = '';
-        $superGlobalArrays = $this->getSuperGlobalArrays();
-
-        foreach ($superGlobalArrays as $superGlobalArray) {
-            if (isset($GLOBALS[$superGlobalArray])) {
-                foreach ($GLOBALS[$superGlobalArray] as $key => $value) {
-                    $result .= sprintf(
-                      '$GLOBALS[\'%s\'][\'%s\'] = %s;' . "\n",
-                      $superGlobalArray,
-                      $key,
-                      var_export($GLOBALS[$superGlobalArray][$key], TRUE)
-                    );
-                }
-            }
-        }
-
-        foreach (array_keys($GLOBALS) as $key) {
-            if ($key != 'GLOBALS' && !in_array($key, $superGlobalArrays)) {
-                $result .= sprintf(
-                  '$GLOBALS[\'%s\'] = %s;' . "\n",
-                  $key,
-                  var_export($GLOBALS[$key], TRUE)
-                );
-            }
-        }
-
-        return $result;
-    }
-
-    protected function getSuperGlobalArrays()
-    {
-        if (ini_get('register_long_arrays') == '1') {
-            return array_merge(
-              self::$superGlobalArrays, self::$superGlobalArraysLong
-            );
-        } else {
-            return self::$superGlobalArrays;
-        }
-    }
-
-    /**
-     * @since Method available since Release 3.4.0
-     */
-    protected function backupStaticAttributes()
-    {
-        $this->staticAttributesBackup = array();
-        $declaredClasses              = get_declared_classes();
-        $declaredClassesNum           = count($declaredClasses);
-
-        for ($i = $declaredClassesNum - 1; $i >= 0; $i--) {
-            if (strpos($declaredClasses[$i], 'PHPUnit') !== 0 &&
-                !$declaredClasses[$i] instanceof PHPUnit_Framework_Test) {
-                $class = new ReflectionClass($declaredClasses[$i]);
-
-                if (!$class->isUserDefined()) {
-                    break;
-                }
-
-                $backup = array();
-
-                foreach ($class->getProperties() as $attribute) {
-                    if ($attribute->isStatic()) {
-                        $name = $attribute->getName();
-
-                        if (!isset($this->backupStaticAttributesBlacklist[$declaredClasses[$i]]) ||
-                            !in_array($name, $this->backupStaticAttributesBlacklist[$declaredClasses[$i]])) {
-                            $attribute->setAccessible(TRUE);
-                            $backup[$name] = serialize($attribute->getValue());
-                        }
-                    }
-                }
-
-                if (!empty($backup)) {
-                    $this->staticAttributesBackup[$declaredClasses[$i]] = $backup;
-                }
-            }
-        }
-    }
-
-    /**
-     * @since Method available since Release 3.4.0
-     */
-    protected function restoreStaticAttributes()
-    {
-        foreach ($this->staticAttributesBackup as $className => $staticAttributes) {
-            foreach ($staticAttributes as $name => $value) {
-                $reflector = new ReflectionProperty($className, $name);
-                $reflector->setAccessible(TRUE);
-                $reflector->setValue(unserialize($value));
-            }
-        }
-
-        $this->staticAttributesBackup = array();
     }
 }
 

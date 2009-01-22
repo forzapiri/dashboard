@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Class.php 4403 2008-12-31 09:26:51Z sb $
+ * @version    SVN: $Id: Class.php 4404 2008-12-31 09:27:18Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.2.0
  */
@@ -58,7 +58,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: @package_version@
+ * @version    Release: 3.3.10
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.2.0
  */
@@ -109,9 +109,7 @@ class PHPUnit_Util_Metrics_Class extends PHPUnit_Util_Metrics
 
         $className = $class->getName();
 
-        $packageInformation = PHPUnit_Util_Class::getPackageInformation(
-          $className, $class->getDocComment()
-        );
+        $packageInformation = PHPUnit_Util_Class::getPackageInformation($className);
 
         if (!empty($packageInformation['fullPackage'])) {
             $this->package = $packageInformation['fullPackage'];

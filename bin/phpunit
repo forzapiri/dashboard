@@ -44,6 +44,4 @@ require_once 'PHPUnit/Util/Filter.php';
 PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
 
 require 'PHPUnit/TextUI/Command.php';
-
-PHPUnit_TextUI_Command::main();
 ?>

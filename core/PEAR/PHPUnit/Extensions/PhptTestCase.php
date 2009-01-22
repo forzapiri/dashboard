@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: PhptTestCase.php 4527 2009-01-21 14:16:42Z sb $
+ * @version    SVN: $Id: PhptTestCase.php 4404 2008-12-31 09:27:18Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.1.4
  */
@@ -69,7 +69,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: @package_version@
+ * @version    Release: 3.3.10
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.1.4
  */
@@ -93,12 +93,13 @@ class PHPUnit_Extensions_PhptTestCase implements PHPUnit_Framework_Test, PHPUnit
      * Constructs a test case with the given filename.
      *
      * @param  string $filename
-     * @param  array  $options
+     * @param  array  $options Array with ini settings for the php instance run,
+     *                         key being the name if the setting, value the ini value.
      */
-    public function __construct($filename, array $options = array())
+    public function __construct($filename, $options = array())
     {
         if (!is_string($filename)) {
-            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'string');
+            throw new InvalidArgumentException;
         }
 
         if (!is_file($filename)) {
@@ -108,6 +109,10 @@ class PHPUnit_Extensions_PhptTestCase implements PHPUnit_Framework_Test, PHPUnit
                 $filename
               )
             );
+        }
+
+        if (!is_array($options)) {
+            throw new InvalidArgumentException;
         }
 
         $this->filename = $filename;
@@ -128,10 +133,11 @@ class PHPUnit_Extensions_PhptTestCase implements PHPUnit_Framework_Test, PHPUnit
      * Runs a test and collects its result in a TestResult instance.
      *
      * @param  PHPUnit_Framework_TestResult $result
-     * @param  array                        $options
+     * @param  array $options Array with ini settings for the php instance run,
+     *                        key being the name if the setting, value the ini value.
      * @return PHPUnit_Framework_TestResult
      */
-    public function run(PHPUnit_Framework_TestResult $result = NULL, array $options = array())
+    public function run(PHPUnit_Framework_TestResult $result = NULL, $options = array())
     {
         if (!class_exists('PEAR_RunTest', FALSE)) {
             throw new RuntimeException('Class PEAR_RunTest not found.');
@@ -149,12 +155,12 @@ class PHPUnit_Extensions_PhptTestCase implements PHPUnit_Framework_Test, PHPUnit
             $result = new PHPUnit_Framework_TestResult;
         }
 
+        if (!is_array($options)) {
+            throw new InvalidArgumentException;
+        }
+
         $coverage = $result->getCollectCodeCoverageInformation();
         $options  = array_merge($options, $this->options);
-
-        if (!isset($options['include_path'])) {
-            $options['include_path'] = get_include_path();
-        }
 
         if ($coverage) {
             $options['coverage'] = TRUE;
@@ -185,10 +191,6 @@ class PHPUnit_Extensions_PhptTestCase implements PHPUnit_Framework_Test, PHPUnit
         $logFile      = $path . DIRECTORY_SEPARATOR . str_replace('.phpt', '.log', $base);
         $outFile      = $path . DIRECTORY_SEPARATOR . str_replace('.phpt', '.out', $base);
         $phpFile      = $path . DIRECTORY_SEPARATOR . str_replace('.phpt', '.php', $base);
-
-        if (file_exists($phpFile)) {
-            PHPUnit_Util_Filter::addFileToFilter($phpFile, 'TESTS');
-        }
 
         if (is_object($buffer) && $buffer instanceof PEAR_Error) {
             $result->addError(

@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Command.php 4537 2009-01-21 19:26:41Z sb $
+ * @version    SVN: $Id: Command.php 4404 2008-12-31 09:27:18Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.0.0
  */
@@ -52,6 +52,10 @@ require_once 'PHPUnit/Util/Getopt.php';
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
 
+if (!defined('PHPUnit_MAIN_METHOD')) {
+    define('PHPUnit_MAIN_METHOD', 'PHPUnit_TextUI_Command::main');
+}
+
 /**
  * A TestRunner for the Command Line Interface (CLI)
  * PHP SAPI Module.
@@ -61,7 +65,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: @package_version@
+ * @version    Release: 3.3.10
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.0.0
  */
@@ -72,7 +76,7 @@ class PHPUnit_TextUI_Command
     public static function main($exit = TRUE)
     {
         $arguments = self::handleArguments();
-        $runner    = new PHPUnit_TextUI_TestRunner($arguments['loader']);
+        $runner    = new PHPUnit_TextUI_TestRunner;
 
         if (is_object($arguments['test']) && $arguments['test'] instanceof PHPUnit_Framework_Test) {
             $suite = $arguments['test'];
@@ -149,9 +153,8 @@ class PHPUnit_TextUI_Command
     protected static function handleArguments()
     {
         $arguments = array(
-          'listGroups'              => FALSE,
-          'loader'                  => NULL,
-          'useDefaultConfiguration' => TRUE
+          'listGroups'  => FALSE,
+          'syntaxCheck' => TRUE
         );
 
         $longOptions = array(
@@ -168,7 +171,6 @@ class PHPUnit_TextUI_Command
           'filter=',
           'group=',
           'help',
-          'include-path=',
           'list-groups',
           'loader=',
           'log-graphviz=',
@@ -177,7 +179,6 @@ class PHPUnit_TextUI_Command
           'log-pmd=',
           'log-tap=',
           'log-xml=',
-          'process-isolation',
           'repeat=',
           'report=',
           'skeleton',
@@ -195,9 +196,6 @@ class PHPUnit_TextUI_Command
           'testdox',
           'testdox-html=',
           'testdox-text=',
-          'no-configuration',
-          'no-globals-backup',
-          'no-static-backup',
           'no-syntax-check',
           'verbose',
           'version',
@@ -233,13 +231,7 @@ class PHPUnit_TextUI_Command
 
         foreach ($options[0] as $option) {
             switch ($option[0]) {
-                case '--ansi': {
-                    self::showMessage(
-                      'The --ansi option is deprecated, please use --colors instead.',
-                      FALSE
-                    );
-                }
-
+                case '--ansi':
                 case '--colors': {
                     $arguments['colors'] = TRUE;
                 }
@@ -256,21 +248,15 @@ class PHPUnit_TextUI_Command
                 }
                 break;
 
+                case '--coverage-clover':
                 case '--coverage-xml': {
-                    self::showMessage(
-                      'The --coverage-xml option is deprecated, please use --coverage-clover instead.',
-                      FALSE
-                    );
-                }
-
-                case '--coverage-clover': {
                     if (extension_loaded('tokenizer') && extension_loaded('xdebug')) {
                         $arguments['coverageClover'] = $option[1];
                     } else {
                         if (!extension_loaded('tokenizer')) {
-                            self::showMessage('The tokenizer extension is not loaded.');
+                            self::showMissingDependency('The tokenizer extension is not loaded.');
                         } else {
-                            self::showMessage('The Xdebug extension is not loaded.');
+                            self::showMissingDependency('The Xdebug extension is not loaded.');
                         }
                     }
                 }
@@ -281,29 +267,23 @@ class PHPUnit_TextUI_Command
                         $arguments['coverageSource'] = $option[1];
                     } else {
                         if (!extension_loaded('tokenizer')) {
-                            self::showMessage('The tokenizer extension is not loaded.');
+                            self::showMissingDependency('The tokenizer extension is not loaded.');
                         } else {
-                            self::showMessage('The Xdebug extension is not loaded.');
+                            self::showMissingDependency('The Xdebug extension is not loaded.');
                         }
                     }
                 }
                 break;
 
+                case '--coverage-html':
                 case '--report': {
-                    self::showMessage(
-                      'The --report option is deprecated, please use --coverage-html instead.',
-                      FALSE
-                    );
-                }
-
-                case '--coverage-html': {
                     if (extension_loaded('tokenizer') && extension_loaded('xdebug')) {
                         $arguments['reportDirectory'] = $option[1];
                     } else {
                         if (!extension_loaded('tokenizer')) {
-                            self::showMessage('The tokenizer extension is not loaded.');
+                            self::showMissingDependency('The tokenizer extension is not loaded.');
                         } else {
-                            self::showMessage('The Xdebug extension is not loaded.');
+                            self::showMissingDependency('The Xdebug extension is not loaded.');
                         }
                     }
                 }
@@ -348,21 +328,13 @@ class PHPUnit_TextUI_Command
                 }
                 break;
 
-                case '--include-path': {
-                    ini_set(
-                      'include_path',
-                      $option[1] . PATH_SEPARATOR . ini_get('include_path')
-                    );
-                }
-                break;
-
                 case '--list-groups': {
                     $arguments['listGroups'] = TRUE;
                 }
                 break;
 
                 case '--loader': {
-                    $arguments['loader'] = self::handleLoader($option[1]);
+                    self::handleLoader($option[1]);
                 }
                 break;
 
@@ -372,15 +344,10 @@ class PHPUnit_TextUI_Command
                 break;
 
                 case '--log-graphviz': {
-                    self::showMessage(
-                      'The --log-graphviz functionality is deprecated and will be removed in the future.',
-                      FALSE
-                    );
-
                     if (PHPUnit_Util_Filesystem::fileExistsInIncludePath('Image/GraphViz.php')) {
                         $arguments['graphvizLogfile'] = $option[1];
                     } else {
-                        self::showMessage('The Image_GraphViz package is not installed.');
+                        self::showMissingDependency('The Image_GraphViz package is not installed.');
                     }
                 }
                 break;
@@ -396,44 +363,28 @@ class PHPUnit_TextUI_Command
                 break;
 
                 case '--log-pmd': {
-                    self::showMessage(
-                      'The --log-pmd functionality is deprecated and will be removed in the future.',
-                      FALSE
-                    );
-
                     if (extension_loaded('tokenizer') && extension_loaded('xdebug')) {
                         $arguments['pmdXML'] = $option[1];
                     } else {
                         if (!extension_loaded('tokenizer')) {
-                            self::showMessage('The tokenizer extension is not loaded.');
+                            self::showMissingDependency('The tokenizer extension is not loaded.');
                         } else {
-                            self::showMessage('The Xdebug extension is not loaded.');
+                            self::showMissingDependency('The Xdebug extension is not loaded.');
                         }
                     }
                 }
                 break;
 
                 case '--log-metrics': {
-                    self::showMessage(
-                      'The --log-metrics functionality is deprecated and will be removed in the future.',
-                      FALSE
-                    );
-
                     if (extension_loaded('tokenizer') && extension_loaded('xdebug')) {
                         $arguments['metricsXML'] = $option[1];
                     } else {
                         if (!extension_loaded('tokenizer')) {
-                            self::showMessage('The tokenizer extension is not loaded.');
+                            self::showMissingDependency('The tokenizer extension is not loaded.');
                         } else {
-                            self::showMessage('The Xdebug extension is not loaded.');
+                            self::showMissingDependency('The Xdebug extension is not loaded.');
                         }
                     }
-                }
-                break;
-
-                case '--process-isolation': {
-                    $arguments['processIsolation'] = TRUE;
-                    $arguments['syntaxCheck']      = FALSE;
                 }
                 break;
 
@@ -451,7 +402,7 @@ class PHPUnit_TextUI_Command
                     if (extension_loaded('pdo')) {
                         $arguments['testDatabaseDSN'] = $option[1];
                     } else {
-                        self::showMessage('The PDO extension is not loaded.');
+                        self::showMissingDependency('The PDO extension is not loaded.');
                     }
                 }
                 break;
@@ -460,7 +411,7 @@ class PHPUnit_TextUI_Command
                     if (extension_loaded('pdo')) {
                         $arguments['testDatabaseLogRevision'] = $option[1];
                     } else {
-                        self::showMessage('The PDO extension is not loaded.');
+                        self::showMissingDependency('The PDO extension is not loaded.');
                     }
                 }
                 break;
@@ -469,7 +420,7 @@ class PHPUnit_TextUI_Command
                     if (extension_loaded('pdo')) {
                         $arguments['testDatabasePrefix'] = $option[1];
                     } else {
-                        self::showMessage('The PDO extension is not loaded.');
+                        self::showMissingDependency('The PDO extension is not loaded.');
                     }
                 }
                 break;
@@ -478,18 +429,12 @@ class PHPUnit_TextUI_Command
                     if (extension_loaded('pdo')) {
                         $arguments['testDatabaseLogInfo'] = $option[1];
                     } else {
-                        self::showMessage('The PDO extension is not loaded.');
+                        self::showMissingDependency('The PDO extension is not loaded.');
                     }
                 }
                 break;
 
-                case '--skeleton': {
-                    self::showMessage(
-                      'The --skeleton option is deprecated, please use --skeleton-test instead.',
-                      FALSE
-                    );
-                }
-
+                case '--skeleton':
                 case '--skeleton-class':
                 case '--skeleton-test': {
                     if (isset($arguments['test']) && $arguments['test'] !== FALSE) {
@@ -506,16 +451,7 @@ class PHPUnit_TextUI_Command
                         }
 
                         try {
-                            $args      = array();
-                            $reflector = new ReflectionClass($class);
-
-                            for ($i = 0; $i <= 3; $i++) {
-                                if (isset($options[1][$i])) {
-                                    $args[] = $options[1][$i];
-                                }
-                            }
-
-                            $skeleton = $reflector->newInstanceArgs($args);
+                            $skeleton = new $class($arguments['test'], $arguments['testFile']);
                             $skeleton->write();
                         }
 
@@ -586,21 +522,6 @@ class PHPUnit_TextUI_Command
                 }
                 break;
 
-                case '--no-configuration': {
-                    $arguments['useDefaultConfiguration'] = FALSE;
-                }
-                break;
-
-                case '--no-globals-backup': {
-                    $arguments['backupGlobals'] = FALSE;
-                }
-                break;
-
-                case '--no-static-backup': {
-                    $arguments['backupStaticAttributes'] = FALSE;
-                }
-                break;
-
                 case '--no-syntax-check': {
                     $arguments['syntaxCheck'] = FALSE;
                 }
@@ -624,62 +545,38 @@ class PHPUnit_TextUI_Command
             }
         }
 
-        if (!isset($arguments['configuration']) && $arguments['useDefaultConfiguration']) {
-            if (file_exists('phpunit.xml')) {
-                $arguments['configuration'] = realpath('phpunit.xml');
-            }
-
-            else if (file_exists('phpunit.xml.dist')) {
-                $arguments['configuration'] = realpath('phpunit.xml.dist');
-            }
+        if (!isset($arguments['configuration']) && file_exists('phpunit.xml')) {
+            $arguments['configuration'] = realpath('phpunit.xml');
         }
 
         if (isset($arguments['configuration'])) {
-            $configuration = PHPUnit_Util_Configuration::getInstance(
+            $configuration = new PHPUnit_Util_Configuration(
               $arguments['configuration']
             );
-
-            $phpunit = $configuration->getPHPUnitConfiguration();
-
-            if (!isset($arguments['syntaxCheck']) && isset($phpunit['syntaxCheck'])) {
-                $arguments['syntaxCheck'] = $phpunit['syntaxCheck'];
-            }
-
-            if (isset($phpunit['testSuiteLoaderClass'])) {
-                if (isset($phpunit['testSuiteLoaderFile'])) {
-                    $file = $phpunit['testSuiteLoaderFile'];
-                } else {
-                    $file = '';
-                }
-
-                $arguments['loader'] = self::handleLoader(
-                  $phpunit['testSuiteLoaderClass'], $file
-                );
-            }
-
-            $configuration->handlePHPConfiguration();
-
-            if (!isset($arguments['bootstrap'])) {
-                $phpunitConfiguration = $configuration->getPHPUnitConfiguration();
-
-                if (isset($phpunitConfiguration['bootstrap'])) {
-                    PHPUnit_Util_Fileloader::load($phpunitConfiguration['bootstrap']);
-                }
-            }
-
-            if (!isset($arguments['test'])) {
-                $testSuite = $configuration->getTestSuiteConfiguration();
-
-                if ($testSuite !== NULL) {
-                    $arguments['test'] = $testSuite;
-                }
-            }
 
             $browsers = $configuration->getSeleniumBrowserConfiguration();
 
             if (!empty($browsers)) {
                 require_once 'PHPUnit/Extensions/SeleniumTestCase.php';
                 PHPUnit_Extensions_SeleniumTestCase::$browsers = $browsers;
+            }
+
+            if (!isset($arguments['test'])) {
+                $configuration->handlePHPConfiguration();
+
+                if (!isset($arguments['bootstrap'])) {
+                    $phpunitConfiguration = $configuration->getPHPUnitConfiguration();
+
+                    if (isset($phpunitConfiguration['bootstrap'])) {
+                        PHPUnit_Util_Fileloader::load($phpunitConfiguration['bootstrap']);
+                    }
+                }
+
+                $testSuite = $configuration->getTestSuiteConfiguration();
+
+                if ($testSuite !== NULL) {
+                    $arguments['test'] = $testSuite;
+                }
             }
         }
 
@@ -698,35 +595,22 @@ class PHPUnit_TextUI_Command
             exit(PHPUnit_TextUI_TestRunner::EXCEPTION_EXIT);
         }
 
-        if (!isset($arguments['syntaxCheck'])) {
-            $arguments['syntaxCheck'] = TRUE;
-        }
-
         return $arguments;
     }
 
     /**
-     * @param  string  $loaderClass
-     * @param  string  $loaderFile
+     * @param  string  $loaderName
      */
-    protected static function handleLoader($loaderClass, $loaderFile = '')
+    protected static function handleLoader($loaderName)
     {
-        if (!class_exists($loaderClass, FALSE)) {
-            if ($loaderFile == '') {
-                $loaderFile = str_replace('_', '/', $loaderClass) . '.php';
-            }
-
-            $loaderFile = PHPUnit_Util_Filesystem::fileExistsInIncludePath(
-              $loaderFile
+        if (!class_exists($loaderName, FALSE)) {
+            PHPUnit_Util_Fileloader::checkAndLoad(
+              str_replace('_', '/', $loaderName) . '.php'
             );
-
-            if ($loaderFile !== FALSE) {
-                require $loaderFile;
-            }
         }
 
-        if (class_exists($loaderClass, FALSE)) {
-            $class = new ReflectionClass($loaderClass);
+        if (class_exists($loaderName, FALSE)) {
+            $class = new ReflectionClass($loaderName);
 
             if ($class->implementsInterface('PHPUnit_Runner_TestSuiteLoader') &&
                 $class->isInstantiable()) {
@@ -739,28 +623,22 @@ class PHPUnit_TextUI_Command
               sprintf(
                 'Could not use "%s" as loader.',
 
-                $loaderClass
+                $loaderName
               )
             );
         }
 
-        return $loader;
+        PHPUnit_TextUI_TestRunner::setLoader($loader);
     }
 
     /**
-     * @param string  $message
-     * @param boolean $exit
+     * @param string $message
      */
-    public static function showMessage($message, $exit = TRUE)
+    public static function showMissingDependency($message)
     {
         PHPUnit_TextUI_TestRunner::printVersionString();
         print $message . "\n";
-
-        if ($exit) {
-            exit(PHPUnit_TextUI_TestRunner::EXCEPTION_EXIT);
-        } else {
-            print "\n";
-        }
+        exit(PHPUnit_TextUI_TestRunner::EXCEPTION_EXIT);
     }
 
     /**
@@ -773,9 +651,12 @@ class PHPUnit_TextUI_Command
 Usage: phpunit [switches] UnitTest [UnitTest.php]
        phpunit [switches] <directory>
 
+  --log-graphviz <file>    Log test execution in GraphViz markup.
   --log-json <file>        Log test execution in JSON format.
   --log-tap <file>         Log test execution in TAP format to file.
   --log-xml <file>         Log test execution in XML format to file.
+  --log-metrics <file>     Write metrics report in XML format.
+  --log-pmd <file>         Write violations report in PMD XML format.
 
   --coverage-html <dir>    Generate code coverage report in HTML format.
   --coverage-clover <file> Write code coverage data in Clover XML format.
@@ -804,29 +685,27 @@ Usage: phpunit [switches] UnitTest [UnitTest.php]
   --tap                    Report test execution progress in TAP format.
   --testdox                Report test execution progress in TestDox format.
 
-  --colors                 Use colors in output.
   --no-syntax-check        Disable syntax check of test source files.
   --stop-on-failure        Stop execution upon first error or failure.
+  --colors                 Use colors in output.
   --verbose                Output more verbose information.
   --wait                   Waits for a keystroke after each test.
 
   --skeleton-class         Generate Unit class for UnitTest in UnitTest.php.
   --skeleton-test          Generate UnitTest class for Unit in Unit.php.
 
-  --process-isolation      Run each test in a separate PHP process.
-  --no-globals-backup      Do not backup and restore \$GLOBALS.
-  --no-static-backup       Do not backup and restore static attributes.
-
-  --bootstrap <file>       A "bootstrap" PHP file that is run before the tests.
-  --configuration <file>   Read configuration from XML file.
-  --no-configuration       Ignore default configuration file (phpunit.xml).
-  --include-path <path(s)> Prepend PHP's include_path with given path(s).
-  -d key[=value]           Sets a php.ini value.
-
   --help                   Prints this usage information.
   --version                Prints the version and exits.
 
+  --bootstrap <file>       A "bootstrap" PHP file that is run before the tests.
+  --configuration <file>   Read configuration from XML file.
+  -d key[=value]           Sets a php.ini value.
+
 EOT;
     }
+}
+
+if (PHPUnit_MAIN_METHOD == 'PHPUnit_TextUI_Command::main') {
+    PHPUnit_TextUI_Command::main();
 }
 ?>

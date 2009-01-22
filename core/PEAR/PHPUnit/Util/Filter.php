@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Filter.php 4442 2009-01-08 18:49:37Z sb $
+ * @version    SVN: $Id: Filter.php 4404 2008-12-31 09:27:18Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.0.0
  */
@@ -54,7 +54,7 @@ require_once 'PHPUnit/Util/FilterIterator.php';
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: @package_version@
+ * @version    Release: 3.3.10
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.0.0
  */
@@ -348,19 +348,17 @@ class PHPUnit_Util_Filter
 
             if (self::$addUncoveredFilesFromWhitelist) {
                 foreach (self::$whitelistedFiles as $whitelistedFile) {
-                    if (!isset(self::$coveredFiles[$whitelistedFile]) &&
-                        !self::isFiltered($whitelistedFile, $filterTests, TRUE)) {
+                    if (!isset(self::$coveredFiles[$whitelistedFile])) {
                         if (file_exists($whitelistedFile)) {
                             xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
                             include_once $whitelistedFile;
                             $coverage = xdebug_get_code_coverage();
                             xdebug_stop_code_coverage();
 
-                            foreach ($coverage as $file => $fileCoverage) {
-                                if (!in_array($file, self::$whitelistedFiles) ||
-                                    isset(self::$coveredFiles[$file])) {
+                            foreach ($coverage as $file => $fileCoverage)
+                            {
+                                if (!in_array($file, self::$whitelistedFiles) || isset(self::$coveredFiles[$file]))
                                     continue;
-                                }
 
                                 foreach ($fileCoverage as $line => $flag) {
                                     if ($flag > 0) {
@@ -440,7 +438,7 @@ class PHPUnit_Util_Filter
         if (is_bool($filter)) {
             self::$filter = $filter;
         } else {
-            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'boolean');
+            throw new InvalidArgumentException;
         }
     }
 
@@ -475,29 +473,46 @@ class PHPUnit_Util_Filter
     {
         $filename = realpath($filename);
 
-        if (!$ignoreWhitelist && !empty(self::$whitelistedFiles)) {
-            return !in_array($filename, self::$whitelistedFiles);
+        // Use blacklist.
+        if ($ignoreWhitelist || empty(self::$whitelistedFiles)) {
+            $blacklistedFiles = self::$blacklistedFiles['DEFAULT'];
+
+            if ($filterTests) {
+                $blacklistedFiles = array_merge(
+                  $blacklistedFiles,
+                  self::$blacklistedFiles['TESTS']
+                );
+            }
+
+            if (self::$filterPHPUnit) {
+                $blacklistedFiles = array_merge(
+                  $blacklistedFiles,
+                  self::$blacklistedFiles['PHPUNIT']
+                );
+            }
+
+            if (in_array($filename, $blacklistedFiles)) {
+                return TRUE;
+            }
+
+            foreach ($blacklistedFiles as $filteredFile) {
+                if (strpos($filename, $filteredFile) !== FALSE) {
+                    return TRUE;
+                }
+            }
+
+            return FALSE;
         }
 
-        $blacklistedFiles = self::$blacklistedFiles['DEFAULT'];
+        // Use whitelist.
+        else
+        {
+            if (in_array($filename, self::$whitelistedFiles)) {
+                return FALSE;
+            }
 
-        if ($filterTests) {
-            $blacklistedFiles = array_merge(
-              $blacklistedFiles, self::$blacklistedFiles['TESTS']
-            );
-        }
-
-        if (self::$filterPHPUnit) {
-            $blacklistedFiles = array_merge(
-              $blacklistedFiles, self::$blacklistedFiles['PHPUNIT']
-            );
-        }
-
-        if (in_array($filename, $blacklistedFiles)) {
             return TRUE;
         }
-
-        return FALSE;
     }
 
     /**
@@ -537,7 +552,7 @@ class PHPUnit_Util_Filter
                 return TRUE;
             }
         }
-
+        
         return FALSE;
     }
 }

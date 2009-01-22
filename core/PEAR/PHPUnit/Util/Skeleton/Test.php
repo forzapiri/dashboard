@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Test.php 4403 2008-12-31 09:26:51Z sb $
+ * @version    SVN: $Id: Test.php 4404 2008-12-31 09:27:18Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.3.0
  */
@@ -58,7 +58,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: @package_version@
+ * @version    Release: 3.3.10
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.3.0
  */
@@ -72,81 +72,67 @@ class PHPUnit_Util_Skeleton_Test extends PHPUnit_Util_Skeleton
     /**
      * Constructor.
      *
-     * @param string $inClassName
-     * @param string $inSourceFile
-     * @param string $outClassName
-     * @param string $outSourceFile
+     * @param  string  $inClassName
+     * @param  string  $inSourceFile
      * @throws RuntimeException
      */
-    public function __construct($inClassName, $inSourceFile = '', $outClassName = '', $outSourceFile = '')
+    public function __construct($inClassName, $inSourceFile = '')
     {
+        $this->inClassName  = $inClassName;
+        $this->outClassName = $inClassName . 'Test';
+
         if (class_exists($inClassName)) {
-            $reflector    = new ReflectionClass($inClassName);
-            $inSourceFile = $reflector->getFileName();
+            $this->inSourceFile = '<internal>';
+        }
 
-            if ($inSourceFile !== FALSE) {
-                $inSourceFile = '<internal>';
-            }
+        else if (empty($inSourceFile) && is_file($inClassName . '.php')) {
+            $this->inSourceFile = $inClassName . '.php';
+        }
 
-            unset($reflector);
+        else if (empty($inSourceFile) ||
+                 is_file(str_replace('_', '/', $inClassName) . '.php')) {
+            $this->inSourceFile  = str_replace('_', '/', $inClassName) . '.php';
+            $this->outSourceFile = str_replace('_', '/', $inClassName) . 'Test.php';
+        }
+
+        else if (empty($inSourceFile)) {
+            throw new RuntimeException(
+              sprintf(
+                'Neither "%s.php" nor "%s.php" could be opened.',
+                $inClassName,
+                str_replace('_', '/', $inClassName)
+              )
+            );
+        }
+
+        else if (!is_file($inSourceFile)) {
+            throw new RuntimeException(
+              sprintf(
+                '"%s" could not be opened.',
+
+                $inSourceFile
+              )
+            );
         } else {
-            if (empty($inSourceFile)) {
-                if (is_file($inClassName . '.php')) {
-                    $inSourceFile = $inClassName . '.php';
-                }
-
-                else if (is_file(str_replace('_', '/', $inClassName) . '.php')) {
-                    $inSourceFile = str_replace('_', '/', $inClassName) . '.php';
-                }
-            }
-
-            if (empty($inSourceFile)) {
-                throw new RuntimeException(
-                  sprintf(
-                    'Neither "%s.php" nor "%s.php" could be opened.',
-                    $inClassName,
-                    str_replace('_', '/', $inClassName)
-                  )
-                );
-            }
-
-            if (!is_file($inSourceFile)) {
-                throw new RuntimeException(
-                  sprintf(
-                    '"%s" could not be opened.',
-
-                    $inSourceFile
-                  )
-                );
-            }
-
-            $inSourceFile = realpath($inSourceFile);
-            include_once $inSourceFile;
-
-            if (!class_exists($inClassName)) {
-                throw new RuntimeException(
-                  sprintf(
-                    'Could not find class "%s" in "%s".',
-
-                    $inClassName,
-                    $inSourceFile
-                  )
-                );
-            }
+            $this->inSourceFile = $inSourceFile;
         }
 
-        if (empty($outClassName)) {
-            $outClassName = $inClassName . 'Test';
+        if ($this->inSourceFile != '<internal>') {
+            include_once $this->inSourceFile;
         }
 
-        if (empty($outSourceFile)) {
-            $outSourceFile = dirname($inSourceFile) . DIRECTORY_SEPARATOR . $outClassName . '.php';
+        if (!class_exists($inClassName)) {
+            throw new RuntimeException(
+              sprintf(
+                'Could not find class "%s" in "%s".',
+
+                $inClassName,
+                realpath($this->inSourceFile)
+              )
+            );
         }
 
-        $this->inClassName   = $inClassName;
-        $this->inSourceFile  = $inSourceFile;
-        $this->outClassName  = $outClassName;
-        $this->outSourceFile = $outSourceFile;
+        $this->outSourceFile = dirname($this->inSourceFile) . DIRECTORY_SEPARATOR . $this->inClassName . 'Test.php';
     }
 
     /**

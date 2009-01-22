@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: ComparisonFailureTest.php 4403 2008-12-31 09:26:51Z sb $
+ * @version    SVN: $Id: ComparisonFailureTest.php 4404 2008-12-31 09:27:18Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.0.0
  */
@@ -55,15 +55,12 @@ require_once 'PHPUnit/Framework/TestCase.php';
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: @package_version@
+ * @version    Release: 3.3.10
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.0.0
  */
 class Framework_ComparisonFailureTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * @covers PHPUnit_Framework_ComparisonFailure::diffEqual
-     */
     public function testComparisonErrorMessage()
     {
         $failure = PHPUnit_Framework_ComparisonFailure::diffEqual('a', 'b', 'c');
@@ -74,9 +71,6 @@ class Framework_ComparisonFailureTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @covers PHPUnit_Framework_ComparisonFailure::diffEqual
-     */
     public function testComparisonErrorStartSame()
     {
         $failure = PHPUnit_Framework_ComparisonFailure::diffEqual('ba', 'bc');
@@ -87,9 +81,6 @@ class Framework_ComparisonFailureTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @covers PHPUnit_Framework_ComparisonFailure::diffEqual
-     */
     public function testComparisonErrorEndSame()
     {
         $failure = PHPUnit_Framework_ComparisonFailure::diffEqual('ab', 'cb');
@@ -100,9 +91,6 @@ class Framework_ComparisonFailureTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @covers PHPUnit_Framework_ComparisonFailure::diffEqual
-     */
     public function testComparisonErrorStartAndEndSame()
     {
         $failure = PHPUnit_Framework_ComparisonFailure::diffEqual('abc', 'adc');
@@ -113,9 +101,6 @@ class Framework_ComparisonFailureTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @covers PHPUnit_Framework_ComparisonFailure::diffEqual
-     */
     public function testComparisonErrorStartSameComplete()
     {
         $failure = PHPUnit_Framework_ComparisonFailure::diffEqual('ab', 'abc');
@@ -126,9 +111,6 @@ class Framework_ComparisonFailureTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @covers PHPUnit_Framework_ComparisonFailure::diffEqual
-     */
     public function testComparisonErrorEndSameComplete()
     {
         $failure = PHPUnit_Framework_ComparisonFailure::diffEqual('bc', 'abc');
@@ -139,9 +121,6 @@ class Framework_ComparisonFailureTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @covers PHPUnit_Framework_ComparisonFailure::diffEqual
-     */
     public function testComparisonErrorOverlapingMatches()
     {
         $failure = PHPUnit_Framework_ComparisonFailure::diffEqual('abc', 'abbc');
@@ -152,9 +131,6 @@ class Framework_ComparisonFailureTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @covers PHPUnit_Framework_ComparisonFailure::diffEqual
-     */
     public function testComparisonErrorOverlapingMatches2()
     {
         $failure = PHPUnit_Framework_ComparisonFailure::diffEqual('abcdde', 'abcde');

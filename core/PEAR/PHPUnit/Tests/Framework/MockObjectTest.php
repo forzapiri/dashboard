@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: MockObjectTest.php 4403 2008-12-31 09:26:51Z sb $
+ * @version    SVN: $Id: MockObjectTest.php 4404 2008-12-31 09:27:18Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.0.0
  */
@@ -61,7 +61,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . '_files' . DIREC
  * @author     Frank Kleine <mikey@stubbles.net>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: @package_version@
+ * @version    Release: 3.3.10
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.0.0
  */
@@ -237,8 +237,7 @@ class Framework_MockObjectTest extends PHPUnit_Framework_TestCase
         $mock1 = $this->getMock('PartialMockTestClass');
         $mock2 = $this->getMock('PartialMockTestClass', array(), array(), '', FALSE);
 
-        $this->assertTrue($mock1->constructorCalled);
-        $this->assertFalse($mock2->constructorCalled);
+        $this->assertNotEquals(get_class($mock1), get_class($mock2));
     }
 
     public function testOriginalCloneSettingConsidered()

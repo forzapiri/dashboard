@@ -2,14 +2,12 @@
 phpunit --log-xml php://stdout DataSetTest ../_files/DataSetTest.php
 --FILE--
 <?php
-$_SERVER['argv'][1] = '--no-configuration';
-$_SERVER['argv'][2] = '--log-xml';
-$_SERVER['argv'][3] = 'php://stdout';
-$_SERVER['argv'][4] = 'DataSetTest';
-$_SERVER['argv'][5] = dirname(dirname(__FILE__)) . '/_files/DataSetTest.php';
+$_SERVER['argv'][1] = '--log-xml';
+$_SERVER['argv'][2] = 'php://stdout';
+$_SERVER['argv'][3] = 'DataSetTest';
+$_SERVER['argv'][4] = dirname(dirname(__FILE__)) . '/_files/DataSetTest.php';
 
 require_once dirname(dirname(dirname(__FILE__))) . '/TextUI/Command.php';
-PHPUnit_TextUI_Command::main();
 ?>
 --EXPECTF--
 PHPUnit %s by Sebastian Bergmann.
@@ -22,7 +20,7 @@ PHPUnit %s by Sebastian Bergmann.
       <testcase name="testAdd with data set #1" assertions="1" time="%f"/>
       <testcase name="testAdd with data set #2" assertions="1" time="%f">
         <failure type="PHPUnit_Framework_ExpectationFailedException">testAdd(DataSetTest) with data set #2 (1, 1, 3)
-Failed asserting that &lt;integer:2&gt; matches expected &lt;integer:3&gt;.
+Failed asserting that &lt;integer:2&gt; matches expected value &lt;integer:3&gt;.
 
 %s:%i
 %s:%i
@@ -39,7 +37,7 @@ Time: %i seconds
 There was 1 failure:
 
 1) testAdd(DataSetTest) with data set #2 (1, 1, 3)
-Failed asserting that <integer:2> matches expected <integer:3>.
+Failed asserting that <integer:2> matches expected value <integer:3>.
 %s:%i
 %s:%i
 

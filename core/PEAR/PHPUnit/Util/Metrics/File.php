@@ -39,14 +39,14 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: File.php 4403 2008-12-31 09:26:51Z sb $
+ * @version    SVN: $Id: File.php 4404 2008-12-31 09:27:18Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.2.0
  */
 
-require_once 'PHPUnit/Util/File.php';
-require_once 'PHPUnit/Util/Filter.php';
+require_once 'PHPUnit/Util/Class.php';
 require_once 'PHPUnit/Util/Metrics.php';
+require_once 'PHPUnit/Util/Filter.php';
 
 PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
 
@@ -58,7 +58,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: @package_version@
+ * @version    Release: 3.3.10
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.2.0
  */
@@ -104,16 +104,12 @@ class PHPUnit_Util_Metrics_File extends PHPUnit_Util_Metrics
         $this->countLines();
         $this->setCoverage($codeCoverage);
 
-        foreach (PHPUnit_Util_File::getClassesInFile($filename) as $className => $class) {
-            $this->classes[$className] = PHPUnit_Util_Metrics_Class::factory(
-              new ReflectionClass($className), $codeCoverage
-            );
+        foreach (PHPUnit_Util_Class::getClassesInFile($filename) as $class) {
+            $this->classes[$class->getName()] = PHPUnit_Util_Metrics_Class::factory($class, $codeCoverage);
         }
 
-        foreach (PHPUnit_Util_File::getFunctionsInFile($filename) as $functionName => $function) {
-            $this->functions[$functionName] = PHPUnit_Util_Metrics_Function::factory(
-              new ReflectionFunction($functionName), $codeCoverage
-            );
+        foreach (PHPUnit_Util_Class::getFunctionsInFile($filename) as $function) {
+            $this->functions[$function->getName()] = PHPUnit_Util_Metrics_Function::factory($function, $codeCoverage);
         }
     }
 

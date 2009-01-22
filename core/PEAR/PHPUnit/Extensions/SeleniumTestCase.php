@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: SeleniumTestCase.php 4506 2009-01-19 16:15:56Z sb $
+ * @version    SVN: $Id: SeleniumTestCase.php 4404 2008-12-31 09:27:18Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.0.0
  */
@@ -62,7 +62,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: @package_version@
+ * @version    Release: 3.3.10
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.0.0
  */
@@ -117,13 +117,12 @@ abstract class PHPUnit_Extensions_SeleniumTestCase extends PHPUnit_Framework_Tes
     /**
      * @param  string $name
      * @param  array  $data
-     * @param  string $dataName
      * @param  array  $browser
      * @throws InvalidArgumentException
      */
-    public function __construct($name = NULL, array $data = array(), $dataName = '', array $browser = array())
+    public function __construct($name = NULL, array $data = array(), array $browser = array())
     {
-        parent::__construct($name, $data, $dataName);
+        parent::__construct($name, $data);
         $this->testId = md5(uniqid(rand(), TRUE));
         $this->getDriver($browser);
     }
@@ -415,7 +414,7 @@ abstract class PHPUnit_Extensions_SeleniumTestCase extends PHPUnit_Framework_Tes
     public function setAutoStop($autoStop)
     {
         if (!is_bool($autoStop)) {
-            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'boolean');
+            throw new InvalidArgumentException;
         }
 
         $this->autoStop = $autoStop;
@@ -695,17 +694,9 @@ abstract class PHPUnit_Extensions_SeleniumTestCase extends PHPUnit_Framework_Tes
      */
     public function __call($command, $arguments)
     {
-        $result = call_user_func_array(
+        return call_user_func_array(
           array($this->drivers[0], $command), $arguments
         );
-
-        $this->verificationErrors = array_merge(
-          $this->verificationErrors, $this->drivers[0]->getVerificationErrors()
-        );
-
-        $this->drivers[0]->clearVerificationErrors();
-
-        return $result;
     }
 
     /**
