@@ -1,0 +1,13 @@
+@CHARSET "UTF-8";
+
+textarea.editor {
+	width: 80%;
+	height: 500px;
+	font-size:0.9em;
+	float: left;
+}
+
+div.editor_details {
+	width: 19%;
+	float: right;
+}
