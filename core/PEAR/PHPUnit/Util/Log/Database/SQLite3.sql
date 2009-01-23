@@ -1,7 +1,7 @@
 --
 -- PHPUnit
 --
--- Copyright (c) 2002-2008, Sebastian Bergmann <sb@sebastian-bergmann.de>.
+-- Copyright (c) 2002-2009, Sebastian Bergmann <sb@sebastian-bergmann.de>.
 -- All rights reserved.
 --
 -- Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 -- ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 -- POSSIBILITY OF SUCH DAMAGE.
 --
--- $Id: SQLite3.sql 3496 2008-07-22 17:47:49Z sb $
+-- $Id: SQLite3.sql 4404 2008-12-31 09:27:18Z sb $
 --
 
 CREATE TABLE IF NOT EXISTS run(

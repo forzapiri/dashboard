@@ -2,6 +2,7 @@
 
 class User extends DBRow {
 	function createTable() {
+		self::$__CLASS__ = __CLASS__;
 		$cols = array(
 			'id?',
 			DBColumn::make('!text', 'username', 'Username'),
@@ -17,7 +18,7 @@ class User extends DBRow {
 		return new DBTable("auth", __CLASS__, $cols);
 	}
 	static function make($id = null) {return parent::make($id, __CLASS__);}
-	static function getAll($where = null) {return self::$tables[__CLASS__]->getAllRows($where);}
+
 	function quickformPrefix() {return 'user_';}
 	
 	public function hasPerm($class, $key) {

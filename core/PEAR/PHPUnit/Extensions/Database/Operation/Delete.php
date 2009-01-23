@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2008, Sebastian Bergmann <sb@sebastian-bergmann.de>.
+ * Copyright (c) 2002-2009, Sebastian Bergmann <sb@sebastian-bergmann.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,9 +37,9 @@
  * @category   Testing
  * @package    PHPUnit
  * @author     Mike Lively <m@digitalsandwich.com>
- * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Delete.php 2854 2008-04-24 08:34:46Z sb $
+ * @version    SVN: $Id: Delete.php 4404 2008-12-31 09:27:18Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.2.0
  */
@@ -58,9 +58,9 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @category   Testing
  * @package    PHPUnit
  * @author     Mike Lively <m@digitalsandwich.com>
- * @copyright  2008 Mike Lively <m@digitalsandwich.com>
+ * @copyright  2009 Mike Lively <m@digitalsandwich.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.9
+ * @version    Release: 3.3.10
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.2.0
  */

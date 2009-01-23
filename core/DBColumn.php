@@ -43,6 +43,8 @@ abstract class DBColumn {
 	protected abstract function type();
 	function name() {return $this->_name;}
 	function label() {return $this->_label;}
+	function getLabel() {return $this->_label;}
+	function setLabel($label) {$this->_label = $label;}
 	function options() {return $this->_options;}
 
 	function hidden() {return $this->_modifier == 'hidden';}
@@ -70,10 +72,10 @@ abstract class DBColumn {
 	}
 
 	function display($obj) {return $obj;}
-	function toDB($obj) {return $obj;}
-	function fromDB($obj) {return $obj;}
-	function toForm($obj) {return $obj;}
-	function fromForm($obj) {return $obj;}
+	static function toDB($obj) {return $obj;}
+	static function fromDB($obj) {return $obj;}
+	static function toForm($obj) {return $obj;}
+	static function fromForm($obj) {return $obj;}
 	function suggestedMysql() {return "varchar(256)";}
 	function addElementTo ($args) {
 		$value = null;
@@ -111,10 +113,11 @@ abstract class DBColumn {
 			return new DBColumnClass($type, $name, $label, $modifier, $options);
 		}
 		$class = @self::$types[$type];
-		if (!$class) error_log ("Type '$type' is not registered");
+		if (!$class) trigger_error ("Type '$type' is not registered");
 		return new $class($name, $label, $modifier, $options);
 	}
 	static public $types = array();
+	static public function getType($type) {return self::$types[$type];}
 	static function register($column) {
 		$type = (is_object ($column)) ? $column : new $column;
 		self::$types[$type->type()] = $column;
@@ -141,6 +144,7 @@ include_once 'DBColumns.php';
 
 class DBColumnClass extends DBColumnId { // A column type for an id, where the intended object is new Typename ($id);
 	function type() {return $this->class;}
+	// function delayLoad() {return true;} // TODO:  Make these delay load; otherwise circularity problems
 	static private $classes = array();
 	public $class;
 	function DBColumnClass($class, $name=null, $label = null, $modifier = "", $options = null) {
@@ -154,7 +158,7 @@ class DBColumnClass extends DBColumnId { // A column type for an id, where the i
 		$value = null;
 		$label = $this->label();
 		extract ($args);
-		$dummy = new $this->class;
+		$dummy = DBRow::make(null, $this->class);
 		$rows = $dummy->table()->getAllRows();
 		$col = $this->options();
 		$col = $col ? $col[0] : 'id';

@@ -18,8 +18,6 @@
 
 /* SEE ../SiteConfig.php FOR MODULE USAGE INFORMATION */
 
-// var_log ($_SESSION);
-
 require_once "SiteConfigType.php";
 class SiteConfig {
 	/* Columns from db */

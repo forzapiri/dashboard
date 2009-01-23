@@ -323,8 +323,8 @@ class Page extends defaultPageActs {
 				$i = DBRow::make($_REQUEST[$prefix . 'id'], $class);
 				$f = $i->getAddEditForm('/admin/' . $_REQUEST['module']);
 				// BUG:  CHRIS THINKS THIS WAS INSERTED TO MASK A BUG IN DBROW, PERHAPS...  WE SHALL SEE.
-				// $i->__construct($i->getId());
-				// $f = $i->getAddEditForm('/admin/' . $_REQUEST['module']);
+				$i = DBRow::make($i->getId(), $class); //$i->__construct($i->getId());
+				$f = $i->getAddEditForm('/admin/' . $_REQUEST['module']);
 				$html .= $f->display();
 			}
 		}

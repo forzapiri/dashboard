@@ -7,9 +7,7 @@
 
 class DBColumnText extends DBColumn {
 	function type() {return "text";}
-	function addElementTo ($args) {
-		parent::addElementTo($args);
-	}
+	function addElementTo ($args) {return parent::addElementTo($args);}
 }
 
 class DBFileUpload extends DBColumn {
@@ -38,17 +36,27 @@ class DBColumnPassword extends DBColumn {
 	}
 }
 
-class DBColumnTextBox extends DBColumn {
-	function type() {return "textbox";}
+class DBColumnTextArea extends DBColumn {
+	function type() {return "textarea";}
 	function addElementTo ($args) {
 		$value = '';
 		$label = $this->label();
 		extract($args);
-		$el = $form->addElement ('textarea', $id, $label);
+		$options = $this->options();
+		if ((count($options) == 2)
+			&& is_string(@$options[0]) && (@$options[0] > 0)
+			&& is_string(@$options[1]) && (@$options[1] > 0))
+		{
+			$options = array ('rows' => $options[0], 'cols' => $options[1]);
+		} else if (!$options) {
+			$options = array ('rows' => 10, 'cols' => 50);
+		}
+		$el = $form->addElement ('textarea', $id, $label, $options);
 		$el->setValue($value);
 		return $el;
 	}
 }
+class DBColumnTextBox extends DBColumnTextArea {function type() {return "textbox";}} // Synonym for textarea
 
 class DBColumnString extends DBColumn {
 	function type() {return "string";}
@@ -151,12 +159,12 @@ class DBColumnCheckbox extends DBColumnInteger {
 		$el->setValue($value);
 		return $el;
 	}
-	function toDB($obj) {return $obj ? 1 : 0;}
-	function fromDB($obj) {return !!$obj;}
+	static function toDB($obj) {return $obj ? 1 : 0;}
+	static function fromDB($obj) {return !!$obj;}
 	
-	function toForm($obj) {return $obj ? 1 : 0;}
+	static function toForm($obj) {return $obj ? 1 : 0;}
 	// checkboxes appear to return '1' (checked) or true (not checked) !!
-	function fromForm($obj) {return '1' === $obj;}
+	static function fromForm($obj) {return '1' === $obj;}
 	function suggestedMysql() {return "tinyint(1)";}
 }
 
@@ -212,10 +220,10 @@ class DBColumnSelect extends DBColumnText {
 
 class DBColumnTimestamp extends DBColumnText {
 	function type() {return "timestamp";}
-	function toDB($obj) {$date = is_object($obj) ? $obj : new NDate($obj); return $date->get(MYSQL_TIMESTAMP);}
-	function fromDB($obj) {return new NDate($obj);}
-	function toForm($obj) {return $this->toDB($obj);}
-	function fromForm($obj) {return $this->fromDB($obj);}
+	static function toDB($obj) {$date = is_object($obj) ? $obj : new NDate($obj); return $date->get(MYSQL_TIMESTAMP);}
+	static function fromDB($obj) {return new NDate($obj);}
+	static function toForm($obj) {return self::toDB($obj);}
+	static function fromForm($obj) {return self::fromDB($obj);}
 	function addElementTo ($args) {
 		$value = null;
 		extract ($args);
@@ -228,9 +236,9 @@ class DBColumnTimestamp extends DBColumnText {
 
 class DBColumnDate extends DBColumnTimestamp {
 	function type() {return "date";}
-	function toDB($obj) {$date = is_object($obj) ? $obj : new NDate($obj); return $date->get(MYSQL_TIMESTAMP);}
+	static function toDB($obj) {$date = is_object($obj) ? $obj : new NDate($obj); return $date->get(MYSQL_TIMESTAMP);}
 	function addElementTo ($args) {
-		$value = $this->toDB(new NDate());
+		$value = self::toDB(new NDate());
 		$label = $this->label();
 		extract ($args);
 		$date = new NDate($value);

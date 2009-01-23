@@ -7,7 +7,7 @@ class ContentPageRevision extends DBRow {
 			DBColumn::make('text', 'page_title', 'Page Title'),
 			DBColumn::make('tinymce', 'content', 'Page Content'),
 			'timestamp',
-			'status',
+			DBColumn::make('status', 'status', 'Make live'),
 			);
 		return new DBTable("content_page_data", __CLASS__, $cols);
 	}
@@ -27,10 +27,32 @@ class ContentPageRevision extends DBRow {
 			}
 		}
 	}
-	public function getSubContent() {return getSubContentFor($this->getId());}
-	public function getAddEditFormSaveHook($form) {
+
+	function __construct($id = null) {
+		/* CHUNKS:  Move this code to DBRow() with a check for $this->chunkable() ?? */
+		$this->chunkManager = new ChunkManager($this);
+		parent::__construct($id);
+	}
+	
+	public function getAddEditFormAfterSaveHook($form) {
 		if (1 == $form->exportValue($this->quickformPrefix() . 'status')){
 			ContentPageRevision::disableOthers($this);
+		}
+		/* CHUNKS:  Move this code to DBRow() with a check for $this->chunkable() ?? */
+		$this->chunkManager->saveFormFields($form, $this);
+	}
+
+	public function getAddEditFormHook($form) {
+		/* CHUNKS:  Move this code to DBRow() with a check for $this->chunkable() ?? */
+		$page = ContentPage::make($this->getParent());
+		$name = $page->getPageTemplate();
+		$template = Template::getRevision('CMS', $name);
+		$this->chunkManager->setTemplate($template);
+		if ($this->chunkManager->insertFormFields($form)) { // Makes sense in ContentPageRevision only; a hack
+			$form->removeElement($this->quickformPrefix() . 'content');
+			$form->removeElement($this->quickformPrefix() . 'page_title');
+			$form->addElement('hidden',$this->quickformPrefix() . 'content');
+			$form->addElement('hidden',$this->quickformPrefix() . 'page_title');
 		}
 	}
 
@@ -40,7 +62,8 @@ class ContentPageRevision extends DBRow {
 			$this->set('parent', $_REQUEST[$this->quickformPrefix() . 'parent']);
 		}
 		$form = parent::getAddEditForm($target);
-		$el =& $form->removeElement($this->quickformPrefix() . 'id');
+		// CHUNK:  DISABLE NOTION OF REVISION HISTORY
+		// $el =& $form->removeElement($this->quickformPrefix() . 'id');
 		return $form;
 	}
 }

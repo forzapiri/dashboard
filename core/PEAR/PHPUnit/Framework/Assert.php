@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2008, Sebastian Bergmann <sb@sebastian-bergmann.de>.
+ * Copyright (c) 2002-2009, Sebastian Bergmann <sb@sebastian-bergmann.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,9 +37,9 @@
  * @category   Testing
  * @package    PHPUnit
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
- * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Assert.php 4385 2008-12-25 16:13:37Z sb $
+ * @version    SVN: $Id: Assert.php 4436 2009-01-08 15:47:17Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.0.0
  */
@@ -59,9 +59,9 @@ if (!class_exists('PHPUnit_Framework_Assert', FALSE)) {
  * @category   Testing
  * @package    PHPUnit
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
- * @copyright  2002-2008 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.9
+ * @version    Release: 3.3.10
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.0.0
  * @abstract
@@ -71,7 +71,7 @@ abstract class PHPUnit_Framework_Assert
     /**
      * @var integer
      */
-    protected static $count = 0;
+    private static $count = 0;
 
     /**
      * Asserts that an array has a specified key.
@@ -1912,7 +1912,7 @@ abstract class PHPUnit_Framework_Assert
         $class      = new ReflectionClass($className);
         $attributes = $class->getStaticProperties();
 
-        if (isset($attributes[$attributeName])) {
+        if (array_key_exists($attributeName, $attributes)) {
             return $attributes[$attributeName];
         }
 
@@ -1922,7 +1922,7 @@ abstract class PHPUnit_Framework_Assert
             $protectedName = '*' . $attributeName;
         }
 
-        if (isset($attributes[$protectedName])) {
+        if (array_key_exists($protectedName, $attributes)) {
             return $attributes[$protectedName];
         }
 
@@ -1936,7 +1936,7 @@ abstract class PHPUnit_Framework_Assert
               $attributeName
             );
 
-            if (isset($attributes[$privateName])) {
+            if (array_key_exists($privateName, $attributes)) {
                 return $attributes[$privateName];
             }
         }

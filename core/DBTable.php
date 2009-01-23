@@ -26,7 +26,6 @@ class DBTable {
 			$column->setLoadQuery (new Query ("$sql?", "i"));
 			if (SANITY_CHECK) {// todo: See if SANITY CHECK is on
 				$type = $mysqlTable->getType($column->name());
-				// var_log ("$dbname." . $column->name() . " type=$type and delayLoad is " . ($column->delayLoad() ? 'true' : 'false'));
 				if (!$column->delayLoad() && in_array($type, array('mediumtext', 'longtext'))) {
 					error_log ("WARNING:  Table $dbname column " . $column->name()
 							   . " has a mediumtext or longtext field.  Delay load required due to mysqli bug.");

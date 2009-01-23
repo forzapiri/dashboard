@@ -42,7 +42,7 @@
 // | Author: Lukas Smith <smith@pooteeweet.org>                           |
 // +----------------------------------------------------------------------+
 //
-// $Id: Common.php,v 1.137 2008/02/17 18:53:40 afz Exp $
+// $Id: Common.php,v 1.139 2008/12/04 11:50:42 afz Exp $
 
 require_once 'MDB2/LOB.php';
 

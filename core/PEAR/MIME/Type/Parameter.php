@@ -21,7 +21,7 @@
 /**
  * Class for working with MIME type parameters
  *
- * @version 1.1.3
+ * @version 1.2.0
  * @package MIME_Type
  * @author Ian Eure <ieure@php.net>
  */
