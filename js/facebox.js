@@ -76,7 +76,13 @@ var Facebox = Class.create({
 	reveal	: function(data, klass){
 		new Effect.Appear($('facebox'), {duration: 0.2, fps: 100});
 		
-		$('overlay').setStyle({height: $$('html')[0].getHeight() + 'px'});
+		var htmlheight = document.body.parentNode.scrollHeight;
+		var pageheight = window.innerHeight;
+		
+		var height = htmlheight;
+		if (pageheight > height) height = pageheight;
+		
+		$('overlay').setStyle({height: height + 'px'});
 		if (!$('overlay').visible()) {
 			$('overlay').observe('click', function() { facebox.close(); });
 			new Effect.Appear($('overlay'), {duration: 1.0, fps: 100, from: 0.0, to: 0.8});
