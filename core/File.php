@@ -62,7 +62,7 @@ class File extends DBRow {
 				error_log ("Key $key=$value not recognized in getLink");
 			}
 		}
-		$args = implode ("&amp;", $results);
+		$args = implode ("&", $results);
 		if ($args) $args = "?$args";
 		return "/im$path$args";
 	}
@@ -90,6 +90,31 @@ class File extends DBRow {
 		if (!$ext) $ext = "tmp";
 		return substr($filename, 0, $pos) . ".$ext";
 	}
+
+	function getFullPath(){return $this->getDirectory() . $this->getLocalFilename();}
+	
+	function insertNotWeb($tempurl, $type, $filename) {
+		if (!is_readable ($tempurl)) {
+			error_log ("Upload of file ".$tmp." failed.");
+			return false;
+		}
+		
+		$this->setType ($type);
+		$this->setFilename ($filename);
+		if (!$this->getId()) $this->save();
+		if (!$this->getId()) {
+			error_log ("Save failed in File.php");
+			return false;
+		}
+		$dir = $this->getDirectory();
+		$file = $this->getLocalFilename();
+		
+		mkdir($dir,0777,true);
+		if (!copy ($tempurl, $dir.$file)) {
+			error_log ("Move of file $tempurl to $dir.$file failed.");
+			return false;
+		}
+	}
 	
 	function insert($data) {
 		if ($data instanceof HTML_QuickForm_file) {$data = $data->getValue();}
@@ -97,7 +122,7 @@ class File extends DBRow {
 		// First check if there is a file available for upload
 		$tmp = $data['tmp_name'];
 		if (!is_readable ($data['tmp_name'])) {
-			error_log ("Upload of file $tmp failed.");
+			error_log ("Upload of file ".$tmp." failed.");
 			return false;
 		}
 
