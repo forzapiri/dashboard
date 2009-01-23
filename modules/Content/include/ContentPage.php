@@ -53,6 +53,11 @@ class ContentPage extends DBRow {
 		}
 	}
 	
+	public function getAddEditFormSaveHook($form) {
+		include_once(SITE_ROOT . '/core/plugins/modifier.urlify.php');
+		$this->set('url_key', smarty_modifier_urlify($this->get('url_key')));
+	}
+	
 	function checkForHomeName($elVal){return (!is_null($elVal) && ucfirst($elVal) != SiteConfig::get('Content::defaultPage'));}
 	
 	public static function checkForHome(&$n){
