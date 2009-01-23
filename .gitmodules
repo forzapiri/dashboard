@@ -10,9 +10,6 @@
 [submodule "modules/Analytics"]
 	path = modules/Analytics
 	url = git@github.com:minichate/analytics.git
-[submodule "modules/User"]
-	path = modules/User
-	url = git@github.com:minichate/user.git
 [submodule "core/tinymce"]
 	path = core/tinymce
 	url = git://github.com/minichate/tinymce.git
