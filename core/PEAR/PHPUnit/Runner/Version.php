@@ -56,7 +56,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.10
+ * @version    Release: 3.3.12
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.0.0
  */
@@ -69,7 +69,7 @@ class PHPUnit_Runner_Version
      */
     public static function id()
     {
-        return '3.3.10';
+        return '3.3.12';
     }
 
     /**
@@ -77,7 +77,7 @@ class PHPUnit_Runner_Version
      */
     public static function getVersionString()
     {
-        return 'PHPUnit 3.3.10 by Sebastian Bergmann.';
+        return 'PHPUnit 3.3.12 by Sebastian Bergmann.';
     }
 }
 ?>

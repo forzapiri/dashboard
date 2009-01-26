@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: PhptTestCase.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: PhptTestCase.php 4528 2009-01-21 14:16:59Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.1.4
  */
@@ -69,7 +69,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.10
+ * @version    Release: 3.3.12
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.1.4
  */
@@ -93,8 +93,7 @@ class PHPUnit_Extensions_PhptTestCase implements PHPUnit_Framework_Test, PHPUnit
      * Constructs a test case with the given filename.
      *
      * @param  string $filename
-     * @param  array  $options Array with ini settings for the php instance run,
-     *                         key being the name if the setting, value the ini value.
+     * @param  array  $options
      */
     public function __construct($filename, $options = array())
     {
@@ -133,8 +132,7 @@ class PHPUnit_Extensions_PhptTestCase implements PHPUnit_Framework_Test, PHPUnit
      * Runs a test and collects its result in a TestResult instance.
      *
      * @param  PHPUnit_Framework_TestResult $result
-     * @param  array $options Array with ini settings for the php instance run,
-     *                        key being the name if the setting, value the ini value.
+     * @param  array                        $options
      * @return PHPUnit_Framework_TestResult
      */
     public function run(PHPUnit_Framework_TestResult $result = NULL, $options = array())
@@ -161,6 +159,10 @@ class PHPUnit_Extensions_PhptTestCase implements PHPUnit_Framework_Test, PHPUnit
 
         $coverage = $result->getCollectCodeCoverageInformation();
         $options  = array_merge($options, $this->options);
+
+        if (!isset($options['include_path'])) {
+            $options['include_path'] = get_include_path();
+        }
 
         if ($coverage) {
             $options['coverage'] = TRUE;
