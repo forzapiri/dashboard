@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: Driver.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: Driver.php 4519 2009-01-21 09:47:33Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.3.0
  */
@@ -56,7 +56,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.10
+ * @version    Release: 3.3.12
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.3.0
  */
@@ -694,7 +694,7 @@ class PHPUnit_Extensions_SeleniumTestCase_Driver
                     case 'open':
                     case 'openWindow': {
                         if ($this->collectCodeCoverageInformation) {
-                            $this->deleteCookie('PHPUNIT_SELENIUM_TEST_ID', '/');
+                            $this->deleteCookie('PHPUNIT_SELENIUM_TEST_ID', 'path=/');
 
                             $this->createCookie(
                               'PHPUNIT_SELENIUM_TEST_ID=' . $this->testId,

@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: SeleniumTestCase.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: SeleniumTestCase.php 4507 2009-01-19 16:16:21Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.0.0
  */
@@ -62,7 +62,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.10
+ * @version    Release: 3.3.12
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.0.0
  */
@@ -117,12 +117,13 @@ abstract class PHPUnit_Extensions_SeleniumTestCase extends PHPUnit_Framework_Tes
     /**
      * @param  string $name
      * @param  array  $data
+     * @param  string $dataName
      * @param  array  $browser
      * @throws InvalidArgumentException
      */
-    public function __construct($name = NULL, array $data = array(), array $browser = array())
+    public function __construct($name = NULL, array $data = array(), $dataName = '', array $browser = array())
     {
-        parent::__construct($name, $data);
+        parent::__construct($name, $data, $dataName);
         $this->testId = md5(uniqid(rand(), TRUE));
         $this->getDriver($browser);
     }
