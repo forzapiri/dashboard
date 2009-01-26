@@ -97,7 +97,7 @@ class Module_User extends Module {
 				die();
 				return;
 			case 'signup':
-				$u = new User();
+				$u = DBRow::make(null,"User");
 				$form = $u->getAddEditForm('/user/signup');
 				$this->smarty->assign('form', $form);
 				
@@ -130,7 +130,7 @@ class Module_User extends Module {
 			
 			case 'logout':
 				unset($_SESSION['authenticated_user']);
-				$auth_container = new User();
+				$auth_container = DBRow::make(null,"User");
 				$auth = new Auth($auth_container, null, 'authInlineHTML');
 				$auth->logout();
 				
@@ -172,6 +172,7 @@ class Module_User extends Module {
 					//header('Location: /');
 					exit;
 				}
+				return authInlineHTML();
 				header('Location: /user/signup');
 		}
 	}
