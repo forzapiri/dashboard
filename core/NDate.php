@@ -78,6 +78,13 @@ class NDate extends Date {
 		NDate::test2 ("Sep 1, 2008 3:35pm", "3:35pm", "1st", "Sep 20, 2008");
 		error_log ("TESTING DONE");
 	}
+	
+	function isEmpty() {
+		$d = $this->getDate();
+		if (!$d) return true;
+		if ($d == '0000-00-00 00:00:00') return true;
+		return false;
+	}
 
 	function NDate($date = null, $now = null) {
 		$n = func_num_args();
