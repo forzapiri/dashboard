@@ -122,7 +122,7 @@ abstract class DBRow {
 		$result = $this->values[$name];
 		$column = @$this->column($name);
 		if (is_null($result) && $column && $column->delayLoad() && $this->values['id']) {
-			$result = $column->load($this->values['id']);
+			$result = $column->fromDB($column->load($this->values['id']));
 			$this->values[$name] = $result;
 		}
 		return $result;
