@@ -191,6 +191,18 @@ class DBColumnTinyMCE extends DBColumnsLongText {
 		return $el;
 	}
 	function suggestedMysql() {return "text";}
+	
+	function fromDB($obj) {
+		return '<div class="wysiwyg">' . $obj . '</div>';
+	}
+	
+	function toDB($obj) {
+		$obj = preg_replace('/\<div class="wysiwyg"\>/', '', $obj, 1);
+		if (substr($obj, strlen($obj) -6, 6) == '</div>') {
+			$obj = substr($obj, 0, -6);
+		}
+		return $obj;
+	}
 }
 
 class DBColumnSelect extends DBColumnText {
