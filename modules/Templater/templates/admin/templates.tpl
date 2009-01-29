@@ -16,6 +16,7 @@ editAreaLoader.init({
 
 <form action="/admin/Templater" method="post">
 <div class="editor_details">
+<a href="/admin/Templater&action=otherinterface">Click here to micro manage the templates</a><br /><br />
 <input type="hidden" name="template_id" value="{$curtemplate->getId()}" /> 
 <input type="submit" name="save" value="Save" />
 <br /><br />
