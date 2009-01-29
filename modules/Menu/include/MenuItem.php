@@ -79,13 +79,21 @@ class MenuItem extends DBRow {
 		$form->updateElementAttr($this->quickformPrefix() . 'module', array('onchange'=>'menuitems(this);'));
 	}
 	
+
+	function &save(&$notification = null) {
+		if (!$this->getId()) {
+			parent::save($notification);
+			$this->setSort($this->getId());
+		}
+		return parent::save($notification);
+	}
+	
 	static function getAll($where = null) {return self::$tables[__CLASS__]->getAllRows("$where");}
 	static function make($id = null) {return parent::make($id, __CLASS__);}
 	function quickformPrefix() {return 'menuitem_';}
 
 	public function getLinkTarget() {
 		return Module::factory( $this->getModule() )->getLinkable( $this->get('link') );
-		//return Module::factory( $this->getModule() )->linkHandler( $this->get('link') );
 	}
 	
 	public function getLinkables() {
@@ -97,25 +105,28 @@ class MenuItem extends DBRow {
 		}
 		return $a;
 	}
+
+	public function swapSort($item1, $item2) {
+		$s1 = $item1->getSort();
+		$s2 = $item2->getSort();
+		$item1->setSort($s2);
+		$item2->setSort($s1);
+	}
 	
 	public function move($direction) {
 		$old = $this->getSort();
+		$id = (integer) $this->getMenuid();
+		$p = (integer) $this->getParentid();
+		$s = (integer) $this->getSort();
 		if ($direction == 'up') {
-			$this->setSort($this->getSort() - 1);
+			$sql = "select * from menu where menuid=$id and parentid=$p and sort<$s order by sort desc limit 1";
 		} else if ($direction = 'down') {
-			$this->setSort($this->getSort() + 1);
+			$sql = "select * from menu where menuid=$id and parentid=$p and sort>$s order by sort limit 1";
 		}
-		if ($this->getSort() < 0) $this->setSort(0);
-		// var_dump ("Moving " . $this->getId() . " $direction $old => " . $this->getSort());
-		$sql = 'select id from menu where menuid=' . e($this->getMenuid()) . ' and parentid=' . e($this->getParentid()) . ' and sort=' . e($this->getSort());
-		$r = Database::singleton()->query_fetch($sql);
-		$r = MenuItem::make($r['id']);
-		$r->setSort($old);
-		// var_dump ($this);
-		// var_dump ($r);
-		$r->save();
+		$other = MenuItem::make(Database::singleton()->query_fetch($sql));
+		$this->swapSort ($this, $other);
+		$other->save();
 		$this->save();
-		// Event_Dispatcher::getInstance('MenuItem')->post(&$this, 'onMove');
 	}
 }
 DBRow::init('MenuItem');
