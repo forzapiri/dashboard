@@ -183,17 +183,18 @@ class DBColumnTinyMCE extends DBColumnsLongText {
 		return $el;
 	}
 	function suggestedMysql() {return "text";}
-
-	static function fromDB($obj) {return '<div class="wysiwyg">' . $obj . '</div>';}
-	static function toDB($obj) {
-		$obj = preg_replace('/^\<div class="wysiwyg"\>/', '', $obj, 1, $done);
-		if ($done && substr($obj, strlen($obj) -6, 6) == '</div>') {
+	
+	function fromDB($obj) {
+		return '<div class="wysiwyg">' . $obj . '</div>';
+	}
+	
+	function toDB($obj) {
+		$obj = preg_replace('/\<div class="wysiwyg"\>/', '', $obj, 1);
+		if (substr($obj, strlen($obj) -6, 6) == '</div>') {
 			$obj = substr($obj, 0, -6);
 		}
 		return $obj;
 	}
-	static function toForm($obj) {return self::toDB($obj);}
-	static function fromForm($obj) {return self::fromDB($obj);}
 }
 
 class DBColumnSelect extends DBColumnText {
@@ -317,6 +318,7 @@ class DBColumnCode extends DBColumn{
 		return $el;
 	}
 }
+
 /* ----------------------------- PUT NEW CLASSES ABOVE THIS LINE! ---------------------- */
 DBColumn::registerClasses();
 /* ------------------------------------------------------------------------------------- */
