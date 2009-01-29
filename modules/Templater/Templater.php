@@ -32,7 +32,7 @@ class Module_Templater extends Module {
 			$this->smarty->assign('curtemplate', $templates[0]);
 		} else {
 			if (isset($_REQUEST['save'])) {
-				$t = new Template($_REQUEST['template_id']);
+				$t = Template::make($_REQUEST['template_id']);
 				$t->setData(u($_REQUEST['editor']));
 				$t->setTimestamp(new NDate(date('Y-m-d H:i:s')));
 				$t->setId(null);
@@ -41,12 +41,12 @@ class Module_Templater extends Module {
 				$templates = Template::getAllTemplates();
 			} else if (isset($_REQUEST['switch_template'])) {
 				$this->smarty->clear_assign('curtemplate');
-				$this->smarty->assign('curtemplate', new Template($_REQUEST['template']));
+				$this->smarty->assign('curtemplate', Template::make($_REQUEST['template']));
 			} else if (isset($_REQUEST['switch_revision'])) {
 				$this->smarty->clear_assign('curtemplate');
-				$this->smarty->assign('curtemplate', new Template($_REQUEST['revision']));
+				$this->smarty->assign('curtemplate', Template::make($_REQUEST['revision']));
 			} else {
-				$this->smarty->assign('curtemplate', new Template($_REQUEST['template_id']));
+				$this->smarty->assign('curtemplate', Template::make($_REQUEST['template_id']));
 			}
 		}
 		
