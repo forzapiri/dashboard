@@ -183,11 +183,6 @@ class DBColumnTinyMCE extends DBColumnsLongText {
 		return $el;
 	}
 	function suggestedMysql() {return "text";}
-	
-	function fromDB($obj) {
-		return '<div class="wysiwyg">' . $obj . '</div>';
-	}
-	
 }
 
 class DBColumnSelect extends DBColumnText {
