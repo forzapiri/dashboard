@@ -192,7 +192,11 @@ class DBColumnTinyMCE extends DBColumnsLongText {
 	}
 	function suggestedMysql() {return "text";}
 
-	static function fromDB($obj) {return '<div class="wysiwyg">' . $obj . '</div>';}
+	static function fromDB($obj) {
+		$bad = "<p>&nbsp;</p>";
+		$obj = preg_replace ("_(^$bad)|($bad\$)_", "", trim($obj));
+		return '<div class="wysiwyg">' . $obj . '</div>';
+	}
 	static function toDB($obj) {
 		$obj = preg_replace('/^\<div class="wysiwyg"\>/', '', $obj, 1, $done);
 		if ($done && substr($obj, strlen($obj) -6, 6) == '</div>') {
