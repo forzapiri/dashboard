@@ -13,19 +13,19 @@ DONE:
 TODO:
 	- Be sure to check for name collisions for new names
 	- Update the associated text field on change to existing name; popup warns of lost data
-   TODO:  Flesh  out stubs in DB which distinguish the active_revision from the draft_revision; then nix the PageContentRevision notion
+    - Flesh  out stubs in DB which distinguish the active_revision from the draft_revision; then nix the PageContentRevision notion
 
-		  Every page is listed once or twice.  The first listing shows every chunk's active_revision, while
-		  if a page has any chunk with a "draft" version, show all draft revisions, with active_revision as fallback.
+	  Every page is listed once or twice.  The first listing shows every chunk's active_revision, while
+	  if a page has any chunk with a "draft" version, show all draft revisions, with active_revision as fallback.
 
-		  Save a draft (deselect "make live") will save all changed chunks as draft_revisions.
+	  Save a draft (deselect "make live") will save all changed chunks as draft_revisions.
 
-		  To publish a draft (select "make live") for every chunk, move existing draft_revision to active_revision
-   TODO:  Update chunks and revisions on save
-		- Every change of the active block redirects all other matching (non-null role + non-null name) pointers
-   TODO:  A save of a "named" revision updates all Chunks which match both "name" and "role" to point to that revision.
-   TODO:  Once working, do a grep 'CHUNK' to find suggested structural improvements, and move from Content module to core.
-   TODO:  Small buttons to go backward and forward in chunk revision history ??  dates or version numbers ??
+	  To publish a draft (select "make live") for every chunk, move existing draft_revision to active_revision
+    - Update chunks and revisions on save
+	  Every change of the active block redirects all other matching (non-null role + non-null name) pointers
+    - A save of a "named" revision updates all Chunks which match both "name" and "role" to point to that revision.
+    - Once working, do a grep 'CHUNK' to find suggested structural improvements, and move from Content module to core.
+    - Small buttons to go backward and forward in chunk revision history ??  dates or version numbers ??
   */
 
   /*  Group generated styled as:
