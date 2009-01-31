@@ -2,14 +2,17 @@
   /*
    NOTE:  modules/Content/chunk.sql has the chunk tables and the dbtable.  LOAD AFTER buildtools/sql/dbtable.sql
 
-   DONE:  Template is parsed, and chunks are filled in.  Chunks can specify a type, a role, and a preview code
-   DONE:  Admin interface presents correct fields, though no "name" select and edit
-   DONE:  Form fields are populated
-   
-   TODO:  Add select to select those "named" which have a matching role.
-             Can select a new text name if the the field has a role (make readonly after named?  I don't think needed.)
-			 Be sure to check for name collisions for new names
-			 Update the associated text field on change to existing role; popup warns of lost data
+DONE:
+	Template is parsed, and chunks are filled in.  Chunks can specify a type, a role, and a preview code
+	Admin interface presents correct fields, though no "name" select and edit
+	Form fields are populated
+	Add select to select those "named" which have a matching role.
+	Add select to select those "named" which have a matching role.
+	Can select a new text name if the the field has a role
+
+TODO:
+	- Be sure to check for name collisions for new names
+	- Update the associated text field on change to existing name; popup warns of lost data
    TODO:  Flesh  out stubs in DB which distinguish the active_revision from the draft_revision; then nix the PageContentRevision notion
 
 		  Every page is listed once or twice.  The first listing shows every chunk's active_revision, while
@@ -30,7 +33,7 @@
   <div class="element">
     <select name="__name__[_name_1]">
 	   <option value=""></option>
-       <option value="__new__">(mark reusable)</option>
+       <option value="__new__">(make reusable)</option>
     </select>
     &nbsp;&nbsp;&nbsp;
     <input name="__name__[_new_name_1]" type="text" />
@@ -59,11 +62,14 @@ class ChunkManager {
 		foreach ($this->fields as $field) {
 			$i++;
 			$label = $field->label();
+			$chunk = @$this->chunks[$i];
 			if ($this->roles[$i]) {
 				$form->addElement('html', "\n<div id=_select_text_$i>");
 				$el = array();
-				$el[] = $form->createElement('select', "select", "joe", array(''=>'', '__new__'=>'(mark reusable)'));
-				$el[] = $form->createElement('text', "text", "larry");
+				$el[] = $s = $form->createElement('select', "select", "", self::getSelection($this->roles[$i]));
+				if ($chunk->getRole() && $chunk->getName())
+					$s->setValue($chunk->getName());
+				$el[] = $form->createElement('text', "text", ""); // HIDDEN BY admin.js
 				$form->addGroup($el, "_chunk_name_$i", $label, '&nbsp;&nbsp;&nbsp;');
 				$form->addElement('html', "\n</div id=_select_text_$i>");
 				$form->addElement('html', "\n<script type='text/javascript'>linkSelectText('_select_text_$i');</script>\n");
@@ -71,7 +77,6 @@ class ChunkManager {
 			}
 			$el = $field->addElementTo(array ('form' => $form, 'id' => "_chunk_$i"));
 			$field->setLabel($label);
-			$chunk = @$this->chunks[$i];
 			if ($chunk && ($chunk->getId() || $chunk->getContent())) {
 				$el->setValue(DBRow::toForm($chunk->getType(), $chunk->getContent()));
 			} else {
@@ -174,5 +179,16 @@ class ChunkManager {
 			$this->roles[] = $role;
 			$this->previews[] = $this->convertPreview($preview);
 		}
+	}
+
+	static private $selectQuery = null;
+	static private function getSelection($role) {
+		if (!self::$selectQuery) {
+			self::$selectQuery = new Query('select name from chunk where role=? and !isnull(role) and !isnull(name) group by name order by name', 's');
+		}
+		$result = self::$selectQuery->fetchAll($role);
+		$names = array();
+		foreach ($result as $val) $names[$val['name']] = $val['name'];
+		return array_merge (array(''=>'', '__new__'=>'Create Name for Reuse:'), $names);
 	}
 }

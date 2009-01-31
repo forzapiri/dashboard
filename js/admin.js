@@ -14,17 +14,16 @@ function deleteConfirm(form) {
 }
 
 function linkSelectText(div) {
-	div = $(div);
-	select = div.down('select');
-	text = div.down('input');
+	var div = $(div);
+	var select = div.down('select');
+	var text = div.down('input');
 	text.hide();
 	function onChangeSelect() {
-		if (select.value == '__new__') text.show();
+		if (select.value == '__new__') {text.show();}
 		else text.hide();
 	}
 	select.observe('change', onChangeSelect.bind(this));
 }
-
 ////////////////////////////////////////////////
 var Message = Class.create({
   type: 'success',
