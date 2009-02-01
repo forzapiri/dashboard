@@ -13,14 +13,19 @@ function deleteConfirm(form) {
 	return true;
 }
 
-function linkSelectText(div) {
+function watchChunkSelect(div) {
 	var div = $(div);
 	var select = div.down('select');
 	var text = div.down('input');
 	text.hide();
 	function onChangeSelect() {
-		if (select.value == '__new__') {text.show();}
-		else text.hide();
+		if (select.value == '__new__') {
+			text.show();
+			return;
+		}
+		text.hide();
+		if (
+		
 	}
 	select.observe('change', onChangeSelect.bind(this));
 }

@@ -7,32 +7,17 @@ class Module_Content extends Module implements linkable {
 		$dispatcher->addNestedDispatcher(Event_Dispatcher::getInstance());
 		
 		$dispatcher->addObserver(array('ContentPage', 'checkForHome'), 'onPreDelete');
-		
-		$pagerev = &Event_Dispatcher::getInstance('ContentPageRevision');
-		$pagerev->addNestedDispatcher(Event_Dispatcher::getInstance());
-		
-		$pagerev->addObserver(array('ContentPageRevision', 'disableOthers'), 'onToggle');
 	}
 	
 	function getUserInterface() {
-		include ('include/ContentPage.php');
-		include ('include/ContentPageRevision.php');
-		include ('include/Chunk.php');
 		$pageid = ContentPage::keytoid($_REQUEST['page']);
 		$pageid = $pageid['id'];
-		$revid = ContentPage::activeRev($pageid);
-		$revid = @$revid['id'];
-		if(!is_null($revid)){
-			$rev = ContentPageRevision::make($revid);
-			$this->smarty->assign('content',$rev);
-			$page = ContentPage::make($pageid);
-			$this->parentSmarty->templateOverride = $page->getSmartyResource();
-			$this->setPageTitle($rev->get('page_title'));
-			/* CHUNKS:  Move this code to Module somehow with a check for $this->chunkable() ?? */
-			$this->smarty->assign ('chunks', ChunkRevision::getAllContentFor($rev));
-		} else {
-			return $this->smarty->dispErr('404', &$this);
-		}
+		$page = ContentPage::make($pageid);
+		$this->smarty->assign('content',$page);
+		$this->parentSmarty->templateOverride = $page->getSmartyResource();
+		$this->setPageTitle("PAGE TITLE STUB");
+		/* CHUNKS */
+		$this->smarty->assign ('chunks', ChunkRevision::getAllContentFor($page));
 		return $this->smarty->fetch('db:content.tpl');	 
 	}
 	
@@ -45,26 +30,13 @@ class Module_Content extends Module implements linkable {
 			 	'Created' => 'timestamp',
 			 	'Published' => 'status'))
 			 ->name('Content Page')
-			 ->pre($this->smarty->fetch('admin/pages.tpl'))
-			 ->on('addedit')->action('ContentPageRevision');
-			 
-		$page->with('ContentPageRevision')
-			 ->show(array(
-			 	'Title' => 'page_title',
-			 	'Created' => 'timestamp',
-			 	'Published' => 'status'))
-			 ->name('Content Page Revision')
-			 ->link(array('parent', array('ContentPage', 'id')))
-			 ->showCreate(false);
-			 
-		$page->with('ContentPage');
+			 ->pre($this->smarty->fetch('admin/pages.tpl'));
 		return $page->render();
 	}
 	
 	public static function getLinkables($level = 0, $id = null){
 		switch($level){
 			case 1:
-				
 			default:
 				$linkItems = ContentPage::getAll("where status = '1'");
 				foreach($linkItems as $linkItem){

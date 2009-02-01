@@ -11,6 +11,9 @@ DONE:
 	Can select a new text name if the the field has a role
 
 TODO:
+WHILE DEBUGGING:
+**** Removed lines Module.php
+	- When naming a chunk, make a parentless canonical version.  That's the one that gets updated.
 	- Be sure to check for name collisions for new names
 	- Update the associated text field on change to existing name; popup warns of lost data
     - Flesh  out stubs in DB which distinguish the active_revision from the draft_revision; then nix the PageContentRevision notion
@@ -71,8 +74,8 @@ class ChunkManager {
 					$s->setValue($chunk->getName());
 				$el[] = $form->createElement('text', "text", ""); // HIDDEN BY admin.js
 				$form->addGroup($el, "_chunk_name_$i", $label, '&nbsp;&nbsp;&nbsp;');
-				$form->addElement('html', "\n</div id=_select_text_$i>");
-				$form->addElement('html', "\n<script type='text/javascript'>linkSelectText('_select_text_$i');</script>\n");
+				$form->addElement('html', "\n</div>");
+				$form->addElement('html', "\n<script type='text/javascript'>watchChunkSelect('_select_text_$i');</script>\n");
 				$field->setLabel(""); // Inspect the add edit form, add an appropriate class, use JavaScript to watch for change and update content
 			}
 			$el = $field->addElementTo(array ('form' => $form, 'id' => "_chunk_$i"));
