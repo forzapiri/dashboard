@@ -1,5 +1,5 @@
 
-<div id="header">
+<div id="buttons">
 	<ul id="primary">
 		<li><a href="/admin/DBTable&amp;action=createTable" title="Create Table">Create Table</a></li>
 	</ul>
@@ -37,7 +37,7 @@
 <div style='clearboth'>{nbsp}<br/>{nbsp}<br/></div>
 
 {if ($viewtable)}
-<div id="header">
+<div id="buttons">
 	<ul id="primary">
 		<li><a href="/admin/DBTable&amp;action=addColumn&amp;table={$name}" title="Add Column">Add Column</a></li>
 	</ul>

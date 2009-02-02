@@ -31,20 +31,20 @@
 
 		<td class="actions">
 {if $norex}
-		<form action="/admin/SiteConfig" method="post" class="norexui_toggle">
+		<form action="/admin/SiteConfig" method="post" class="norexui_toggle" style="float: left;">
 			<input type="hidden" name="action" value="toggle" />
 			<input type="hidden" name="NOREX" value="1" />
 			<input type="hidden" name="siteconfig_id" value="{$siteconfig->getId()}" />
 			<input type="image" src="/images/admin/{if $siteconfig->getEditable() == '1'}tick{else}cross{/if}.gif" />
 		</form>
 {/if}
-		<form action="/admin/SiteConfig" method="post">
+		<form action="/admin/SiteConfig" method="post" style="float: left;">
 			<input type="hidden" name="action" value="addedit" />
 			<input type="hidden" name="siteconfig_id" value="{$siteconfig->getId()}" />
 			<input type="image" src="/images/admin/pencil.gif" />
 		</form>
 {if $norex}
-		<form action="/admin/SiteConfig" method="post" onsubmit="return !deleteConfirm({$siteconfig->getId()});">
+		<form action="/admin/SiteConfig" method="post" onsubmit="return !deleteConfirm({$siteconfig->getId()});" style="float: left;">
             <input type="hidden" name="action" value="delete" />
 			<input type="hidden" name="siteconfig_id" value="{$siteconfig->getId()}" />
 			<input type="image" src="/images/admin/page_delete.gif" /></td>

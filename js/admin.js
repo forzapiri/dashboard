@@ -76,7 +76,7 @@ var NorexUI = Class.create(Facebox, {
 		$$('form.norexui_delete').invoke('observe', 'submit', this.deleteConfirm);
 		$$('li.norexui_delete').invoke('observe', 'click', this.deleteConfirm);
 		
-		$$('div#header ul#primary:not(ul.plain) li:not(li.plain)').invoke('observe', 'click', this.addedit);
+		$$('div#buttons ul#primary:not(ul.plain) li:not(li.plain)').invoke('observe', 'click', this.addedit);
 
 		// To make a sortable admin list, use <tbody id="foo" class="sortable">
 		// A PhP template looks like:
@@ -141,11 +141,11 @@ var NorexUI = Class.create(Facebox, {
 			},
 			onComplete: function(transport) {
 				if (!transport.responseText.match(/class="error/)) {
-					new Message({message: 'Item was updated successfully'});
+					//new Message({message: 'Item was updated successfully'});
 					
 					ui.close();
 				} else {
-					new Message({type: 'error', message: 'Not all fields were filled in'});
+					//new Message({type: 'error', message: 'Not all fields were filled in'});
 				}
 			}
 		});

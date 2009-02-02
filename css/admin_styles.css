@@ -32,6 +32,11 @@ body {
 h1 {
 	color: #FF5800;
 	font-family: trebuchet ms,arial,tahoma,verdana,sans-serif;
+	margin-bottom: 0;
+}
+
+h2 {
+	margin-bottom: 0;
 }
 
 a {
@@ -179,6 +184,10 @@ form li div.element {
 	float: left;
 	margin-bottom: 10px;
 	margin-top: 10px;
+}
+
+form.norexui_addedit,form.norexui_toggle,form.norexui_delete {
+	float: left;
 }
 
 /* @end */

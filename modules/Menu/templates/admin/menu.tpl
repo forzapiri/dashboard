@@ -1,7 +1,7 @@
 {foreach from=$menus item=curmenu name='loop'}
 {assign var=n value=$smarty.foreach.loop.iteration}
 {* Templates({$templates|@count}) *}
-<div id="header">
+<div id="buttons">
 	<ul id="primary">
 		<li><a href="/admin/Menu&amp;section=menuitem&action=addedit&n={$n}&menuitem_menu_id={$curmenu->getId()}" title="Create Menu Item">Create Menu Item</a></li>
 {if $norex || ($n>$minimumNumber && $templates|@count>1)}
@@ -15,7 +15,7 @@
 	</ul>
 </div>
 
-<h1 style="float: left;">{$curmenu->getName()}</h1>
+<h2 style="float: left;">{$curmenu->getName()}</h2>
 
 {assign var=menu value=$curmenu->getMenu()->getRoots()}
 <table border="0" cellspacing="0" cellpadding="0" class="adminList" style="clear: both; float: left;">
@@ -36,7 +36,7 @@
 {/foreach}
 
 {if $n < $maximumNumber}
-<div id="header">
+<div id="buttons">
 	<ul id="primary">
 		<li><a href="/admin/Menu&amp;section=menutype&action=addedit" title="Create New Menu">Create Entirely New Menu</a></li>
 	</ul>
