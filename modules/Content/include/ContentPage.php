@@ -35,7 +35,7 @@ class ContentPage extends DBRow {
 			$form->removeElement($this->quickformPrefix().'page_template');
 			$el = $form->addElement('hidden', $this->quickformPrefix() . 'page_template');
 			$el->setValue($this->getPageTemplate());
-			$el = $form->addElement('html', "<b>Site Template:</b> " . $this->getPageTemplate());
+			$el = $form->addElement('html', "<li><b>Site Template:</b> " . $this->getPageTemplate() . '</li>');
 		}
 		if($this->get('name') == SiteConfig::get('Content::defaultPage')){
 			switch($_REQUEST['action']){

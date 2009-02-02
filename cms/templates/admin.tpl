@@ -19,9 +19,9 @@
 <body>
 
 <div class='container' id='header'>
-  <div class='column span-7' id='logo'><a href="/admin/"><img src="/images/admin/norex_logo.png" /></a>
+  <div class='column span-6' id='logo'><a href="/admin/"><img src="/images/admin/norex_logo.png" /></a>
   </div>
-  <div class='column last span-17' id="nav">{menu admin=true}
+  <div class='column last span-18' id="nav">{menu admin=true}
   </div>
 </div>
 
@@ -45,30 +45,6 @@
  	<p>&copy; {$smarty.now|date_format:"%Y"} by <a href="http://www.norex.ca" title="Norex Core Web Development">Norex Core Web Development</a></p>
   </div>  
 </div>
-
-{*
-<div id="sitewrap">
-	
-	<div id="header">
-		<div id="header_title"><a href="/admin/"><img src="/images/admin/norex_logo.png" alt="Norex" title="Norex" /></a></div>
-		<div id="nav">{menu admin=true}</div>
-	</div>
-
-	<div id="content">
-		<div id="content_top"></div>
-		<div id="content">
-			<h2><span class="fake_url">norex://</span> {$module_title}</h2>
-			<div id="messages"></div>
-			<div id="module_content">{module class=$module admin=true}</div>
-		</div>
-		<div id="content_bottom"></div>
-	</div>
-	
-	<div id="footer">
-		<p>&copy; {$smarty.now|date_format:"%Y"} by <a href="http://www.norex.ca" title="Norex Core Web Development">Norex Core Web Development</a></p>
-	</div>
-
-</div> *}
 
 </body>
 </html>

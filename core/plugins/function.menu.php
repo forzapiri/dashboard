@@ -29,7 +29,8 @@ function adminMenu($params, &$smarty) {
 	//$activeModules = array_reverse(Config::getActiveModules());
 	$activeModules = Config::getActiveModules();
 	
-	$adminItems = array('<li class="borderRight"><a href="/admin/">DASHBOARD</a></li>');
+	$initial = '<li class="borderRight' . (!isset($_REQUEST['module']) ? " active" : '') . '"><a href="/admin/">DASHBOARD</a></li>';
+	$adminItems = array($initial);
 	
 	$i = 0;
 	foreach ($activeModules as $module) {
@@ -51,11 +52,18 @@ function adminMenu($params, &$smarty) {
 			//} else {
 			//	array_unshift($adminItems, '<li><a href="/admin/?module=' . $module['module'] . '">' . strtolower($module['module']) . '</a></li>');
 			//}
-			if ($i != count($activeModules)) {
-				$liClass = ' class="borderRight"';
-			} else {
-				unset($liClass);
+			unset($liClass);
+			unset($active);
+			if ($module['module'] == $_REQUEST['module']) {
+				$active = ' active"';
 			}
+			
+			if ($i != count($activeModules)) {
+				$liClass = ' class="borderRight' . $active . '"';
+			} else {
+				$liClass = ' class="' . $active . '"';
+			}
+			
 			$adminItems[] = '<li' . $liClass . '><a href="/admin/' . $module['module'] . '">' . strtoupper($module['display_name']) . '</a></li>';
 		}
 		

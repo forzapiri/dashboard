@@ -71,21 +71,34 @@ div#logo a img {
 }
 
 div#nav ul {
-	padding: 15px;
+	padding: 9px;
 	float: right;
+	height:  16px;
 }
 
 div#nav ul li {
 	float: left;
 	list-style-image: none;
 	list-style-type: none;
-	padding-right: 4px;
-	padding-left: 4px;
+	padding-right: 5px;
+	padding-left: 5px;
 	font-size: 11px;
 }
 
-div#nav ul li.borderRight {
-	border-right: 1px solid #555;
+div#nav ul li {
+	height: 32px;
+}
+
+div#nav ul li.active {
+	background-color: #ff5800;
+}
+
+div#nav ul li.active a {
+	color: #fff;
+}
+
+div#nav ul li.active a:hover {
+	text-decoration: none;
 }
 
 h1 span.fake_url {
@@ -107,6 +120,10 @@ div#module_title h1 {
 
 div#content {
 	background: url(/images/admin/content_back.png);
+}
+
+div#subnav {
+	float: right;
 }
 
 div#module_content {
@@ -158,6 +175,7 @@ form fieldset {
 
 form li {
 	list-style-type: none;
+	clear: both;
 }
 
 form li label {
