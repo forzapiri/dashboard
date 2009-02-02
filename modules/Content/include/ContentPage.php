@@ -58,10 +58,11 @@ class ContentPage extends DBRow {
 		}
 
 		/* CHUNKS:  Move this code to DBRow() with a check for $this->chunkable() ?? */
-		$name = $this->getPageTemplate();
-		$template = Template::getRevision('CMS', $name);
-		$this->chunkManager->setTemplate($template);
-		$this->chunkManager->insertFormFields($form);
+		if ($name = $this->getPageTemplate()) {
+			$template = Template::getRevision('CMS', $name);
+			$this->chunkManager->setTemplate($template);
+			$this->chunkManager->insertFormFields($form);
+		}
 	}
 	
 	public function getAddEditFormBeforeSaveHook($form) {
@@ -71,7 +72,7 @@ class ContentPage extends DBRow {
 	
 	public function getAddEditFormAfterSaveHook($form) {
 		/* CHUNKS:  Move this code to DBRow() with a check for $this->chunkable() ?? */
-		$this->chunkManager->saveFormFields($form, $this);
+		$this->chunkManager->saveFormFields($form, 'active');
 	}
 
 	function checkForHomeName($elVal){return (!is_null($elVal) && ucfirst($elVal) != SiteConfig::get('Content::defaultPage'));}

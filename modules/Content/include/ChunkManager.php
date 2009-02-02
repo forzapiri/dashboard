@@ -1,22 +1,37 @@
 <?php
-  /*
-   NOTE:  modules/Content/chunk.sql has the chunk tables and the dbtable.  LOAD AFTER buildtools/sql/dbtable.sql
+/*
+NOTE:  modules/Content/chunk.sql has the chunk tables and the dbtable.  LOAD AFTER buildtools/sql/dbtable.sql
+   
+DATA MODEL:  A chunk which has both a name and role is linked to a canonical parentless chunk.  This is the chunk that represents the actual content.  Example:
+
++----+---------+------+-------+--------------+--------+------+
+| id | type    | role | name  | parent_class | parent | sort |
++----+---------+------+-------+--------------+--------+------+
+| 28 | text    | NULL | NULL  | ContentPage  |      2 |    0 | 
+| 29 | tinymce | col  | test1 | ContentPage  |      2 |    1 | 
+| 30 | tinymce | col  | NULL  | ContentPage  |      2 |    2 | 
+| 32 | tinymce | col  | test1 | NULL         |   NULL | NULL | 
+| 33 | tinymce | col  | test1 | ContentPage  |      8 |    1 | 
+
+Chunks 28 and 30 are chunks which display the (active) revision (from chunk_revision table) with parent 28 and 30, respectively.
+Chunks 29 and 33, however, are named chunks with role/name of col/test1.  The role/name points to the parentless chunk 32.  So
+So the relevant revisions are those with parent 32!  However, there may be orphaned revisions pointing to 29 and 33 which would
+be un-orphaned if the user were to unname these chunks.
 
 DONE:
 	Template is parsed, and chunks are filled in.  Chunks can specify a type, a role, and a preview code
 	Admin interface presents correct fields, though no "name" select and edit
 	Form fields are populated
 	Add select to select those "named" which have a matching role.
-	Add select to select those "named" which have a matching role.
 	Can select a new text name if the the field has a role
-
+	Nixed PageContentRevision
+	When naming a chunk, make a parentless canonical version.  That's the one that gets updated.
+	Update the associated text field on change to existing name
 TODO:
 WHILE DEBUGGING:
 **** Removed lines Module.php
-	- When naming a chunk, make a parentless canonical version.  That's the one that gets updated.
 	- Be sure to check for name collisions for new names
-	- Update the associated text field on change to existing name; popup warns of lost data
-    - Flesh  out stubs in DB which distinguish the active_revision from the draft_revision; then nix the PageContentRevision notion
+    - Flesh  out stubs in DB which distinguish the active_revision from the draft_revision.
 
 	  Every page is listed once or twice.  The first listing shows every chunk's active_revision, while
 	  if a page has any chunk with a "draft" version, show all draft revisions, with active_revision as fallback.
@@ -24,9 +39,6 @@ WHILE DEBUGGING:
 	  Save a draft (deselect "make live") will save all changed chunks as draft_revisions.
 
 	  To publish a draft (select "make live") for every chunk, move existing draft_revision to active_revision
-    - Update chunks and revisions on save
-	  Every change of the active block redirects all other matching (non-null role + non-null name) pointers
-    - A save of a "named" revision updates all Chunks which match both "name" and "role" to point to that revision.
     - Once working, do a grep 'CHUNK' to find suggested structural improvements, and move from Content module to core.
     - Small buttons to go backward and forward in chunk revision history ??  dates or version numbers ??
   */
@@ -43,7 +55,6 @@ WHILE DEBUGGING:
   </div>
 </li>
 <li><label for="_chunk_1" class="element">&nbsp;</label>
-  <div class="element">
 	<textarea id="_chunk_1" id="_chunk_1" name="_chunk_1" rows="15" cols="16" class="_chunk_1" style="width: 200px">c3</textarea>
     <script type="text/javascript">
 	    initRTE("exact","advanced","_chunk_1","/css/style.css","mainContent","tinymce");
@@ -66,16 +77,18 @@ class ChunkManager {
 			$i++;
 			$label = $field->label();
 			$chunk = @$this->chunks[$i];
-			if ($this->roles[$i]) {
+			if ($role = $this->roles[$i]) {
 				$form->addElement('html', "\n<div id=_select_text_$i>");
 				$el = array();
-				$el[] = $s = $form->createElement('select', "select", "", self::getSelection($this->roles[$i]));
-				if ($chunk->getRole() && $chunk->getName())
+				$el[] = $s = $form->createElement('select', "select", "", self::getSelection($role));
+				if ($chunk && $chunk->getRole() && $chunk->getName())
 					$s->setValue($chunk->getName());
 				$el[] = $form->createElement('text', "text", ""); // HIDDEN BY admin.js
 				$form->addGroup($el, "_chunk_name_$i", $label, '&nbsp;&nbsp;&nbsp;');
 				$form->addElement('html', "\n</div>");
-				$form->addElement('html', "\n<script type='text/javascript'>watchChunkSelect('_select_text_$i');</script>\n");
+				$class = $chunk->getParentClass();
+				$parent = $chunk->getParent();
+				$form->addElement('html', "\n<script type='text/javascript'>watchChunkSelect('_select_text_$i', '_chunk_$i', '$role', '$class', $parent);</script>\n");
 				$field->setLabel(""); // Inspect the add edit form, add an appropriate class, use JavaScript to watch for change and update content
 			}
 			$el = $field->addElementTo(array ('form' => $form, 'id' => "_chunk_$i"));
@@ -89,7 +102,7 @@ class ChunkManager {
 		return ++$i; // Returns the number of form fields which were added
 	}
 
-	function saveFormFields($form) {
+	function saveFormFields($form, $status = 'active') {
 		$class = get_class($this->object);
 		$id = $this->object->getId();
 		$i=-1;
@@ -100,28 +113,29 @@ class ChunkManager {
 			$value = $form->exportValue("_chunk_$i");
 			if ($chunk) {
 				$newRevision = DBRow::toDB($type, $value) != $chunk->getRawContent();
-				$rev = $chunk->getActiveRevision();
+				$old_rev = $chunk->getRevision();
 			} else {
 				$newRevision = true;
 				$chunk = Chunk::make();
 				$chunk->save(); // So it has an id
-				$rev = null;
+				$old_rev = null;
 			}
 			if ($newRevision) {
-				$prev = $rev;
 				$rev = ChunkRevision::make();
 				$rev->setParent($chunk->getId());
-				$rev->setRevision($prev ? 1+$prev->getRevision() : 0);
-				$rev->save(); // So it has an id
-				$chunk->setActiveRevisionId($rev->getId());
-			}
+				$rev->setStatus($status);
+				// Need to reset the old status unless we're making a draft and the old one was active
+				if ($old_rev && ($status =='active' || $old_rev->getStatus() == 'draft')) {
+					$old_rev->setStatus('inactive');
+				}
+			} else $rev = $old_rev;
 			$chunk->setRole ($this->roles[$i]);
 			$chunk->setSort($i);
 			if ($chunk->getRole()) {
 				$pair = $form->exportValue("_chunk_name_$i");
 				switch ($pair['select']) {
-				case '__new__': $chunk->setName ($pair['text']);   break;
-				case '':        $chunk->setName (null);            break;
+				case '__new__': $chunk->setName ($pair['text']); $chunk->setNewName();  break;
+				case '':        $chunk->setName ('');            break;
 				default:       $chunk->setName ($pair['select']); break;
 				}
 			}
@@ -130,6 +144,8 @@ class ChunkManager {
 			$chunk->setParentClass($class);
 			$chunk->setParent($id);
 			$rev->setContent(DBRow::toDB($field->type(), $value));
+			$rev->setStatus ($status);
+			if ($old_rev) $old_rev->save();
 			$chunk->save();
 			$rev->save();
 		}
