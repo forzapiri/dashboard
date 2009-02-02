@@ -5,7 +5,7 @@
 <title>{$cmsName} - Website Management</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 
-<link rel="stylesheet" href="/css/admin_menu.css,/css/admin_tabs.css,/css/admin.css{if $css.norm|@count > 0}{foreach from=$css.norm item=cssUrl},{$cssUrl}{/foreach}{/if}" type="text/css" />
+<link rel="stylesheet" href="/css/screen.css,/css/admin_styles.css{if $css.norm|@count > 0}{foreach from=$css.norm item=cssUrl},{$cssUrl}{/foreach}{/if}" type="text/css" />
 {if $css.print|@count > 0}
 	<link rel="stylesheet" href="{foreach from=$css.print item=cssUrl}{$cssUrl}{if $css.print|@key < $css.print|@count},{/if}{/foreach}" type="text/css" media="print" />
 {/if}
@@ -18,30 +18,57 @@
 </head>
 <body>
 
+<div class='container' id='header'>
+  <div class='column span-7' id='logo'><a href="/admin/"><img src="/images/admin/norex_logo.png" /></a>
+  </div>
+  <div class='column last span-17' id="nav">{menu admin=true}
+  </div>
+</div>
+
+<div class='container' id="content_container">
+  <div class='column span-24' id="container_top">{nbsp}</div>
+  
+  <div class='column span-24' id='module_title'>
+	  <h1><span class="fake_url">norex://</span> {$module_title}</h1>
+  </div>
+	  
+  <div class='column span-24' id="content">
+  	<div id="module_content">{module class=$module admin=true}</div>
+  </div>
+
+  <div class='column span-24' id='container_bottom'>
+</div>
+</div>
+
+<div class="container" id="footer">
+  <div class='column span-24'>
+ 	<p>&copy; {$smarty.now|date_format:"%Y"} by <a href="http://www.norex.ca" title="Norex Core Web Development">Norex Core Web Development</a></p>
+  </div>  
+</div>
+
+{*
 <div id="sitewrap">
 	
-	<div id="headerHolder">
-		<div id="headerTitle"><a href="/admin/"><img src="/images/admin/norex_logo.png" alt="Norex" title="Norex" /></a></div>
-		<div id="logout"><a href="/user/logout">LOGOUT</a> | <a href="/" title="Return to Public Site">BACK TO SITE</a></div>
+	<div id="header">
+		<div id="header_title"><a href="/admin/"><img src="/images/admin/norex_logo.png" alt="Norex" title="Norex" /></a></div>
 		<div id="nav">{menu admin=true}</div>
 	</div>
 
 	<div id="content">
-		<div id="contentTopTd"></div>
-		<div id="contentTd">
-			<h2><span style="color:#000;">norex://</span> {$module_title}</h2>
+		<div id="content_top"></div>
+		<div id="content">
+			<h2><span class="fake_url">norex://</span> {$module_title}</h2>
 			<div id="messages"></div>
 			<div id="module_content">{module class=$module admin=true}</div>
 		</div>
-		<div id="contentBottomTd"></div>
+		<div id="content_bottom"></div>
 	</div>
 	
 	<div id="footer">
-		<p>&copy; 2009 by <a href="http://www.norex.ca" title="Norex Core Web Development">Norex Core Web Development</a></p>
-		<p>Codename Beeblebrox</p>
+		<p>&copy; {$smarty.now|date_format:"%Y"} by <a href="http://www.norex.ca" title="Norex Core Web Development">Norex Core Web Development</a></p>
 	</div>
 
-</div>
+</div> *}
 
 </body>
 </html>

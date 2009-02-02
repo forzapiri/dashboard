@@ -1,5 +1,5 @@
 var removeElements = function() {
-	var table = $('module_content').getElementsBySelector('[class="adminList"]')['0'].down();
+	var table = $('module_content').getElementsBySelector('table')['0'].down();
 	var tableElements = table.getElementsBySelector('[class="norexui_delete"]');
 	for(var i = 0; i < tableElements.length; i++){
 		var container = tableElements[i].up('tr').down('td');

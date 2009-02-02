@@ -59,13 +59,13 @@ var NorexUI = Class.create(Facebox, {
 	},
 	
 	updateEvents: function() {
-		$$('table.adminList tr.row1').invoke('observe', 'click', 
+		$$('table tr.row1').invoke('observe', 'click', 
 			function(event) { 
 				var row = event.element().up('tr');
 				new Effect.Highlight(row, {duration:1.5, startcolor: '#ffff99', endcolor: '#FFBF9C', restorecolor: '#ffbf9c'});
 			}
 		);
-		$$('table.adminList tr.row2').invoke('observe', 'click', 
+		$$('table tr.row2').invoke('observe', 'click', 
 			function(event) { 
 				var row = event.element().up('tr');
 				new Effect.Highlight(row, {duration:1.5, startcolor: '#ffff99', endcolor: '#FFE1D0', restorecolor: '#FFE1D0'});

@@ -371,7 +371,7 @@ class Page extends defaultPageActs {
 		}
 		
 		if (isset($this->showcreate[$this->pointer]) && $this->showcreate[$this->pointer] && $this->user->hasPerm($this->pointer, $this->pageActions[$this->pointer]['add']['perm'])) {
-			$html .= '<div id="header">
+			$html .= '<div id="buttons">
 				<ul id="primary">
 					<li><a href="/admin/' . $_REQUEST['module'] . '&amp;section=' . $this->pointer . '&amp;action=add' . @$add . '" title="Create ' . $this->getName() .'">Create ' . $this->getName() . '</a></li>
 				</ul></div>';
@@ -381,7 +381,7 @@ class Page extends defaultPageActs {
 			$html .= '<br />';
 		}	
 		
-		$html .= '<table border="0" cellspacing="0" cellpadding="0" class="adminList">';
+		$html .= '<table border="0" cellspacing="0" cellpadding="0">';
 		$html .= '<tbody>';
 		$html .= '<tr>';
 		foreach ($this->tables[$this->pointer] as $key => $name) {
