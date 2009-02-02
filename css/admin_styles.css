@@ -6,6 +6,8 @@ body {
 
 .container {
 	width: 950px;
+	/* Make this liquid by uncommenting: */
+	width: 80%; 
 	margin: 0 auto;
 }
 
@@ -14,29 +16,17 @@ body {
 	margin-right: 10px;
 }
 
+.span-24, div.span-24 {
+	width: 100%;
+	margin-right: 0;	
+}
+
 .logo {
 	width: 270px;
 }
 
 .last {
 	margin-right: 0;
-}
-
-.span-17 {
-	width: 670px;
-}
-
-.span-24 {
-	width: 950px;
-	margin: 0;
-}
-
-.span-18 {
-	width: 710px;
-}
-
-.span-6 {
-	width: 230px;
 }
 
 h1 {
@@ -70,6 +60,10 @@ div#logo a img {
 	padding: 15px;
 }
 
+div#nav {
+	float:  right;
+}
+
 div#nav ul {
 	padding: 9px;
 	float: right;
@@ -101,25 +95,25 @@ div#nav ul li.active a:hover {
 	text-decoration: none;
 }
 
+div#container_top,div#container_bottom {
+	background-image: url(/images/admin/content_top.png);
+	height: 16px;
+}
+
+div#container_bottom {
+	background-image: url(/images/admin/content_bottom.png);
+}
+
 h1 span.fake_url {
 	color: #000;
 }
 
-div#container_top {
-	height: 16px;
-	background-image: url(/images/admin/content_top.png);
-}
-
-div#module_title {
-	background: url(/images/admin/content_back.png);
+div#module_title,div#content {
+	background-image: url(/images/admin/content_back.png);
 }
 
 div#module_title h1 {
 	margin-left: 15px;
-}
-
-div#content {
-	background: url(/images/admin/content_back.png);
 }
 
 div#subnav {
@@ -128,11 +122,6 @@ div#subnav {
 
 div#module_content {
 	padding: 0 15px 0 15px;
-}
-
-div#container_bottom {
-	height: 16px;
-	background-image: url(/images/admin/content_bottom.png);
 }
 
 div#footer {
@@ -201,7 +190,7 @@ form li div.element {
 	background-color: #ff5800;
 	color: #fff;
 	clear: both;
-	margin: 0;
+	margin: auto;
 }
 
 .roundcont div.interior {
