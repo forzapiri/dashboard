@@ -62,7 +62,7 @@ WHILE DEBUGGING:
 </li>
    */
 class ChunkManager {
-	private $fields = array();
+	private $fields = array(); // Fields are of type DBColumn
 	private $roles = array();
 	private $previews = array();
 	private $chunks = array();
@@ -103,7 +103,69 @@ class ChunkManager {
 		return ++$i; // Returns the number of form fields which were added
 	}
 
+	private $form;
+	private function getName ($i, &$isNew) { // TODO: make second arg optional
+		$isNew = false;
+		if ($this->roles[$i]) {
+			$pair = $this->form->exportValue("_chunk_name_$i");
+			$isNew = $pair['select'] == '__new__';
+			return $isNew ? $pair['text'] : $pair['select'];
+		}
+		else return '';
+	}
+
+	private function newChunk ($i, $canonical) {
+		$field = $this->fields[$i];
+		$chunk = Chunk::make();
+		$chunk->setType ($field->type());
+		$chunk->setLabel($field->label());
+		if (!$canonical) {
+			$chunk->setParentClass(get_class($this->object));
+			$chunk->setParent($this->object->getId());
+		}
+		return $chunk;
+	}
+
+	private function createChunkIfNeeded ($i) {
+		$chunk = @$this->chunks[$i];
+		/* Canonical Chunk will be created by Chunk->getRevision() if needed */
+		if (!$chunk) {
+			$chunk = $this->newChunk($i, false);
+			$chunk->save();
+			$this->chunks[$i] = $chunk;
+		}
+		$name = $this->getName($i, $new);
+		$chunk->setName ($name);
+	}
+	
 	function saveFormFields($form, $status = 'active') {
+		$this->form = $form;
+		$i=-1;
+		foreach ($this->fields as $field) {
+			$i++;
+			$this->createChunkIfNeeded ($i);
+			$type = $field->type();
+			$value = $form->exportValue("_chunk_$i");
+			$chunk = $this->chunks[$i];
+			$old_rev = $chunk->getRevision();
+			$newRevision = !$old_rev || (DBRow::toDB($type, $value) != $chunk->getRawContent());
+			if ($newRevision) {
+				$rev = ChunkRevision::make();
+				$rev->setParent($old_rev->getParent());
+				$rev->setStatus($status);
+				// Need to reset the old status unless we're making a draft and the old one was active
+				if ($old_rev && ($status =='active' || $old_rev->getStatus() == 'draft')) {
+					$old_rev->setStatus('inactive');
+					$old_rev->save();
+				}
+			} else $rev = $old_rev;
+			$rev->setContent(DBRow::toDB($field->type(), $value));
+			$rev->setStatus ($status);
+			$rev->save();
+		}
+	}
+/*	
+	function saveFormFields_old($form, $status = 'active') {
 		$class = get_class($this->object);
 		$id = $this->object->getId();
 		$i=-1;
@@ -169,7 +231,7 @@ class ChunkManager {
 			$rev->save();
 		}
 	}
-
+*/
 	private static $previewCodes
 		= array ("h1" => "<h1>Title</h1>",
 				 "h2" => "<h2>Major Heading</h2>",

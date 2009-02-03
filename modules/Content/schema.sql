@@ -37,7 +37,6 @@ CREATE TABLE `chunk` (
 
 LOCK TABLES `chunk` WRITE;
 /*!40000 ALTER TABLE `chunk` DISABLE KEYS */;
-INSERT INTO `chunk` VALUES (85,'text',NULL,NULL,'ContentPage',11,0),(86,'tinymce','col','named chunk','ContentPage',11,1),(87,'tinymce','col','named chunk',NULL,NULL,NULL),(88,'tinymce','col','','ContentPage',11,2),(89,'date',NULL,NULL,'ContentPage',11,3),(90,'text',NULL,NULL,'ContentPage',12,0),(91,'tinymce','col','','ContentPage',12,1),(92,'tinymce','col','','ContentPage',12,2),(93,'date',NULL,NULL,'ContentPage',12,3),(94,'text',NULL,NULL,'ContentPage',13,0),(95,'tinymce','col','','ContentPage',13,1),(96,'tinymce','col','named chunk','ContentPage',13,2),(97,'date',NULL,NULL,'ContentPage',13,3);
 /*!40000 ALTER TABLE `chunk` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -53,7 +52,7 @@ CREATE TABLE `chunk_revision` (
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `status` enum('active','draft','inactive') default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=149 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=153 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `chunk_revision`
@@ -61,7 +60,6 @@ CREATE TABLE `chunk_revision` (
 
 LOCK TABLES `chunk_revision` WRITE;
 /*!40000 ALTER TABLE `chunk_revision` DISABLE KEYS */;
-INSERT INTO `chunk_revision` VALUES (136,85,'This is the title','2009-02-03 01:22:57','active'),(137,87,'<p>This is a named chunk which can be reused<br mce_bogus=\"1\"></p>','2009-02-03 01:22:57','active'),(138,86,'<p>This is a named chunk which can be reused<br mce_bogus=\"1\"></p>','2009-02-03 01:22:57','active'),(139,88,'<h1>Title2</h1>\n<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nunc ligula nisl, egestas non, pharetra vel, scelerisque accumsan, lacus. Proin nibh. Aenean dapibus</p>','2009-02-03 01:22:57','active'),(140,89,'2009-01-02 00:00:00','2009-02-03 01:22:57','active'),(141,90,'Title 2','2009-02-03 01:25:34','active'),(142,91,'<p>Content 2<br mce_bogus=\"1\"></p>','2009-02-03 01:25:35','active'),(143,92,'<h1>Title of chunk 2<br></h1>\n<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nunc ligula nisl, egestas non, pharetra vel, scelerisque accumsan, lacus. Proin nibh. Aenean dapibus</p>','2009-02-03 01:25:35','active'),(144,93,'2009-03-02 00:00:00','2009-02-03 01:25:35','active'),(145,94,'','2009-02-03 01:26:10','active'),(146,95,'<p>test 3<br mce_bogus=\"1\"></p>','2009-02-03 01:26:10','active'),(147,96,'<h1>Title</h1>\n<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nunc ligula nisl, egestas non, pharetra vel, scelerisque accumsan, lacus. Proin nibh. Aenean dapibus</p>','2009-02-03 01:26:10','active'),(148,97,'2009-02-02 00:00:00','2009-02-03 01:26:10','active');
 /*!40000 ALTER TABLE `chunk_revision` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -133,7 +131,7 @@ CREATE TABLE `content_pages` (
   PRIMARY KEY  (`id`),
   KEY `page_name` (`name`),
   KEY `status` (`status`)
-) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `content_pages`
@@ -141,7 +139,7 @@ CREATE TABLE `content_pages` (
 
 LOCK TABLES `content_pages` WRITE;
 /*!40000 ALTER TABLE `content_pages` DISABLE KEYS */;
-INSERT INTO `content_pages` VALUES (1,'Home','2007-12-15 23:23:33',1,'public','home','site.tpl'),(11,'Chunk Test','2009-02-03 01:22:24',1,'public','chunk','chunks.tpl'),(12,'Chunk test 2','2009-02-03 01:25:00',1,'public','chunk2','chunks.tpl'),(13,'Chunk 3','2009-02-03 01:25:49',1,'public','chunk3','chunks.tpl');
+INSERT INTO `content_pages` VALUES (1,'Home','2007-12-15 23:23:33',1,'public','home','site.tpl');
 /*!40000 ALTER TABLE `content_pages` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -154,4 +152,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2009-02-03  1:39:17
+-- Dump completed on 2009-02-03 12:25:20
