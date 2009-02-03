@@ -14,7 +14,9 @@ function watchChunkSelect(div, textarea, role, parent_class, parent_id) {
 		text.hide();
 		var ed = tinyMCE.get(textarea);
 		ed.setProgressState(1); // Show progress
-		if (select.value == '')
+		if (select.value == '' && parent_id == 0)
+			return;
+		else if (select.value == '')
 		    $params = {action: 'loadChunk', parent_class: parent_class, parent: parent_id};
 		else
 			$params = {action: 'loadChunk', role: role, name: select.value};

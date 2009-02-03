@@ -9,7 +9,7 @@ class ChunkRevision extends DBRow {
 		$id = $obj->getId();
 		if (!$id) return array();
 		// Tried using prepared statement.  For some reason didn't work.
-		$sql = "select type,content from chunk c,chunk_revision r where r.status='$status' and c.parent=$id and parent_class='$class' order by sort";
+		$sql = "select type,content from chunk c,chunk_revision r where r.status='$status' and r.parent = c.id and c.parent=$id and parent_class='$class' order by sort";
 		$results = Database::singleton()->query_fetch_all($sql);
 		$contents = array();
 		foreach ($results as $result) {

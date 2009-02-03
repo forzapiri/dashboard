@@ -81,13 +81,14 @@ class ChunkManager {
 				$form->addElement('html', "\n<div id=_select_text_$i>");
 				$el = array();
 				$el[] = $s = $form->createElement('select', "select", "", self::getSelection($role));
-				if ($chunk && $chunk->getRole() && $chunk->getName())
+				if ($chunk && $chunk->getRole() && $chunk->getName()) {
 					$s->setValue($chunk->getName());
+				}
 				$el[] = $form->createElement('text', "text", ""); // HIDDEN BY admin.js
 				$form->addGroup($el, "_chunk_name_$i", $label, '&nbsp;&nbsp;&nbsp;');
 				$form->addElement('html', "\n</div>");
-				$class = $chunk->getParentClass();
-				$parent = $chunk->getParent();
+				$class = $chunk ? $chunk->getParentClass() : '';
+				$parent = $chunk ? $chunk->getParent() : 0;
 				$form->addElement('html', "\n<script type='text/javascript'>watchChunkSelect('_select_text_$i', '_chunk_$i', '$role', '$class', $parent);</script>\n");
 				$field->setLabel(""); // Inspect the add edit form, add an appropriate class, use JavaScript to watch for change and update content
 			}
@@ -131,10 +132,16 @@ class ChunkManager {
 			} else $rev = $old_rev;
 			$chunk->setRole ($this->roles[$i]);
 			$chunk->setSort($i);
+			$newName = false;
 			if ($chunk->getRole()) {
 				$pair = $form->exportValue("_chunk_name_$i");
 				switch ($pair['select']) {
-				case '__new__': $chunk->setName ($pair['text']); $chunk->setNewName();  break;
+				case '__new__':
+					if ($name = $pair['text']) {
+						$chunk->setName ($pair['text']);
+						$newName = true;
+						break;
+					} // else fall through
 				case '':        $chunk->setName ('');            break;
 				default:       $chunk->setName ($pair['select']); break;
 				}
@@ -145,6 +152,18 @@ class ChunkManager {
 			$chunk->setParent($id);
 			$rev->setContent(DBRow::toDB($field->type(), $value));
 			$rev->setStatus ($status);
+			if ($newName) {
+				$namedChunk = Chunk::make();
+				$namedChunk->setType($field->type());
+				$namedChunk->setRole($chunk->getRole());
+				$namedChunk->setName($name);
+				$named_rev = ChunkRevision::make();
+				$named_rev->setContent($rev->getContent());
+				$named_rev->setStatus($rev->getStatus());
+				$namedChunk->save();
+				$named_rev->setParent($namedChunk->getId());
+				$named_rev->save();
+			}
 			if ($old_rev) $old_rev->save();
 			$chunk->save();
 			$rev->save();
