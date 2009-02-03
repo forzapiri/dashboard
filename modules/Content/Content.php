@@ -23,13 +23,14 @@ class Module_Content extends Module implements linkable {
 	
 	function getAdminInterface() {
 		if (@$_REQUEST['action'] == 'loadChunk') {
-			// Response to AJAX request only.
-			$role = @$_REQUEST['role'];
-			$name = @$_REQUEST['name'];
-			$parent_class = @$_REQUEST['parent_class'];
-			$parent = @$_REQUEST['parent'];
+			// Response to AJAX request only.  CHUNK
+			$role = e(@$_REQUEST['role']);
+			$name = e(@$_REQUEST['name']);
+			$parent_class = e(@$_REQUEST['parent_class']);
+			$parent = (int) @$_REQUEST['parent'];
+			$sort = (int) @$_REQUEST['sort'];
 			if ($role && $name) echo ChunkRevision::getNamedChunkFormField($role, $name);
-			else if ($parent_class && $parent) echo ChunkRevision::getChunkFormField ($parent_class, $parent);
+			else if ($parent_class && $parent) echo ChunkRevision::getChunkFormField ($parent_class, $parent, $sort);
 			else {
 				trigger_error ('Bad AJAX request for loadChunk');
 				var_log ($_REQUEST);

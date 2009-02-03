@@ -8,26 +8,22 @@ class ChunkRevision extends DBRow {
 	private static $q1a;
 	private static $q1b;
 
-	static private function getRevisionFormField($result) {
-		if (!$result) return null;
-		$type = $result['type'];
-		$result = DBRow::fromDB($type, $result['content']);
-		$result = DBRow::toForm($type, $result);
-		return $result;
+	static private function outputRevisionFormField($chunk, $status) {
+		if (!$chunk) return null;
+		$type = $chunk->getType();
+		$c = $chunk->getContent($status);
+		echo DBRow::toForm($type, $c);
+		die();
 	}
 
-	private static $q2 = null;
-	static function getChunkFormField ($class, $parent, $status = 'active') {
-		if (!self::$q2) self::$q2 = new Query ("select type,content from chunk c,chunk_revision r where r.status='$status' and c.parent_class=? and c.parent=?",'si');
-		$result = self::$q2->fetch ($class, $parent);
-		return self::getRevisionFormField($result);
+	static function getChunkFormField ($class, $parent, $sort, $status = 'active') {
+		$c = Chunk::getAll("where parent_class='$class' and parent=$parent and sort=$sort");
+		self::outputRevisionFormField($c[0], $status);
 	}
 
-	private static $q3 = null;
 	static function getNamedChunkFormField ($role, $name, $status = 'active') {
-		if (!self::$q3) self::$q3 =  new Query ("select type,content from chunk c,chunk_revision r where r.status='$status' and role=? and c.parent is null and name=?", 'ss');
-		$result = self::$q3->fetch ($role, $name);
-		return self::getRevisionFormField($result);
+		$c = Chunk::getAll("where role='$role' and name='$name' and (parent is null or parent=0)");
+		self::outputRevisionFormField($c[0], $status);
 	}
 }
 	

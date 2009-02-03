@@ -15,6 +15,7 @@ class Chunk extends DBRow {
 		foreach ($chunks as &$chunk) {
 			$type = $chunk->getType();
 			$chunk = $chunk->getRevision($status);
+			$chunk->setType($type);
 			$chunk = DBRow::fromDB($type, $chunk->getContent());
 		}
 		return new ChunkList($chunks);
@@ -28,8 +29,9 @@ class Chunk extends DBRow {
 			$c = self::getAll("where role='$role' and name='$name' and (parent is null or parent=0)");
 			if (!$c) { // Create the canonical Chunk with this (role, name) pair.
 				$c = Chunk::make();
-				$c->setRole($c);
-				$c->setName($name);
+				$c->setRole($role);
+				$c->setName($this->getName());
+				$c->setType($this->getType());
 				$c->save();
 				$id = $c->getId();
 			} else {

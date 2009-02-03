@@ -1,10 +1,9 @@
 // ONLY DOES UPDATES OF CONTENT FOR tinyMCE CONTENT
 
-function watchChunkSelect(div, textarea, role, parent_class, parent_id) {
-	var div = $(div);
+function watchChunkSelect(sort, role, parent_class, parent_id) {
+	var div = $('_select_text_'+sort);
 	var select = div.down('select');
 	var text = div.down('input');
-	// var textarea = $(textarea);
 	text.hide();
 	function onChangeSelect() {
 		if (select.value == '__new__') {
@@ -12,12 +11,12 @@ function watchChunkSelect(div, textarea, role, parent_class, parent_id) {
 			return;
 		}
 		text.hide();
-		var ed = tinyMCE.get(textarea);
+		var ed = tinyMCE.get('_chunk_'+sort);
 		ed.setProgressState(1); // Show progress
 		if (select.value == '' && parent_id == 0)
 			return;
 		else if (select.value == '')
-		    $params = {action: 'loadChunk', parent_class: parent_class, parent: parent_id};
+		    $params = {action: 'loadChunk', parent_class: parent_class, parent: parent_id, sort: sort};
 		else
 			$params = {action: 'loadChunk', role: role, name: select.value};
 		new Ajax.Request ('/admin/Content',

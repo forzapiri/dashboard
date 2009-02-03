@@ -89,7 +89,7 @@ class ChunkManager {
 				$form->addElement('html', "\n</div>");
 				$class = $chunk ? $chunk->getParentClass() : '';
 				$parent = $chunk ? $chunk->getParent() : 0;
-				$form->addElement('html', "\n<script type='text/javascript'>watchChunkSelect('_select_text_$i', '_chunk_$i', '$role', '$class', $parent);</script>\n");
+				$form->addElement('html', "\n<script type='text/javascript'>watchChunkSelect($i, '$role', '$class', $parent);</script>\n");
 				$field->setLabel(""); // Inspect the add edit form, add an appropriate class, use JavaScript to watch for change and update content
 			}
 			$el = $field->addElementTo(array ('form' => $form, 'id' => "_chunk_$i"));
@@ -119,6 +119,7 @@ class ChunkManager {
 		$chunk = Chunk::make();
 		$chunk->setType ($field->type());
 		$chunk->setLabel($field->label());
+		$chunk->setRole($this->roles[$i]);
 		if (!$canonical) {
 			$chunk->setParentClass(get_class($this->object));
 			$chunk->setParent($this->object->getId());
@@ -131,11 +132,12 @@ class ChunkManager {
 		/* Canonical Chunk will be created by Chunk->getRevision() if needed */
 		if (!$chunk) {
 			$chunk = $this->newChunk($i, false);
-			$chunk->save();
 			$this->chunks[$i] = $chunk;
 		}
 		$name = $this->getName($i, $new);
 		$chunk->setName ($name);
+		$chunk->setSort($i);
+		$chunk->save();
 	}
 	
 	function saveFormFields($form, $status = 'active') {
@@ -148,7 +150,7 @@ class ChunkManager {
 			$value = $form->exportValue("_chunk_$i");
 			$chunk = $this->chunks[$i];
 			$old_rev = $chunk->getRevision();
-			$newRevision = !$old_rev || (DBRow::toDB($type, $value) != $chunk->getRawContent());
+			$newRevision = !$old_rev && (DBRow::toDB($type, $value) != $chunk->getRawContent());
 			if ($newRevision) {
 				$rev = ChunkRevision::make();
 				$rev->setParent($old_rev->getParent());
@@ -164,74 +166,7 @@ class ChunkManager {
 			$rev->save();
 		}
 	}
-/*	
-	function saveFormFields_old($form, $status = 'active') {
-		$class = get_class($this->object);
-		$id = $this->object->getId();
-		$i=-1;
-		foreach ($this->fields as $field) {
-			$i++;
-			$chunk = @$this->chunks[$i];
-			$type = $field->type();
-			$value = $form->exportValue("_chunk_$i");
-			if ($chunk) {
-				$newRevision = DBRow::toDB($type, $value) != $chunk->getRawContent();
-				$old_rev = $chunk->getRevision();
-			} else {
-				$newRevision = true;
-				$chunk = Chunk::make();
-				$chunk->save(); // So it has an id
-				$old_rev = null;
-			}
-			if ($newRevision) {
-				$rev = ChunkRevision::make();
-				$rev->setParent($chunk->getId());
-				$rev->setStatus($status);
-				// Need to reset the old status unless we're making a draft and the old one was active
-				if ($old_rev && ($status =='active' || $old_rev->getStatus() == 'draft')) {
-					$old_rev->setStatus('inactive');
-				}
-			} else $rev = $old_rev;
-			$chunk->setRole ($this->roles[$i]);
-			$chunk->setSort($i);
-			$newName = false;
-			if ($chunk->getRole()) {
-				$pair = $form->exportValue("_chunk_name_$i");
-				switch ($pair['select']) {
-				case '__new__':
-					if ($name = $pair['text']) {
-						$chunk->setName ($pair['text']);
-						$newName = true;
-						break;
-					} // else fall through
-				case '':        $chunk->setName ('');            break;
-				default:       $chunk->setName ($pair['select']); break;
-				}
-			}
-			$chunk->setType ($field->type()); // TODO: move
-			$chunk->setLabel($field->label()); // TODO: move
-			$chunk->setParentClass($class);
-			$chunk->setParent($id);
-			$rev->setContent(DBRow::toDB($field->type(), $value));
-			$rev->setStatus ($status);
-			if ($newName) {
-				$namedChunk = Chunk::make();
-				$namedChunk->setType($field->type());
-				$namedChunk->setRole($chunk->getRole());
-				$namedChunk->setName($name);
-				$named_rev = ChunkRevision::make();
-				$named_rev->setContent($rev->getContent());
-				$named_rev->setStatus($rev->getStatus());
-				$namedChunk->save();
-				$named_rev->setParent($namedChunk->getId());
-				$named_rev->save();
-			}
-			if ($old_rev) $old_rev->save();
-			$chunk->save();
-			$rev->save();
-		}
-	}
-*/
+
 	private static $previewCodes
 		= array ("h1" => "<h1>Title</h1>",
 				 "h2" => "<h2>Major Heading</h2>",
