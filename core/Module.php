@@ -36,7 +36,7 @@ abstract class Module {
 		
 		public function onPreDelete(Event_Notification &$notification) {}
 		public function onPreSave(Event_Notification &$notification) {}
-		public function onPreToggle(Event_Notification &$notification)}
+		public function onPreToggle(Event_Notification &$notification) {}
 		public function onDelete(Event_Notification &$notification) {}
 		public function onSave(Event_Notification &$notification) {}
 		public function onToggle(Event_Notification &$notification) {}
