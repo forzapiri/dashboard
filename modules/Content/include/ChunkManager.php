@@ -160,9 +160,11 @@ class ChunkManager {
 					$old_rev->setStatus('inactive');
 					$old_rev->save();
 				}
+				$rev->setContent(DBRow::toDB($field->type(), $value));
 			} else $rev = $old_rev;
-			$rev->setContent(DBRow::toDB($field->type(), $value));
-			$rev->setStatus ($status);
+			if ($rev->getStatus() != 'active') {
+				$rev->setStatus ($status);
+			}
 			$rev->save();
 		}
 	}
