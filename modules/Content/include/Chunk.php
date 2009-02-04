@@ -9,18 +9,25 @@ class Chunk extends DBRow {
 		$id = $obj->getId();
 		return ($class && $id) ? self::getAll("where parent_class='$class' and parent=$id") : array();
 	}
-	
+
+	private static $hasDraftFlag;
+	static function hasDraft() {
+		getAllContentFor($obj, 'draft');
+		return $this->hasDraftFlag;
+	}
+
 	static function getAllContentFor($obj, $status = 'active') {
+		self::$hasDraftFlag = false;
 		$chunks = Chunk::getAllFor($obj);
 		foreach ($chunks as &$chunk) {
 			$type = $chunk->getType();
 			$chunk = $chunk->getRevision($status);
-			$chunk->setType($type);
+			// $chunk->setType($type); // THIS SETS THE TYPE OF A REVISION... 
 			$chunk = DBRow::fromDB($type, $chunk->getContent());
 		}
 		return new ChunkList($chunks);
 	}
-	
+
 	function getRevision ($status = 'active') {
 		// This code not only gets the current revision, but also creates one if needed.
 		if ($this->getName() && $this->getRole() && $this->getParent()) {

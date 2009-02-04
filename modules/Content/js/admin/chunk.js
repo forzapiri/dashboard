@@ -24,6 +24,7 @@ function watchChunkSelect(sort, role, parent_class, parent_id) {
 						   parameters: $params,
 						   onSuccess: function (t) {
 								  if (t.responseText) ed.setContent(t.responseText);
+								  ed.save();
 								  ed.setProgressState(0);
 							  }.bind(this),
 						   onFailure: function(){

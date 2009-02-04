@@ -150,8 +150,10 @@ class ChunkManager {
 			$value = $form->exportValue("_chunk_$i");
 			$chunk = $this->chunks[$i];
 			$old_rev = $chunk->getRevision();
-			$newRevision = !$old_rev && (DBRow::toDB($type, $value) != $chunk->getRawContent());
-			if ($newRevision) {
+			if (!$old_rev->getContent()) { // Entirely new revision
+				$rev = $old_rev;
+				$rev->setContent(DBRow::toDB($field->type(), $value));
+			} else if (DBRow::toDB($type, $value) != $chunk->getRawContent()) { // New revision of old content
 				$rev = ChunkRevision::make();
 				$rev->setParent($old_rev->getParent());
 				$rev->setStatus($status);
@@ -161,7 +163,10 @@ class ChunkManager {
 					$old_rev->save();
 				}
 				$rev->setContent(DBRow::toDB($field->type(), $value));
-			} else $rev = $old_rev;
+			} else {
+				// Same content as previous revision; might update status
+				$rev = $old_rev;
+			}
 			if ($rev->getStatus() != 'active') {
 				$rev->setStatus ($status);
 			}
