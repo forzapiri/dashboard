@@ -23,8 +23,7 @@ class Module_Block extends Module {
 					'Title' => 'title',
 					'Last Updated' => 'timestamp',
 					'Status' => 'status'
-			 ))
-			 ->pre($this->smarty->fetch('admin/pages.tpl'));
+			 ));
 			 
 		return $page->render();
 	}
