@@ -13,7 +13,6 @@ class Module_Content extends Module implements linkable {
 		$pageid = ContentPage::keytoid($_REQUEST['page']);
 		$pageid = $pageid['id'];
 		$page = ContentPage::make($pageid);
-		var_log ($page->getStatus());
 		if (!$page->getStatus()) {
 			return $this->smarty->dispErr('404', &$this);
 		}
