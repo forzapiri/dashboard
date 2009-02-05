@@ -373,7 +373,7 @@ class Page extends defaultPageActs {
 		if (isset($this->showcreate[$this->pointer]) && $this->showcreate[$this->pointer] && $this->user->hasPerm($this->pointer, $this->pageActions[$this->pointer]['add']['perm'])) {
 			$html .= '<div id="buttons">
 				<ul id="primary">
-					<li><a href="/admin/' . $_REQUEST['module'] . '&amp;section=' . $this->pointer . '&amp;action=add' . @$add . '" title="Create ' . $this->getName() .'">Create ' . $this->getName() . '</a></li>
+					<li' . ((!isset($this->ajax['addedit']) || $this->ajax['addedit'] == true) ? '' : ' class="plain"')  . '><a href="/admin/' . $_REQUEST['module'] . '&amp;section=' . $this->pointer . '&amp;action=add' . @$add . '" title="Create ' . $this->getName() .'">Create ' . $this->getName() . '</a></li>
 				</ul></div>';
 			$html .= '<div style="float: left; width: 300px;">' . $pager->links . '</div>';
 		} else {

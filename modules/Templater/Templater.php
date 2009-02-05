@@ -27,6 +27,20 @@ class Module_Templater extends Module {
 	function getAdminInterface() {
 		$this->addCSS('/modules/Templater/css/templates.css');
 		$templates = Template::getAllTemplates();
+		if (isset($_REQUEST['action'])){
+			if($_REQUEST['action']=='otherinterface'){
+				$page = new Page();
+				$page->with('Template')
+					 ->show(array(
+							'Module' => 'module',
+							'Path' => 'path',
+							'Timestamp' => 'timestamp'
+					 ))
+					 ->pre('<h1>Micro Managing Templates</h1>. <a href="/admin/Templater" style="color:white;"><h3> click here to go back to main interface </h3></a>')
+					 ->filter('order by timestamp desc');
+				return $page->render();
+			}
+		}
 		
 		if (!isset($_REQUEST['template_id'])) {
 			$this->smarty->assign('curtemplate', $templates[0]);
