@@ -29,7 +29,7 @@ function adminMenu($params, &$smarty) {
 	//$activeModules = array_reverse(Config::getActiveModules());
 	$activeModules = Config::getActiveModules();
 	
-	$initial = '<li class="borderRight' . (!isset($_REQUEST['module']) ? " active" : '') . '"><a href="/admin/">DASHBOARD</a></li>';
+	$initial = '<li class="borderRight' . (!isset($_REQUEST['module']) ? " active" : '') . '"><a href="/admin/" style="background-image: url(/images/admin/dashboard_active.gif);">Dashboard</a></li>';
 	$adminItems = array($initial);
 	
 	$i = 0;
@@ -63,8 +63,13 @@ function adminMenu($params, &$smarty) {
 			} else {
 				$liClass = ' class="' . $active . '"';
 			}
+			if (isset($blah->icon)) {
+				$extra = ' style="background-image: url(' . $blah->icon . ');"';
+			} else {
+				$extra = ' style="background-image: url(/modules/Content/images/application_edit.png);"';
+			}
 			
-			$adminItems[] = '<li' . $liClass . '><a href="/admin/' . $module['module'] . '">' . strtoupper($module['display_name']) . '</a></li>';
+			$adminItems[] = '<li' . $liClass . '><a href="/admin/' . $module['module'] . '"' . @$extra . '>' . ($module['display_name']) . '</a></li>';
 		}
 		
 	}

@@ -1,6 +1,9 @@
 <?php
 
 class Module_Content extends Module implements linkable {
+	
+	public $icon = '/modules/Content/images/page_edit.png';
+	
 	public function __construct() {
 		parent::__construct();
 		$dispatcher = &Event_Dispatcher::getInstance('ContentPage');
@@ -42,7 +45,6 @@ class Module_Content extends Module implements linkable {
 			 	'Created' => 'timestamp',
 			 	'Published' => 'status'))
 			 ->name('Content Page')
-			 ->pre($this->smarty->fetch('admin/pages.tpl'))
 			 ->on('addedit')->action('ContentPageRevision');
 			 
 		$page->with('ContentPageRevision')

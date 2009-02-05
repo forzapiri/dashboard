@@ -17,32 +17,32 @@
 
 </head>
 <body>
-
-<div class='container' id='header'>
-  <div class='column' id='logo'><a href="/admin/"><img src="/images/admin/norex_logo.png" /></a>
+<div id="container">
+<div id="header">
+  <div id="logo">Norex Core Web Development</a>
   </div>
-  <div class='column last' id="nav">{menu admin=true}
+  <div id="top_nav"><a class="logout" href="/user/logout">Sign Out</a> <a class="return_to_site" href="/">Return to Site</a>
   </div>
 </div>
 
 
-<div class='container' id="container_top">{nbsp}</div>
+<div id="left_menu">{menu admin=true}</div>
 
-<div class='container' id='module_title'>
-	  <h1><span class="fake_url">norex://</span> {$module_title}</h1>
+<div id="main_window">
+
+<div id='module_title'>
+	  <h1>{$module_title}</h1>
   </div>
   
-  <div class='container' id="content">
+  <div id="content">
   	<div id="module_content">{module class=$module admin=true}</div>
   </div>
-  
-  <div class='container' id="container_bottom">{nbsp}</div>
-
-<div class="container" id="footer">
-  <div class='column span-24 last'>
- 	<p>&copy; {$smarty.now|date_format:"%Y"} by <a href="http://www.norex.ca" title="Norex Core Web Development">Norex Core Web Development</a></p>
-  </div>  
 </div>
 
+<div id="footer">
+ 	<p>&copy; {$smarty.now|date_format:"%Y"} by <a href="http://www.norex.ca" title="Norex Core Web Development">Norex Core Web Development</a></p>
+</div>
+
+</div>
 </body>
 </html>

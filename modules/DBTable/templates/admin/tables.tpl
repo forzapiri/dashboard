@@ -1,10 +1,10 @@
 
 <div id="buttons">
 	<ul id="primary">
-		<li><a href="/admin/DBTable&amp;action=createTable" title="Create Table">Create Table</a></li>
+		<li><a href="/admin/DBTable&amp;action=createTable" title="Create Table" class="create">Create Table</a></li>
 	</ul>
 </div>
-<table border="0" cellspacing="0" cellpadding="0" class="adminList" style="clear: both; float: left;">
+<table border="0" cellspacing="0" cellpadding="0" class="admin_list">
 <thead>
 	<tr>
 		<th width='10'></th>
@@ -33,9 +33,6 @@
 </tbody>
 </table>
 
-<div style='clearboth'>{nbsp}<br/>{nbsp}<br/></div>
-<div style='clearboth'>{nbsp}<br/>{nbsp}<br/></div>
-
 {if ($viewtable)}
 <div id="buttons">
 	<ul id="primary">
@@ -45,11 +42,11 @@
 
 <h1 style="float: left;">{$name}</h1>
 
-<table border="0" cellspacing="0" cellpadding="0" class="adminList" style="clear: both; float: left;">
+<table border="0" cellspacing="0" cellpadding="0" class="admin_list">
 <thead>
 	<tr>
 		<th colspan="5" align="center">DBRow</th>
-		<th colspan="3" align="center">-------------------- MySQL --------------------</th>
+		<th colspan="3" align="center">------------- MySQL ------------</th>
 	</tr>
 	<tr>
 		<th valign="center">Name</th> 

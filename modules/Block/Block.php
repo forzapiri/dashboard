@@ -2,6 +2,8 @@
 
 class Module_Block extends Module {
 	
+	public $icon = '/modules/Block/images/package_green.png';
+	
 	public function __construct() {
 		parent::__construct();
 		$dispatcher = &Event_Dispatcher::getInstance('Block');

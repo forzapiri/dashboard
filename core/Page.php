@@ -306,13 +306,13 @@ class Page extends defaultPageActs {
 		}
 		
 		if (count($this->heading)) {
-			$html .= '<div id="subnav">';
+			$html .= '<ul id="subnav">';
 			foreach ($this->heading as $key => $head) {
 				if ($this->user->hasPerm($key, 'view'))
-				$html .= ' <a href="/admin/' . $_REQUEST['module'] . '&amp;section=' . $key . @$add . '">' . $head . '</a> | ';
+				$html .= '<li><a href="/admin/' . $_REQUEST['module'] . '&amp;section=' . $key . @$add . '">' . $head . '</li>';
 			}
 			$html = rtrim($html, ' |');
-			$html .= '</div>';
+			$html .= '</ul>';
 		}
 		
 		if (isset($this->link[$this->pointer]) && $this->showLink[$this->pointer]) {
@@ -347,7 +347,7 @@ class Page extends defaultPageActs {
 				else $pfix = 's';
 				$html .= '<p>No ' . $this->getName() . $pfix . ' Created.';
 				if ($this->user->hasPerm($this->pointer, $this->pageActions[$this->pointer]['add']['perm'])) {
-					$html .= ' Would you like to <a href="/admin/' . $_REQUEST['module'] . '&amp;section=' . $this->pointer . '&amp;action=add' . @$add . '">make one</a>?</p>';
+					$html .= ' Would you like to <a href="/admin/' . $_REQUEST['module'] . '&amp;section=' . $this->pointer . '&amp;action=add' . @$add . '" class="create">make one</a>?</p>';
 				}
 			}
 			if (count($items) == 0 && (isset($this->pre[$this->pointer]))) {
@@ -373,7 +373,7 @@ class Page extends defaultPageActs {
 		if (isset($this->showcreate[$this->pointer]) && $this->showcreate[$this->pointer] && $this->user->hasPerm($this->pointer, $this->pageActions[$this->pointer]['add']['perm'])) {
 			$html .= '<div id="buttons">
 				<ul id="primary">
-					<li' . ((!isset($this->ajax['addedit']) || $this->ajax['addedit'] == true) ? '' : ' class="plain"')  . '><a href="/admin/' . $_REQUEST['module'] . '&amp;section=' . $this->pointer . '&amp;action=add' . @$add . '" title="Create ' . $this->getName() .'">Create ' . $this->getName() . '</a></li>
+					<li' . ((!isset($this->ajax['addedit']) || $this->ajax['addedit'] == true) ? '' : ' class="plain"')  . '><a class="create" href="/admin/' . $_REQUEST['module'] . '&amp;section=' . $this->pointer . '&amp;action=add' . @$add . '" title="Create ' . $this->getName() .'">Create ' . $this->getName() . '</a></li>
 				</ul></div>';
 			$html .= '<div style="float: left; width: 300px;">' . $pager->links . '</div>';
 		} else {
@@ -381,8 +381,8 @@ class Page extends defaultPageActs {
 			$html .= '<br />';
 		}	
 		
-		$html .= '<table border="0" cellspacing="0" cellpadding="0">';
-		$html .= '<tbody>';
+		$html .= '<table border="0" cellspacing="0" cellpadding="0" class="admin_list">';
+		$html .= '<thead>';
 		$html .= '<tr>';
 		foreach ($this->tables[$this->pointer] as $key => $name) {
 			$html .= '<th valign="middle">' . $key . '</th>';
@@ -395,6 +395,7 @@ class Page extends defaultPageActs {
 				break;
 			}
 		}
+		$html .= '</thead><tbody>';
 		$html .= '</tr>';
 		foreach ($items as $key => $item) {
 			$html .= '<tr class="';

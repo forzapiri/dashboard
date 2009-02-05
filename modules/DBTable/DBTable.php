@@ -15,6 +15,9 @@
  */
 
 class Module_DBTable extends Module {
+	
+	public $icon = '/modules/DBTable/images/database_edit.png';
+	
 	private function refresh($id) {
 		$rows = TableColumn::getAll(" order by id");
 		$tables = array();

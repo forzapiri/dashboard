@@ -1,8 +1,8 @@
 {if $norex}
-<p style="width: 100%; text-align: right;"><a href="/admin/SiteConfig&amp;action=addedit">Create new configuration variable</a></p>
+<p style="width: 100%; text-align: right;"><a href="/admin/SiteConfig&amp;action=addedit" class="create">Create new configuration variable</a></p>
 {/if}
 
-<table border="0" cellspacing="0" cellpadding="0" class="adminList" style="clear: both; float: left;">
+<table border="0" cellspacing="0" cellpadding="0" class="admin_list">
 <thead>
 	<tr>
 {if $norex}

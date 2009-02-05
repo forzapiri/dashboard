@@ -15,6 +15,8 @@
  */
 class Module_User extends Module {
 	
+	public $icon = '/images/admin/user.png';
+	
 	protected $group_dispatcher = null;
 
 	
