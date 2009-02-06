@@ -27,18 +27,9 @@ DONE:
 	Nixed PageContentRevision
 	When naming a chunk, make a parentless canonical version.  That's the one that gets updated.
 	Update the associated text field on change to existing name
+	Draft model implemented
 TODO:
-WHILE DEBUGGING:
-**** Removed lines Module.php
-	- Be sure to check for name collisions for new names
-    - Flesh  out stubs in DB which distinguish the active_revision from the draft_revision.
-
-	  Every page is listed once or twice.  The first listing shows every chunk's active_revision, while
-	  if a page has any chunk with a "draft" version, show all draft revisions, with active_revision as fallback.
-
-	  Save a draft (deselect "make live") will save all changed chunks as draft_revisions.
-
-	  To publish a draft (select "make live") for every chunk, move existing draft_revision to active_revision
+	- Check for name collisions for new names
     - Once working, do a grep 'CHUNK' to find suggested structural improvements, and move from Content module to core.
     - Small buttons to go backward and forward in chunk revision history ??  dates or version numbers ??
   */

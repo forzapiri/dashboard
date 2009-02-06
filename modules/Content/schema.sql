@@ -2,7 +2,7 @@
 --
 -- Host: localhost    Database: master
 -- ------------------------------------------------------
--- Server version	5.0.41
+-- Server version	5.0.41-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -139,7 +139,7 @@ CREATE TABLE `content_pages` (
 
 LOCK TABLES `content_pages` WRITE;
 /*!40000 ALTER TABLE `content_pages` DISABLE KEYS */;
-INSERT INTO `content_pages` VALUES (1,'Home','2007-12-15 23:23:33',1,'public','home','site.tpl');
+INSERT INTO `content_pages` VALUES (1,'Home','2007-12-15 23:23:33',1,'public','home','chunks.tpl');
 /*!40000 ALTER TABLE `content_pages` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -152,4 +152,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2009-02-03 12:25:20
+-- Dump completed on 2009-02-06  2:09:00
