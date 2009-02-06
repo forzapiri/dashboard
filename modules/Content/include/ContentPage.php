@@ -72,7 +72,7 @@ class ContentPage extends DBRow {
 	
 	public function getAddEditFormAfterSaveHook($form) {
 		/* CHUNKS:  Move this code to DBRow() with a check for $this->chunkable() ?? */
-		$this->chunkManager->saveFormFields($form, 'active');
+		$this->chunkManager->saveFormFields($form, 'draft');
 	}
 
 	function checkForHomeName($elVal){return (!is_null($elVal) && ucfirst($elVal) != SiteConfig::get('Content::defaultPage'));}
@@ -91,6 +91,18 @@ class ContentPage extends DBRow {
 	function getSmartyResource() {
 		if ($t = $this->getPageTemplate()) {return "db:" . $t;}
 		else return null;
+	}
+
+	function getDraftForms() {
+		if (Chunk::hasDraft($this)) {
+			$module = Module::factory('Content');
+			$smarty = $module->smarty;
+			$smarty->assign ('obj', $this);
+			$smarty->assign ('id', $this->getId());
+			return $smarty->fetch ('admin/draft-actions.tpl');
+		} else {
+			return "";
+		}
 	}
 }
 DBRow::init('ContentPage');

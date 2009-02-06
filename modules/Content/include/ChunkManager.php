@@ -94,8 +94,8 @@ class ChunkManager {
 			}
 			$el = $field->addElementTo(array ('form' => $form, 'id' => "_chunk_$i"));
 			$field->setLabel($label);
-			if ($chunk && ($chunk->getId() || $chunk->getContent())) {
-				$el->setValue(DBRow::toForm($chunk->getType(), $chunk->getContent()));
+			if ($chunk && ($chunk->getId() || $chunk->getContent('draft'))) {
+				$el->setValue(DBRow::toForm($chunk->getType(), $chunk->getContent('draft')));
 			} else {
 				$el->setValue($this->previews[$i]);
 			}
@@ -140,7 +140,7 @@ class ChunkManager {
 		$chunk->save();
 	}
 	
-	function saveFormFields($form, $status = 'active') {
+	function saveFormFields($form) {
 		$this->form = $form;
 		$i=-1;
 		foreach ($this->fields as $field) {
@@ -149,28 +149,25 @@ class ChunkManager {
 			$type = $field->type();
 			$value = $form->exportValue("_chunk_$i");
 			$chunk = $this->chunks[$i];
-			$old_rev = $chunk->getRevision();
+			$old_rev = $chunk->getRevision('draft');
 			if (!$old_rev->getContent()) { // Entirely new revision
 				$rev = $old_rev;
 				$rev->setContent(DBRow::toDB($field->type(), $value));
-			} else if (DBRow::toDB($type, $value) != $chunk->getRawContent()) { // New revision of old content
+				$rev->setStatus('draft');
+				$rev->save();
+			} else if (DBRow::toDB($type, $value) != $chunk->getRawContent('draft')) { // New revision of old content
 				$rev = ChunkRevision::make();
 				$rev->setParent($old_rev->getParent());
-				$rev->setStatus($status);
+				$rev->setStatus('draft');
+				var_log ($old_rev);
 				// Need to reset the old status unless we're making a draft and the old one was active
-				if ($old_rev && ($status =='active' || $old_rev->getStatus() == 'draft')) {
+				if ($old_rev && $old_rev->getStatus() == 'draft') {
 					$old_rev->setStatus('inactive');
 					$old_rev->save();
 				}
 				$rev->setContent(DBRow::toDB($field->type(), $value));
-			} else {
-				// Same content as previous revision; might update status
-				$rev = $old_rev;
-			}
-			if ($rev->getStatus() != 'active') {
-				$rev->setStatus ($status);
-			}
-			$rev->save();
+				$rev->save();
+			} // else no change was made to the revision so do nothing.
 		}
 	}
 

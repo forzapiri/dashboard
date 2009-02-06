@@ -10,23 +10,43 @@ class Module_Content extends Module implements linkable {
 	}
 	
 	function getUserInterface() {
-		$pageid = ContentPage::keytoid($_REQUEST['page']);
-		$pageid = $pageid['id'];
-		$page = ContentPage::make($pageid);
-		if (!$page->getStatus()) {
-			return $this->smarty->dispErr('404', &$this);
+		$pageid = @$_REQUEST['id'];
+		if ($pageid) { // Admin preview of a page
+			if (!$this->user->hasPerm('ContentPage', 'addedit')) {
+				return $this->smarty->dispErr('404', &$this);
+			}
+			$status = $_REQUEST['status'];
+			$page = ContentPage::make($pageid);
+		} else {
+			$status = 'active';
+			$pageid = ContentPage::keytoid($_REQUEST['page']);
+			$pageid = $pageid['id'];
+			$page = ContentPage::make($pageid);
+			if (!$page->getStatus()) {
+				return $this->smarty->dispErr('404', &$this);
+			}
 		}
 		$this->smarty->assign('content',$page);
 		$this->parentSmarty->templateOverride = $page->getSmartyResource();
 		$this->setPageTitle("PAGE TITLE STUB");
 		/* CHUNKS */
-		$this->smarty->assign ('chunks', Chunk::getAllContentFor($page));
-		return $this->smarty->fetch('db:content.tpl');	 
+		$this->smarty->assign ('chunks', Chunk::getAllContentFor($page, $status));
+		return $this->smarty->fetch('db:content.tpl');
 	}
 	
 	function getAdminInterface() {
-		if (@$_REQUEST['action'] == 'loadChunk') {
-			// Response to AJAX request only.  CHUNK
+		var_dump ($_REQUEST);
+		$id = @$_REQUEST['id'];
+		if ($id) $page = ContentPage::make($id);
+		switch (@$_REQUEST['action']) {
+		case 'revertdrafts':
+			Chunk::revertDrafts($page);
+			break;
+		case 'makeactive':
+			Chunk::makeDraftActive($page);
+			break;
+		case 'loadChunk':
+			// CHUNKS: Response to AJAX request only.
 			$role = e(@$_REQUEST['role']);
 			$name = e(@$_REQUEST['name']);
 			$parent_class = e(@$_REQUEST['parent_class']);
@@ -39,17 +59,18 @@ class Module_Content extends Module implements linkable {
 				var_log ($_REQUEST);
 			}
 			die();
+		default: // Fall through
 		}
 		$this->addJS('/modules/Content/js/admin/handleHome.js');
 		$this->addJS('/modules/Content/js/admin/chunk.js');
 		$page = new Page();
 		$page->with('ContentPage')
-			 ->show(array(
-			 	'Name' => 'name',
-			 	'Created' => 'timestamp',
-			 	'Published' => 'status'))
-			 ->name('Content Page')
-			 ->pre($this->smarty->fetch('admin/pages.tpl'));
+			->show(array('Name' => 'name',
+						 'Created' => 'timestamp',
+						 'Published' => 'status',
+						 'Draft' => array('id', array('ContentPage', 'getDraftForms'))))
+			->name('Content Page')
+			->pre($this->smarty->fetch('admin/pages.tpl'));
 		return $page->render();
 	}
 	

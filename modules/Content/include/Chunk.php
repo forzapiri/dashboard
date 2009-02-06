@@ -1,4 +1,6 @@
 <?php
+  // Note that when a getter asks for the "draft", if no "draft" exists, return the active version.
+
 class Chunk extends DBRow {
 	function createTable() {return parent::createTable("chunk", __CLASS__);}
 	static function getAll($where = null) {return self::$tables[__CLASS__]->getAllRows($where);}
@@ -10,25 +12,52 @@ class Chunk extends DBRow {
 		return ($class && $id) ? self::getAll("where parent_class='$class' and parent=$id") : array();
 	}
 
-	private static $hasDraftFlag;
-	static function hasDraft() {
-		getAllContentFor($obj, 'draft');
-		return $this->hasDraftFlag;
+	static function revertDrafts($obj) {
+		foreach (self::getAllFor($obj) as $chunk) $chunk->revert();
+	}
+	function revert() {
+		$draft = $this->getRevision('draft');
+		if ($draft->getStatus() == 'draft') {
+			$draft->setStatus('inactive');
+			$draft->save();
+		}
 	}
 
-	static function getAllContentFor($obj, $status = 'active') {
+	static function makeDraftActive($obj) {
+		foreach (self::getAllFor($obj) as $chunk) $chunk->activate();
+	}
+	function activate() {
+		$draft = $this->getRevision('draft');
+		if ($draft && $draft->getStatus() == 'draft') {
+			$active = $this->getRevision('active');
+			if ($active && $active->getStatus() == 'active') {
+				$active->setStatus('inactive');
+				$active->save();
+			}
+			$draft->setStatus('active');
+			$draft->save();
+		}
+	}
+	
+	private static $hasDraftFlag;
+	static function hasDraft($obj) {
+		self::getAllContentFor($obj, 'draft');
+		return self::$hasDraftFlag;
+	}
+
+	static function getAllContentFor($obj, $status) {
 		self::$hasDraftFlag = false;
 		$chunks = Chunk::getAllFor($obj);
-		foreach ($chunks as &$chunk) {
+		foreach ($chunks as &$chunk) { // Converts Chunk -> rev -> content
 			$type = $chunk->getType();
 			$chunk = $chunk->getRevision($status);
-			// $chunk->setType($type); // THIS SETS THE TYPE OF A REVISION... 
+			if ($chunk->getStatus() == 'draft') self::$hasDraftFlag = true;
 			$chunk = DBRow::fromDB($type, $chunk->getContent());
 		}
 		return new ChunkList($chunks);
 	}
 
-	function getRevision ($status = 'active') {
+	function getRevision ($status) {
 		// This code not only gets the current revision, but also creates one if needed.
 		if ($this->getName() && $this->getRole() && $this->getParent()) {
 			$name = e($this->getName());
@@ -63,14 +92,14 @@ class Chunk extends DBRow {
 		return $rev;
 	}
 
-	function getRawContent($status = 'active') {
+	function getRawContent($status) {
 		if (!$this->getRevision ($status)) {
 			trigger_error ("Failed to get content");
 			return "";
 		}
 		return $this->getRevision($status)->getContent();
 	}
-	function getContent($status = 'active') {return DBRow::fromDB($this->getType(), $this->getRawContent($status));}
+	function getContent($status) {return DBRow::fromDB($this->getType(), $this->getRawContent($status));}
 }
 
 class ChunkList { // Just so that the template doesn't need to pass in an iterating index
