@@ -1,3 +1,4 @@
 .cache
 storage
 files
+.DS_Store
