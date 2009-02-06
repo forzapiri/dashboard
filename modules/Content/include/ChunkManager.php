@@ -150,7 +150,6 @@ class ChunkManager {
 				$rev = ChunkRevision::make();
 				$rev->setParent($old_rev->getParent());
 				$rev->setStatus('draft');
-				var_log ($old_rev);
 				// Need to reset the old status unless we're making a draft and the old one was active
 				if ($old_rev && $old_rev->getStatus() == 'draft') {
 					$old_rev->setStatus('inactive');

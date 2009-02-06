@@ -35,7 +35,6 @@ class Module_Content extends Module implements linkable {
 	}
 	
 	function getAdminInterface() {
-		var_dump ($_REQUEST);
 		$id = @$_REQUEST['id'];
 		if ($id) $page = ContentPage::make($id);
 		switch (@$_REQUEST['action']) {
