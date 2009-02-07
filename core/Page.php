@@ -230,6 +230,48 @@ class Page extends defaultPageActs {
 		return false;
 	}
 	
+	public function getWhere($pointer = null) {
+		$where = null;
+		if (is_null($pointer)) {
+			$pointer = $this->pointer;
+		}
+		
+		if (isset($this->link[$pointer])) {
+			$where = ' where ';
+			$prefix = call_user_func(array($this->link[$pointer][1][0], 'quickformPrefix'));
+			if (isset($_REQUEST[$prefix . $this->link[$pointer][1][1]])) {
+				$where .= $this->link[$pointer][0] . '=' . $_REQUEST[$prefix . $this->link[$pointer][1][1]];
+			} else if (!isset($_REQUEST[call_user_func(array($this->pointer, 'quickformPrefix')) . 'id'])) {
+				$prefix = call_user_func(array($pointer, 'quickformPrefix'));
+				$where .= $this->link[$pointer][0] . '=' . $_REQUEST[$prefix . $this->link[$pointer][0]];
+			} else {
+				$prefix = call_user_func(array($this->pointer, 'quickformPrefix'));
+				$n = DBRow::make($_REQUEST[$prefix . 'id'], $pointer);
+				$where .= $this->link[$pointer][0] . '=' . $n->get($this->link[$pointer][0]);
+			}
+			
+		}
+		if (isset($this->filter[$pointer])) {
+			if (!is_array($this->filter[$pointer])) {
+				$where .= $this->filter[$pointer];
+			}
+		}
+		
+		
+		if (isset($this->order[$pointer])) {
+			$where .= ' order by ' . $this->order[$pointer];
+		}
+		return $where;
+	}
+	
+	public function getItems($pointer = null) {
+		if (is_null($pointer)) {
+			$pointer = $this->pointer;
+		}
+		$items = call_user_func(array($pointer, 'getAll'), $this->getWhere($pointer));
+		return $items;
+	}
+	
 	public function render() {
 		if($this->useDefaultActions){
 			$this->initDefaultActs();
@@ -240,33 +282,8 @@ class Page extends defaultPageActs {
 		if ($r = $this->catchActions()) return $r;
 		
 		$html = '';
-		$where = null;
-		if (isset($this->link[$this->pointer])) {
-			$where = ' where ';
-			$prefix = call_user_func(array($this->link[$this->pointer][1][0], 'quickformPrefix'));
-			if (isset($_REQUEST[$prefix . $this->link[$this->pointer][1][1]])) {
-				$where .= $this->link[$this->pointer][0] . '=' . $_REQUEST[$prefix . $this->link[$this->pointer][1][1]];
-			} else if (!isset($_REQUEST[call_user_func(array($this->pointer, 'quickformPrefix')) . 'id'])) {
-				$prefix = call_user_func(array($this->pointer, 'quickformPrefix'));
-				$where .= $this->link[$this->pointer][0] . '=' . $_REQUEST[$prefix . $this->link[$this->pointer][0]];
-			} else {
-				$prefix = call_user_func(array($this->pointer, 'quickformPrefix'));
-				$n = DBRow::make($_REQUEST[$prefix . 'id'], $this->pointer);
-				$where .= $this->link[$this->pointer][0] . '=' . $n->get($this->link[$this->pointer][0]);
-			}
-			
-		}
-		if (isset($this->filter[$this->pointer])) {
-			if (!is_array($this->filter[$this->pointer])) {
-				$where .= $this->filter[$this->pointer];
-			}
-		}
 		
-		
-		if (isset($this->order[$this->pointer])) {
-			$where .= ' order by ' . $this->order[$this->pointer];
-		}
-		
+		$where = $this->getWhere();
 		$this->perPage = isset($_REQUEST['X-DataLimit']) ? $_REQUEST['X-DataLimit'] : $this->perPage;
 		$sql = 'select count(' . (call_user_func(array($this->pointer, 'createTable'))->name()) . '.id) as count from ' . (call_user_func(array($this->pointer, 'createTable'))->name()) . ' ' . $where;
 			$r = Database::singleton()->query_fetch($sql);
@@ -383,20 +400,28 @@ class Page extends defaultPageActs {
 		
 		$html .= '<table border="0" cellspacing="0" cellpadding="0" class="admin_list">';
 		$html .= '<thead>';
-		$html .= '<tr>';
+		
+		$headfoot = '';
+		
+		$headfoot .= '<tr>';
 		foreach ($this->tables[$this->pointer] as $key => $name) {
-			$html .= '<th valign="middle">' . $key . '</th>';
+			$headfoot .= '<th valign="middle">' . $key . '</th>';
 		}
 		$insertTd = false;
 		foreach($this->pageActions[$this->pointer] as $action => $data){
 			if ($this->user->hasPerm($this->pointer, $data['perm'])){
-				$html .= '<th valign="middle">Actions</th>';
+				$headfoot .= '<th valign="middle">Actions</th>';
 				$insertTd = true;
 				break;
 			}
 		}
-		$html .= '</thead><tbody>';
-		$html .= '</tr>';
+		$headfoot .= '</tr>';
+		
+		
+		$html .= $headfoot;
+		
+		$html .= '</thead><tfoot>' . $headfoot . '</tfoot><tbody>';
+		
 		foreach ($items as $key => $item) {
 			$html .= '<tr class="';
 			if ($key & 1) {

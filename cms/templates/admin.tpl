@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>{$cmsName} - Website Management</title>
+<title>{siteconfig get="CMSname"} - Website Management</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 
 <link rel="stylesheet" href="/css/screen.css,/css/liquid.css,/css/admin_styles.css{if $css.norm|@count > 0}{foreach from=$css.norm item=cssUrl},{$cssUrl}{/foreach}{/if}" type="text/css" />
@@ -19,7 +19,7 @@
 <body>
 <div id="container">
 <div id="header">
-  <div id="logo">Norex Core Web Development</a>
+  <div id="logo">{$cmsName}</a>
   </div>
   <div id="top_nav"><a class="logout" href="/user/logout">Sign Out</a> <a class="return_to_site" href="/">Return to Site</a>
   </div>
@@ -40,7 +40,11 @@
 </div>
 
 <div id="footer">
- 	<p>&copy; {$smarty.now|date_format:"%Y"} by <a href="http://www.norex.ca" title="Norex Core Web Development">Norex Core Web Development</a></p>
+ 	<p> 
+ 	<span style="float: right;">Memory Usage: {siteconfig info="memory"} |
+ 	Render Time: {siteconfig info="render_time"} seconds</span>
+ 	&copy; {$smarty.now|date_format:"%Y"} by <a href="http://www.norex.ca" title="Norex Core Web Development">Norex Core Web Development</a>
+ 	</p>
 </div>
 
 </div>

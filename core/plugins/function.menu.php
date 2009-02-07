@@ -69,7 +69,13 @@ function adminMenu($params, &$smarty) {
 				$extra = ' style="background-image: url(/modules/Content/images/application_edit.png);"';
 			}
 			
-			$adminItems[] = '<li' . $liClass . '><a href="/admin/' . $module['module'] . '"' . @$extra . '>' . ($module['display_name']) . '</a></li>';
+			$text = $module['display_name'];
+			if (isset($blah->page)) {
+				$text .= ' <strong>(' . count($blah->page->getItems()) . ')</strong>';
+			}
+			
+			$adminItems[] = '<li' . $liClass . '><a href="/admin/' . $module['module'] . '"' . @$extra . '>' . $text . 
+				'</a></li>';
 		}
 		
 	}

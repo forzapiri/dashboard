@@ -89,7 +89,7 @@ div#main_window h1 {
 	margin: 0;
 	padding: 7px;
 	background-color: #BDC0CE;
-	text-shadow: 0 1px 1px #000;
+	text-shadow: 0 1px 1px #fff;
 	font-size: 100%;
 	font-weight: bold;
 }
@@ -167,27 +167,30 @@ form ol li {
 }
 
 table.admin_list {
-	border-width: 1px 1px 1px 1px;
-	border-spacing: 0px;
-	border-style: none none none none;
-	border-color: gray gray gray gray;
-	border-collapse: collapse;
-}
-
-table.admin_list {
 	clear: right;
+	border: 1px solid #ddd;
+	-moz-border-radius-bottomleft:6px;
+	-moz-border-radius-bottomright:6px;
+	-moz-border-radius-topleft:6px;
+	-moz-border-radius-topright:6px;
+	border-style:solid;
+	border-width:1px;
+	margin: 0 1% 10px 0;
 }
 
-table.admin_list tr.row1 {
-	background-color: #e0e2f3;
+table.admin_list th {
+	background: url(/images/admin/gray-grad.png) repeat-x;
+	color:#464646;
 }
 
-table.admin_list td, table.admin_list th {
-	border-width: 1px 1px 1px 1px;
-	border-style: inset inset inset inset;
-	border-color: gray gray gray gray;
-	-moz-border-radius: 0px 0px 0px 0px;
+table.admin_list tr.row2 {
+	background-color: #eee;
 }
+
+table.admin_list tfoot {
+	font-style: normal;
+}
+
 
 ul#primary li, ul#primary {
 	list-style-type: none;
@@ -222,4 +225,69 @@ a.delete {
 	background: url(/images/admin/cross.png) no-repeat;
 	padding-left: 20px;
 	text-decoration: none;
+}
+
+div.info-box {
+	width: 48.5%;
+	float: left;
+	border: 1px solid #ddd;
+	-moz-border-radius-bottomleft:6px;
+	-moz-border-radius-bottomright:6px;
+	-moz-border-radius-topleft:6px;
+	-moz-border-radius-topright:6px;
+	border-style:solid;
+	border-width:1px;
+	margin: 0 1% 10px 0;
+}
+
+div.info-box h2 {
+	background: url(/images/admin/gray-grad.png) repeat-x;
+	text-shadow:0 1px 0 #FFFFFF;
+	font-size:12px;
+	font-weight:bold;
+	line-height:1;
+	margin:0;
+	padding:7px 9px;
+	color:#464646;
+}
+
+div.info-box h3 {
+	font-size: 100%;
+	font-weight: bolder;
+	margin: 0;
+	padding: 0 0 4px 0;
+	border-bottom: 1px solid #ddd;
+}
+
+div.info-box h4 {
+	font-size: 100%;
+}
+
+div.info-box ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 8px;
+	background-color: #f9f9f9;
+}
+
+div.info-box ul li ul {
+	margin: 0;
+	padding: 4px 0 4px 8px;
+}
+
+div.info-box ul  li ul li {
+border-bottom: 1px solid #ddd;
+}
+
+div.info-box p {
+	margin: 8px;
+}
+
+div.info-box a {
+	text-decoration: none;
+}
+
+div.info-box .data {
+	float: right;
+	font-weight: bold;
 }

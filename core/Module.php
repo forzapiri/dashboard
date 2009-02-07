@@ -33,6 +33,7 @@ abstract class Module {
 		public $db;
 		public $version;
 		protected $template;
+		public $name;
 		
 		public function onPreDelete(Event_Notification &$notification) {
 			fb('bubble pre-delete', 'Event Notification', FirePHP::INFO);
@@ -78,6 +79,7 @@ abstract class Module {
 				$classname = 'Module_' . $name;
 				
 				$module = new $classname;
+				$module->name = $name;
 				
 				if (!is_null($parentSmarty)) {
 					$module->parentSmarty =& $parentSmarty;

@@ -15,6 +15,26 @@ class Module_Content extends Module implements linkable {
 		$pagerev->addNestedDispatcher(Event_Dispatcher::getInstance());
 		
 		$pagerev->addObserver(array('ContentPageRevision', 'disableOthers'), 'onToggle');
+		
+		$this->page = new Page();
+		$this->page->with('ContentPage')
+			 ->show(array(
+			 	'Name' => 'name',
+			 	'Created' => 'timestamp',
+			 	'Published' => 'status'))
+			 ->name('Content Page')
+			 ->on('addedit')->action('ContentPageRevision');
+			 
+		$this->page->with('ContentPageRevision')
+			 ->show(array(
+			 	'Title' => 'page_title',
+			 	'Created' => 'timestamp',
+			 	'Published' => 'status'))
+			 ->name('Content Page Revision')
+			 ->link(array('parent', array('ContentPage', 'id')))
+			 ->showCreate(false);
+			 
+		$this->page->with('ContentPage');
 	}
 	
 	function getUserInterface() {
@@ -38,26 +58,8 @@ class Module_Content extends Module implements linkable {
 	
 	function getAdminInterface() {
 		$this->addJS('/modules/Content/js/admin/handleHome.js');
-		$page = new Page();
-		$page->with('ContentPage')
-			 ->show(array(
-			 	'Name' => 'name',
-			 	'Created' => 'timestamp',
-			 	'Published' => 'status'))
-			 ->name('Content Page')
-			 ->on('addedit')->action('ContentPageRevision');
-			 
-		$page->with('ContentPageRevision')
-			 ->show(array(
-			 	'Title' => 'page_title',
-			 	'Created' => 'timestamp',
-			 	'Published' => 'status'))
-			 ->name('Content Page Revision')
-			 ->link(array('parent', array('ContentPage', 'id')))
-			 ->showCreate(false);
-			 
-		$page->with('ContentPage');
-		return $page->render();
+		
+		return $this->page->render();
 	}
 	
 	public static function getLinkables($level = 0, $id = null){
