@@ -1,5 +1,4 @@
 <?php
-
 class Module_Content extends Module implements linkable {
 	public function __construct() {
 		parent::__construct();
@@ -51,12 +50,13 @@ class Module_Content extends Module implements linkable {
 			$parent_class = e(@$_REQUEST['parent_class']);
 			$parent = (int) @$_REQUEST['parent'];
 			$sort = (int) @$_REQUEST['sort'];
-			if ($role && $name) echo ChunkRevision::getNamedChunkFormField($role, $name);
-			else if ($parent_class && $parent) echo ChunkRevision::getChunkFormField ($parent_class, $parent, $sort);
+			if ($role && $name) $result = ChunkRevision::getNamedChunkFormField($role, $name);
+			else if ($parent_class && $parent) $result = ChunkRevision::getChunkFormField ($parent_class, $parent, $sort);
 			else {
 				trigger_error ('Bad AJAX request for loadChunk');
 				var_log ($_REQUEST);
 			}
+			echo $result;
 			die();
 		default: // Fall through
 		}
@@ -90,5 +90,3 @@ class Module_Content extends Module implements linkable {
 		return '/content/' . $page->get('url_key');
 	}
 }
-
-?>

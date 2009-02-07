@@ -78,8 +78,8 @@ class ChunkManager {
 				$el[] = $form->createElement('text', "text", ""); // HIDDEN BY admin.js
 				$form->addGroup($el, "_chunk_name_$i", $label, '&nbsp;&nbsp;&nbsp;');
 				$form->addElement('html', "\n</div>");
-				$class = $chunk ? $chunk->getParentClass() : '';
-				$parent = $chunk ? $chunk->getParent() : 0;
+				$class = get_class($this->object);
+				$parent = $this->object->getId();
 				$form->addElement('html', "\n<script type='text/javascript'>watchChunkSelect($i, '$role', '$class', $parent);</script>\n");
 				$field->setLabel(""); // Inspect the add edit form, add an appropriate class, use JavaScript to watch for change and update content
 			}

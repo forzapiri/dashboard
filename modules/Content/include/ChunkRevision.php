@@ -8,22 +8,21 @@ class ChunkRevision extends DBRow {
 	private static $q1a;
 	private static $q1b;
 
-	static private function outputRevisionFormField($chunk, $status) {
+	static private function getRevisionFormField($chunk, $status) {
 		if (!$chunk) return null;
 		$type = $chunk->getType();
 		$c = $chunk->getContent($status);
-		echo DBRow::toForm($type, $c);
-		die();
+		return DBRow::toForm($type, $c);
 	}
 
-	static function getChunkFormField ($class, $parent, $sort, $status = 'active') {
+	static function getChunkFormField ($class, $parent, $sort, $status = 'draft') {
 		$c = Chunk::getAll("where parent_class='$class' and parent=$parent and sort=$sort");
-		self::outputRevisionFormField($c[0], $status);
+		return $c ? self::getRevisionFormField($c[0], $status) : "";
 	}
 
-	static function getNamedChunkFormField ($role, $name, $status = 'active') {
+	static function getNamedChunkFormField ($role, $name, $status = 'draft') {
 		$c = Chunk::getAll("where role='$role' and name='$name' and (parent is null or parent=0)");
-		self::outputRevisionFormField($c[0], $status);
+		return self::getRevisionFormField($c[0], $status);
 	}
 }
 	
