@@ -2,7 +2,7 @@
 --
 -- Host: localhost    Database: master
 -- ------------------------------------------------------
--- Server version	5.0.41-log
+-- Server version	5.0.41
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -142,6 +142,32 @@ LOCK TABLES `content_pages` WRITE;
 INSERT INTO `content_pages` VALUES (1,'Home','2007-12-15 23:23:33',1,'public','home','chunks.tpl');
 /*!40000 ALTER TABLE `content_pages` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `permissions`
+--
+
+DROP TABLE IF EXISTS `permissions`;
+CREATE TABLE `permissions` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `key` text,
+  `class` text,
+  `name` text,
+  `description` text,
+  `group_id` int(11) default NULL,
+  `status` tinyint(1) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `permissions`
+--
+
+LOCK TABLES `permissions` WRITE;
+/*!40000 ALTER TABLE `permissions` DISABLE KEYS */;
+INSERT INTO `permissions` VALUES (1,'admin','CMS','Admin Access',NULL,1,1),(2,'view','Permission','View Permissions',NULL,1,1),(3,'addedit','Permission','Add/Edit Permissions',NULL,1,1),(4,'delete','Permission','Delete Permissions','',1,1),(5,'view','User','View Users','',1,1),(6,'addedit','User','Add/Edit Users','',1,1),(7,'delete','User','Delete Users','',1,1),(8,'view','Group','View Groups','',1,1),(9,'addedit','Group','Add/Edit Groups','',1,1),(10,'delete','Group','Delete Groups','',1,1),(11,'addedit','Block','Add/Edit Blocks','',1,1),(12,'view','Block','View Blocks','',1,1),(13,'delete','Block','Delete Blocks',NULL,1,1),(14,'view','ContentPage','View Content Pages','',1,1),(15,'addedit','ContentPage','Add / Edit Content Pages','',1,1),(16,'delete','ContentPage','Delete Content Pages','',1,1),(17,'view','ContentPageRevision','View Content Page Revisions','',1,1),(18,'addedit','ContentPageRevision','Add / Edit Content Page Revisions','',1,1),(19,'delete','ContentPageRevision','Delete Content Page Revisions','',1,1),(20,'view','Analytics','View Analytics','',1,1),(21,'addedit','Analytics','Add/Edit Analytics','',1,1),(22,'delete','Analytics','Delete Analytics','',1,0);
+/*!40000 ALTER TABLE `permissions` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -152,4 +178,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2009-02-06  2:21:48
+-- Dump completed on 2009-02-07 14:34:13
