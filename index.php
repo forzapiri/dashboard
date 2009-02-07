@@ -43,14 +43,14 @@ if ( $ajaxHelper->isAJAX () ){
 	echo Module::factory($_REQUEST['module'], $smarty)->getUserInterface($_REQUEST);
 } else {
 	$smarty->addJS('/js/scriptaculous.js');
-	
+
 	$smarty->content[$_REQUEST['module']] = Module::factory($_REQUEST['module'], $smarty)->getUserInterface($_REQUEST);
 
 	$smarty->template_dir = SITE_ROOT . '/templates/';
 	$smarty->compile_dir = SITE_ROOT . '/cache/templates';
 	$smarty->plugins_dir[] = SITE_ROOT . '/core/plugins';
 	$smarty->compile_id = 'CMS';
-	
+
 	$smarty->assign ( 'module', $_REQUEST['module'] );
 	if (isset($_SESSION['authenticated_user'])) {
 		$smarty->assign_by_ref ( 'user', $_SESSION['authenticated_user'] );

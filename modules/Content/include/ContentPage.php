@@ -15,6 +15,11 @@ class ContentPage extends DBRow {
 	static function getAll($where = null) {return self::$tables[__CLASS__]->getAllRows($where);}
 	static function make($id = null) {return parent::make($id, __CLASS__);}
 	function quickformPrefix() {return 'content_pages_';}
+	function __construct($id = null) {
+		/* CHUNKS:  Move this code to DBRow() with a check for $this->chunkable() ?? */
+		$this->chunkManager = new ChunkManager($this);
+		parent::__construct($id);
+	}
 	
 	function keytoid($name){
 		$sql = 'select id from content_pages where url_key="'.$name.'"';
@@ -51,13 +56,25 @@ class ContentPage extends DBRow {
 					break;
 			}
 		}
+
+		/* CHUNKS:  Move this code to DBRow() with a check for $this->chunkable() ?? */
+		if ($name = $this->getPageTemplate()) {
+			$template = Template::getRevision('CMS', $name);
+			$this->chunkManager->setTemplate($template);
+			$this->chunkManager->insertFormFields($form);
+		}
 	}
 	
-	public function getAddEditFormSaveHook($form) {
+	public function getAddEditFormBeforeSaveHook($form) {
 		include_once(SITE_ROOT . '/core/plugins/modifier.urlify.php');
 		$this->set('url_key', smarty_modifier_urlify($this->get('url_key')));
 	}
 	
+	public function getAddEditFormAfterSaveHook($form) {
+		/* CHUNKS:  Move this code to DBRow() with a check for $this->chunkable() ?? */
+		$this->chunkManager->saveFormFields($form, 'draft');
+	}
+
 	function checkForHomeName($elVal){return (!is_null($elVal) && ucfirst($elVal) != SiteConfig::get('Content::defaultPage'));}
 	
 	public static function checkForHome(&$n){
@@ -74,6 +91,18 @@ class ContentPage extends DBRow {
 	function getSmartyResource() {
 		if ($t = $this->getPageTemplate()) {return "db:" . $t;}
 		else return null;
+	}
+
+	function getDraftForms() {
+		if (Chunk::hasDraft($this)) {
+			$module = Module::factory('Content');
+			$smarty = $module->smarty;
+			$smarty->assign ('obj', $this);
+			$smarty->assign ('id', $this->getId());
+			return $smarty->fetch ('admin/draft-actions.tpl');
+		} else {
+			return "";
+		}
 	}
 }
 DBRow::init('ContentPage');

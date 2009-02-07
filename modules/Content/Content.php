@@ -7,64 +7,75 @@ class Module_Content extends Module implements linkable {
 		$dispatcher->addNestedDispatcher(Event_Dispatcher::getInstance());
 		
 		$dispatcher->addObserver(array('ContentPage', 'checkForHome'), 'onPreDelete');
-		
-		$pagerev = &Event_Dispatcher::getInstance('ContentPageRevision');
-		$pagerev->addNestedDispatcher(Event_Dispatcher::getInstance());
-		
-		$pagerev->addObserver(array('ContentPageRevision', 'disableOthers'), 'onToggle');
 	}
 	
 	function getUserInterface() {
-		include ('include/ContentPage.php');
-		include ('include/ContentPageRevision.php');
-		include ('include/Chunk.php');
-		$pageid = ContentPage::keytoid($_REQUEST['page']);
-		$pageid = $pageid['id'];
-		$revid = ContentPage::activeRev($pageid);
-		$revid = @$revid['id'];
-		if(!is_null($revid)){
-			$rev = ContentPageRevision::make($revid);
-			$this->smarty->assign('content',$rev);
+		$pageid = @$_REQUEST['id'];
+		if ($pageid) { // Admin preview of a page
+			if (!$this->user->hasPerm('ContentPage', 'addedit')) {
+				return $this->smarty->dispErr('404', &$this);
+			}
+			$status = $_REQUEST['status'];
 			$page = ContentPage::make($pageid);
-			$this->parentSmarty->templateOverride = $page->getSmartyResource();
-			$this->setPageTitle($rev->get('page_title'));
-			/* CHUNKS:  Move this code to Module somehow with a check for $this->chunkable() ?? */
-			$this->smarty->assign ('chunks', ChunkRevision::getAllContentFor($rev));
 		} else {
-			return $this->smarty->dispErr('404', &$this);
+			$status = 'active';
+			$pageid = ContentPage::keytoid($_REQUEST['page']);
+			$pageid = $pageid['id'];
+			$page = ContentPage::make($pageid);
+			if (!$page->getStatus()) {
+				return $this->smarty->dispErr('404', &$this);
+			}
 		}
-		return $this->smarty->fetch('db:content.tpl');	 
+		$this->smarty->assign('content',$page);
+		$this->parentSmarty->templateOverride = $page->getSmartyResource();
+		$this->setPageTitle("PAGE TITLE STUB");
+		/* CHUNKS */
+		$this->smarty->assign ('chunks', Chunk::getAllContentFor($page, $status));
+		return $this->smarty->fetch('db:content.tpl');
 	}
 	
 	function getAdminInterface() {
+		$id = @$_REQUEST['id'];
+		if ($id) $page = ContentPage::make($id);
+		switch (@$_REQUEST['action']) {
+		case 'revertdrafts':
+			Chunk::revertDrafts($page);
+			break;
+		case 'makeactive':
+			Chunk::makeDraftActive($page);
+			break;
+		case 'loadChunk':
+			// CHUNKS: Response to AJAX request only.
+			$role = e(@$_REQUEST['role']);
+			$name = e(@$_REQUEST['name']);
+			$parent_class = e(@$_REQUEST['parent_class']);
+			$parent = (int) @$_REQUEST['parent'];
+			$sort = (int) @$_REQUEST['sort'];
+			if ($role && $name) echo ChunkRevision::getNamedChunkFormField($role, $name);
+			else if ($parent_class && $parent) echo ChunkRevision::getChunkFormField ($parent_class, $parent, $sort);
+			else {
+				trigger_error ('Bad AJAX request for loadChunk');
+				var_log ($_REQUEST);
+			}
+			die();
+		default: // Fall through
+		}
 		$this->addJS('/modules/Content/js/admin/handleHome.js');
+		$this->addJS('/modules/Content/js/admin/chunk.js');
 		$page = new Page();
 		$page->with('ContentPage')
-			 ->show(array(
-			 	'Name' => 'name',
-			 	'Created' => 'timestamp',
-			 	'Published' => 'status'))
-			 ->name('Content Page')
-			 ->pre($this->smarty->fetch('admin/pages.tpl'))
-			 ->on('addedit')->action('ContentPageRevision');
-			 
-		$page->with('ContentPageRevision')
-			 ->show(array(
-			 	'Title' => 'page_title',
-			 	'Created' => 'timestamp',
-			 	'Published' => 'status'))
-			 ->name('Content Page Revision')
-			 ->link(array('parent', array('ContentPage', 'id')))
-			 ->showCreate(false);
-			 
-		$page->with('ContentPage');
+			->show(array('Name' => 'name',
+						 'Created' => 'timestamp',
+						 'Published' => 'status',
+						 'Draft' => array('id', array('ContentPage', 'getDraftForms'))))
+			->name('Content Page')
+			->pre($this->smarty->fetch('admin/pages.tpl'));
 		return $page->render();
 	}
 	
 	public static function getLinkables($level = 0, $id = null){
 		switch($level){
 			case 1:
-				
 			default:
 				$linkItems = ContentPage::getAll("where status = '1'");
 				foreach($linkItems as $linkItem){

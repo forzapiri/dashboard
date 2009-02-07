@@ -34,33 +34,13 @@ abstract class Module {
 		public $version;
 		protected $template;
 		
-		public function onPreDelete(Event_Notification &$notification) {
-			fb('bubble pre-delete', 'Event Notification', FirePHP::INFO);
-		}
-		
-		public function onPreSave(Event_Notification &$notification) {
-			fb('bubble pre-save', 'Event Notification', FirePHP::INFO);
-		}
-		
-		public function onPreToggle(Event_Notification &$notification) {
-			fb('bubble pre-toggle', 'Event Notification', FirePHP::INFO);
-		}
-		
-		public function onDelete(Event_Notification &$notification) {
-			fb('bubble delete', 'Event Notification', FirePHP::INFO);
-		}
-		
-		public function onSave(Event_Notification &$notification) {
-			fb('bubble save', 'Event Notification', FirePHP::INFO);
-		}
-		
-		public function onToggle(Event_Notification &$notification) {
-			fb('bubble toggle', 'Event Notification', FirePHP::INFO);
-		}
-		
-		public function __construct() {
-			
-		}
+		public function onPreDelete(Event_Notification &$notification) {}
+		public function onPreSave(Event_Notification &$notification) {}
+		public function onPreToggle(Event_Notification &$notification) {}
+		public function onDelete(Event_Notification &$notification) {}
+		public function onSave(Event_Notification &$notification) {}
+		public function onToggle(Event_Notification &$notification) {}
+		public function __construct() {}
 		
 		/**
 		 * Create and return reference to loaded module.
@@ -118,9 +98,7 @@ abstract class Module {
 				if (@isset($_SESSION['authenticated_user'])) {
 					$module->user = User::make($_SESSION['authenticated_user']->getId());
 					$module->smarty->assign_by_ref('user', $module->user);
-					
 				} 
-				
 				return $module;
 			} else {
 				$module = false;
