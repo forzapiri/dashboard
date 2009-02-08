@@ -32,7 +32,8 @@ DONE:
 TODO:
     I removed the checkForHomeName in Content.php; rewrite as needed.
 	Check for name collisions for new names
-    Once working, do a grep 'CHUNK' to find suggested structural improvements, and move from Content module to core.
+	AJAX calls to auto-save tinymce chunks --- keyclick starts timer; auto-save happens 1 minute later?
+    Once working, do a grep 'CHUNK' to find methods which need to be promoted to Module, DBRow, Page classes
   */
 class ChunkManager {
 	private $fields = array(); // Fields are of type DBColumn
