@@ -6,14 +6,18 @@ class Chunk extends DBRow {
 	static function getAll($where = null) {return self::$tables[__CLASS__]->getAllRows($where);}
 	static function make($id = null) {return parent::make($id, __CLASS__);}
 
-	static function getAllFor($obj) {
-		$class = get_class($obj);
-		$id = $obj->getId();
+	static function getAllFor($obj, $id = null) { // If $obj is a class name, $id is the object's id
+		if ($id) {
+			$class = $obj;
+		} else {
+			$class = get_class($obj);
+			$id = $obj->getId();
+		}
 		return ($class && $id) ? self::getAll("where parent_class='$class' and parent=$id") : array();
 	}
 
-	static function revertDrafts($obj) {
-		foreach (self::getAllFor($obj) as $chunk) $chunk->revert();
+	static function revertDrafts($class, $id) {
+		foreach (self::getAllFor($class, $id) as $chunk) $chunk->revert();
 	}
 	function revert() {
 		$draft = $this->getRevision('draft');
@@ -23,8 +27,8 @@ class Chunk extends DBRow {
 		}
 	}
 
-	static function makeDraftActive($obj) {
-		foreach (self::getAllFor($obj) as $chunk) $chunk->activate();
+	static function makeDraftActive($class, $id) {
+		foreach (self::getAllFor($class, $id) as $chunk) $chunk->activate();
 	}
 	function activate() {
 		$draft = $this->getRevision('draft');
@@ -74,17 +78,25 @@ class Chunk extends DBRow {
 		}
 	}
 	
-	function getRevision ($status /* OR count */ , $create = true) {
+	function getRevision ($statusORcount, $create = true) {
 		// This code not only gets the current revision, but also creates one if needed.
+		// var_log ("statusORcount=" . $statusORcount);
 		$c = $this->getActualChunk();
 		$id = $c->getId();
-		switch ($status) {
-		case 'active': $statusClause = "status='$status'"; break;
+		$count = (integer) $statusORcount;
+		switch ($statusORcount) {
+		case 'active': $statusClause = "status='$statusORcount'"; break;
 		case 'draft': $statusClause = "(status='draft' OR status='active') ORDER BY status DESC limit 1"; break;
 		default:
-			$count = (integer) $status;
-			if (!$count) trigger_error ("Invalid status in getRevision: $status");
+			if (!$count) trigger_error ("Invalid status in getRevision: $statusORcount");
 			$statusClause = "count=$count";
+			$draft = ChunkRevision::getAll("where status='draft'");
+			// var_log ("REVERTING DRAFT.  DRAFT EXISTS " . !!$draft);
+			if ($draft) { // RESET PREVIOUS draft TO inactive
+				$draft = $draft[0];
+				$draft->setStatus('inactive');
+				$draft->save();
+			}
 		}
 		$all = ChunkRevision::getAll("where parent=$id and $statusClause");
 		if ($all) {
@@ -93,8 +105,11 @@ class Chunk extends DBRow {
 			if (!$create) return null;
 			$rev = ChunkRevision::make();
 			$rev->setParent($id);
-			$rev->setStatus($status);
 			$rev->setCount(0);
+		}
+		if ($rev->getStatus() == 'inactive') {
+			$rev->setStatus('draft');
+			$rev->save();
 		}
 		return $rev;
 	}
@@ -113,7 +128,7 @@ class Chunk extends DBRow {
 		return $result['count'];
 	}
 
-	static function loadChunk() { // Load the chunk from $_REQUEST
+	static function loadChunk() { // Load the chunk from $_REQUEST and update draft
 		// CHUNKS: Response to AJAX request only.
 		$role = e(@$_REQUEST['role']);
 		$name = e(@$_REQUEST['name']);

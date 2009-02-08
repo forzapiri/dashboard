@@ -4,10 +4,6 @@ class ChunkRevision extends DBRow {
 	static function getAll($where = null) {return self::$tables[__CLASS__]->getAllRows($where);}
 	static function make($id = null) {return parent::make($id, __CLASS__);}
 
-	// NEED TO PAY ATTENTION TO NAMED CONTENT HERE!!  AND TO REVISIONS.  MAKE MULTIPLE DB CALLS AND GO CHUNK BY CHUNK  ???
-	private static $q1a;
-	private static $q1b;
-
 	static private function getRevisionFormField($chunk, $status) {
 		if (!$chunk) return null;
 		$type = $chunk->getType();

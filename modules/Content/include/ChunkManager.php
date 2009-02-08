@@ -28,31 +28,11 @@ DONE:
 	When naming a chunk, make a parentless canonical version.  That's the one that gets updated.
 	Update the associated text field on change to existing name
 	Draft model implemented
+	Small buttons to tranverse revision history
 TODO:
 	- Check for name collisions for new names
     - Once working, do a grep 'CHUNK' to find suggested structural improvements, and move from Content module to core.
-    - Small buttons to go backward and forward in chunk revision history ??  dates or version numbers ??
   */
-
-  /*  Group generated styled as:
-<li><label class="element">First Column</label>
-  <div class="element">
-    <select name="__name__[_name_1]">
-	   <option value=""></option>
-       <option value="__new__">(make reusable)</option>
-    </select>
-	<input name="_chunk_name_1[prev]" type="image" src="/images/admin/arrow_left.gif" />
-	<input name ="_chunk_name_1[next]" type="image" src="/images/admin/arrow_right.gif" />
-    <input name="__name__[_new_name_1]" type="text" />
-  </div>
-</li>
-<li><label for="_chunk_1" class="element">&nbsp;</label>
-	<textarea id="_chunk_1" id="_chunk_1" name="_chunk_1" rows="15" cols="16" class="_chunk_1" style="width: 200px">c3</textarea>
-    <script type="text/javascript">
-	    initRTE("exact","advanced","_chunk_1","/css/style.css","mainContent","tinymce");
-	</script></div>
-</li>
-   */
 class ChunkManager {
 	private $fields = array(); // Fields are of type DBColumn
 	private $roles = array();
@@ -84,8 +64,8 @@ class ChunkManager {
 				$form->addElement('html', "\n</div>");
 				$class = get_class($this->object);
 				$parent = $this->object->getId();
-				$total = $chunk->countRevisions();
-				$count = $chunk->getCount('draft');
+				$total = $chunk ? $chunk->countRevisions() : 0;
+				$count = $chunk ? $chunk->getCount('draft') : 0;
 				$form->addElement('html', "\n<script type='text/javascript'>watchChunkSelect($i, '$role', '$class', $parent, $total, $count);</script>\n");
 				$field->setLabel(""); // Inspect the add edit form, add an appropriate class, use JavaScript to watch for change and update content
 			}
@@ -152,7 +132,7 @@ class ChunkManager {
 				$rev = $old_rev;
 				$rev->setCount(1);
 				$rev->setContent(DBRow::toDB($field->type(), $value));
-				$rev->setStatus('draft');
+				$rev->setStatus('active');
 				$rev->save();
 			} else if (DBRow::toDB($type, $value) != $chunk->getRawContent('draft')) { // New revision of old content
 				$rev = ChunkRevision::make();
@@ -233,10 +213,10 @@ class ChunkManager {
 	static function fieldAdminRequest() {
 		switch (@$_REQUEST['action']) { // CHUNKS
 		case 'chunk_revertdrafts':
-			Chunk::revertDrafts($page);
+			Chunk::revertDrafts($_REQUEST['section'], $_REQUEST['id']);
 			break;
 		case 'chunk_makeactive':
-			Chunk::makeDraftActive($page);
+			Chunk::makeDraftActive($_REQUEST['section'], $_REQUEST['id']);
 			break;
 		case 'chunk_load':  // Response to AJAX request only.
 			echo Chunk::loadChunk();
