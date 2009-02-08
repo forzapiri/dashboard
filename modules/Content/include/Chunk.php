@@ -132,8 +132,8 @@ class Chunk extends DBRow {
 		// CHUNKS: Response to AJAX request only.
 		$role = e(@$_REQUEST['role']);
 		$name = e(@$_REQUEST['name']);
-		$parent_class = e(@$_REQUEST['parent_class']);
-		$parent = (int) @$_REQUEST['parent'];
+		$parent_class = e(@$_REQUEST['section']);
+		$parent = (int) @$_REQUEST['id'];
 		$sort = (int) @$_REQUEST['sort'];
 		$count = (int) @$_REQUEST['i'];
 		$status = $count ? $count : 'draft';

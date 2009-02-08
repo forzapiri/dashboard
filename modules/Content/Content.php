@@ -34,15 +34,15 @@ class Module_Content extends Module implements linkable {
 	}
 	
 	function getAdminInterface() {
-		ChunkManager::fieldAdminRequest();
+		ChunkManager::fieldAdminRequest(); // CHUNKS
+		$this->addJS('/modules/Content/js/admin/chunk.js'); // CHUNKS
 		$this->addJS('/modules/Content/js/admin/handleHome.js');
-		$this->addJS('/modules/Content/js/admin/chunk.js');
 		$page = new Page();
 		$page->with('ContentPage')
 			->show(array('Name' => 'name',
 						 'Created' => 'timestamp',
 						 'Published' => 'status',
-						 'Draft' => array('id', array('ContentPage', 'getDraftForms'))))
+						 'Draft' => array('id', array('ContentPage', 'getDraftForms')))) // CHUNKS
 			->name('Content Page')
 			->pre($this->smarty->fetch('admin/pages.tpl'));
 		return $page->render();

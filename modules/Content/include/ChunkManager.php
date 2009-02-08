@@ -30,8 +30,9 @@ DONE:
 	Draft model implemented
 	Small buttons to tranverse revision history
 TODO:
-	- Check for name collisions for new names
-    - Once working, do a grep 'CHUNK' to find suggested structural improvements, and move from Content module to core.
+    I removed the checkForHomeName in Content.php; rewrite as needed.
+	Check for name collisions for new names
+    Once working, do a grep 'CHUNK' to find suggested structural improvements, and move from Content module to core.
   */
 class ChunkManager {
 	private $fields = array(); // Fields are of type DBColumn

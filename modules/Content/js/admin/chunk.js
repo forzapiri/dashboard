@@ -33,7 +33,7 @@ function watchChunkSelect(sort, role, parent_class, parent_id, n, i) { // We are
 		if (event.element() == prev) {i = rev-1;}
 		if (event.element() == next) {i = rev+1;}
 		if (select.value == '')
-		    $params = {action: 'chunk_load', parent_class: parent_class, parent: parent_id, sort: sort, i: i};
+		    $params = {action: 'chunk_load', section: parent_class, id: parent_id, sort: sort, i: i};
 		else
 			$params = {action: 'chunk_load', role: role, name: select.value, i: i};
 		new Ajax.Request ('/admin/Content',
