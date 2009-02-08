@@ -50,9 +50,9 @@ class Chunk extends DBRow {
 		$chunks = Chunk::getAllFor($obj);
 		foreach ($chunks as &$chunk) { // Converts Chunk -> rev -> content
 			$type = $chunk->getType();
-			$chunk = $chunk->getRevision($status);
-			if ($chunk->getStatus() == 'draft') self::$hasDraftFlag = true;
-			$chunk = DBRow::fromDB($type, $chunk->getContent());
+			$rev = $chunk->getRevision($status);
+			if ($rev->getStatus() == 'draft') self::$hasDraftFlag = true;
+			$chunk = DBRow::fromDB($type, $rev->getContent());
 		}
 		return new ChunkList($chunks);
 	}
@@ -74,15 +74,17 @@ class Chunk extends DBRow {
 		}
 	}
 	
-	function getRevision ($status, $create = true) {
+	function getRevision ($status /* OR count */ , $create = true) {
 		// This code not only gets the current revision, but also creates one if needed.
 		$c = $this->getActualChunk();
-		var_log ($c);
 		$id = $c->getId();
 		switch ($status) {
 		case 'active': $statusClause = "status='$status'"; break;
 		case 'draft': $statusClause = "(status='draft' OR status='active') ORDER BY status DESC limit 1"; break;
-		default: trigger_error ("Invalid status in getRevision: $status");
+		default:
+			$count = (integer) $status;
+			if (!$count) trigger_error ("Invalid status in getRevision: $status");
+			$statusClause = "count=$count";
 		}
 		$all = ChunkRevision::getAll("where parent=$id and $statusClause");
 		if ($all) {
@@ -109,6 +111,23 @@ class Chunk extends DBRow {
 		$sql = "d";
 		$result = self::$countQuery->fetch($c->getId());
 		return $result['count'];
+	}
+
+	static function loadChunk() { // Load the chunk from $_REQUEST
+		// CHUNKS: Response to AJAX request only.
+		$role = e(@$_REQUEST['role']);
+		$name = e(@$_REQUEST['name']);
+		$parent_class = e(@$_REQUEST['parent_class']);
+		$parent = (int) @$_REQUEST['parent'];
+		$sort = (int) @$_REQUEST['sort'];
+		$count = (int) @$_REQUEST['i'];
+		$status = $count ? $count : 'draft';
+		if ($role && $name) $result = ChunkRevision::getNamedChunkFormField($role, $name, $status);
+		else if ($parent_class && $parent) $result = ChunkRevision::getChunkFormField ($parent_class, $parent, $sort, $status);
+		else {
+			trigger_error ('Bad AJAX request for loadChunk');
+		}
+		return json_encode ($result);
 	}
 }
 

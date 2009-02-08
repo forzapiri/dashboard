@@ -78,8 +78,8 @@ class ChunkManager {
 					$chunk = $chunk->getActualChunk();
 				}
 				$el[] = $form->createElement('text', "text", ""); // THESE FIELDS ARE HIDDEN AND/OR HANDLED BY chunks.js
-				$el[] = $form->createElement('image', 'prev', "/images/admin/arrow_left.gif", array('onclick' => 'return false'));
-				$el[] = $form->createElement('image', 'next', "/images/admin/arrow_right.gif", array('onclick' => 'return false'));
+				$el[] = $form->createElement('image', 'prev', "/images/admin/arrow_left.gif", array('onclick' => 'return false', 'id'=>"_chunk_prev_".$i));
+				$el[] = $form->createElement('image', 'next', "/images/admin/arrow_right.gif", array('onclick' => 'return false', 'id'=>"_chunk_next_".$i));
 				$form->addGroup($el, "_chunk_name_$i", $label, '&nbsp;&nbsp;&nbsp;');
 				$form->addElement('html', "\n</div>");
 				$class = get_class($this->object);
@@ -228,5 +228,20 @@ class ChunkManager {
 		$names = array();
 		foreach ($result as $val) $names[$val['name']] = $val['name'];
 		return array_merge (array(''=>'', '__new__'=>'Create Name for Reuse:'), $names);
+	}
+
+	static function fieldAdminRequest() {
+		switch (@$_REQUEST['action']) { // CHUNKS
+		case 'chunk_revertdrafts':
+			Chunk::revertDrafts($page);
+			break;
+		case 'chunk_makeactive':
+			Chunk::makeDraftActive($page);
+			break;
+		case 'chunk_load':  // Response to AJAX request only.
+			echo Chunk::loadChunk();
+			die();
+		default: // Fall through
+		}
 	}
 }

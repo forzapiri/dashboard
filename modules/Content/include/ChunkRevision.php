@@ -12,10 +12,11 @@ class ChunkRevision extends DBRow {
 		if (!$chunk) return null;
 		$type = $chunk->getType();
 		$c = $chunk->getContent($status);
-		return DBRow::toForm($type, $c);
+		$content = DBRow::toForm($type, $c);
+		return array ('content' => $content, 'i' => $chunk->getCount($status), 'n' => $chunk->countRevisions());
 	}
 
-	static function getChunkFormField ($class, $parent, $sort, $status = 'draft') {
+	static function getChunkFormField ($class, $parent, $sort, $status /* or count */) {
 		$c = Chunk::getAll("where parent_class='$class' and parent=$parent and sort=$sort");
 		return $c ? self::getRevisionFormField($c[0], $status) : "";
 	}
