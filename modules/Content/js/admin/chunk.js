@@ -5,7 +5,7 @@ function watchChunkSelect(sort, role, parent_class, parent_id) {
 	var select = div.down('select');
 	var text = div.down('input');
 	text.hide();
-	function onChangeSelect() {
+	function onChangeSelect(blah) {
 		if (select.value == '__new__') {
 			text.show();
 			return;
@@ -23,7 +23,8 @@ function watchChunkSelect(sort, role, parent_class, parent_id) {
 						  {method: 'post',
 						   parameters: $params,
 						   onSuccess: function (t) {
-								  ed.setContent(t.responseText);
+								  var result = t.responseText.evalJSON(true);
+								  ed.setContent(result.content);
 								  ed.save();
 								  ed.setProgressState(0);
 							  }.bind(this),

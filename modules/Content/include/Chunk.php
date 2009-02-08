@@ -1,5 +1,5 @@
 <?php
-  // Note that when a getter asks for the "draft", if no "draft" exists, return the active version.
+  // Note that when a getter asks for the "draft", if no "draft" exists, we return the active version.
 
 class Chunk extends DBRow {
 	function createTable() {return parent::createTable("chunk", __CLASS__);}
@@ -28,8 +28,8 @@ class Chunk extends DBRow {
 	}
 	function activate() {
 		$draft = $this->getRevision('draft');
-		if ($draft && $draft->getStatus() == 'draft') {
-			$active = $this->getRevision('active');
+		if ($draft->getStatus() == 'draft') {
+			$active = $this->getRevision('active', false);
 			if ($active && $active->getStatus() == 'active') {
 				$active->setStatus('inactive');
 				$active->save();
@@ -57,25 +57,28 @@ class Chunk extends DBRow {
 		return new ChunkList($chunks);
 	}
 
-	function getRevision ($status) {
-		// This code not only gets the current revision, but also creates one if needed.
-		if ($this->getName() && $this->getRole() && $this->getParent()) {
-			$name = e($this->getName());
-			$role = $this->getRole();
-			$c = self::getAll("where role='$role' and name='$name' and (parent is null or parent=0)");
-			if (!$c) { // Create the canonical Chunk with this (role, name) pair.
-				$c = Chunk::make();
-				$c->setRole($role);
-				$c->setName($this->getName());
-				$c->setType($this->getType());
-				$c->save();
-				$id = $c->getId();
-			} else {
-				$id = $c[0]->getId();
-			}
+	function getActualChunk() { // If this is a roled, named chunk returns the canonical version
+		if (!($this->getName() && $this->getRole() && $this->getParent())) return $this;
+		$name = e($this->getName());
+		$role = $this->getRole();
+		$c = self::getAll("where role='$role' and name='$name' and (parent is null or parent=0)");
+		if (!$c) { // Create the canonical Chunk with this (role, name) pair.
+			$c = Chunk::make();
+			$c->setRole($role);
+			$c->setName($this->getName());
+			$c->setType($this->getType());
+			$c->save();
+			return $c;
 		} else {
-			$id = $this->getId();
+			return $c[0];
 		}
+	}
+	
+	function getRevision ($status, $create = true) {
+		// This code not only gets the current revision, but also creates one if needed.
+		$c = $this->getActualChunk();
+		var_log ($c);
+		$id = $c->getId();
 		switch ($status) {
 		case 'active': $statusClause = "status='$status'"; break;
 		case 'draft': $statusClause = "(status='draft' OR status='active') ORDER BY status DESC limit 1"; break;
@@ -85,21 +88,28 @@ class Chunk extends DBRow {
 		if ($all) {
 			$rev= $all[0];
 		} else {
+			if (!$create) return null;
 			$rev = ChunkRevision::make();
 			$rev->setParent($id);
 			$rev->setStatus($status);
+			$rev->setCount(0);
 		}
 		return $rev;
 	}
 
-	function getRawContent($status) {
-		if (!$this->getRevision ($status)) {
-			trigger_error ("Failed to get content");
-			return "";
-		}
-		return $this->getRevision($status)->getContent();
-	}
+	function getRawContent($status) {return $this->getRevision($status)->getContent();}
+	function getCount($status) {return $this->getRevision($status)->getCount();}
 	function getContent($status) {return DBRow::fromDB($this->getType(), $this->getRawContent($status));}
+
+	static $countQuery = null;
+	function countRevisions() {
+		if (!self::$countQuery) self::$countQuery = new Query ("select count(*) as count from chunk_revision where parent=?", 'i');
+		$c = $this->getActualChunk();
+		$id = $c->getId();
+		$sql = "d";
+		$result = self::$countQuery->fetch($c->getId());
+		return $result['count'];
+	}
 }
 
 class ChunkList { // Just so that the template doesn't need to pass in an iterating index

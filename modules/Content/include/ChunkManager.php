@@ -41,7 +41,8 @@ TODO:
 	   <option value=""></option>
        <option value="__new__">(make reusable)</option>
     </select>
-    &nbsp;&nbsp;&nbsp;
+	<input name="_chunk_name_1[prev]" type="image" src="/images/admin/arrow_left.gif" />
+	<input name ="_chunk_name_1[next]" type="image" src="/images/admin/arrow_right.gif" />
     <input name="__name__[_new_name_1]" type="text" />
   </div>
 </li>
@@ -74,13 +75,18 @@ class ChunkManager {
 				$el[] = $s = $form->createElement('select', "select", "", self::getSelection($role));
 				if ($chunk && $chunk->getRole() && $chunk->getName()) {
 					$s->setValue($chunk->getName());
+					$chunk = $chunk->getActualChunk();
 				}
-				$el[] = $form->createElement('text', "text", ""); // HIDDEN BY admin.js
+				$el[] = $form->createElement('text', "text", ""); // THESE FIELDS ARE HIDDEN AND/OR HANDLED BY chunks.js
+				$el[] = $form->createElement('image', 'prev', "/images/admin/arrow_left.gif", array('onclick' => 'return false'));
+				$el[] = $form->createElement('image', 'next', "/images/admin/arrow_right.gif", array('onclick' => 'return false'));
 				$form->addGroup($el, "_chunk_name_$i", $label, '&nbsp;&nbsp;&nbsp;');
 				$form->addElement('html', "\n</div>");
 				$class = get_class($this->object);
 				$parent = $this->object->getId();
-				$form->addElement('html', "\n<script type='text/javascript'>watchChunkSelect($i, '$role', '$class', $parent);</script>\n");
+				$total = $chunk->countRevisions();
+				$count = $chunk->getCount('draft');
+				$form->addElement('html', "\n<script type='text/javascript'>watchChunkSelect($i, '$role', '$class', $parent, $total, $count);</script>\n");
 				$field->setLabel(""); // Inspect the add edit form, add an appropriate class, use JavaScript to watch for change and update content
 			}
 			$el = $field->addElementTo(array ('form' => $form, 'id' => "_chunk_$i"));
@@ -140,14 +146,17 @@ class ChunkManager {
 			$type = $field->type();
 			$value = $form->exportValue("_chunk_$i");
 			$chunk = $this->chunks[$i];
+			$revs = $chunk->countRevisions();
 			$old_rev = $chunk->getRevision('draft');
-			if (!$old_rev->getContent()) { // Entirely new revision
+			if ((0 == $revs) && (0 == $old_rev->getCount())) { // Entirely new revision
 				$rev = $old_rev;
+				$rev->setCount(1);
 				$rev->setContent(DBRow::toDB($field->type(), $value));
 				$rev->setStatus('draft');
 				$rev->save();
 			} else if (DBRow::toDB($type, $value) != $chunk->getRawContent('draft')) { // New revision of old content
 				$rev = ChunkRevision::make();
+				$rev->setCount(1+$revs);
 				$rev->setParent($old_rev->getParent());
 				$rev->setStatus('draft');
 				// Need to reset the old status unless we're making a draft and the old one was active

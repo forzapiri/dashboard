@@ -173,6 +173,7 @@ CREATE TABLE `chunk_revision` (
   `content` text,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `status` enum('active','draft','inactive') default NULL,
+  `count` int(11) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
@@ -351,7 +352,7 @@ CREATE TABLE `dbtable` (
   `type` varchar(1000) NOT NULL,
   `modifier` varchar(20) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `dbtable`
@@ -359,7 +360,7 @@ CREATE TABLE `dbtable` (
 
 LOCK TABLES `dbtable` WRITE;
 /*!40000 ALTER TABLE `dbtable` DISABLE KEYS */;
-INSERT INTO `dbtable` VALUES (1,'chunk','id','','id','hidden'),(2,'chunk','type','DBColumn Type','text',''),(3,'chunk','role','Role','text',''),(4,'chunk','name','Name','text',''),(7,'chunk','sort','Sort','sort',''),(5,'chunk','parent_class','Parent Class','text',''),(6,'chunk','parent','Parent ID','integer',''),(11,'chunk_revision','id','','id','hidden'),(15,'chunk_revision','status','Status','enum(active,draft,inactive)',''),(13,'chunk_revision','content','Content','text',''),(14,'chunk_revision','timestamp','Timestamp','timestamp',''),(12,'chunk_revision','parent','Chunk','integer','');
+INSERT INTO `dbtable` VALUES (1,'chunk','id','','id','hidden'),(2,'chunk','type','DBColumn Type','text',''),(3,'chunk','role','Role','text',''),(4,'chunk','name','Name','text',''),(7,'chunk','sort','Sort','sort',''),(5,'chunk','parent_class','Parent Class','text',''),(6,'chunk','parent','Parent ID','integer',''),(11,'chunk_revision','id','','id','hidden'),(15,'chunk_revision','status','Status','enum(active,draft,inactive)',''),(13,'chunk_revision','content','Content','text',''),(14,'chunk_revision','timestamp','Timestamp','timestamp',''),(12,'chunk_revision','parent','Chunk','integer',''),(21,'chunk_revision','count','Count','integer','');
 /*!40000 ALTER TABLE `dbtable` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -658,4 +659,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2009-02-07 14:05:17
+-- Dump completed on 2009-02-08  1:08:40

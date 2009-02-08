@@ -56,7 +56,7 @@ class Module_Content extends Module implements linkable {
 				trigger_error ('Bad AJAX request for loadChunk');
 				var_log ($_REQUEST);
 			}
-			echo $result;
+			echo json_encode (array ('content' => $result));
 			die();
 		default: // Fall through
 		}
