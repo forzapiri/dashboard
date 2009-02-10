@@ -13,13 +13,13 @@ div#container {
 
 div#header {
 	width: 100%;
-	background-color: #333;
 	
 	color: #fff;
 	
 	border-bottom: 1px solid #000;
 	text-shadow: 0 1px 1px #000;
-	height: 23px;
+	height: 110px;
+	background: #000 url(/images/admin/head_bg.png) repeat-x;
 }
 
 div#header div {
@@ -66,6 +66,28 @@ div#left_menu ul li {
 	width: 156px;
 }
 
+div#left_menu ul li ul {
+
+}
+
+div#left_menu ul li ul li a {
+	background-image: none !important;
+	padding: 0 0 0 7px;
+
+	font-weight: normal !important;
+	font-style: normal;
+	font-size: 10px;
+}
+
+div#left_menu ul li.active ul {
+	display: block;
+}
+
+div#left_menu ul li ul li.active {
+	font-weight: bolder !important;
+	background-image: none;
+}
+
 div#left_menu ul li a {
 	color: #000;
 	text-decoration: none;
@@ -79,6 +101,15 @@ div#left_menu ul li.active {
 
 div#left_menu ul li.active a {
 	font-weight: bolder;
+}
+
+div#left_menu ul li div.handle {
+	float: right;
+	background-image: url(/images/admin/down_arrow.png);
+	margin-right: 6px;
+	margin-top: 4px;
+	width: 12px;
+	height: 12px;
 }
 
 div#main_window {
@@ -180,7 +211,6 @@ table.admin_list {
 
 table.admin_list th {
 	background: url(/images/admin/gray-grad.png) repeat-x;
-	color:#464646;
 }
 
 table.admin_list tr.row2 {

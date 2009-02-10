@@ -69,13 +69,29 @@ function adminMenu($params, &$smarty) {
 				$extra = ' style="background-image: url(/modules/Content/images/application_edit.png);"';
 			}
 			
-			$text = $module['display_name'];
 			if (isset($blah->page)) {
-				$text .= ' <strong>(' . count($blah->page->getItems()) . ')</strong>';
+				$text = '';
+				if (count($blah->page->heading) > 0) {
+					$text .= '<div class="handle">&nbsp;</div>';
+				}
+				$text .= '<a href="/admin/' . $module['module'] . '"' . @$extra . '>' . $module['display_name'] . '</a>';
+				if (count($blah->page->heading) > 0) {
+					$text .= '<ul' . (($module['module'] != $_REQUEST['module']) ? ' style="display: none;"' : '') . '>';
+					foreach ($blah->page->heading as $key => $heading) {
+						$text .= '<li' . (($_REQUEST['section'] == $key) ? ' class="active"' : '') . '><a href="/admin/' . 
+							$module['module'] . '&amp;section=' . $key . '">' . $heading .
+							' (' . count($blah->page->getItems($key)) . ')' .  
+							'</a></li>';
+					}
+					$text .= '</ul>';
+				} else {
+					$text .= ' <strong>(' . count($blah->page->getItems()) . ')</strong>';
+				}
+			} else {
+				$text = '<a href="/admin/' . $module['module'] . '"' . @$extra . '>' . $module['display_name'] . '</a>';
 			}
 			
-			$adminItems[] = '<li' . $liClass . '><a href="/admin/' . $module['module'] . '"' . @$extra . '>' . $text . 
-				'</a></li>';
+			$adminItems[] = '<li' . $liClass . '>' . $text  . '</li>';
 		}
 		
 	}

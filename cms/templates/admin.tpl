@@ -19,7 +19,7 @@
 <body>
 <div id="container">
 <div id="header">
-  <div id="logo">{$cmsName}</a>
+  <div id="logo">{siteconfig get="CMSname"}
   </div>
   <div id="top_nav"><a class="logout" href="/user/logout">Sign Out</a> <a class="return_to_site" href="/">Return to Site</a>
   </div>

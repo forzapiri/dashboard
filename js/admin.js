@@ -72,6 +72,13 @@ var NorexUI = Class.create(Facebox, {
 			}
 		);
 		
+		$$('div#left_menu ul li div.handle').invoke('observe', 'click', 
+				function(event) {
+					var el = Event.element(event);
+					Effect.Appear(el.next('ul'));
+				}
+		);
+		
 		$$('form.norexui_addedit').invoke('observe', 'submit', this.addedit);
 		$$('form.norexui_delete').invoke('observe', 'submit', this.deleteConfirm);
 		$$('li.norexui_delete').invoke('observe', 'click', this.deleteConfirm);
