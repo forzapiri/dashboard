@@ -26,18 +26,29 @@ class User extends DBRow {
 	}
 
 	private $oldPassword;
-	public function getAddEditFormBeforeSaveHook($form) {
-		if ($this->getPassword()) {
+	private $oldSalt;
+	public function getAddEditFormSaveHook($form) {
+		if (isset($_REQUEST[$this->quickformPrefix() . 'password']) && $_REQUEST[$this->quickformPrefix() . 'password'] != '') {
 			$salt = uniqid('norexcms', true);
 			$this->set('salt', $salt);
 			$this->setPassword(md5($this->get('password') . md5($salt)));
-		} else $this->setPassword($this->oldPassword);
+		} else {
+			$this->set('password', $this->oldPassword);
+			$this->set('salt', $this->oldSalt);
+		}
 	}
 
 	public function getAddEditForm($target = null) {
 		$this->oldPassword = $this->get('password');
-		return parent::getAddEditForm($target);
+		$this->oldSalt = $this->get('salt');
+		
+		$form = parent::getAddEditForm($target);
+		$p = $form->getElement($this->quickformPrefix() . 'password');
+		$p->setValue('');
+		return $form;
 	}
+	
+	
 
 	public function toArray() {
 		$array = array();
