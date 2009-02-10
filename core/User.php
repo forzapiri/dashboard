@@ -25,25 +25,32 @@ class User extends DBRow {
 		$p = Permission::hasPerm($this->getGroup(), $class, $key);
 		return $p;
 	}
-	
-	public function getAddEditForm($target = null) {
-		$old = $this->get('password');
-		$form = parent::getAddEditForm($target);
-		$el =& $form->getElement($this->quickformPrefix() . 'password');
-		$new = $el->getValue();
-		$el->setValue(null);
-		if ($form->isProcessed() && ($_REQUEST[$this->quickformPrefix() . 'password'] != '' && $new != '' && $new != null)) {
+
+	private $oldPassword;
+	private $oldSalt;
+	public function getAddEditFormSaveHook($form) {
+		if (isset($_REQUEST[$this->quickformPrefix() . 'password']) && $_REQUEST[$this->quickformPrefix() . 'password'] != '') {
 			$salt = uniqid('norexcms', true);
 			$this->set('salt', $salt);
-			$this->set('password', (md5($_REQUEST[$this->quickformPrefix() . 'password'] . md5($salt))));
-			$this->save();
-		} else if ($form->isProcessed()) {
-			$this->set('password', $old);
-			$this->save();
+			$this->setPassword(md5($this->get('password') . md5($salt)));
+		} else {
+			$this->set('password', $this->oldPassword);
+			$this->set('salt', $this->oldSalt);
 		}
+	}
+
+	public function getAddEditForm($target = null) {
+		$this->oldPassword = $this->get('password');
+		$this->oldSalt = $this->get('salt');
+		
+		$form = parent::getAddEditForm($target);
+		$p = $form->getElement($this->quickformPrefix() . 'password');
+		$p->setValue('');
 		return $form;
 	}
 	
+	
+
 	public function toArray() {
 		$array = array();
 		foreach (self::getAll() as $s) {
@@ -51,7 +58,6 @@ class User extends DBRow {
 		}
 		return $array;
 	}
-
 }
 DBRow::init('User');
 
