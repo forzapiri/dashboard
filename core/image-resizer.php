@@ -118,7 +118,7 @@ if (!$permitted)
 	// For now, just check that the user is authenticated and is in the Administrator group
 	require_once ('../include/Site.php');
 	$u = @$_SESSION['authenticated_user'];
-	$permitted = $u && $u->hasPerm('CMS', 'admin');
+	$permitted = $u && ($u->hasPerm('CMS', 'admin') || $u->hasPerm('CMS','view'));
 }
 
 if (!$permitted)

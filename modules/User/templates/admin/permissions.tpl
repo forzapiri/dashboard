@@ -1,37 +1,57 @@
-<div id="permissions">
-{include file="admin/subnav.tpl"}
+<table class="adminList" cellspacing="0" cellpadding="0" border="0" style="clear: both; float: left;">
+<thead>
+	<tr>
+		<th width='10'></th>
+		<th valign="center">Group</th>
+	</tr>
+</thead>
+{foreach from=$groups item=group}
+	<tr class="{cycle values="row1,row2"}">
+	<td width="10">
+	<form action="/admin/User" method="post" onsubmit="return !formSubmit(this);">
+	<input type="hidden" name="section" value="Permission" />
+	<input type="hidden" name="perm_action" value="view" />
+	<input type="hidden" name="group" value="{$group->getId()}" />
+   	<input type="image" src="/images/admin/{if ($selected == $group)}yellow{else}orange{/if}-bullet.gif" />
+	</form>
+	</td>
+	<td>{$group->getName()}</td>
+	</tr>
+{/foreach}
+</table>
 
-<h3>Permissions Management</h3>
+<div style='clearboth'>{nbsp}<br/>{nbsp}<br/></div>
+<div style='clearboth'>{nbsp}<br/>{nbsp}<br/></div>
 
 <table class="adminList" cellspacing="0" cellpadding="0" border="0" style="clear: both; float: left;">
 <thead>
-
 	<tr>
-		<th>&nbsp;</th>
-		{foreach from=$groups item=group}
-		<th>{$group->getName()}</th>
-		{/foreach}
+		<th valign="center">Group</th>
+		<th valign="center">Item</th>
+{foreach from=$perms item=name}
+		<th valign="center">{$name}</th>
+{/foreach}
 	</tr>
 </thead>
-	{foreach from=$permissions item=perm}
+{foreach from=$classes item=class}
 	<tr class="{cycle values="row1,row2"}">
-		<td>{$perm->getTitle()}</td>
-		{foreach from=$groups item=group}
-		<td>
-		<form method="post" action="/admin/User" onsubmit="return !submitPermissions(this);">
-		<input type="hidden" name="section" value="permission" />
-		<input type="hidden" name="action" value="toggle" />
-		<input type="hidden" name="perm" value="{$perm->getId()}" />
-		<input type="hidden" name="group" value="{$group->getId()}" />    
-		{if $group->hasPerm($perm->getKey())}
-		<input name="togglePerm" id="togglePerm" value="true" src="/images/admin/tick.gif" type="image" />
-		{else}
-		<input name="togglePerm" id="togglePerm" value="false" src="/images/admin/cross.gif" type="image" />
-		{/if}
+	<td>{$selected->getName()}</td>
+	<td>{$class}</td>
+  {foreach from=$perms item=name key=key}
+      <td>
+     	{if $permHandler->exists($class, $key)}
+		{assign var=value value=$permHandler->hasPerm($selected, $class, $key)}
+		<form action="/admin/User" method="post" onsubmit="return !ui.formSubmit(this);" style="float: left;">
+		  <input type="hidden" name="section" value="Permission" />
+		  <input type="hidden" name="perm_action" value="toggle" />
+		  <input type="hidden" name="group" value="{$selected->getId()}" />
+		  <input type="hidden" name="class" value="{$class}">
+		  <input type="hidden" name="key" value="{$key}">
+		  <input type="image" src="/images/admin/{if $value}tick{else}cross{/if}.png" />
 		</form>
-		</td>
-		{/foreach}
-	</tr>
-	{/foreach}
+	    {/if}
+	  </td>
+  {/foreach}
+  </tr>
+{/foreach}
 </table>
-</div>

@@ -34,7 +34,8 @@ function adminInterface($params,&$smarty) {
 		return $smarty->fetch('dashboard.tpl');
 	}
 	$module = Module::factory ( $params ['class'], $smarty );
-	if (isset($smarty->content[$params['class']]) && $module->user->hasPerm('CMS', 'admin')) {
+	if (isset($smarty->content[$params['class']]) && ($module->user->hasPerm('CMS', 'admin')
+													  || $module->user->hasPerm('CMS','view'))) {
 		return $smarty->content[$params['class']];
 	} else {
 		return $smarty->fetch('error.tpl');
