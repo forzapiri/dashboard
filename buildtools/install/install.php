@@ -16,7 +16,6 @@ $step = isset($_REQUEST['step']) ? $_REQUEST['step'] : 0;
 $steps = array('Welcome', 'Checking permissions', 'Database credentials', 'Create database', 'Install Schemas', 'Done');
 $s->assign('curstep', $step);
 	
-									 
 switch ($step) {
 	case 0:
 		$checks = array(
@@ -27,7 +26,9 @@ switch ($step) {
 		$content = $s->fetch('step0.htpl');
 		break;
 	case 1:
+		$fileOwn = posix_getpwuid(fileowner(SITE_ROOT . '/files'));
 		$checks = array(
+			'files directory is owned by the webserver user' => ($_ENV['APACHE_RUN_USER'] == $fileOwn['name']),
 			'templates directory is readable' => is_readable(SITE_ROOT . '/templates') && is_dir(SITE_ROOT . '/templates'),
 			'cache/templates directory is a read/write directory' => isReadWriteDir(SITE_ROOT . '/cache/templates'),
 			'js/cache soft links to cache/js' => is_link(SITE_ROOT . '/js/cache') && readlink(SITE_ROOT . '/js/cache') === '../cache/js',
