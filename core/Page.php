@@ -279,18 +279,38 @@ class Page extends defaultPageActs {
 		$r = Database::singleton()->query_fetch($sql);
 			
 		$currentPage = @$_REQUEST['pageID'];
+		
+		if (!isset($this->tables[$this->pointer])) $this->perPage = 1000000; /* KLUGE */
+
+		$this->perPage = isset($_REQUEST['X-DataLimit']) ? $_REQUEST['X-DataLimit'] : $this->perPage;
+		$sql = 'select count(' . (call_user_func(array($this->pointer, 'createTable'))->name()) . '.id) as count from ' . (call_user_func(array($this->pointer, 'createTable'))->name()) . ' ' . $where;
+			$r = Database::singleton()->query_fetch($sql);
+			$currentPage = @$_REQUEST['pageID'];
 			
 		require_once('Pager/Pager.php');
 		$pagerOptions = array(
 			    'mode'     => 'Sliding',
 			    'delta'    => 4,
 			    'perPage'  => $this->perPage,
-				'append'   => true,  //don't append the GET parameters to the url
+				'append'   => false,  //don't append the GET parameters to the url
 		  	  	'fileName'     => '/admin/' . $_REQUEST['module'] . "&section=" . $this->pointer . "&pageID=%d",
-		    	'path' => '/admin/Contacts',
+		    	'path' => '',
 				'totalItems' => $r['count']
 		);
+		if (isset($this->link[$this->pointer])) {
+			$prefix = call_user_func(array($this->link[$this->pointer][1][0], 'quickformPrefix'));
+			if (isset($_REQUEST[$prefix . $this->link[$this->pointer][1][1]])) {
+				$pagerOptions['fileName'] .= '&' . $prefix . 'id' . '=' . $_REQUEST[$prefix . 'id'];
+			} else if (!isset($_REQUEST[call_user_func(array($this->pointer, 'quickformPrefix')) . 'id'])) {
+					
+				$varname = call_user_func(array($this->link[$this->pointer][1][0], 'quickformPrefix')) . $this->link[$this->pointer][1][1];
+					
+				$prefix = call_user_func(array($this->pointer, 'quickformPrefix'));
+				$pagerOptions['fileName'] .= '&' . $varname . '=' . $_REQUEST[$prefix . $this->link[$this->pointer][0]];
+			}
+		}
 		$pager =& Pager::factory($pagerOptions);
+
 			
 		list($from, $to) = $pager->getOffsetByPageId();
 		$where .= ' limit ' . ($from - 1) . ', ' . ($this->perPage);
