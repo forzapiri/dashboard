@@ -1,5 +1,4 @@
 <?php
-
 class Module_Content extends Module implements linkable {
 	
 	public $icon = '/modules/Content/images/page_edit.png';
@@ -22,7 +21,7 @@ class Module_Content extends Module implements linkable {
 	
 	function getUserInterface() {
 		$pageid = @$_REQUEST['id'];
-		if ($pageid) { // Admin preview of a page
+		if ($pageid) { // CHUNKS:  Admin preview of a page; allow preview only if visitor has addedit privilege
 			if (!$this->user->hasPerm('ContentPage', 'addedit')) {
 				return $this->smarty->dispErr('404', &$this);
 			}
@@ -46,33 +45,9 @@ class Module_Content extends Module implements linkable {
 	}
 	
 	function getAdminInterface() {
-		$id = @$_REQUEST['id'];
-		if ($id) $page = ContentPage::make($id);
-		switch (@$_REQUEST['action']) {
-		case 'revertdrafts':
-			Chunk::revertDrafts($page);
-			break;
-		case 'makeactive':
-			Chunk::makeDraftActive($page);
-			break;
-		case 'loadChunk':
-			// CHUNKS: Response to AJAX request only.
-			$role = e(@$_REQUEST['role']);
-			$name = e(@$_REQUEST['name']);
-			$parent_class = e(@$_REQUEST['parent_class']);
-			$parent = (int) @$_REQUEST['parent'];
-			$sort = (int) @$_REQUEST['sort'];
-			if ($role && $name) echo ChunkRevision::getNamedChunkFormField($role, $name);
-			else if ($parent_class && $parent) echo ChunkRevision::getChunkFormField ($parent_class, $parent, $sort);
-			else {
-				trigger_error ('Bad AJAX request for loadChunk');
-				var_log ($_REQUEST);
-			}
-			die();
-		default: // Fall through
-		}
+		ChunkManager::fieldAdminRequest(); // CHUNKS
+		$this->addJS('/modules/Content/js/admin/chunk.js'); // CHUNKS
 		$this->addJS('/modules/Content/js/admin/handleHome.js');
-		$this->addJS('/modules/Content/js/admin/chunk.js');
 		
 		return $this->page->render();
 	}
@@ -94,5 +69,3 @@ class Module_Content extends Module implements linkable {
 		return '/content/' . $page->get('url_key');
 	}
 }
-
-?>
