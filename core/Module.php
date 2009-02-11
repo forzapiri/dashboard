@@ -131,6 +131,10 @@ abstract class Module {
 		public function setMetaKeywords($kwrds) {
 			$this->smarty->setMetaKeywords($kwrds);
 		}
+		
+		public function templateOverride($template) {
+			$this->parentSmarty->templateOverride = $template;
+		}
 }
 
 ?>
