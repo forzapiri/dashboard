@@ -272,6 +272,35 @@ class Page extends defaultPageActs {
 		return $items;
 	}
 	
+	public function getPagedItems() {
+		$where = $this->getWhere();
+		$this->perPage = isset($_REQUEST['X-DataLimit']) ? $_REQUEST['X-DataLimit'] : $this->perPage;
+		$sql = 'select count(' . (call_user_func(array($this->pointer, 'createTable'))->name()) . '.id) as count from ' . (call_user_func(array($this->pointer, 'createTable'))->name()) . ' ' . $where;
+		$r = Database::singleton()->query_fetch($sql);
+			
+		$currentPage = @$_REQUEST['pageID'];
+			
+		require_once('Pager/Pager.php');
+		$pagerOptions = array(
+			    'mode'     => 'Sliding',
+			    'delta'    => 4,
+			    'perPage'  => $this->perPage,
+				'append'   => true,  //don't append the GET parameters to the url
+		  	  	'fileName'     => '/admin/' . $_REQUEST['module'] . "&section=" . $this->pointer . "&pageID=%d",
+		    	'path' => '/admin/Contacts',
+				'totalItems' => $r['count']
+		);
+		$pager =& Pager::factory($pagerOptions);
+			
+		list($from, $to) = $pager->getOffsetByPageId();
+		$where .= ' limit ' . ($from - 1) . ', ' . ($this->perPage);
+		$items = call_user_func(array($this->pointer, 'getAll'), $where);
+		
+		$this->pager = $pager;
+		
+		return $items;
+	}
+	
 	public function render($pointer = null, $insert = '') {
 		if($this->useDefaultActions){
 			$this->initDefaultActs();
@@ -287,27 +316,7 @@ class Page extends defaultPageActs {
 
 		if (!isset($this->tables[$this->pointer])) $this->perPage = 1000000; /* KLUGE */
 
-		$this->perPage = isset($_REQUEST['X-DataLimit']) ? $_REQUEST['X-DataLimit'] : $this->perPage;
-		$sql = 'select count(' . (call_user_func(array($this->pointer, 'createTable'))->name()) . '.id) as count from ' . (call_user_func(array($this->pointer, 'createTable'))->name()) . ' ' . $where;
-			$r = Database::singleton()->query_fetch($sql);
-			
-			$currentPage = @$_REQUEST['pageID'];
-			
-			require_once('Pager/Pager.php');
-			$pagerOptions = array(
-			    'mode'     => 'Sliding',
-			    'delta'    => 4,
-			    'perPage'  => $this->perPage,
-				'append'   => true,  //don't append the GET parameters to the url
-		  	  	'fileName'     => '/admin/' . $_REQUEST['module'] . "&section=" . $this->pointer . "&pageID=%d",
-		    	'path' => '/admin/Contacts',
-				'totalItems' => $r['count']
-			);
-			$pager =& Pager::factory($pagerOptions);
-			
-			list($from, $to) = $pager->getOffsetByPageId();
-			$where .= ' limit ' . ($from - 1) . ', ' . ($this->perPage);
-			$items = call_user_func(array($this->pointer, 'getAll'), $where);
+		$items = $this->getPagedItems();
 		
 		switch ($type) {
 		case 'html':
@@ -395,9 +404,9 @@ class Page extends defaultPageActs {
 				<ul id="primary">
 					<li' . ((!isset($this->ajax['addedit']) || $this->ajax['addedit'] == true) ? '' : ' class="plain"')  . '><a class="create" href="/admin/' . $_REQUEST['module'] . '&amp;section=' . $this->pointer . '&amp;action=add' . @$add . '" title="Create ' . $this->getName() .'">Create ' . $this->getName() . '</a></li>
 				</ul></div>';
-			$html .= '<div style="float: left; width: 300px;">' . $pager->links . '</div>';
+			$html .= '<div style="float: left; width: 300px;">' . $this->pager->links . '</div>';
 		} else {
-			$html .= '<div style="float: left; width: 300px;">' . $pager->links . '</div>';
+			$html .= '<div style="float: left; width: 300px;">' . $this->pager->links . '</div>';
 			$html .= '<br />';
 		}	
 
