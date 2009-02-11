@@ -26,7 +26,7 @@ switch ($step) {
 		$content = $s->fetch('step0.htpl');
 		break;
 	case 1:
-		@mkdir(SITE_ROOT . '/files');
+		if(!file_exists(SITE_ROOT . '/files')) mkdir(SITE_ROOT . '/files');
 		$fileOwn = posix_getpwuid(fileowner(SITE_ROOT . '/files'));
 		$checks = array(
 			'files directory is owned by the webserver user' => (exec('whoami') == $fileOwn['name']),
