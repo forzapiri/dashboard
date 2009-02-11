@@ -35,6 +35,8 @@
 
 class Module_SiteConfig extends Module {
 	
+	public $icon = '/modules/SiteConfig/images/cog.png';
+	
 	/**
 	 * Build and return admin interface
 	 * 

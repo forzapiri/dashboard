@@ -17,6 +17,8 @@
  */
 class Module_Templater extends Module {
 	
+	public $icon = '/modules/Templater/images/table_gear.png';
+	
 	/**
 	 * Build and return admin interface
 	 * 

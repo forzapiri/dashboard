@@ -29,7 +29,8 @@ function adminMenu($params, &$smarty) {
 	//$activeModules = array_reverse(Config::getActiveModules());
 	$activeModules = Config::getActiveModules();
 	
-	$adminItems = array('<li class="borderRight"><a href="/admin/">DASHBOARD</a></li>');
+	$initial = '<li class="borderRight' . (!isset($_REQUEST['module']) ? " active" : '') . '"><a href="/admin/" style="background-image: url(/images/admin/dashboard_active.gif);">Dashboard</a></li>';
+	$adminItems = array($initial);
 	
 	$i = 0;
 	foreach ($activeModules as $module) {
@@ -51,12 +52,46 @@ function adminMenu($params, &$smarty) {
 			//} else {
 			//	array_unshift($adminItems, '<li><a href="/admin/?module=' . $module['module'] . '">' . strtolower($module['module']) . '</a></li>');
 			//}
-			if ($i != count($activeModules)) {
-				$liClass = ' class="borderRight"';
-			} else {
-				unset($liClass);
+			unset($liClass);
+			unset($active);
+			if ($module['module'] == $_REQUEST['module']) {
+				$active = ' active"';
 			}
-			$adminItems[] = '<li' . $liClass . '><a href="/admin/' . $module['module'] . '">' . strtoupper($module['display_name']) . '</a></li>';
+			
+			if ($i != count($activeModules)) {
+				$liClass = ' class="borderRight' . $active . '"';
+			} else {
+				$liClass = ' class="' . $active . '"';
+			}
+			if (isset($blah->icon)) {
+				$extra = ' style="background-image: url(' . $blah->icon . ');"';
+			} else {
+				$extra = ' style="background-image: url(/modules/Content/images/application_edit.png);"';
+			}
+			
+			if (isset($blah->page)) {
+				$text = '';
+				if (count($blah->page->heading) > 0) {
+					$text .= '<div class="handle">&nbsp;</div>';
+				}
+				$text .= '<a href="/admin/' . $module['module'] . '"' . @$extra . '>' . $module['display_name'] . '</a>';
+				if (count($blah->page->heading) > 0) {
+					$text .= '<ul' . (($module['module'] != $_REQUEST['module']) ? ' style="display: none;"' : '') . '>';
+					foreach ($blah->page->heading as $key => $heading) {
+						$text .= '<li' . (($_REQUEST['section'] == $key) ? ' class="active"' : '') . '><a href="/admin/' . 
+							$module['module'] . '&amp;section=' . $key . '">' . $heading .
+							' (' . count($blah->page->getItems($key)) . ')' .  
+							'</a></li>';
+					}
+					$text .= '</ul>';
+				} else {
+					$text .= ' <strong>(' . count($blah->page->getItems()) . ')</strong>';
+				}
+			} else {
+				$text = '<a href="/admin/' . $module['module'] . '"' . @$extra . '>' . $module['display_name'] . '</a>';
+			}
+			
+			$adminItems[] = '<li' . $liClass . '>' . $text  . '</li>';
 		}
 		
 	}

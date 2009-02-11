@@ -77,7 +77,6 @@ if ($auth->checkAuth()) {
 		
 		$smarty->template_dir = SITE_ROOT . '/cms/templates';
 		$smarty->compile_id = 'admin';
-		$smarty->assign ('cmsName', SiteConfig::get('CMSname'));
 		$smarty->render('admin.tpl');
 	}
 }

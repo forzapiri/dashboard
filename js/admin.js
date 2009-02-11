@@ -59,24 +59,31 @@ var NorexUI = Class.create(Facebox, {
 	},
 	
 	updateEvents: function() {
-		$$('table.adminList tr.row1').invoke('observe', 'click', 
+		$$('table tr.row1').invoke('observe', 'click', 
 			function(event) { 
 				var row = event.element().up('tr');
-				new Effect.Highlight(row, {duration:1.5, startcolor: '#ffff99', endcolor: '#FFBF9C', restorecolor: '#ffbf9c'});
+				new Effect.Highlight(row, {duration:1.5, startcolor: '#ffff99', endcolor: '#ffffff', restorecolor: '#ffffff'});
 			}
 		);
-		$$('table.adminList tr.row2').invoke('observe', 'click', 
+		$$('table tr.row2').invoke('observe', 'click', 
 			function(event) { 
 				var row = event.element().up('tr');
-				new Effect.Highlight(row, {duration:1.5, startcolor: '#ffff99', endcolor: '#FFE1D0', restorecolor: '#FFE1D0'});
+				new Effect.Highlight(row, {duration:1.5, startcolor: '#ffff99', endcolor: '#eeeeee', restorecolor: '#eeeeee'});
 			}
+		);
+		
+		$$('div#left_menu ul li div.handle').invoke('observe', 'click', 
+				function(event) {
+					var el = Event.element(event);
+					Effect.Appear(el.next('ul'));
+				}
 		);
 		
 		$$('form.norexui_addedit').invoke('observe', 'submit', this.addedit);
 		$$('form.norexui_delete').invoke('observe', 'submit', this.deleteConfirm);
 		$$('li.norexui_delete').invoke('observe', 'click', this.deleteConfirm);
 		
-		$$('div#header ul#primary:not(ul.plain) li:not(li.plain)').invoke('observe', 'click', this.addedit);
+		$$('div#buttons ul#primary:not(ul.plain) li:not(li.plain)').invoke('observe', 'click', this.addedit);
 
 		// To make a sortable admin list, use <tbody id="foo" class="sortable">
 		// A PhP template looks like:
@@ -141,11 +148,11 @@ var NorexUI = Class.create(Facebox, {
 			},
 			onComplete: function(transport) {
 				if (!transport.responseText.match(/class="error/)) {
-					new Message({message: 'Item was updated successfully'});
+					//new Message({message: 'Item was updated successfully'});
 					
 					ui.close();
 				} else {
-					new Message({type: 'error', message: 'Not all fields were filled in'});
+					//new Message({type: 'error', message: 'Not all fields were filled in'});
 				}
 			}
 		});

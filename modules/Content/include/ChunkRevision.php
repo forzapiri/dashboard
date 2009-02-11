@@ -4,26 +4,22 @@ class ChunkRevision extends DBRow {
 	static function getAll($where = null) {return self::$tables[__CLASS__]->getAllRows($where);}
 	static function make($id = null) {return parent::make($id, __CLASS__);}
 
-	// NEED TO PAY ATTENTION TO NAMED CONTENT HERE!!  AND TO REVISIONS.  MAKE MULTIPLE DB CALLS AND GO CHUNK BY CHUNK  ???
-	private static $q1a;
-	private static $q1b;
-
-	static private function outputRevisionFormField($chunk, $status) {
+	static private function getRevisionFormField($chunk, $status) {
 		if (!$chunk) return null;
 		$type = $chunk->getType();
 		$c = $chunk->getContent($status);
-		echo DBRow::toForm($type, $c);
-		die();
+		$content = DBRow::toForm($type, $c);
+		return array ('content' => $content, 'i' => $chunk->getCount($status), 'n' => $chunk->countRevisions());
 	}
 
-	static function getChunkFormField ($class, $parent, $sort, $status = 'active') {
+	static function getChunkFormField ($class, $parent, $sort, $status /* or count */) {
 		$c = Chunk::getAll("where parent_class='$class' and parent=$parent and sort=$sort");
-		self::outputRevisionFormField($c[0], $status);
+		return $c ? self::getRevisionFormField($c[0], $status) : "";
 	}
 
-	static function getNamedChunkFormField ($role, $name, $status = 'active') {
+	static function getNamedChunkFormField ($role, $name, $status = 'draft') {
 		$c = Chunk::getAll("where role='$role' and name='$name' and (parent is null or parent=0)");
-		self::outputRevisionFormField($c[0], $status);
+		return self::getRevisionFormField($c[0], $status);
 	}
 }
 	

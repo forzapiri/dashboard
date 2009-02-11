@@ -31,10 +31,16 @@ function smarty_function_module($params,&$smarty) {
  */
 function adminInterface($params,&$smarty) {
 	if ($params['class'] == 'Dashboard') {
+		$modules = array();
+		foreach (Config::getActiveModules() as $module) {
+			$modules[] = Module::factory($module['module']);
+		}
+		$smarty->assign('modules', $modules);
 		return $smarty->fetch('dashboard.tpl');
 	}
 	$module = Module::factory ( $params ['class'], $smarty );
-	if (isset($smarty->content[$params['class']]) && $module->user->hasPerm('CMS', 'admin')) {
+	if (isset($smarty->content[$params['class']]) && ($module->user->hasPerm('CMS', 'admin')
+													  || $module->user->hasPerm('CMS','view'))) {
 		return $smarty->content[$params['class']];
 	} else {
 		return $smarty->fetch('error.tpl');

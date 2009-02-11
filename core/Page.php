@@ -230,7 +230,78 @@ class Page extends defaultPageActs {
 		return false;
 	}
 	
-	public function render() {
+	public function getWhere($pointer = null) {
+		$where = null;
+		if (is_null($pointer)) {
+			$pointer = $this->pointer;
+		}
+		
+		if (isset($this->link[$pointer])) {
+			$where = ' where ';
+			$prefix = call_user_func(array($this->link[$pointer][1][0], 'quickformPrefix'));
+			if (isset($_REQUEST[$prefix . $this->link[$pointer][1][1]])) {
+				$where .= $this->link[$pointer][0] . '=' . $_REQUEST[$prefix . $this->link[$pointer][1][1]];
+			} else if (!isset($_REQUEST[call_user_func(array($this->pointer, 'quickformPrefix')) . 'id'])) {
+				$prefix = call_user_func(array($pointer, 'quickformPrefix'));
+				$where .= $this->link[$pointer][0] . '=' . $_REQUEST[$prefix . $this->link[$pointer][0]];
+			} else {
+				$prefix = call_user_func(array($this->pointer, 'quickformPrefix'));
+				$n = DBRow::make($_REQUEST[$prefix . 'id'], $pointer);
+				$where .= $this->link[$pointer][0] . '=' . $n->get($this->link[$pointer][0]);
+			}
+			
+		}
+		if (isset($this->filter[$pointer])) {
+			if (!is_array($this->filter[$pointer])) {
+				$where .= $this->filter[$pointer];
+			}
+		}
+		
+		
+		if (isset($this->order[$pointer])) {
+			$where .= ' order by ' . $this->order[$pointer];
+		}
+		return $where;
+	}
+	
+	public function getItems($pointer = null) {
+		if (is_null($pointer)) {
+			$pointer = $this->pointer;
+		}
+		$items = call_user_func(array($pointer, 'getAll'), $this->getWhere($pointer));
+		return $items;
+	}
+	
+	public function getPagedItems() {
+		$where = $this->getWhere();
+		$this->perPage = isset($_REQUEST['X-DataLimit']) ? $_REQUEST['X-DataLimit'] : $this->perPage;
+		$sql = 'select count(' . (call_user_func(array($this->pointer, 'createTable'))->name()) . '.id) as count from ' . (call_user_func(array($this->pointer, 'createTable'))->name()) . ' ' . $where;
+		$r = Database::singleton()->query_fetch($sql);
+			
+		$currentPage = @$_REQUEST['pageID'];
+			
+		require_once('Pager/Pager.php');
+		$pagerOptions = array(
+			    'mode'     => 'Sliding',
+			    'delta'    => 4,
+			    'perPage'  => $this->perPage,
+				'append'   => true,  //don't append the GET parameters to the url
+		  	  	'fileName'     => '/admin/' . $_REQUEST['module'] . "&section=" . $this->pointer . "&pageID=%d",
+		    	'path' => '/admin/Contacts',
+				'totalItems' => $r['count']
+		);
+		$pager =& Pager::factory($pagerOptions);
+			
+		list($from, $to) = $pager->getOffsetByPageId();
+		$where .= ' limit ' . ($from - 1) . ', ' . ($this->perPage);
+		$items = call_user_func(array($this->pointer, 'getAll'), $where);
+		
+		$this->pager = $pager;
+		
+		return $items;
+	}
+	
+	public function render($pointer = null, $insert = '') {
 		if($this->useDefaultActions){
 			$this->initDefaultActs();
 		}
@@ -240,54 +311,12 @@ class Page extends defaultPageActs {
 		if ($r = $this->catchActions()) return $r;
 		
 		$html = '';
-		$where = null;
-		if (isset($this->link[$this->pointer])) {
-			$where = ' where ';
-			$prefix = call_user_func(array($this->link[$this->pointer][1][0], 'quickformPrefix'));
-			if (isset($_REQUEST[$prefix . $this->link[$this->pointer][1][1]])) {
-				$where .= $this->link[$this->pointer][0] . '=' . $_REQUEST[$prefix . $this->link[$this->pointer][1][1]];
-			} else if (!isset($_REQUEST[call_user_func(array($this->pointer, 'quickformPrefix')) . 'id'])) {
-				$prefix = call_user_func(array($this->pointer, 'quickformPrefix'));
-				$where .= $this->link[$this->pointer][0] . '=' . $_REQUEST[$prefix . $this->link[$this->pointer][0]];
-			} else {
-				$prefix = call_user_func(array($this->pointer, 'quickformPrefix'));
-				$n = DBRow::make($_REQUEST[$prefix . 'id'], $this->pointer);
-				$where .= $this->link[$this->pointer][0] . '=' . $n->get($this->link[$this->pointer][0]);
-			}
-			
-		}
-		if (isset($this->filter[$this->pointer])) {
-			if (!is_array($this->filter[$this->pointer])) {
-				$where .= $this->filter[$this->pointer];
-			}
-		}
 		
-		
-		if (isset($this->order[$this->pointer])) {
-			$where .= ' order by ' . $this->order[$this->pointer];
-		}
-		
-		$this->perPage = isset($_REQUEST['X-DataLimit']) ? $_REQUEST['X-DataLimit'] : $this->perPage;
-		$sql = 'select count(' . (call_user_func(array($this->pointer, 'createTable'))->name()) . '.id) as count from ' . (call_user_func(array($this->pointer, 'createTable'))->name()) . ' ' . $where;
-			$r = Database::singleton()->query_fetch($sql);
-			
-			$currentPage = @$_REQUEST['pageID'];
-			
-			require_once('Pager/Pager.php');
-			$pagerOptions = array(
-			    'mode'     => 'Sliding',
-			    'delta'    => 4,
-			    'perPage'  => $this->perPage,
-				'append'   => true,  //don't append the GET parameters to the url
-		  	  	'fileName'     => '/admin/' . $_REQUEST['module'] . "&section=" . $this->pointer . "&pageID=%d",
-		    	'path' => '/admin/Contacts',
-				'totalItems' => $r['count']
-			);
-			$pager =& Pager::factory($pagerOptions);
-			
-			list($from, $to) = $pager->getOffsetByPageId();
-			$where .= ' limit ' . ($from - 1) . ', ' . ($this->perPage);
-			$items = call_user_func(array($this->pointer, 'getAll'), $where);
+		$where = $this->getWhere();
+
+		if (!isset($this->tables[$this->pointer])) $this->perPage = 1000000; /* KLUGE */
+
+		$items = $this->getPagedItems();
 		
 		switch ($type) {
 		case 'html':
@@ -306,13 +335,13 @@ class Page extends defaultPageActs {
 		}
 		
 		if (count($this->heading)) {
-			$html .= '<div id="subnav">';
+			$html .= '<ul id="subnav">';
 			foreach ($this->heading as $key => $head) {
 				if ($this->user->hasPerm($key, 'view'))
-				$html .= ' <a href="/admin/' . $_REQUEST['module'] . '&amp;section=' . $key . @$add . '">' . $head . '</a> | ';
+				$html .= '<li><a href="/admin/' . $_REQUEST['module'] . '&amp;section=' . $key . @$add . '">' . $head . '</li>';
 			}
 			$html = rtrim($html, ' |');
-			$html .= '</div>';
+			$html .= '</ul>';
 		}
 		
 		if (isset($this->link[$this->pointer]) && $this->showLink[$this->pointer]) {
@@ -347,7 +376,7 @@ class Page extends defaultPageActs {
 				else $pfix = 's';
 				$html .= '<p>No ' . $this->getName() . $pfix . ' Created.';
 				if ($this->user->hasPerm($this->pointer, $this->pageActions[$this->pointer]['add']['perm'])) {
-					$html .= ' Would you like to <a href="/admin/' . $_REQUEST['module'] . '&amp;section=' . $this->pointer . '&amp;action=add' . @$add . '">make one</a>?</p>';
+					$html .= ' Would you like to <a href="/admin/' . $_REQUEST['module'] . '&amp;section=' . $this->pointer . '&amp;action=add' . @$add . '" class="create">make one</a>?</p>';
 				}
 			}
 			if (count($items) == 0 && (isset($this->pre[$this->pointer]))) {
@@ -366,36 +395,49 @@ class Page extends defaultPageActs {
 				</div>';
 			
 			if (count($items) == 0) {
-				return $html;
+				return $html . $insert;
 			}
 		}
 		
 		if (isset($this->showcreate[$this->pointer]) && $this->showcreate[$this->pointer] && $this->user->hasPerm($this->pointer, $this->pageActions[$this->pointer]['add']['perm'])) {
-			$html .= '<div id="header">
+			$html .= '<div id="buttons">
 				<ul id="primary">
-					<li' . ((!isset($this->ajax['addedit']) || $this->ajax['addedit'] == true) ? '' : ' class="plain"')  . '><a href="/admin/' . $_REQUEST['module'] . '&amp;section=' . $this->pointer . '&amp;action=add' . @$add . '" title="Create ' . $this->getName() .'">Create ' . $this->getName() . '</a></li>
+					<li' . ((!isset($this->ajax['addedit']) || $this->ajax['addedit'] == true) ? '' : ' class="plain"')  . '><a class="create" href="/admin/' . $_REQUEST['module'] . '&amp;section=' . $this->pointer . '&amp;action=add' . @$add . '" title="Create ' . $this->getName() .'">Create ' . $this->getName() . '</a></li>
 				</ul></div>';
-			$html .= '<div style="float: left; width: 300px;">' . $pager->links . '</div>';
+			$html .= '<div style="float: left; width: 300px;">' . $this->pager->links . '</div>';
 		} else {
-			$html .= '<div style="float: left; width: 300px;">' . $pager->links . '</div>';
+			$html .= '<div style="float: left; width: 300px;">' . $this->pager->links . '</div>';
 			$html .= '<br />';
 		}	
+
+		$html .= $insert;
 		
-		$html .= '<table border="0" cellspacing="0" cellpadding="0" class="adminList">';
-		$html .= '<tbody>';
-		$html .= '<tr>';
+		if (isset($this->tables[$this->pointer])) { /* START OF IF STATEMENT NOT INDENTED PROPERLY */
+		
+		$html .= '<table border="0" cellspacing="0" cellpadding="0" class="admin_list">';
+		$html .= '<thead>';
+		
+		$headfoot = '';
+		
+		$headfoot .= '<tr>';
 		foreach ($this->tables[$this->pointer] as $key => $name) {
-			$html .= '<th valign="middle">' . $key . '</th>';
+			$headfoot .= '<th valign="middle">' . $key . '</th>';
 		}
 		$insertTd = false;
 		foreach($this->pageActions[$this->pointer] as $action => $data){
 			if ($this->user->hasPerm($this->pointer, $data['perm'])){
-				$html .= '<th valign="middle">Actions</th>';
+				$headfoot .= '<th valign="middle">Actions</th>';
 				$insertTd = true;
 				break;
 			}
 		}
-		$html .= '</tr>';
+		$headfoot .= '</tr>';
+		
+		
+		$html .= $headfoot;
+		
+		$html .= '</thead><tfoot>' . $headfoot . '</tfoot><tbody>';
+		
 		foreach ($items as $key => $item) {
 			$html .= '<tr class="';
 			if ($key & 1) {
@@ -440,6 +482,8 @@ class Page extends defaultPageActs {
 		$html .= '</tbody>';
 		
 		$html .= '</table>';
+		
+		}   /*   END OF IF STATEMENT NOT INDENTED PROPERLY */
 		
 		if (isset($this->post[$this->pointer])) {
 			$html .= $this->post[$this->pointer];

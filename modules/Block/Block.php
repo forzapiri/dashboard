@@ -2,10 +2,16 @@
 
 class Module_Block extends Module {
 	
+	public $icon = '/modules/Block/images/package_green.png';
+	
 	public function __construct() {
-		parent::__construct();
-		$dispatcher = &Event_Dispatcher::getInstance('Block');
-		$dispatcher->addNestedDispatcher(Event_Dispatcher::getInstance());
+		$this->page = new Page();
+		$this->page->with('Block')
+			 ->show(array(
+					'Title' => 'title',
+					'Last Updated' => 'timestamp',
+					'Status' => 'status'
+			 ));
 	}
 	
 	/**
@@ -16,16 +22,7 @@ class Module_Block extends Module {
 	 * @return string
 	 */
 	function getAdminInterface() {
-
-		$page = new Page();
-		$page->with('Block')
-			 ->show(array(
-					'Title' => 'title',
-					'Last Updated' => 'timestamp',
-					'Status' => 'status'
-			 ));
-			 
-		return $page->render();
+		return $this->page->render();
 	}
 	
 	function getUserInterface($params) {
