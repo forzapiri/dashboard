@@ -44,14 +44,14 @@ class Module_User extends Module {
 			 
 			 
 		$this->page->with('Permission')
-			 ->show(array(
+/*			 ->show(array(
 			 	'Group Name' => array('group_id', array('Group', 'getName')),
 			 	'Type of Object' => 'class',
 			 	'Name' => 'name',
 				'Status' => 'status',
 				))
 			 ->name('Permission')
-			 ->heading('Permission Management');
+*/			 ->heading('Permission Management');
 			 
 		$this->page->with('User');
 	}
@@ -66,9 +66,47 @@ class Module_User extends Module {
 	function getAdminInterface() {
 		$this->addJS('/modules/User/js/admin.js');
 
-		return $this->page->render();
+		return $this->page->render('', $this->getPermissionsInterface());
 	}
 
+	function getPermissionsInterface() {
+		// CHECK PERMISSIONS FOR MODULE
+		if (@$_REQUEST['section'] !== 'Permission') return "";
+		
+		$handler = new PermHandler();
+		$groups = Group::getAll();
+		if (!$groups) return "";
+
+		$selected = (integer) @$_REQUEST['group'];
+		$selected = $selected ? Group::make($selected) : $groups[0];
+
+		switch (@$_REQUEST['perm_action']) {
+		case 'toggle':
+			if ($selected->getName() == 'Administrator') break; // Don't allow edits to Administrator group
+			if (!$this->user->hasPerm('Permission', 'addedit')) break;
+			$class = $_REQUEST['class'];
+			$key = $_REQUEST['key'];
+			$group = $selected->getId();
+			if (!$handler->exists($class, $key)) break;
+			$p = $handler->getPerm($group, $class, $key);
+			$p->toggle();
+			$p->save();
+		default:
+		}
+
+		$query = new Query('select class from permissions group by class order by class', '');
+		$classes = $query->fetchAll();
+		foreach ($classes as &$class) $class = $class['class'];
+
+		$this->smarty->assign('groups', $groups);
+		$this->smarty->assign('selected', $selected);
+		$this->smarty->assign('classes', $classes);
+		$this->smarty->assign('perms', array('view' => 'View', 'delete' => 'Delete', 'addedit' => 'Add/Edit'));
+		$this->smarty->assign('permHandler', new PermHandler());
+		
+		return ($this->smarty->fetch('admin/permissions.tpl'));
+	}
+	
 	public function setupList($class, $all = null) {
 		$method = 'getAll'; // . $all . $class . 's';
 		$a = call_user_func(array($class, $method));	
@@ -286,4 +324,35 @@ class Module_User extends Module {
 		$this->template = 'admin/user_table.tpl';
 	}
 }
-?>
+
+class PermHandler {
+	function __construct() {
+		// $this->exists = new Query ("select count(*) from permissions where `class`=? and `key`=? limit 1", 'ss');
+		$this->getQ = new Query ("select id from permissions where `group_id`=? and `class`=? and `key`=? limit 1", 'iss');
+	}
+
+	function getPerm($group, $class, $key) {
+		$p = $this->getQ->fetch($group, $class, $key);
+		if ($p) return Permission::make($p['id']);
+		$p = Permission::make();
+		$o = $this->exists($class, $key);
+		if (!$o) {
+			trigger_error ("Attempt to get non-existent permissions");
+			return null;
+		}
+		$o = $o[0];
+		$p->setGroupId($group);
+		$p->setClass($class);
+		$p->setKey($key);
+		$p->setStatus(0);
+		$p->setName($o->getName());
+		$p->setDescription($o->getDescription());
+		return $p;
+	}
+	function exists($class, $key) {
+		return Permission::hasPerm(1, $class, $key);
+	}
+	function hasPerm($group, $class, $key) {
+		return !!Permission::hasPerm($group->getId(), $class, $key);
+	}
+}

@@ -3,15 +3,17 @@ var menuitems = function(type) {
 		method: 'post',
 		parameters: { section: 'menuitem', action: 'linkables', module: $F(type) },
 		onCreate: function(transport) {
+			
 			var menu = $('menuitem_link');
+			
 			var contain = menu.up();
 			
 			for( var key in menu.options ) {
-				menu.options[key] = null;
+				//menu.options[key] = null;
 				menu.remove(key);
 			}
 			
-			menu.hide();
+			menu.disable();
 			
 			if(contain.lastChild != '[object Text]'){
 				contain.insert('&nbsp;');
@@ -19,9 +21,10 @@ var menuitems = function(type) {
 		},
 		onSuccess: function(transport) {
 			var menu = $('menuitem_link');
+			
 			var opts = transport.responseText.evalJSON();
 			
-			menu.show();
+			menu.enable();
 
 			var i = 0;
 			opts.each(function(el) {

@@ -272,7 +272,7 @@ class Page extends defaultPageActs {
 		return $items;
 	}
 	
-	public function render() {
+	public function render($pointer = null, $insert = '') {
 		if($this->useDefaultActions){
 			$this->initDefaultActs();
 		}
@@ -284,6 +284,9 @@ class Page extends defaultPageActs {
 		$html = '';
 		
 		$where = $this->getWhere();
+
+		if (!isset($this->tables[$this->pointer])) $this->perPage = 1000000; /* KLUGE */
+
 		$this->perPage = isset($_REQUEST['X-DataLimit']) ? $_REQUEST['X-DataLimit'] : $this->perPage;
 		$sql = 'select count(' . (call_user_func(array($this->pointer, 'createTable'))->name()) . '.id) as count from ' . (call_user_func(array($this->pointer, 'createTable'))->name()) . ' ' . $where;
 			$r = Database::singleton()->query_fetch($sql);
@@ -383,7 +386,7 @@ class Page extends defaultPageActs {
 				</div>';
 			
 			if (count($items) == 0) {
-				return $html;
+				return $html . $insert;
 			}
 		}
 		
@@ -397,6 +400,10 @@ class Page extends defaultPageActs {
 			$html .= '<div style="float: left; width: 300px;">' . $pager->links . '</div>';
 			$html .= '<br />';
 		}	
+
+		$html .= $insert;
+		
+		if (isset($this->tables[$this->pointer])) { /* START OF IF STATEMENT NOT INDENTED PROPERLY */
 		
 		$html .= '<table border="0" cellspacing="0" cellpadding="0" class="admin_list">';
 		$html .= '<thead>';
@@ -466,6 +473,8 @@ class Page extends defaultPageActs {
 		$html .= '</tbody>';
 		
 		$html .= '</table>';
+		
+		}   /*   END OF IF STATEMENT NOT INDENTED PROPERLY */
 		
 		if (isset($this->post[$this->pointer])) {
 			$html .= $this->post[$this->pointer];
