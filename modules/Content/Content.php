@@ -16,6 +16,7 @@ class Module_Content extends Module implements linkable {
 						 'Created' => 'timestamp',
 						 'Published' => 'status',
 						 'Draft' => array('id', array('ContentPage', 'getDraftForms'))))
+			->on('addedit')->noAJAX()
 			->name('Content Page');
 	}
 	
