@@ -15,11 +15,45 @@
  */
 class Module_User extends Module {
 	
+	public $icon = '/images/admin/user.png';
+	
 	protected $group_dispatcher = null;
 
 	
 	public function __construct() {
 		parent::__construct();
+		$this->page = new Page();
+		$this->page->with('User')
+			->filter ("where username!='norex'")
+			 ->show(array(
+			 	'Username' => 'username',
+			 	'Name' => 'name',
+			 	'Last Name' => 'last_name',
+			 	'E-Mail Address' => 'email',
+			 	'Group Name' => array('group', array('Group', 'getName')),
+			 	'Status' => 'status'))
+			 ->name('User')
+			 ->heading('User Management');
+			 
+		$this->page->with('Group')
+			 ->show(array(
+			 	'Name' => 'name',
+			 	'Members' => array('id', array('Group', 'getCountMembers'))))
+			 ->name('Group')
+			 ->heading('Group Management');
+			 
+			 
+		$this->page->with('Permission')
+/*			 ->show(array(
+			 	'Group Name' => array('group_id', array('Group', 'getName')),
+			 	'Type of Object' => 'class',
+			 	'Name' => 'name',
+				'Status' => 'status',
+				))
+			 ->name('Permission')
+*/			 ->heading('Permission Management');
+			 
+		$this->page->with('User');
 	}
 	
 	/**
@@ -32,39 +66,7 @@ class Module_User extends Module {
 	function getAdminInterface() {
 		$this->addJS('/modules/User/js/admin.js');
 
-		$page = new Page();
-		$page->with('User')
-			->filter ("where username!='norex'")
-			 ->show(array(
-			 	'Username' => 'username',
-			 	'Name' => 'name',
-			 	'Last Name' => 'last_name',
-			 	'E-Mail Address' => 'email',
-			 	'Group Name' => array('group', array('Group', 'getName')),
-			 	'Status' => 'status'))
-			 ->name('User')
-			 ->heading('User Management');
-			 
-		$page->with('Group')
-			 ->show(array(
-			 	'Name' => 'name',
-			 	'Members' => array('id', array('Group', 'getCountMembers'))))
-			 ->name('Group')
-			 ->heading('Group Management');
-			 
-			 
-		$page->with('Permission')
-/*			 ->show(array(
-			 	'Group Name' => array('group_id', array('Group', 'getName')),
-			 	'Type of Object' => 'class',
-			 	'Name' => 'name',
-				'Status' => 'status',
-				))
-			 ->name('Permission')
-*/			 ->heading('Permission Management');
-			 
-		$page->with('User');
-		return $page->render($this->getPermissionsInterface());
+		return $this->page->render('', $this->getPermissionsInterface());
 	}
 
 	function getPermissionsInterface() {

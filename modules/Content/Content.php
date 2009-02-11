@@ -1,12 +1,23 @@
 <?php
 
 class Module_Content extends Module implements linkable {
+	
+	public $icon = '/modules/Content/images/page_edit.png';
+	
 	public function __construct() {
 		parent::__construct();
 		$dispatcher = &Event_Dispatcher::getInstance('ContentPage');
 		$dispatcher->addNestedDispatcher(Event_Dispatcher::getInstance());
 		
 		$dispatcher->addObserver(array('ContentPage', 'checkForHome'), 'onPreDelete');
+		
+		$this->page = new Page();
+		$this->page->with('ContentPage')
+			->show(array('Name' => 'name',
+						 'Created' => 'timestamp',
+						 'Published' => 'status',
+						 'Draft' => array('id', array('ContentPage', 'getDraftForms'))))
+			->name('Content Page');
 	}
 	
 	function getUserInterface() {
@@ -62,15 +73,8 @@ class Module_Content extends Module implements linkable {
 		}
 		$this->addJS('/modules/Content/js/admin/handleHome.js');
 		$this->addJS('/modules/Content/js/admin/chunk.js');
-		$page = new Page();
-		$page->with('ContentPage')
-			->show(array('Name' => 'name',
-						 'Created' => 'timestamp',
-						 'Published' => 'status',
-						 'Draft' => array('id', array('ContentPage', 'getDraftForms'))))
-			->name('Content Page')
-			->pre($this->smarty->fetch('admin/pages.tpl'));
-		return $page->render();
+		
+		return $this->page->render();
 	}
 	
 	public static function getLinkables($level = 0, $id = null){

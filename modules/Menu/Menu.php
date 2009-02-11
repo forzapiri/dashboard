@@ -12,6 +12,8 @@
  */
 class Module_Menu extends Module {
 	
+	public $icon = '/modules/Menu/images/shape_align_left.png';
+	
 	public $version = '$Id$';
 	public $linkables = array();
 	

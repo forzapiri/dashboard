@@ -1,4 +1,4 @@
-<table class="adminList" cellspacing="0" cellpadding="0" border="0" style="clear: both; float: left;">
+<table class="admin_list" cellspacing="0" cellpadding="0" border="0">
 <thead>
 	<tr>
 		<th width='10'></th>
@@ -20,10 +20,7 @@
 {/foreach}
 </table>
 
-<div style='clearboth'>{nbsp}<br/>{nbsp}<br/></div>
-<div style='clearboth'>{nbsp}<br/>{nbsp}<br/></div>
-
-<table class="adminList" cellspacing="0" cellpadding="0" border="0" style="clear: both; float: left;">
+<table class="admin_list" cellspacing="0" cellpadding="0" border="0">
 <thead>
 	<tr>
 		<th valign="center">Group</th>

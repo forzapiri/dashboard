@@ -1,0 +1,323 @@
+html, body {
+	margin: 0;
+	padding: 0;
+	background: url(/images/admin/bg_body.gif) repeat-y;
+	font-family: "Lucida Grande","Tahoma","Lucida Sans Unicode",Tahoma,Verdana !important;
+	height: 100%;
+}
+
+div#container {
+	position: relative;
+	min-height: 100%;
+}
+
+div#header {
+	width: 100%;
+	
+	color: #fff;
+	
+	border-bottom: 1px solid #000;
+	text-shadow: 0 1px 1px #000;
+	height: 110px;
+	background: #000 url(/images/admin/head_bg.png) repeat-x;
+}
+
+div#header div {
+	padding: 2px 7px;
+}
+
+div#logo {
+	float:  left;
+	font-weight: bold;
+}
+
+div#top_nav {
+	float: right;
+}
+
+div#top_nav a {
+	color: #fff;
+	padding-left: 21px;
+	margin-left: 10px;
+}
+
+div#top_nav a.logout {
+	background: url(/images/admin/user.png) no-repeat;
+}
+
+div#top_nav a.return_to_site {
+	background: url(/images/admin/world_go.png) no-repeat;
+}
+
+div#left_menu {
+	float: left;
+}
+
+div#left_menu ul {
+	list-style-type: none;
+	margin: 4px 0 0 5px;
+	padding: 0;
+}
+
+div#left_menu ul li {
+	margin: 0;
+	padding: 1px 0 0 10px;
+	height: 21px;
+	width: 156px;
+}
+
+div#left_menu ul li ul {
+
+}
+
+div#left_menu ul li ul li a {
+	background-image: none !important;
+	padding: 0 0 0 7px;
+
+	font-weight: normal !important;
+	font-style: normal;
+	font-size: 10px;
+}
+
+div#left_menu ul li.active ul {
+	display: block;
+}
+
+div#left_menu ul li ul li.active {
+	font-weight: bolder !important;
+	background-image: none;
+}
+
+div#left_menu ul li a {
+	color: #000;
+	text-decoration: none;
+	padding-left: 22px;
+	background-repeat: no-repeat;
+}
+
+div#left_menu ul li.active {
+	background-image: url(/images/admin/menu_active.gif);
+}
+
+div#left_menu ul li.active a {
+	font-weight: bolder;
+}
+
+div#left_menu ul li div.handle {
+	float: right;
+	background-image: url(/images/admin/down_arrow.png);
+	margin-right: 6px;
+	margin-top: 4px;
+	width: 12px;
+	height: 12px;
+}
+
+div#main_window {
+	margin: 0 0 0 187px;
+}
+
+div#main_window h1 {
+	margin: 0;
+	padding: 7px;
+	background-color: #BDC0CE;
+	text-shadow: 0 1px 1px #fff;
+	font-size: 100%;
+	font-weight: bold;
+}
+
+div#content {
+	padding: 7px;
+}
+
+div#footer {
+	position: absolute;
+	clear: both;
+	bottom: 0px;
+	height: 24px;
+	background-color: #ccc;
+	border-top: 1px solid #666;
+	width: 100%;
+}
+
+div#footer p {
+	padding: 3px;
+}
+
+div#footer p a {
+	color: #666;
+	font-weight: bold;
+}
+
+
+/*   */
+
+
+form fieldset {
+	margin: 0;
+	padding: 0;
+	border: none;
+}
+
+form fieldset input[type="text"], form fieldset input[type="password"], form fieldset select {
+	width: 644px;
+	border: 1px solid #666;
+	padding: 4px;
+	font-size: 16px;
+}
+
+form input[type="submit"] {
+	border: 1px solid #666;
+	font-size: 16px;
+	padding: 4px;
+	width: 100px;
+	-moz-border-radius-bottomleft:11px;
+	-moz-border-radius-bottomright:11px;
+	-moz-border-radius-topleft:11px;
+	-moz-border-radius-topright:11px;
+	-moz-box-sizing:content-box;
+	border-style:solid;
+	border-width:1px;
+	cursor:pointer;
+	line-height:16px;
+	padding:2px 8px;
+	text-decoration:none;
+}
+
+form input[type="submit"]:hover {
+	border: 1px solid #222;
+}
+
+form ol {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+form ol li {
+	margin-bottom: 16px;
+}
+
+table.admin_list {
+	clear: right;
+	border: 1px solid #ddd;
+	-moz-border-radius-bottomleft:6px;
+	-moz-border-radius-bottomright:6px;
+	-moz-border-radius-topleft:6px;
+	-moz-border-radius-topright:6px;
+	border-style:solid;
+	border-width:1px;
+	margin: 0 1% 10px 0;
+}
+
+table.admin_list th {
+	background: url(/images/admin/gray-grad.png) repeat-x;
+}
+
+table.admin_list tr.row2 {
+	background-color: #eee;
+}
+
+table.admin_list tfoot {
+	font-style: normal;
+}
+
+
+ul#primary li, ul#primary {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+	float: right;
+}
+
+ul#primary li {
+	margin: 0 6px;
+}
+
+a.other {
+	background: url(/images/admin/pencil.png) no-repeat;
+	padding-left: 20px;
+	text-decoration: none;
+}
+
+ul#primary {
+	float: right;
+	margin-bottom: 6px;
+	width: 50%;
+}
+
+a.create {
+	background: url(/images/admin/add.png) no-repeat;
+	padding-left: 20px;
+	text-decoration: none;
+}
+
+a.delete {
+	background: url(/images/admin/cross.png) no-repeat;
+	padding-left: 20px;
+	text-decoration: none;
+}
+
+div.info-box {
+	width: 48.5%;
+	float: left;
+	border: 1px solid #ddd;
+	-moz-border-radius-bottomleft:6px;
+	-moz-border-radius-bottomright:6px;
+	-moz-border-radius-topleft:6px;
+	-moz-border-radius-topright:6px;
+	border-style:solid;
+	border-width:1px;
+	margin: 0 1% 10px 0;
+}
+
+div.info-box h2 {
+	background: url(/images/admin/gray-grad.png) repeat-x;
+	text-shadow:0 1px 0 #FFFFFF;
+	font-size:12px;
+	font-weight:bold;
+	line-height:1;
+	margin:0;
+	padding:7px 9px;
+	color:#464646;
+}
+
+div.info-box h3 {
+	font-size: 100%;
+	font-weight: bolder;
+	margin: 0;
+	padding: 0 0 4px 0;
+	border-bottom: 1px solid #ddd;
+}
+
+div.info-box h4 {
+	font-size: 100%;
+}
+
+div.info-box ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 8px;
+	background-color: #f9f9f9;
+}
+
+div.info-box ul li ul {
+	margin: 0;
+	padding: 4px 0 4px 8px;
+}
+
+div.info-box ul  li ul li {
+border-bottom: 1px solid #ddd;
+}
+
+div.info-box p {
+	margin: 8px;
+}
+
+div.info-box a {
+	text-decoration: none;
+}
+
+div.info-box .data {
+	float: right;
+	font-weight: bold;
+}

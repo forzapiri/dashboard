@@ -1,5 +1,5 @@
-<table border="0" cellspacing="0" cellpadding="0" class="adminList" style="clear: both; float: left;">
-
+<table border="0" cellspacing="0" cellpadding="0" class="admin_list">
+<thead>
 	<tr>
 		<th valign="center">Menu Item *</th>
 		<th valign="center">Links To</th>
@@ -7,6 +7,7 @@
 		<th valign="center" style="width: 60px">Active? **</th>
 		<th valign="center">Actions ***</th> 
 	</tr>
+</thead>
 <tbody id="menuTable">
 {foreach from=$menu item=item}
 	{include file="admin/menu_item_row.tpl"}
