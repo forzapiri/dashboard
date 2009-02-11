@@ -34,7 +34,7 @@ switch ($step) {
 			'cache/js directory is a read/write directory' => isReadWriteDir(SITE_ROOT . '/cache/js'),
 			'cache/images directory is a read/write directory' => isReadWriteDir(SITE_ROOT . '/cache/images'),
 			'cache/pages directory is a read/write directory' => isReadWriteDir(SITE_ROOT . '/cache/pages'),
-			'include directory is a read/write directory' => isReadWriteDir(SITE_ROOT . '/include')
+			'Can write include/db-config.php' => ((file_exists(SITE_ROOT . '/include/db-config.php') && is_writeable(SITE_ROOT . '/include/db-config.php')) || (!file_exists(SITE_ROOT . '/include/db-config.php') && isReadWriteDir(SITE_ROOT . '/include')))
 		);
 		$s->assign('checks', $checks);
 		$content = $s->fetch('step1.htpl');

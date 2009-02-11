@@ -2,3 +2,4 @@
 storage
 files
 .DS_Store
+include/db-config.php
