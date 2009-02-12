@@ -124,7 +124,7 @@ div#left_menu ul li.active strong {
 
 div#left_menu ul li.active a {
 	font-weight: bolder;
-	color: #fff;
+	color: #000;
 }
 
 div#left_menu ul li div.handle {
