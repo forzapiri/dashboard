@@ -109,7 +109,11 @@ class File extends DBRow {
 		$dir = $this->getDirectory();
 		$file = $this->getLocalFilename();
 		
+		$oldmask = umask();
+		umask(0);
 		mkdir($dir,0777,true);
+		umask($oldmask);
+
 		if (!copy ($tempurl, $dir.$file)) {
 			error_log ("Move of file $tempurl to $dir.$file failed.");
 			return false;
