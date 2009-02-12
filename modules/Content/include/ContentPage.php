@@ -38,7 +38,7 @@ class ContentPage extends DBRow {
 			$el = $form->addElement('html', "<b>Site Template:</b> " . $this->getPageTemplate());
 		}
 		if($this->get('name') == SiteConfig::get('Content::defaultPage')){
-			switch($_REQUEST['action']){
+			switch(@$_REQUEST['action']){
 				//Disables home page from having name change
 				case 'addedit':
 					if($form->elementExists($this->quickformPrefix() . 'name')){

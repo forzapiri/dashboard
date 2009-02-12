@@ -284,14 +284,16 @@ class Page extends defaultPageActs {
 		    	'path' => '',
 				'totalItems' => $r['count']
 			);
-			if (isset($_REQUEST[$prefix . $this->link[$this->pointer][1][1]])) {
-				$pagerOptions['fileName'] .= '&' . $prefix . 'id' . '=' . $_REQUEST[$prefix . 'id'];
-			} else if (!isset($_REQUEST[call_user_func(array($this->pointer, 'quickformPrefix')) . 'id'])) {
-				
-				$varname = call_user_func(array($this->link[$this->pointer][1][0], 'quickformPrefix')) . $this->link[$this->pointer][1][1];
-				
-				$prefix = call_user_func(array($this->pointer, 'quickformPrefix'));
-				$pagerOptions['fileName'] .= '&' . $varname . '=' . $_REQUEST[$prefix . $this->link[$this->pointer][0]];
+			if (isset($this->link[$this->pointer])) { 
+				if (isset($_REQUEST[$prefix . $this->link[$this->pointer][1][1]])) {
+					$pagerOptions['fileName'] .= '&' . $prefix . 'id' . '=' . $_REQUEST[$prefix . 'id'];
+				} else if (!isset($_REQUEST[call_user_func(array($this->pointer, 'quickformPrefix')) . 'id'])) {
+					
+					$varname = call_user_func(array($this->link[$this->pointer][1][0], 'quickformPrefix')) . $this->link[$this->pointer][1][1];
+					
+					$prefix = call_user_func(array($this->pointer, 'quickformPrefix'));
+					$pagerOptions['fileName'] .= '&' . $varname . '=' . $_REQUEST[$prefix . $this->link[$this->pointer][0]];
+				}
 			}
 			
 			$pager =& Pager::factory($pagerOptions);
