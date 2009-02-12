@@ -43,10 +43,3 @@ additional tools such as print and other media forms play important supporting r
 </ul>
 </div>
 
-<div class="info-box">
-<h2>Site Configuration</h2>
-<ul>
-<li><h3>Site Name</h3><p>{siteconfig get="CMSname"}</p></li>
-</ul>
-</div>
-
