@@ -110,12 +110,21 @@ div#left_menu ul li a {
 	background-repeat: no-repeat;
 }
 
+div#left_menu ul li strong {
+	color: #aaa;
+}
+
 div#left_menu ul li.active {
-	background-image: url(/images/admin/menu_active.gif);
+	background-image: url(/images/admin/menu_active.png);
+} 
+
+div#left_menu ul li.active strong {
+	color: #aaa;
 }
 
 div#left_menu ul li.active a {
 	font-weight: bolder;
+	color: #fff;
 }
 
 div#left_menu ul li div.handle {
