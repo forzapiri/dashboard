@@ -120,6 +120,33 @@ class File extends DBRow {
 		}
 	}
 	
+	function insertNotWeb($tempurl, $type, $filename) {
+		if (!is_readable ($tempurl)) {
+			error_log ("Upload of file ".$tmp." failed.");
+			return false;
+		}
+		
+		$this->setType ($type);
+		$this->setFilename ($filename);
+		if (!$this->getId()) $this->save();
+		if (!$this->getId()) {
+			error_log ("Save failed in File.php");
+			return false;
+		}
+		$dir = $this->getDirectory();
+		$file = $this->getLocalFilename();
+		
+		$oldmask = umask();
+		umask(0);
+		mkdir($dir,0777,true);
+		umask($oldmask);
+
+		if (!copy ($tempurl, $dir.$file)) {
+			error_log ("Move of file $tempurl to $dir.$file failed.");
+			return false;
+		}
+	}
+	
 	function insert($data) {
 		if ($data instanceof HTML_QuickForm_file) {$data = $data->getValue();}
 
