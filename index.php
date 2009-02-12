@@ -8,6 +8,9 @@
  * @version 2.0
  */
 
+//Insures that db-config exists. Runs installer if not
+if(!file_exists('include/db-config.php')) header("Location: buildtools/install/install.php");
+
 /*
  * Kicks things off with initiliziation of the general framework infrastructure.
  */
