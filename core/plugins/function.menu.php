@@ -29,7 +29,7 @@ function adminMenu($params, &$smarty) {
 	//$activeModules = array_reverse(Config::getActiveModules());
 	$activeModules = Config::getActiveModules();
 	
-	$initial = '<li class="borderRight' . (!isset($_REQUEST['module']) ? " active" : '') . '"><a href="/admin/" style="background-image: url(/images/admin/dashboard_active.gif);">Dashboard</a></li>';
+	$initial = '<li class="borderRight' . (!isset($_REQUEST['module']) ? " active" : '') . '"><a href="/admin/" style="background-image: url(/images/admin/dashboard_active.png);">Dashboard</a></li>';
 	$adminItems = array($initial);
 	
 	$i = 0;
