@@ -1,9 +1,12 @@
 html, body {
 	margin: 0;
 	padding: 0;
-	background: url(/images/admin/bg_body.gif) repeat-y;
 	font-family: "Lucida Grande","Tahoma","Lucida Sans Unicode",Tahoma,Verdana !important;
 	height: 100%;
+}
+
+a {
+	color: #FF5800;
 }
 
 div#container {
@@ -16,19 +19,31 @@ div#header {
 	
 	color: #fff;
 	
-	border-bottom: 1px solid #000;
 	text-shadow: 0 1px 1px #000;
-	height: 110px;
-	background: #000 url(/images/admin/head_bg.png) repeat-x;
+	height: 46px;
+	background: #464646;
 }
 
 div#header div {
 	padding: 2px 7px;
 }
 
+div#header_shadow {
+	background: url(/images/admin/shadow.png) repeat-x;
+}
+
 div#logo {
-	float:  left;
-	font-weight: bold;
+	font-family: Georgia,"Times New Roman","Bitstream Charter",Times,serif;
+	font-size: 22px;
+	float: left;
+	padding-left: 40px !important;
+	background: url(/images/admin/logo.png) no-repeat;
+	margin: 7px 0 0 15px;
+}
+
+div#logo a {
+	font-size: 50%;
+	color: #fff;
 }
 
 div#top_nav {
@@ -117,12 +132,20 @@ div#main_window {
 }
 
 div#main_window h1 {
-	margin: 0;
-	padding: 7px;
-	background-color: #BDC0CE;
-	text-shadow: 0 1px 1px #fff;
-	font-size: 100%;
-	font-weight: bold;
+	-x-system-font:none;
+	font-family:Georgia,"Times New Roman","Bitstream Charter",Times,serif;
+	font-size:24px;
+	font-size-adjust:none;
+	font-stretch:normal;
+	font-style:italic;
+	font-variant:normal;
+	font-weight:normal;
+	line-height:35px;
+	margin:0;
+	padding: 0 0 3px 47px;
+	text-shadow:0 1px 0 #FFFFFF;
+	color: #464646;
+	background: url(/images/admin/icon.png) no-repeat 7px;
 }
 
 div#content {

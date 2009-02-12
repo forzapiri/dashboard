@@ -19,11 +19,10 @@
 <body>
 <div id="container">
 <div id="header">
-  <div id="logo">{siteconfig get="CMSname"}
-  </div>
-  <div id="top_nav"><a class="logout" href="/user/logout">Sign Out</a> <a class="return_to_site" href="/">Return to Site</a>
-  </div>
+  <div id="top_nav"><a class="logout" href="/user/logout">Sign Out</a> <a class="return_to_site" href="/">Return to Site</a></div>
+  <div id="logo">{siteconfig get="CMSname"} <a href="/">&larr; Visit site</a></div>
 </div>
+<div id="header_shadow">{nbsp}</div>
 
 
 <div id="left_menu">{menu admin=true}</div>
