@@ -26,10 +26,12 @@ switch ($step) {
 		$content = $s->fetch('step0.htpl');
 		break;
 	case 1:
-		if(!file_exists(SITE_ROOT . '/files')) mkdir(SITE_ROOT . '/files');
-		$fileOwn = posix_getpwuid(fileowner(SITE_ROOT . '/files'));
+		if(!file_exists(SITE_ROOT . '/files') && isReadWriteDir(SITE_ROOT)) mkdir(SITE_ROOT . '/files');
+		if(file_exists(SITE_ROOT . '/files')) $fileOwn = posix_getpwuid(fileowner(SITE_ROOT . '/files'));
+		else $fileOwn['name'] = null;
+		
 		$checks = array(
-			'files directory is owned by the webserver user' => (exec('whoami') == $fileOwn['name']),
+			'files directory is owned by the webserver user' => ((exec('whoami') == $fileOwn['name'])),
 			'templates directory is readable' => is_readable(SITE_ROOT . '/templates') && is_dir(SITE_ROOT . '/templates'),
 			'cache/templates directory is a read/write directory' => isReadWriteDir(SITE_ROOT . '/cache/templates'),
 			'js/cache soft links to cache/js' => is_link(SITE_ROOT . '/js/cache') && readlink(SITE_ROOT . '/js/cache') === '../cache/js',
