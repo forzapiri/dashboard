@@ -41,6 +41,17 @@ function adminMenu($params, &$smarty) {
 		$blah = new $modulename();
 		$test = new ReflectionClass($blah);
 		
+		$moduleflag = false;
+		if ($blah->page) {
+			foreach ($blah->page->tables as $key => $table) {
+				$perm = Permission::hasPerm($_SESSION['authenticated_user']->get('group'), $key, 'view');
+				if (count($perm) > 0) {
+					$moduleflag = true;
+				}
+			}
+		}
+		if (!$moduleflag) continue;
+		
 		// Determine if the current object provides and admin interface. Some modules may provide functionality
 		// but not require a main admin interface, and instead accomplish their tasks with hooks or no interface
 		// at all.
