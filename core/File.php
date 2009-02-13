@@ -81,6 +81,8 @@ class File extends DBRow {
 	private function getLocalFilename() {
 		// Replaces the extension with one matching the mime type, if available
 		$filename = $this->getFilename();
+		$filename = preg_replace('/ /', '_', $filename);
+		$filename = preg_replace('/[^0-9a-zA-Z._]/', '', $filename);
 		if (!$filename) return "file.tmp";
 		$pos = strrpos ($filename, '.');
 		if ($pos === false) return "$filename.tmp";
