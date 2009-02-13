@@ -67,7 +67,10 @@ switch ($step) {
 			if ($_REQUEST['db_name']) $dbase = $_REQUEST['db_name'];
 			if ($_REQUEST['db_pass']) $dbpass = $_REQUEST['db_pass'];
 		}
-		$link = @mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
+		$linkCheck = 1;
+		$link = @mysqli_connect($dbhost, $dbuser, $dbpass, $dbase);
+		if($link)
+			$linkCheck = @mysqli_errno($link);
 		
 		/*if ($link && !mysqli_query($link, 'use ' . $dbase)) {
 			mysqli_query($link, 'create database ' . $dbase);
@@ -78,7 +81,7 @@ switch ($step) {
 		$s->assign('db_exists', $db_exists);*/
 		
 		$checks = array(
-			'Can connect to MySQL Database' => !!$link,
+			'Can connect to MySQL Database' => !$linkCheck,
 			//'DB has data' => $db_exists
 		);
 		if ($link) {
