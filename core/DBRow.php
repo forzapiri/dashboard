@@ -60,7 +60,7 @@ abstract class DBRow {
 	static function getAll($where = null) {return self::$tables[self::$__CLASS__]->getAllRows($where);}
 
 	static $makeFlag = false;
-	static function make($id, $class) {
+	static function make($id, $class) {  // $id can be an array!
 		if (is_string ($id) && is_string ($class) && class_exists ($class) && class_exists ($id)) {
 			trigger_error ("I bet you have a call to $id::make($id, x) which should be $id::make(x) OR DBRow::make(x, $id)");
 		}
@@ -135,6 +135,11 @@ abstract class DBRow {
 		return $result;
 	}
 	function &set($name, $value) {
+		if ($name == 'id' && $this->table()->getCache($value)  // SANITY CHECK
+			&& @$this->values[$name] != $value) {
+			$class = get_class($this);
+			trigger_error ("Attempt to reset a DBRow id to an existing cached value; use DBRow::make($value, $class) or $class::make($value)");
+		}
 		if (isset($this->values[$name.'_id'])) { // Setting blah_id and blah
 			$this->values[$name] = $value;
 			$this->values[$name.'_id'] = $value->getId();
@@ -182,11 +187,8 @@ abstract class DBRow {
 			return $this;
 		}
 		
-		if ($obj->get('status') == 1) {
-			$obj->set('status', 0)->save();
-		} else {
-			$obj->set('status', 1)->save();
-		}
+		$obj->set('status', 1 - $obj->get('status'))->save();
+		$obj->table()->resetWhereCache();
 		$n = Event_Dispatcher::getInstance(get_class($obj))->post(&$obj, 'onToggle');
 		
 		return $this;
@@ -307,13 +309,7 @@ abstract class DBRow {
 				if ($column->noForm()) continue;
 				$name = $column->name();
 				$value = $form->exportValue($this->quickformPrefix() . $name);
-				if ($column->type() == 'checkbox' || $column->type() == 'status') {
-					$value = @$_REQUEST[$this->quickformPrefix() . $name] ? 1 : 0;
-					$this->set($name, $value);
-				} else {
-					$this->set($name, $column->fromForm($value));
-				}
-				
+				$this->set($name, $column->fromForm($value));
 			}
 			$this->getAddEditFormBeforeSaveHook($form);
 			$this->save();
