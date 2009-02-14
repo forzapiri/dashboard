@@ -10,6 +10,14 @@ additional tools such as print and other media forms play important supporting r
 <ul>
 {foreach from=$modules item=module}
 {if $module->page}
+	{assign var="permflag" value=false}
+	{foreach from=$module->page->tables item=table key=tablekey}
+		{if $module->user->hasPerm($tablekey, 'view')}
+			{assign var="permflag" value=true}
+		{/if}
+	{/foreach}
+	
+	{if $permflag}
 	<li>
 	<h3>{$module->name}</h3>
 	<ul>
@@ -28,8 +36,11 @@ additional tools such as print and other media forms play important supporting r
 		</a></span>
 		</li>
 	{/if}
+	
 	</ul>
+	
 	</li>
+	{/if}
 {/if}
 {/foreach}
 </ul>
