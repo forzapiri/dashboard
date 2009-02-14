@@ -81,7 +81,11 @@ abstract class DBColumn {
 		$value = null;
 		$label = $this->label();
 		extract($args);
-		$el = $form->addElement ('text', $id, $label);
+		$options = $this->options();
+		if (1 == count($options)	&& is_string(@$options[0]) && (@$options[0] > 0)) {
+			$options = array ('size' => $options[0]);
+		}
+		$el = $form->addElement ('text', $id, $label, $options);
 		$el->setValue($value);
 		return $el;
 	}

@@ -16,6 +16,7 @@ function underscore2uccamel($text) { // 'menu_item' => 'MenuItem'
 }
 
 abstract class DBRow {
+	public $chunkManager = false;  // TODO: Make private
 	protected static $__CLASS__ = __CLASS__;
 	protected static $tables = array();
 	private $values = array();
@@ -51,6 +52,7 @@ abstract class DBRow {
 	function column($name) {return $this->table()->column($name);} 
 	function columns() {return $this->table()->columns();}
 	function quickformPrefix() {return "";}
+	function chunkable() {return false;}
 	function addElementTo($form, $id, $formValue) {
 		switch ($id) {
 		default: false;
@@ -92,6 +94,7 @@ abstract class DBRow {
 			self::$makeFlag = false;
 		}
 		if ($id === DUMMY_INIT_ROW) {return;}
+		if ($this->chunkable()) {$this->chunkManager = new ChunkManager($this);}
 		if (is_array ($id)) {
 			$result = $id;
 		} else if (is_null($id)) {
@@ -297,6 +300,12 @@ abstract class DBRow {
 			$els[$name] = $el;
 		}
 		$this->getAddEditFormHook($form);
+		if ($this->chunkable() && ($name = $this->getPageTemplate())) {
+			$template = Template::getRevision('CMS', $name);
+			$this->chunkManager->setTemplate($template);
+			$this->chunkManager->insertFormFields($form);
+		}
+		
 		$form->addElement('submit', $this->quickformPrefix() . 'submit', 'Submit');
 		if ($form->isSubmitted() && isset($_REQUEST[$this->quickformPrefix() . 'submit']) && $form->validate()) {
 			$uniqid = $form->exportValue('uniqid');
@@ -313,6 +322,7 @@ abstract class DBRow {
 			}
 			$this->getAddEditFormBeforeSaveHook($form);
 			$this->save();
+			if ($this->chunkManager) $this->chunkManager->saveFormFields($form, 'draft');
 			$this->getAddEditFormAfterSaveHook($form);
 			$form->setProcessed();
 		}
@@ -340,4 +350,14 @@ abstract class DBRow {
 	public static function   fromDB($type, $value) {return self::apply('fromDB',   $type, $value);}
 	public static function   toForm($type, $value) {return self::apply('toForm',   $type, $value);}
 	public static function fromForm($type, $value) {return self::apply('fromForm', $type, $value);}
+	function getDraftForms() {
+		if ($this->chunkManager && Chunk::hasDraft($this)) {
+			global $smarty;
+			$smarty->assign ('obj', $this);
+			$smarty->assign ('id', $this->getId());
+			return $smarty->fetch ('../../../templates/draft-actions.tpl'); // TODO:  FIX SO PATH CAN BE JUST draft-actions.tpl
+		} else {
+			return "";
+		}
+	}
 }
