@@ -47,7 +47,7 @@ class Module_Content extends Module implements linkable {
 	
 	function getAdminInterface() {
 		ChunkManager::fieldAdminRequest(); // CHUNKS
-		$this->addJS('/modules/Content/js/admin/chunk.js'); // CHUNKS
+		$this->addJS('/js/chunk.js'); // CHUNKS
 		$this->addJS('/modules/Content/js/admin/handleHome.js');
 		
 		return $this->page->render();
