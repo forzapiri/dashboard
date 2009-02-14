@@ -9,7 +9,7 @@
  */
 
 //Insures that db-config exists. Runs installer if not
-if(!file_exists('include/db-config.php') || !file_exists('templates_c')) header("Location: buildtools/install/install.php");
+if(!file_exists('include/db-config.php') || !file_exists('cache/templates')) header("Location: buildtools/install/install.php");
 
 /*
  * Kicks things off with initiliziation of the general framework infrastructure.
@@ -58,11 +58,8 @@ if ( $ajaxHelper->isAJAX () ){
 	if (isset($_SESSION['authenticated_user'])) {
 		$smarty->assign_by_ref ( 'user', $_SESSION['authenticated_user'] );
 	}
-	$uncachedModules = SiteConfig::get('cacheNotTheseModules');
-	if (!SiteConfig::norex()
-		&& !is_null($uncachedModules) && is_array($uncachedModules)
-		&& !in_array ($_REQUEST['module'], $uncachedModules)
-		&& !in_array ('all', $uncachedModules)) {
+	$cachedModules = SiteConfig::get('cachedModules');
+	if (in_array ($_REQUEST['module'], (array) $cachedModules)) {
 			$result = $smarty->render ('db:site.tpl', $smarty->templateOverride, false);
 			$pageCache->save($result, CACHED_PAGE_INDEX);
 			echo $result;
