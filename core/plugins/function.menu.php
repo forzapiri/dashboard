@@ -42,7 +42,9 @@ function adminMenu($params, &$smarty) {
 		$test = new ReflectionClass($blah);
 		
 		$moduleflag = false;
-		if ($blah->page) {
+		if (SiteConfig::norex())
+			$moduleflag = true;
+		else if ($blah->page) {
 			foreach ($blah->page->tables as $key => $table) {
 				$perm = Permission::hasPerm($_SESSION['authenticated_user']->get('group'), $key, 'view');
 				if (count($perm) > 0) {
