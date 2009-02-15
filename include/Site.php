@@ -53,7 +53,6 @@ $options = array(
 );
 $pageCache = new Cache_Lite($options);
 if ($data = $pageCache->get(CACHED_PAGE_INDEX)) {
-	var_log ("Using cached copy");
 	echo $data;
 	die();
 }
