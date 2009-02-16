@@ -59,7 +59,7 @@ abstract class DBRow {
 		}
 	}
 	
-	static function getAll($where, $class = null) {
+	static function getAll($where = null, $class = null) {
 		if (!$class) $class = self::$__CLASS__;
 		$table = @self::$tables[$class];
 		if (!$table) trigger_error("Table for $class does not yet exists");
