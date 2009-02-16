@@ -88,7 +88,7 @@ class MenuItem extends DBRow {
 		return parent::save($notification);
 	}
 	
-	static function getAll($where = null) {return self::$tables[__CLASS__]->getAllRows("$where");}
+	static function getAll($where = null) {return parent::getAll($where, __CLASS__);}
 	static function make($id = null) {return parent::make($id, __CLASS__);}
 	function quickformPrefix() {return 'menuitem_';}
 

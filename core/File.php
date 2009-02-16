@@ -13,7 +13,7 @@ class File extends DBRow {
 	}
 
 	static function make($id = null) {return parent::make($id, __CLASS__);}
-	static function getAll($where = null) {return self::$tables[__CLASS__]->getAllRows($where);}
+	static function getAll($where = null) {return parent::getAll($where, __CLASS__);}
 
 	function getLink() {return "/" . DATA_STORAGE_DIR . $this->getPath() . $this->getLocalFilename();}
 	function getImgTag($arg = array(), $alt = null) {

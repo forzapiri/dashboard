@@ -1,7 +1,7 @@
 <?php
 class ChunkRevision extends DBRow {
 	function createTable() {return parent::createTable("chunk_revision", __CLASS__);}
-	static function getAll($where = null) {return self::$tables[__CLASS__]->getAllRows($where);}
+	static function getAll($where = null) {return parent::getAll($where, __CLASS__);}
 	static function make($id = null) {return parent::make($id, __CLASS__);}
 
 	static private function getRevisionFormField($chunk, $status) {

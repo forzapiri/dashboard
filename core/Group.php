@@ -10,7 +10,7 @@ class Group extends DBRow {
 		return new DBTable("auth_groups", __CLASS__, $cols);
 	}
 	static function make($id = null) {return parent::make($id, __CLASS__);}
-	static function getAll($where = null) {return self::$tables[__CLASS__]->getAllRows($where);}
+	static function getAll($where = null) {return parent::getAll($where, __CLASS__);}
 	function quickformPrefix() {return 'group_';}
 	
 	public function getCountMembers() {
