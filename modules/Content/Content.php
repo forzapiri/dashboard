@@ -22,14 +22,14 @@ class Module_Content extends Module implements linkable {
 	
 	function getUserInterface() {
 		$pageid = @$_REQUEST['id'];
-		if ($pageid) { // CHUNKS:  Admin preview of a page; allow preview only if visitor has addedit privilege
+		if (@$_REQUEST['action'] == 'viewdraft') { // CHUNKS:  Admin preview of a page; allow preview only if visitor has addedit privilege
 			if (!$this->user->hasPerm('ContentPage', 'addedit')) {
 				return $this->smarty->dispErr('404', &$this);
 			}
 			$status = $_REQUEST['status'];
 			$page = ContentPage::make($pageid);
 		} else {
-			$status = 'active';
+			$status = 'active';  // CHUNK
 			$pageid = ContentPage::keytoid($_REQUEST['page']);
 			$pageid = $pageid['id'];
 			$page = ContentPage::make($pageid);
