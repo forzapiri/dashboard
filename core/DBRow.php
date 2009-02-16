@@ -366,4 +366,8 @@ abstract class DBRow {
 			return "";
 		}
 	}
+	
+	public function getObjectType() {
+		return get_class($this);
+	}
 }
