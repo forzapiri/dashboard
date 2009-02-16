@@ -95,74 +95,14 @@ class File extends DBRow {
 
 	function getFullPath(){return $this->getDirectory() . $this->getLocalFilename();}
 	
-	function insertNotWeb($tempurl, $type, $filename) {
+	private function _insert($tempurl, $type, $filename, $copy = true) {
 		if (!is_readable ($tempurl)) {
-			error_log ("Upload of file ".$tmp." failed.");
+			error_log ("Upload of file ".$tmpurl." failed.");
 			return false;
 		}
-		
-		$this->setType ($type);
-		$this->setFilename ($filename);
-		if (!$this->getId()) $this->save();
-		if (!$this->getId()) {
-			error_log ("Save failed in File.php");
-			return false;
-		}
-		$dir = $this->getDirectory();
-		$file = $this->getLocalFilename();
-		
-		$oldmask = umask();
-		umask(0);
-		mkdir($dir,0777,true);
-		umask($oldmask);
-
-		if (!copy ($tempurl, $dir.$file)) {
-			error_log ("Move of file $tempurl to $dir.$file failed.");
-			return false;
-		}
-	}
-	
-	function insertNotWeb($tempurl, $type, $filename) {
-		if (!is_readable ($tempurl)) {
-			error_log ("Upload of file ".$tmp." failed.");
-			return false;
-		}
-		
-		$this->setType ($type);
-		$this->setFilename ($filename);
-		if (!$this->getId()) $this->save();
-		if (!$this->getId()) {
-			error_log ("Save failed in File.php");
-			return false;
-		}
-		$dir = $this->getDirectory();
-		$file = $this->getLocalFilename();
-		
-		$oldmask = umask();
-		umask(0);
-		mkdir($dir,0777,true);
-		umask($oldmask);
-
-		if (!copy ($tempurl, $dir.$file)) {
-			error_log ("Move of file $tempurl to $dir.$file failed.");
-			return false;
-		}
-	}
-	
-	function insert($data) {
-		if ($data instanceof HTML_QuickForm_file) {$data = $data->getValue();}
-
-		// First check if there is a file available for upload
-		$tmp = $data['tmp_name'];
-		if (!is_readable ($data['tmp_name'])) {
-			error_log ("Upload of file ".$tmp." failed.");
-			return false;
-		}
-
 		// Assume the file is uploaded (for now) and set up the file object; need to save() to get a new id.
-
-		$this->setType ($data['type']);
-		$this->setFilename ($data['name']);
+		$this->setType ($type);
+		$this->setFilename ($filename);
 		if (!$this->getId()) $this->save();
 		if (!$this->getId()) {
 			error_log ("Save failed in File.php");
@@ -170,11 +110,26 @@ class File extends DBRow {
 		}
 		$dir = $this->getDirectory();
 		$file = $this->getLocalFilename();
+		
+		$oldmask = umask();
+		umask(0);
 		mkdir($dir,0777,true);
-		if (!move_uploaded_file ($data['tmp_name'], $dir.$file)) {
-			error_log ("Upload of file $tmp to $loc failed.");
+		umask($oldmask);
+
+		$method = $copy ? 'copy' : 'move_uploaded_file';
+		$Method = $copy ? 'Copy' : 'Move';
+		if (!$method ($tempurl, $dir.$file)) {
+			error_log ("$Method of file $tempurl to $dir$file failed.");
 			return false;
 		}
+	}
+	
+	function insert($data, $type = null, $filename = null) {
+		// $data is either an array OR a quickform result OR a URL to be copied;
+		// if the latter, proved $type and $filename
+		if ($data instanceof HTML_QuickForm_file) {$data = $data->getValue();}
+		if (is_array ($data)) return $this->_insert($data['tmp_name'], $data['type'], $data['name'], false);
+		else                  return $this->_insert($data, $type, $filename, true);
 	}
 
 	function getAddEditFormHook($form) {
@@ -184,6 +139,7 @@ class File extends DBRow {
 	function setPublic() {$this->setPermission('public');}
 	function setPrivate() {$this->setPermission('private');}
 	function setPermission($perm) {
+		if (!$this->getId()) return;
 		$this->permission = $perm;
 		$file = $this->getDirectory() . 'public';
 		if ($perm == 'public') touch($file);
