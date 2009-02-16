@@ -39,7 +39,7 @@ class Module_Content extends Module implements linkable {
 		}
 		$this->smarty->assign('content',$page);
 		$this->parentSmarty->templateOverride = $page->getSmartyResource();
-		$this->setPageTitle("PAGE TITLE STUB");
+		$this->setPageTitle($page->get('page_title'));
 		/* CHUNKS */
 		$this->smarty->assign ('chunks', Chunk::getAllContentFor($page, $status));
 		return $this->smarty->fetch('db:content.tpl');
