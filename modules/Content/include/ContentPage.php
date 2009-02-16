@@ -7,6 +7,7 @@ class ContentPage extends DBRow {
 			DBColumn::make('text', 'name', 'Page Name'),
 			DBColumn::make('text', 'url_key', 'URL Key'),
 			DBColumn::make('select', 'page_template', 'Page Template', Template::toArray('CMS')),
+			DBColumn::make('text', 'page_title', 'Page Title'),
 			'//timestamp',
 			'//status'
 			);

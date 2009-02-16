@@ -7,6 +7,7 @@ CREATE TABLE `content_pages` (
   `access` varchar(64) NOT NULL default 'public',
   `url_key` varchar(32) NOT NULL,
   `page_template` varchar(128) default 'site.tpl',
+  `page_title` varchar(128) default NULL,
   PRIMARY KEY  (`id`),
   KEY `page_name` (`name`),
   KEY `status` (`status`)
