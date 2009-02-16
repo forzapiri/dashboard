@@ -146,7 +146,7 @@ class Module_User extends Module {
 				
 				$form->addRule($u->quickformPrefix() . 'password', 'Please enter a password', 'required', null, 'client');
 
-				if ($form->isProcessed() && $form->validate()) {
+				if ($form->isProcessed() && !$form->isResubmit() && $form->validate()) {
 					$salt = uniqid('norexcms', true);
 					$u->set('salt', $salt);
 					$u->set('password', (md5($_REQUEST[$u->quickformPrefix() . 'password'] . md5($salt))));

@@ -316,6 +316,7 @@ abstract class DBRow {
 			$uniqid = $form->exportValue('uniqid');
 			if (@$_SESSION['form_uniqids'][$uniqid]) {
 				$form->setProcessed();
+				$form->setResubmit();
 				return $form;
 			}
 			$_SESSION['form_uniqids'][$uniqid] = 'submitted';
