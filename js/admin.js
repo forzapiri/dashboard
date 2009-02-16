@@ -68,7 +68,7 @@ var NorexUI = Class.create(Facebox, {
 		$$('table tr.row2').invoke('observe', 'click', 
 			function(event) { 
 				var row = event.element().up('tr');
-				new Effect.Highlight(row, {duration:1.5, startcolor: '#ffff99', endcolor: '#eeeeee', restorecolor: '#eeeeee'});
+				new Effect.Highlight(row, {duration:1.5, startcolor: '#ffff99', endcolor: '#f8f8f8', restorecolor: '#f8f8f8'});
 			}
 		);
 		

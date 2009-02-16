@@ -29,7 +29,7 @@ function adminMenu($params, &$smarty) {
 	//$activeModules = array_reverse(Config::getActiveModules());
 	$activeModules = Config::getActiveModules();
 	
-	$initial = '<li class="borderRight' . (!isset($_REQUEST['module']) ? " active" : '') . '"><a href="/admin/" style="background-image: url(/images/admin/dashboard_active.gif);">Dashboard</a></li>';
+	$initial = '<li class="borderRight' . (!isset($_REQUEST['module']) ? " active" : '') . '"><a href="/admin/" style="background-image: url(/images/admin/dashboard_active.png);">Dashboard</a></li>';
 	$adminItems = array($initial);
 	
 	$i = 0;
@@ -40,6 +40,19 @@ function adminMenu($params, &$smarty) {
 		include_once SITE_ROOT . '/modules/' . $module['module'] . '/' . $module['module'] . '.php';
 		$blah = new $modulename();
 		$test = new ReflectionClass($blah);
+		
+		$moduleflag = false;
+		if (SiteConfig::norex())
+			$moduleflag = true;
+		else if ($blah->page) {
+			foreach ($blah->page->tables as $key => $table) {
+				$perm = Permission::hasPerm($_SESSION['authenticated_user']->get('group'), $key, 'view');
+				if (count($perm) > 0) {
+					$moduleflag = true;
+				}
+			}
+		}
+		if (!$moduleflag) continue;
 		
 		// Determine if the current object provides and admin interface. Some modules may provide functionality
 		// but not require a main admin interface, and instead accomplish their tasks with hooks or no interface

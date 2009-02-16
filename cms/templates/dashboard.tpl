@@ -10,6 +10,14 @@ additional tools such as print and other media forms play important supporting r
 <ul>
 {foreach from=$modules item=module}
 {if $module->page}
+	{assign var="permflag" value=false}
+	{foreach from=$module->page->tables item=table key=tablekey}
+		{if $module->user->hasPerm($tablekey, 'view')}
+			{assign var="permflag" value=true}
+		{/if}
+	{/foreach}
+	
+	{if $permflag}
 	<li>
 	<h3>{$module->name}</h3>
 	<ul>
@@ -28,19 +36,15 @@ additional tools such as print and other media forms play important supporting r
 		</a></span>
 		</li>
 	{/if}
+	
 	</ul>
+	
 	</li>
+	{/if}
 {/if}
 {/foreach}
 </ul>
 <p>There are currently <strong>{$modules|@count}</strong> modules installed</p>
-</div>
-
-<div class="info-box">
-<h2>Site Configuration</h2>
-<ul>
-<li><h3>Site Name</h3><p>{siteconfig get="CMSname"}</p></li>
-</ul>
 </div>
 
 <div class="info-box">

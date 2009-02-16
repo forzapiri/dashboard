@@ -26,6 +26,11 @@ class Module_Menu extends Module {
 		$menuitem_dispatcher->addNestedDispatcher($dispatcher);
 		
 		$menuitem_dispatcher->addObserver(array('Menu', 'moveItem'), 'onMoveItem');
+		
+		$this->page = new Page();
+		$this->page->with('MenuType')
+			->show(array('Name' => 'name'))
+			->name('Menu');
 	}
 	
 	/**

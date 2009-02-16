@@ -131,7 +131,7 @@ class UserTest extends PHPUnit_Framework_TestCase {
 		$this->User->setGroup(1);
 		$this->User->save();
 		
-		$this->assertTrue(!!$this->User->hasPerm('CMS', 'admin'));
+		$this->assertTrue(!!$this->User->hasPerm('CMS', 'view'));
 		$this->assertFalse(!!$this->User->hasPerm('CMS', 'made_up_permission_string'));
 	}
 	

@@ -78,10 +78,9 @@ class Chunk extends DBRow {
 		}
 	}
 	
-	function getRevision ($statusORcount, $create = true) {
+	function getRevision ($statusORcount, $create = true, $follow = true) {
 		// This code not only gets the current revision, but also creates one if needed.
-		// var_log ("statusORcount=" . $statusORcount);
-		$c = $this->getActualChunk();
+		$c = $follow ? $this->getActualChunk() : $this;
 		$id = $c->getId();
 		$count = (integer) $statusORcount;
 		switch ($statusORcount) {
@@ -91,7 +90,6 @@ class Chunk extends DBRow {
 			if (!$count) trigger_error ("Invalid status in getRevision: $statusORcount");
 			$statusClause = "count=$count";
 			$draft = ChunkRevision::getAll("where status='draft'");
-			// var_log ("REVERTING DRAFT.  DRAFT EXISTS " . !!$draft);
 			if ($draft) { // RESET PREVIOUS draft TO inactive
 				$draft = $draft[0];
 				$draft->setStatus('inactive');
@@ -114,14 +112,14 @@ class Chunk extends DBRow {
 		return $rev;
 	}
 
-	function getRawContent($status) {return $this->getRevision($status)->getContent();}
-	function getCount($status) {return $this->getRevision($status)->getCount();}
-	function getContent($status) {return DBRow::fromDB($this->getType(), $this->getRawContent($status));}
+	function getRawContent($status, $follow = true) {return $this->getRevision($status, true, $follow)->getContent();}
+	function getCount($status, $follow = true) {return $this->getRevision($status, true, $follow)->getCount();}
+	function getContent($status, $follow = true) {return DBRow::fromDB($this->getType(), $this->getRawContent($status, $follow));}
 
 	static $countQuery = null;
-	function countRevisions() {
+	function countRevisions($follow = true) { // $follow means use canonical chunk of appropriate
 		if (!self::$countQuery) self::$countQuery = new Query ("select count(*) as count from chunk_revision where parent=?", 'i');
-		$c = $this->getActualChunk();
+		$c = $follow ? $this->getActualChunk() : $this;
 		$id = $c->getId();
 		$sql = "d";
 		$result = self::$countQuery->fetch($c->getId());
@@ -139,9 +137,7 @@ class Chunk extends DBRow {
 		$status = $count ? $count : 'draft';
 		if ($role && $name) $result = ChunkRevision::getNamedChunkFormField($role, $name, $status);
 		else if ($parent_class && $parent) $result = ChunkRevision::getChunkFormField ($parent_class, $parent, $sort, $status);
-		else {
-			trigger_error ('Bad AJAX request for loadChunk');
-		}
+		else trigger_error ('Bad AJAX request for loadChunk');
 		return json_encode ($result);
 	}
 }

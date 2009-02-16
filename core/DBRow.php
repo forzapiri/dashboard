@@ -16,6 +16,7 @@ function underscore2uccamel($text) { // 'menu_item' => 'MenuItem'
 }
 
 abstract class DBRow {
+	public $chunkManager = false;  // TODO: Make private
 	protected static $__CLASS__ = __CLASS__;
 	protected static $tables = array();
 	private $values = array();
@@ -51,6 +52,7 @@ abstract class DBRow {
 	function column($name) {return $this->table()->column($name);} 
 	function columns() {return $this->table()->columns();}
 	function quickformPrefix() {return "";}
+	function chunkable() {return false;}
 	function addElementTo($form, $id, $formValue) {
 		switch ($id) {
 		default: false;
@@ -60,7 +62,7 @@ abstract class DBRow {
 	static function getAll($where = null) {return self::$tables[self::$__CLASS__]->getAllRows($where);}
 
 	static $makeFlag = false;
-	static function make($id, $class) {
+	static function make($id, $class) {  // $id can be an array!
 		if (is_string ($id) && is_string ($class) && class_exists ($class) && class_exists ($id)) {
 			trigger_error ("I bet you have a call to $id::make($id, x) which should be $id::make(x) OR DBRow::make(x, $id)");
 		}
@@ -92,6 +94,7 @@ abstract class DBRow {
 			self::$makeFlag = false;
 		}
 		if ($id === DUMMY_INIT_ROW) {return;}
+		if ($this->chunkable()) {$this->chunkManager = new ChunkManager($this);}
 		if (is_array ($id)) {
 			$result = $id;
 		} else if (is_null($id)) {
@@ -135,6 +138,11 @@ abstract class DBRow {
 		return $result;
 	}
 	function &set($name, $value) {
+		if ($name == 'id' && $this->table()->getCache($value)  // SANITY CHECK
+			&& @$this->values[$name] != $value) {
+			$class = get_class($this);
+			trigger_error ("Attempt to reset a DBRow id to an existing cached value; use DBRow::make($value, $class) or $class::make($value)");
+		}
 		if (isset($this->values[$name.'_id'])) { // Setting blah_id and blah
 			$this->values[$name] = $value;
 			$this->values[$name.'_id'] = $value->getId();
@@ -182,11 +190,8 @@ abstract class DBRow {
 			return $this;
 		}
 		
-		if ($obj->get('status') == 1) {
-			$obj->set('status', 0)->save();
-		} else {
-			$obj->set('status', 1)->save();
-		}
+		$obj->set('status', 1 - $obj->get('status'))->save();
+		$obj->table()->resetWhereCache();
 		$n = Event_Dispatcher::getInstance(get_class($obj))->post(&$obj, 'onToggle');
 		
 		return $this;
@@ -295,6 +300,12 @@ abstract class DBRow {
 			$els[$name] = $el;
 		}
 		$this->getAddEditFormHook($form);
+		if ($this->chunkable() && ($name = $this->getPageTemplate())) {
+			$template = Template::getRevision('CMS', $name);
+			$this->chunkManager->setTemplate($template);
+			$this->chunkManager->insertFormFields($form);
+		}
+		
 		$form->addElement('submit', $this->quickformPrefix() . 'submit', 'Submit');
 		if ($form->isSubmitted() && isset($_REQUEST[$this->quickformPrefix() . 'submit']) && $form->validate()) {
 			$uniqid = $form->exportValue('uniqid');
@@ -307,16 +318,11 @@ abstract class DBRow {
 				if ($column->noForm()) continue;
 				$name = $column->name();
 				$value = $form->exportValue($this->quickformPrefix() . $name);
-				if ($column->type() == 'checkbox' || $column->type() == 'status') {
-					$value = @$_REQUEST[$this->quickformPrefix() . $name] ? 1 : 0;
-					$this->set($name, $value);
-				} else {
-					$this->set($name, $column->fromForm($value));
-				}
-				
+				$this->set($name, $column->fromForm($value));
 			}
 			$this->getAddEditFormBeforeSaveHook($form);
 			$this->save();
+			if ($this->chunkManager) $this->chunkManager->saveFormFields($form, 'draft');
 			$this->getAddEditFormAfterSaveHook($form);
 			$form->setProcessed();
 		}
@@ -344,4 +350,14 @@ abstract class DBRow {
 	public static function   fromDB($type, $value) {return self::apply('fromDB',   $type, $value);}
 	public static function   toForm($type, $value) {return self::apply('toForm',   $type, $value);}
 	public static function fromForm($type, $value) {return self::apply('fromForm', $type, $value);}
+	function getDraftForms() {
+		if ($this->chunkManager && Chunk::hasDraft($this)) {
+			global $smarty;
+			$smarty->assign ('obj', $this);
+			$smarty->assign ('id', $this->getId());
+			return $smarty->fetch ('../../../templates/draft-actions.tpl'); // TODO:  FIX SO PATH CAN BE JUST draft-actions.tpl
+		} else {
+			return "";
+		}
+	}
 }

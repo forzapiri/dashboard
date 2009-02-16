@@ -121,18 +121,8 @@ class DBColumnMoney extends DBColumnText {
 	}
 }
 
-class DBColumnStatus extends DBColumnText {
+class DBColumnStatus extends DBColumnCheckbox {
 	function type() {return "status";}
-	function addElementTo ($args) {
-		$value = 0;
-		$label = $this->label();
-		extract($args);
-		$el = $form->addElement ('checkbox', $id, $label);
-		$el->setValue($value);
-		return $el;
-	}
-	function suggestedMysql() {return "tinytext";}
-	
 	public function __toString($item, $key) {
 		$html = '<form action="/admin/' . $_REQUEST['module'] . '" method="post" onsubmit="return !ui.formSubmit(this);" style="float: left;">
 					<input type="hidden" name="section" value="' . get_class($item) . '" />
