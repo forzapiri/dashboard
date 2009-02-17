@@ -15,16 +15,20 @@
  */
 require_once (dirname(__FILE__) . "/../include/Site.php");
 
-/* Aggressively clear cache just in case this admin request changes static web pages.
- * 
- */
-$pageCache->clean();
-
 $auth_container = new CMSAuthContainer();
 $auth = new Auth($auth_container, null, 'authHTML');
 $auth->start();
 
 if ($auth->checkAuth()) {
+	if (!isset($_SESSION['authenticated_user']) || $_SESSION['authenticated_user']->hasPerm('CMS', 'view') == false) {
+		header('Location: /');
+		die();
+	}
+	/* Aggressively clear cache just in case this admin request changes static web pages.
+	 * 
+	 */
+	$pageCache->clean();
+	
 	// set templates dir to the admin templates location
 	$smarty->template_dir = SITE_ROOT . '/cms/templates';
 	// set a custom compile id to ensure Smarty doesent accidentally overwrite duplicate compiled files.
