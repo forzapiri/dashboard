@@ -28,7 +28,7 @@ class TableColumn extends DBRow {
 		       	</ol>");
 	}
 	static function make($id = null) {return parent::make($id, __CLASS__);}
-	static function getAll($where = null) {return self::$tables[__CLASS__]->getAllRows($where);}
+	static function getAll($where = null) {return parent::getAll($where, __CLASS__);}
 	static function getAllTables() {return self::getAll("where type='id'");}
 	static function getAllRows($table) {return self::getAll("where `table`='$table'");}
 	

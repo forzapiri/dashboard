@@ -3,7 +3,7 @@
  * Basic advMultiSelect HTML_QuickForm element without any customization.
  * Load options from a database.
  *
- * @version    $Id: qfams_basic_2.php,v 1.3 2008/04/26 17:25:59 farell Exp $
+ * @version    $Id: qfams_basic_2.php,v 1.4 2009/01/29 11:22:26 farell Exp $
  * @author     Laurent Laville <pear@laurent-laville.org>
  * @package    HTML_QuickForm_advmultiselect
  * @subpackage Examples
@@ -63,6 +63,7 @@ $ams =& $form->addElement('advmultiselect', 'user',
     null,                                             // datas
     array('style' => 'width:200px;')                  // custom layout
 );
+$ams->setElementTemplate(null, false);
 
 // load QFAMS values (unselected and selected)
 $ams->load($db, $queryAll, 'useridentity', 'userid', $affected_user);

@@ -26,6 +26,8 @@ class MenuType extends DBRow {
 			
 		return new DBTable("menus", __CLASS__, $cols);
 	}
+	static function make($id = null) {return parent::make($id, __CLASS__);}
+	static function getAll($where = null) {return parent::getAll($where, __CLASS__);}
 
 	public function getAddEditFormOld($target = null) {
 		$el =& $form->getElement($this->quickformPrefix() . 'template');
@@ -60,9 +62,6 @@ class MenuType extends DBRow {
 		default: false;
 		}
 	}
-	
-	static function make($id = null) {return parent::make($id, __CLASS__);}
-	static function getAll($where = null) {return self::$tables[__CLASS__]->getAllRows($where);} 
 	
 	public function getMenu() {
 		return new Menu($this->getId());

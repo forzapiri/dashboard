@@ -4,7 +4,7 @@
  * that present alternatively a dual multsi-select
  * or a single checkboxes with fancy attributes.
  *
- * @version    $Id: qfams_custom_4.php,v 1.6 2008/04/26 12:45:44 farell Exp $
+ * @version    $Id: qfams_custom_4.php,v 1.8 2009/01/29 09:41:19 farell Exp $
  * @author     Laurent Laville <pear@laurent-laville.org>
  * @package    HTML_QuickForm_advmultiselect
  * @subpackage Examples
@@ -54,17 +54,9 @@ $form->addElement('header', null, 'Advanced Multiple Select: custom layout ');
 
 $form->addElement('text', 'name', 'Name:', array('size' => 40, 'maxlength' => 80));
 
-$ams =& $form->addElement('advmultiselect', 'fruit', null, null,
+$ams =& $form->addElement('advmultiselect', 'fruit', null, $fruit_array,
                            array('class' => 'pool')
 );
-foreach ($fruit_array as $key => $data) {
-    if (!is_array($data)) {
-        $data = array($data, $fruit_styles);
-    }
-    $attr = isset($data[1]) ? $data[1] : null;
-    $ams->addOption($data[0], $key, $attr);
-}
-
 $ams->setLabel(array('Fruit:', 'Available', 'Selected'));
 
 // template for a dual multi-select element shape
@@ -99,10 +91,6 @@ if (isset($_POST['multiselect'])) {
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     // fruit default values already selected without any end-user actions
     $form->setDefaults(array('fruit' => array('kiwi','lime')));
-
-} elseif (isset($_POST['fruit'])) {
-    // fruit end-user selection
-    $form->setDefaults(array('fruit' => $_POST['fruit']));
 }
 
 $buttons[] =& $form->createElement('submit', null, 'Submit');

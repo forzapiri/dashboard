@@ -6,7 +6,7 @@
  * The template allows to add label as headers of dual select box
  * and moves the buttons between the two select box (up and down).
  *
- * @version    $Id: qfams_custom_2.php,v 1.4 2008/04/26 17:25:59 farell Exp $
+ * @version    $Id: qfams_custom_2.php,v 1.5 2009/01/28 22:24:43 farell Exp $
  * @author     Laurent Laville <pear@laurent-laville.org>
  * @package    HTML_QuickForm_advmultiselect
  * @subpackage Examples
@@ -80,10 +80,6 @@ $template = '
 <!-- BEGIN label_3 --><tr><th align="center">{label_3}</th></tr><!-- END label_3 -->
 </table>';
 $ams->setElementTemplate($template);
-
-if (isset($_POST['fruit'])) {
-    $form->setDefaults(array('fruit' => $_POST['fruit']));
-}
 
 $form->addElement('submit', 'send', 'Send');
 ?>

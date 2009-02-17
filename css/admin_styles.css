@@ -190,8 +190,14 @@ form fieldset {
 	border: none;
 }
 
-form fieldset input[type="text"], form fieldset input[type="password"], form fieldset select {
+form fieldset input[type="text"], form fieldset input[type="password"] {
 	width: 644px;
+	border: 1px solid #666;
+	padding: 4px;
+	font-size: 16px;
+}
+
+form fieldset select {
 	border: 1px solid #666;
 	padding: 4px;
 	font-size: 16px;

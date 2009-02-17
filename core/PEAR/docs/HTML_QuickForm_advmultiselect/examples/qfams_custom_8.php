@@ -1,23 +1,23 @@
 <?php
 /**
  * Custom advMultiSelect HTML_QuickForm element
- * with extended buttons (select all, select none, toggle selection)
+ * with extended move buttons (move Top, move Bottom)
  *
- * @version    $Id: qfams_custom_7.php,v 1.4 2009/01/28 22:24:43 farell Exp $
+ * @version    $Id: qfams_custom_8.php,v 1.3 2009/01/28 22:24:43 farell Exp $
  * @author     Laurent Laville <pear@laurent-laville.org>
  * @package    HTML_QuickForm_advmultiselect
  * @subpackage Examples
  * @access     public
- * @example    examples/qfams_custom_7.php
- *             qfams_custom_7 source code
- * @link       http://www.laurent-laville.org/img/qfams/screenshot/custom7.png
- *             screenshot (Image PNG, 640x525 pixels) 160 Kb
+ * @example    examples/qfams_custom_8.php
+ *             qfams_custom_8 source code
+ * @link       http://www.laurent-laville.org/img/qfams/screenshot/custom8.png
+ *             screenshot (Image PNG, 648x312 pixels) 13 Kb
  */
 
 require_once 'HTML/QuickForm.php';
 require_once 'HTML/QuickForm/advmultiselect.php';
 
-$form = new HTML_QuickForm('amsCustom7');
+$form = new HTML_QuickForm('amsCustom8');
 $form->removeAttribute('name');        // XHTML compliance
 
 $fruit_array = array(
@@ -41,13 +41,15 @@ $ams =& $form->addElement('advmultiselect', 'fruit', null, $fruit_array,
 );
 $ams->setLabel(array('Fruit:', 'Available', 'Selected'));
 
-$ams->setButtonAttributes('add'     , 'class=inputCommand');
-$ams->setButtonAttributes('remove'  , 'class=inputCommand');
-$ams->setButtonAttributes('all'     , 'class=inputCommand');
-$ams->setButtonAttributes('none'    , 'class=inputCommand');
-$ams->setButtonAttributes('toggle'  , 'class=inputCommand');
-$ams->setButtonAttributes('moveup'  , 'class=inputCommand');
-$ams->setButtonAttributes('movedown', 'class=inputCommand');
+$ams->setButtonAttributes('add'       , 'class=inputCommand');
+$ams->setButtonAttributes('remove'    , 'class=inputCommand');
+$ams->setButtonAttributes('all'       , 'class=inputCommand');
+$ams->setButtonAttributes('none'      , 'class=inputCommand');
+$ams->setButtonAttributes('toggle'    , 'class=inputCommand');
+$ams->setButtonAttributes('moveup'    , 'class=inputCommand');
+$ams->setButtonAttributes('movedown'  , 'class=inputCommand');
+$ams->setButtonAttributes('movetop'   , 'class=inputCommand');
+$ams->setButtonAttributes('movebottom', 'class=inputCommand');
 
 // template for a single checkboxes multi-select element shape
 $template1 = '
@@ -69,6 +71,7 @@ $template2 = '
   <td>{unselected}</td>
   <td align="center">
     {add}<br />{remove}<br /><br />{all}<br />{none}<br /><br />{moveup}<br />{movedown}<br />
+    {movetop}<br />{movebottom}
   </td>
   <td>{selected}</td>
 </tr>
@@ -97,7 +100,7 @@ $form->addGroup($buttons, null, '&nbsp;');
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>HTML_QuickForm::advMultiSelect custom example 7</title>
+<title>HTML_QuickForm::advMultiSelect custom example 8</title>
 <style type="text/css">
 <!--
 body {
@@ -108,7 +111,7 @@ body {
 
 table.pool {
   border: 0;
-  background-color: cyan;
+  background-color: yellow;
 }
 table.pool td {
   padding-left: 1em;
@@ -133,7 +136,7 @@ if (!isset($_POST['multiselect'])) {
 ?>
  -->
 </style>
-<?php echo $ams->getElementJs(false); ?>
+<?php echo $ams->getElementJs(false, true); ?>
 </head>
 <body>
 <?php

@@ -3,7 +3,7 @@
  * Custom advMultiSelect HTML_QuickForm element
  * embedded into a Sigma template and using the QF dynamic renderer.
  *
- * @version    $Id: qfams_template_1.php,v 1.4 2008/04/26 17:26:26 farell Exp $
+ * @version    $Id: qfams_template_1.php,v 1.5 2009/01/28 22:24:43 farell Exp $
  * @author     Laurent Laville <pear@laurent-laville.org>
  * @package    HTML_QuickForm_advmultiselect
  * @subpackage Examples
@@ -63,10 +63,6 @@ $template = '
 </table>
 ';
 $ams->setElementTemplate($template);
-
-if (isset($_POST['fruit'])) {
-    $form->setDefaults(array('fruit' => $_POST['fruit']));
-}
 
 $form->addElement('submit', 'send', 'Send', array('class' => 'inputCommand'));
 

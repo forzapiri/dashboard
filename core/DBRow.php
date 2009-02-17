@@ -59,7 +59,12 @@ abstract class DBRow {
 		}
 	}
 	
-	static function getAll($where = null) {return self::$tables[self::$__CLASS__]->getAllRows($where);}
+	static function getAll($where = null, $class = null) {
+		if (!$class) $class = self::$__CLASS__;
+		$table = @self::$tables[$class];
+		if (!$table) trigger_error("Table for $class does not yet exists");
+		else return $table->getAllRows($where);
+	}
 
 	static $makeFlag = false;
 	static function make($id, $class) {  // $id can be an array!
@@ -311,6 +316,7 @@ abstract class DBRow {
 			$uniqid = $form->exportValue('uniqid');
 			if (@$_SESSION['form_uniqids'][$uniqid]) {
 				$form->setProcessed();
+				$form->setResubmit();
 				return $form;
 			}
 			$_SESSION['form_uniqids'][$uniqid] = 'submitted';
@@ -359,5 +365,9 @@ abstract class DBRow {
 		} else {
 			return "";
 		}
+	}
+	
+	public function getObjectType() {
+		return get_class($this);
 	}
 }

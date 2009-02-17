@@ -27,7 +27,7 @@ class Block extends DBRow {
 			);
 		return new DBTable("blocks", __CLASS__, $cols);
 	}
-	static function getAll($where = null) {return self::$tables[__CLASS__]->getAllRows($where);}
+	static function getAll($where = null) {return parent::getAll($where, __CLASS__);}
 	function quickformPrefix() {return 'blocks_';}
 
 	static function getAllBlocks ($status = null) {

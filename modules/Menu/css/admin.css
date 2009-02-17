@@ -1,0 +1,10 @@
+div.indent {
+	float: left;
+}
+
+div.sort_buttons {
+	float: left;
+	border: 1px solid #ddd;
+	padding: 1px;
+	margin-right: 6px;
+}

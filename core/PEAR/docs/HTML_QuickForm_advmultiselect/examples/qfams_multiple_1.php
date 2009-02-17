@@ -1,9 +1,9 @@
 <?php
 /**
  * Mixed advMultiSelect HTML_QuickForm elements.
- * Two widgets on the same page/form with each its own javascript function
+ * Two widgets on the same page/form with one javascript code instance
  *
- * @version    $Id: qfams_multiple_1.php,v 1.4 2008/04/26 17:25:59 farell Exp $
+ * @version    $Id: qfams_multiple_1.php,v 1.7 2009/01/29 11:11:51 farell Exp $
  * @author     Laurent Laville <pear@laurent-laville.org>
  * @package    HTML_QuickForm_advmultiselect
  * @subpackage Examples
@@ -65,10 +65,7 @@ $car_array = array(
 $form->addElement('header', null, 'Advanced Multiple Select: default layout ');
 
 $ams1 =& $form->addElement('advmultiselect', 'cars', 'Cars:', $car_array);
-
-if (isset($_POST['cars'])) {
-    $form->setDefaults(array('cars' => $_POST['cars']));
-}
+$ams1->setElementTemplate(null, false);
 
 // rendering with css selectors and API selLabel(), setButtonAttributes()
 $form->addElement('header', null, 'Advanced Multiple Select: custom layout ');
@@ -78,7 +75,7 @@ $ams2 =& $form->addElement('advmultiselect', 'fruit', null, $fruit_array,
                                  'class' => 'pool', 'style' => 'width:200px;'
                                 )
 );
-$ams2->setJsElement('fruit_');
+
 $ams2->setLabel(array('Fruit:', 'Available', 'Selected'));
 $ams2->setButtonAttributes('add',    array('value' => 'Add', 'name' => 'add1',
                                            'class' => 'inputCommand'
@@ -86,10 +83,7 @@ $ams2->setButtonAttributes('add',    array('value' => 'Add', 'name' => 'add1',
 $ams2->setButtonAttributes('remove', array('value' => 'Remove', 'name' => 'remove1',
                                            'class' => 'inputCommand'
 ));
-
-if (isset($_POST['fruit'])) {
-    $form->setDefaults(array('fruit' => $_POST['fruit']));
-}
+$ams2->setElementTemplate(null, false);
 
 $form->addElement('submit', 'send', 'Send');
 ?>
@@ -130,15 +124,9 @@ table.pool select {
 }
  -->
 </style>
-<script type="text/javascript">
-//<![CDATA[
 <?php
-echo $ams1->getElementJs();
-
-echo $ams2->getElementJs();
+echo $ams1->getElementJs(false, true);
 ?>
-//]]>
-</script>
 </head>
 <body>
 <?php

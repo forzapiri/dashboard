@@ -32,6 +32,10 @@ class Form extends HTML_QuickForm {
 	private $processed = false;
 	function setProcessed() {$this->processed = true;}
 	function isProcessed() {return $this->processed;}
+
+	private $resubmit = false;
+	function setResubmit() {$this->resubmit = true;}
+	function isResubmit() {return $this->resubmit;}
 	
 	public function display() {
 		$renderer =& new HTML_QuickForm_Renderer_Tableless();

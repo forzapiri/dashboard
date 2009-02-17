@@ -3,7 +3,7 @@
  * Custom advMultiSelect HTML_QuickForm element
  * that allows to manage sort of select boxes.
  *
- * @version    $Id: qfams_custom_5.php,v 1.5 2008/04/26 17:25:59 farell Exp $
+ * @version    $Id: qfams_custom_5.php,v 1.6 2009/01/28 22:24:43 farell Exp $
  * @author     Laurent Laville <pear@laurent-laville.org>
  * @package    HTML_QuickForm_advmultiselect
  * @subpackage Examples
@@ -105,10 +105,6 @@ $ams->setElementTemplate($template);
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     // fruit default values already selected without any end-user actions
     $form->setDefaults(array('fruit' => array('kiwi','lime')));
-
-} elseif (isset($_POST['fruit'])) {
-    // fruit end-user selection
-    $form->setDefaults(array('fruit' => $_POST['fruit']));
 }
 
 $buttons[] =& $form->createElement('submit', null, 'Submit');

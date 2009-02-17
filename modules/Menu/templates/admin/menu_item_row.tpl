@@ -1,8 +1,6 @@
 <tr class="{cycle values="row1,row2"}" id="{$item->getId()}">
 		<td>
-			<div class="indent">
-			{""|indent:$item->depth:"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"}
-			</div>
+			<div class="indent" style="width: {math equation="(x-1) * 28" x=$item->depth}px;">{nbsp}</div>
 			<div class="sort_buttons">
 				{if !$item->bottom}
 					<form action="/admin/Menu" method="post" style="display: inline;" onsubmit="return !formSubmit(this);">
@@ -45,14 +43,14 @@
 			</form>
 		</td>
 		<td class="actions">
-			<form method="POST" action="/admin/Menu" class="norexui_addedit">
+			<form method="POST" action="/admin/Menu" class="norexui_addedit" style="float: left;">
 				<input type="hidden" name="menuitem_id" value="{$item->getId()}" />
 				<input type="hidden" name="n" value="{$n}" />
 				<input type="hidden" name="section" value="menuitem" />
 				<input type="hidden" name="action" value="addedit" />
 				<input type="image" name="edit" id="edit" value="edit" src="/images/admin/pencil.gif" />
 			</form>
- 			<form method="POST" action="/admin/Menu" class="norexui_delete">
+ 			<form method="POST" action="/admin/Menu" class="norexui_delete" style="float: left;">
 				<input type="hidden" name="menuitem_id" value="{$item->getId()}" />
 				<input type="hidden" name="action" value="delete" />
 				<input type="hidden" name="section" value="menuitem" />

@@ -4,7 +4,7 @@
  * that can be display in one or two select box mode.
  * This example demonstrate the new feature of version 1.3.0 : Live Counter
  *
- * @version    $Id: qfams_multiple_2.php,v 1.2 2008/04/26 13:25:14 farell Exp $
+ * @version    $Id: qfams_multiple_2.php,v 1.4 2009/01/28 22:24:43 farell Exp $
  * @author     Laurent Laville <pear@laurent-laville.org>
  * @package    HTML_QuickForm_advmultiselect
  * @subpackage Examples
@@ -94,10 +94,6 @@ if (isset($_POST['multiselect1'])) {
     $ams1->setElementTemplate($template1);
 }
 
-if (isset($_POST['cars'])) {
-    $defaults = array('cars' => $_POST['cars']);
-}
-
 // second QF ams element
 $form->addElement('header', null, 'Advanced Multiple Select: Live Counter - pool2 style ');
 
@@ -119,10 +115,6 @@ if (isset($_POST['multiselect2'])) {
     $ams2->setElementTemplate($template1);
 }
 
-if (isset($_POST['fruit'])) {
-    $defaults = array_merge($defaults, array('fruit' => $_POST['fruit']));
-}
-
 $buttons[] =& $form->createElement('submit', null, 'Submit');
 $buttons[] =& $form->createElement('reset',  null, 'Reset');
 $buttons[] =& $form->createElement('checkbox', 'multiselect1', null,
@@ -130,10 +122,6 @@ $buttons[] =& $form->createElement('checkbox', 'multiselect1', null,
 $buttons[] =& $form->createElement('checkbox', 'multiselect2', null,
                                    'fruit list dual select');
 $form->addGroup($buttons, null, '&nbsp;');
-
-if (count($defaults) > 0) {
-    $form->setDefaults($defaults);
-}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3c.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -187,14 +175,6 @@ if (!isset($_POST['multiselect2'])) {
  -->
 </style>
 <?php echo $ams1->getElementJs(false); ?>
-<script type="text/javascript">
-//<![CDATA[
-window.qfamsName = new Array();
-window.qfamsName[0] = 'cars';
-window.qfamsName[1] = 'fruit';
-window.addEventListener('load', qfamsInit, false);
-//]]>
-</script>
 </head>
 <body>
 <?php
@@ -207,5 +187,13 @@ if ($form->validate()) {
 }
 $form->display();
 ?>
+<script type="text/javascript">
+//<![CDATA[
+function init() {
+    QFAMS.init(['cars','fruit']);
+}
+window.addEventListener('load', init, false);
+//]]>
+</script>
 </body>
 </html>
