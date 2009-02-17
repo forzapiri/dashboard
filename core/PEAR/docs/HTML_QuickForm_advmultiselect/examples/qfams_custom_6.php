@@ -3,7 +3,7 @@
  * Custom advMultiSelect HTML_QuickForm element
  * with extended buttons (select all, select none, toggle selection)
  *
- * @version    $Id: qfams_custom_6.php,v 1.3 2008/04/26 13:25:44 farell Exp $
+ * @version    $Id: qfams_custom_6.php,v 1.4 2009/01/28 22:24:43 farell Exp $
  * @author     Laurent Laville <pear@laurent-laville.org>
  * @package    HTML_QuickForm_advmultiselect
  * @subpackage Examples
@@ -84,10 +84,6 @@ if (isset($_POST['multiselect'])) {
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     // fruit default values already selected without any end-user actions
     $form->setDefaults(array('fruit' => array('kiwi','lime')));
-
-} elseif (isset($_POST['fruit'])) {
-    // fruit end-user selection
-    $form->setDefaults(array('fruit' => $_POST['fruit']));
 }
 
 $buttons[] =& $form->createElement('submit', null, 'Submit');

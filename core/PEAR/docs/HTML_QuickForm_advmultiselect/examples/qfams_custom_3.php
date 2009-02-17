@@ -3,7 +3,7 @@
  * Custom advMultiSelect HTML_QuickForm element
  * loading values with fancy attributes (disabled, ...)
  *
- * @version    $Id: qfams_custom_3.php,v 1.4 2008/04/26 17:25:59 farell Exp $
+ * @version    $Id: qfams_custom_3.php,v 1.6 2009/01/30 13:51:49 farell Exp $
  * @author     Laurent Laville <pear@laurent-laville.org>
  * @package    HTML_QuickForm_advmultiselect
  * @subpackage Examples
@@ -52,16 +52,9 @@ $fruit_array = array(
 // rendering with QF renderer engine and template system
 $form->addElement('header', null, 'Advanced Multiple Select: custom layout ');
 
-$ams =& $form->addElement('advmultiselect', 'fruit', null, null,
-                           array('class' => 'pool')
+$ams =& $form->createElement('advmultiselect', 'fruit', null, null,
+                             array('class' => 'pool')
 );
-foreach ($fruit_array as $key => $data) {
-    if (!is_array($data)) {
-        $data = array($data);
-    }
-    $attr = isset($data[1]) ? $data[1] : null;
-    $ams->addOption($data[0], $key, $attr);
-}
 
 $ams->setLabel(array('Fruit:', 'Available', 'Selected'));
 $ams->setButtonAttributes('add',    array('value' => 'Add >>',
@@ -85,10 +78,9 @@ $template = '
 </table>';
 $ams->setElementTemplate($template);
 
-if (isset($_POST['fruit'])) {
-    $form->setDefaults(array('fruit' => $_POST['fruit']));
-}
+$ams->load($fruit_array, 'apple,pear');
 
+$form->addElement($ams);
 $form->addElement('submit', 'send', 'Send');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"

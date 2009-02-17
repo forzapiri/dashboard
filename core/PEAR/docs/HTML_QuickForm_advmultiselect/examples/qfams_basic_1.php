@@ -3,7 +3,7 @@
  * Basic advMultiSelect HTML_QuickForm element
  * without any customization.
  *
- * @version    $Id: qfams_basic_1.php,v 1.4 2008/04/26 17:25:59 farell Exp $
+ * @version    $Id: qfams_basic_1.php,v 1.5 2009/01/28 22:24:43 farell Exp $
  * @author     Laurent Laville <pear@laurent-laville.org>
  * @package    HTML_QuickForm_advmultiselect
  * @subpackage Examples
@@ -53,10 +53,6 @@ $car_array = array(
 $form->addElement('header', null, 'Advanced Multiple Select: default layout ');
 
 $form->addElement('advmultiselect', 'cars', 'Cars:', $car_array);
-
-if (isset($_POST['cars'])) {
-    $form->setDefaults(array('cars' => $_POST['cars']));
-}
 
 $form->addElement('submit', 'send', 'Send');
 ?>

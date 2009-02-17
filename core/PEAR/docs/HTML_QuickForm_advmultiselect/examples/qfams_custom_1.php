@@ -6,7 +6,7 @@
  * The template allows to add label as headers of dual select box
  * and moves the button to another location (below each select box).
  *
- * @version    $Id: qfams_custom_1.php,v 1.4 2008/04/26 17:25:59 farell Exp $
+ * @version    $Id: qfams_custom_1.php,v 1.6 2009/01/28 22:24:43 farell Exp $
  * @author     Laurent Laville <pear@laurent-laville.org>
  * @package    HTML_QuickForm_advmultiselect
  * @subpackage Examples
@@ -23,7 +23,7 @@ require_once 'HTML/QuickForm/advmultiselect.php';
 $form = new HTML_QuickForm('amsCustom1');
 $form->removeAttribute('name');        // XHTML compliance
 
-// same as default element template but wihtout the label (in first td cell)
+// same as default element template but without the label (in first td cell)
 $withoutLabel = <<<_HTML
 <tr valign="top">
     <td align="right">
@@ -81,10 +81,6 @@ $template = '
 </tr>
 </table>';
 $ams->setElementTemplate($template);
-
-if (isset($_POST['fruit'])) {
-    $form->setDefaults(array('fruit' => $_POST['fruit']));
-}
 
 $form->addElement('submit', 'send', 'Send');
 ?>
