@@ -42,6 +42,7 @@ class Module_Menu extends Module {
 	 */
 	function getAdminInterface() {
 		$this->addJS('/modules/Menu/js/menu.js');
+		$this->addCSS('/modules/Menu/css/admin.css');
 		
 		switch (@$_REQUEST['section']) {
 			case 'menuitem':
