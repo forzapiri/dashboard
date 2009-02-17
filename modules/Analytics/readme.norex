@@ -1,0 +1,32 @@
+/**
+ * Analytics Module
+ * @author Adam Thurlow <adam@norex.ca>
+ * @package Modules
+ */
+
+/**
+ * !!!!!!!!READ ME!!!!!!!!!
+ * Analytics
+ * 
+ * This is an interface for adding Google Analytics JS to each page.
+ * Schema is provided, includes table drops.
+ * Schema also includes line to add to the Admin Menu
+ * 
+ * Usage: in site.tpl, add line {module class="Analytics"} in the head.
+ * 
+ * @package Modules
+ * @subpackage Skeleton
+ */
+ 
+ /**
+ *To Do for v 2.0
+ * just include the google analytics key instead of pasting whole code (easier for users)
+ *
+ *
+ */
+ 
+ /**
+ *!!BUGS
+ *
+ * Bugs that need fixing?
+ */
