@@ -191,7 +191,6 @@ form fieldset {
 }
 
 form fieldset input[type="text"], form fieldset input[type="password"] {
-	width: 644px;
 	border: 1px solid #666;
 	padding: 4px;
 	font-size: 16px;
