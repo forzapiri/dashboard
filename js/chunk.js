@@ -41,7 +41,7 @@ function watchChunkSelect(sort, role, parent_class, parent_id, n, i) { // We are
 						   parameters: $params,
 						   onSuccess: function (t) {
 								  var result = t.responseText.evalJSON(true);
-								  ed.setContent(result.content);
+								  ed.setContent(result.content ? result.content : '');
 								  ed.save();
 								  ed.setProgressState(0);
 								  checkArrows(result.i, result.n);

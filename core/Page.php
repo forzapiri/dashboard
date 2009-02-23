@@ -176,6 +176,16 @@ class Page extends defaultPageActs {
 		return $this->pointer;
 	}
 	
+	public function getPluralName() {
+		if(substr($this->getName(), 0, -1) == 's') { 
+			return $this->getName() . 'es';
+		} else if(substr($this->getName(), -2) == 'ry') { 
+			return substr($this->getName(), 0, -1) . 'ies';
+		} else {
+			return $this->getName() . 's';
+		}
+	}
+	
 	public function restricted($action, $item){
 		if(key_exists('restrict', $this->pageActions[$this->pointer][$action])){
 			foreach($this->tables[$this->pointer] as $column){
@@ -392,9 +402,7 @@ class Page extends defaultPageActs {
 				
 			
 			if (count($items) == 0) {
-				if(substr($this->getName(), 0, -1) == 's') $pfix = 'es';
-				else $pfix = 's';
-				$html .= '<p>No ' . $this->getName() . $pfix . ' Created.';
+				$html .= '<p>No ' . $this->getPluralName() . ' Created.';
 				if ($this->user->hasPerm($this->pointer, $this->pageActions[$this->pointer]['add']['perm'])) {
 					$html .= ' Would you like to <a href="/admin/' . $_REQUEST['module'] . '&amp;section=' . $this->pointer . '&amp;action=add' . @$add . '" class="create">make one</a>?</p>';
 				}

@@ -69,7 +69,7 @@ class DBColumnTinytext extends DBColumn {
 	function suggestedMysql() {return "tinytext";}
 }
 
-class DBColumnsLongText extends DBColumn {
+class DBColumnsLongText extends DBColumnTextArea {
 	function type() {return 'longtext';}
 	function prepareCode() {return 's';} // TODO: NOT SURE YET "b" or "s" ??
 	function delayLoad() {return true;}
