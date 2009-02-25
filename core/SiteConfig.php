@@ -118,7 +118,6 @@ class SiteConfig {
 				return $config;
 			}
 		}
-		error_log ('SiteConfig failed to locate name "' . ($module ? "$module::" : ""). $name . '"');
 		return new SiteConfig();
 	}
 	
