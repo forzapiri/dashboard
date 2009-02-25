@@ -244,6 +244,19 @@ class DBColumnDate extends DBColumnTimestamp {
 	function suggestedMysql() {return "date";}
 }
 
+class DBColumnDateTime extends DBColumnTimestamp {
+	function type() {return "datetime";}
+	function addElementTo ($args) {
+		$value = null;
+		extract ($args);
+		$label = $this->label();
+		$el = $form->addElement ('date', $id, $label, array('format'=>'d-M-Y H:i:s'));
+		$el->setValue($value);
+		return $el;
+	}
+	function suggestedMysql() {return "datetime";}
+}
+
 class DBColumnEnum extends DBColumnSelect {
 	function __construct($name, $label, $modifier, $options) {
 		parent::__construct ($name, $label, $modifier, array_combine ($options, $options));
