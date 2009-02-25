@@ -47,6 +47,11 @@ class defaultPageActs {
 		}
 		if (!$form->isProcessed()) {
 			if ($this->user->hasPerm($this->pointer, 'addedit')) {
+				if (isset($this->link[$this->pointer]) && isset($_REQUEST[$i->quickformPrefix() . $this->link[$this->pointer][0]])) {
+					$form->removeElement($i->quickformPrefix() . $this->link[$this->pointer][0]);
+					$form->addElement('hidden', $i->quickformPrefix() . $this->link[$this->pointer][0], $_REQUEST[$i->quickformPrefix() . $this->link[$this->pointer][0]]);
+				}
+				
 				if (isset($this->renderer[$this->pointer][$this->actionspointer])) {
 					$r = $this->renderer[$this->pointer][$this->actionspointer];
 					$r[0]->assign('item', $i);
