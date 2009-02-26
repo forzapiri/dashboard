@@ -28,6 +28,11 @@ class Page extends defaultPageActs {
 		$this->user =& $_SESSION['authenticated_user'];
 	}
 	
+	public function &paging($amount){
+		$this->perPage = $amount;
+		return $this;
+	}
+	
 	public function &with( $class ) {
 		$this->pointer = $class;
 		return $this;
