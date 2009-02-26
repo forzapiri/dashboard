@@ -28,7 +28,7 @@ class Module_Templater extends Module {
 		$this->addCSS('/modules/Templater/css/templates.css');
 		$templates = Template::getAllTemplates();
 		if (isset($_REQUEST['action'])){
-			if($_REQUEST['action']=='otherinterface'){
+			if($_REQUEST['action']=='otherinterface' || 'add' || 'addedit' || 'delete'){
 				$page = new Page();
 				$page->with('Template')
 					 ->show(array(
@@ -37,7 +37,8 @@ class Module_Templater extends Module {
 							'Timestamp' => 'timestamp'
 					 ))
 					 ->pre('<h1>Micro Managing Templates</h1>. <a href="/admin/Templater" style="color:white;"><h3> click here to go back to main interface </h3></a>')
-					 ->filter('order by timestamp desc');
+					 ->filter('order by timestamp desc')
+					 ->paging(50);
 				return $page->render();
 			}
 		}
