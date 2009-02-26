@@ -93,10 +93,6 @@ abstract class Module {
 				
 				$module->smarty->assign('module', &$module);
 				
-				// Give the module access to the site-wide DB connection. This LOOKS like each module
-				// is assigned its own DB object, but the class singleton ensures that its actually
-				// a shared connection.
-				$module->db = Database::singleton();
 				if (@isset($_SESSION['authenticated_user'])) {
 					$module->user = User::make($_SESSION['authenticated_user']->getId());
 					$module->smarty->assign_by_ref('user', $module->user);
