@@ -1,6 +1,12 @@
 #RewriteRule [.*] http://woz.norex.ca/gone.html [NC,L]
 
 RewriteEngine On
+Options -Indexes
+
+<FilesMatch "\.(engine|inc|info|install|module|profile|po|sh|.*sql|theme|tpl|htpl|tpl(\.php)?|xtmpl)$|^(code-style\.pl|Entries.*|Repository|Root|Tag|Template)$">
+  Order allow,deny
+</FilesMatch>
+
 #RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*\.)(js|css)$ /js/jscsscomp.php?q=$1$2 [L,NC]
 
