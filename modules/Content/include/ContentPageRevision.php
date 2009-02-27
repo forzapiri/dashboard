@@ -68,4 +68,3 @@ class ContentPageRevision extends DBRow {
 	}
 }
 DBRow::init('ContentPageRevision');
-?>

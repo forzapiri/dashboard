@@ -24,4 +24,3 @@ class ChunkRevision extends DBRow {
 }
 	
 DBRow::init('ChunkRevision');
-?>

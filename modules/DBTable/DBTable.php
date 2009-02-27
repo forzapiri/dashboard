@@ -109,5 +109,3 @@ class Module_DBTable extends Module {
 		return $smarty->fetch( 'admin/tables.tpl' );
 	}
 }
-
-?>

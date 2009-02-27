@@ -537,5 +537,3 @@ class Page extends defaultPageActs {
 	}
 	
 }
-
-?>

@@ -40,5 +40,3 @@ function smarty_function_ajaxcall($params, &$smarty) {
 		echo '<div id="' . $target . '">&nbsp;</div>';
 	}
 }
-
-?> 

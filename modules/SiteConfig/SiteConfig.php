@@ -71,4 +71,3 @@ class Module_SiteConfig extends Module {
 		return $this->smarty->fetch( 'admin/siteconfigs.tpl' );
 	}
 }
-?>

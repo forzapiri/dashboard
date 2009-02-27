@@ -12,5 +12,3 @@ $dbhost = 'localhost';
 $dbuser = 'root';
 $dbpass = 'qp10alzm';
 $dbase = 'kitchenparty';
-
-?>

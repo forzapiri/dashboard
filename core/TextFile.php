@@ -10,5 +10,3 @@ class TextFile extends Storage {
 	}
 }
 DBRow::init('TextFile');
-
-?>

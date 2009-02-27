@@ -64,5 +64,3 @@ class Module_Gallery extends Module {
 		return '/gallery/';
 	}
 }
-
-?>

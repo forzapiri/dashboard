@@ -30,4 +30,3 @@ class Group extends DBRow {
 
 }
 DBRow::init('Group');
-?>

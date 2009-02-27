@@ -132,5 +132,3 @@ abstract class Module {
 			$this->parentSmarty->templateOverride = $template;
 		}
 }
-
-?>

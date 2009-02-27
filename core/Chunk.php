@@ -149,4 +149,3 @@ class ChunkList { // Just so that the template doesn't need to pass in an iterat
 }
 
 DBRow::init('Chunk');
-?>

@@ -54,5 +54,3 @@ class Module_Analytics extends Module {
 	}
 
 }
-
-?>

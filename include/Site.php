@@ -331,4 +331,3 @@ require_once 'Event/Dispatcher.php';
 			$global->addObserver(array('Module', 'onPreSave'), 'onPreSave');
 			$global->addObserver(array('Module', 'onPreDelete'), 'onPreDelete');
 			$global->addObserver(array('Module', 'onPreToggle'), 'onPreToggle');
-?>

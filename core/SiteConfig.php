@@ -268,4 +268,3 @@ class SiteConfig {
 		return $configs; 
 	}
 }
-?>

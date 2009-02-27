@@ -148,5 +148,3 @@ class Menu {
 	}
 	public function cookieCrumbsTo() {return array();} // STUB FOR NEW CODE
 }
-
-?>

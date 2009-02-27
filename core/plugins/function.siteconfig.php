@@ -7,4 +7,3 @@ function smarty_function_siteconfig($params, &$smarty) {
 	}
 	return SiteConfig::get($params['get']);
 }
-?> 

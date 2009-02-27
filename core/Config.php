@@ -128,5 +128,3 @@ class Config {
 		return false;
 	}
 }
-
-?>

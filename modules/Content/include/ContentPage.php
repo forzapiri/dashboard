@@ -79,4 +79,3 @@ class ContentPage extends DBRow {
 	}
 }
 DBRow::init('ContentPage');
-?>

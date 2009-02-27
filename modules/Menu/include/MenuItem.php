@@ -130,4 +130,3 @@ class MenuItem extends DBRow {
 	}
 }
 DBRow::init('MenuItem');
-?>

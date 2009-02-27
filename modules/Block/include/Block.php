@@ -39,4 +39,3 @@ class Block extends DBRow {
 	}
 }
 DBRow::init('Block');
-?>

@@ -72,5 +72,3 @@ class Module_Templater extends Module {
 	}
 
 }
-
-?>

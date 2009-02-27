@@ -11,4 +11,3 @@ function smarty_block_insert_in ($params, $content, &$smarty) {
 		return "$before$content$after";
 	}
 }
-?>

@@ -15,5 +15,3 @@
 function smarty_function_helpitem($params, &$smarty) {
 	return '<a href="javascript:getHelp(\'' . @$params['item'] . '\')" onmouseover="getHelp(\'' . @$params['item'] . '\')"><img src="/images/help.gif" /></a>';
 }
-
-?> 

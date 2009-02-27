@@ -137,4 +137,3 @@ class SiteConfigPhpType extends SiteConfigType {
 	function _setValue($config, $value) {$config->setValue(serialize($value));}
 }
 SiteConfigType::register(new SiteConfigPhpType());
-?>

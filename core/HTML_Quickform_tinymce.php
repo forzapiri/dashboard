@@ -162,4 +162,3 @@ class HTML_Quickform_tinymce extends HTML_Quickform_element {
 	} // End function toHtml
 
 }
-?>

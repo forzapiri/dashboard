@@ -44,5 +44,3 @@ class Module_Search extends Module {
 	}
 
 }
-
-?>

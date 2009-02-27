@@ -15,4 +15,3 @@
 function smarty_function_nbsp() {
 	return '&nbsp;';
 }
-?> 

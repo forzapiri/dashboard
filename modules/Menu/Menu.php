@@ -126,5 +126,3 @@ class Module_Menu extends Module {
 		return $this->smarty->fetch( 'db:' . $type->getTemplate() );
 	}
 }
-
-?>

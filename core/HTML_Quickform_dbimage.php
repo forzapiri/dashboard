@@ -45,4 +45,3 @@ class HTML_QuickForm_dbimage extends HTML_QuickForm_element
 
 
 }
-?>

@@ -17,4 +17,3 @@ function smarty_function_amp($params) {
 	$arg = $arg[0];
 	return "&$arg";
 }
-?> 

@@ -35,4 +35,3 @@ class PhotoGallery extends DBRow {
 }
 
 DBRow::init('PhotoGallery');
-?>

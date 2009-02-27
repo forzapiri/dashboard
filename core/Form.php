@@ -65,5 +65,3 @@ class Form extends HTML_QuickForm {
 	}
 	
 }
-
-?>

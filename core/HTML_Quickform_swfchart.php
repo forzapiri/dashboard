@@ -23,7 +23,4 @@ class HTML_QuickForm_swfchart extends HTML_QuickForm_html {
     	
     	return $string;
     }
-    
-
 }
-?>

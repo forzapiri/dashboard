@@ -34,5 +34,3 @@ class Module_Block extends Module {
 	}
 
 }
-
-?>

@@ -71,4 +71,3 @@ class Storage extends DBRow implements StorageInterface {
 	}
 }
 DBRow::init('Storage');
-?>

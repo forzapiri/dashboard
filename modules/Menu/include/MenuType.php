@@ -69,4 +69,3 @@ class MenuType extends DBRow {
 }
 
 DBRow::init('MenuType');
-?>

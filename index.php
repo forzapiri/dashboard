@@ -1,6 +1,3 @@
-
-
-
 <?php
 /**
  * Site Initialization
@@ -75,4 +72,3 @@ if ( $ajaxHelper->isAJAX () ){
 		$smarty->render ( 'db:site.tpl', $smarty->templateOverride);
 	}
 }
-?>

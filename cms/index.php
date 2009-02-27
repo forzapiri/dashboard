@@ -13,6 +13,7 @@
 /**
  * Require the site initialization file
  */
+
 require_once (dirname(__FILE__) . "/../include/Site.php");
 
 $auth_container = new CMSAuthContainer();
@@ -49,7 +50,7 @@ if ($auth->checkAuth()) {
 			$m = Module::factory($name);
 		}
 	}
-	
+
 	// render the admin page
 	require_once 'HTML/AJAX/Helper.php';
 	$ajaxHelper = new HTML_AJAX_Helper ( );

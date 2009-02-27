@@ -119,4 +119,3 @@ function adminMenu($params, &$smarty) {
 function frontendMenu($params, &$smarty) {
 
 }
-?> 

@@ -16,4 +16,3 @@ function smarty_resource_text_secure($tpl_name, &$smarty_obj) {
 }
 
 function smarty_resource_text_trusted($tpl_name, &$smarty_obj) {}
-?>

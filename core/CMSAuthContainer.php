@@ -50,5 +50,3 @@ class CMSAuthContainer extends Auth_Container
     }
     
 }
-
-?>

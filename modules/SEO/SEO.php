@@ -44,5 +44,3 @@ class Module_SEO extends Module {
 	}
 
 }
-
-?>

@@ -10,5 +10,3 @@ function smarty_function_userstatus($params,&$smarty) {
 	}
 	return 'Offline';
 }
-
-?> 

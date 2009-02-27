@@ -444,4 +444,3 @@ function doConditionalGet($etag, $lastModified)
 // the sound of water
 
 // —Matsuo Basho
-?>

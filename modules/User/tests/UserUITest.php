@@ -45,4 +45,3 @@ class UserUITest extends UITest
     	$this->click('xpath=//*/table/tbody/tr/td[1][text()="testuser"]/../td[7]/form[2]/input[4]');
     }
 }
-?>

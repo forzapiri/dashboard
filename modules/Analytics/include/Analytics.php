@@ -22,5 +22,3 @@ class analytics extends DBRow {
 	}
 }
 DBRow::init('analytics');
-
-?>

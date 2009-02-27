@@ -27,4 +27,3 @@ function smarty_resource_before_after_timestamp($tpl_name, &$tpl_timestamp, &$sm
 function smarty_resource_before_after_secure($tpl_name, &$smarty_obj) {return true;}
 
 function smarty_resource_before_after_trusted($tpl_name, &$smarty_obj) {}
-?>

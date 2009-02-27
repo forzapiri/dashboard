@@ -71,4 +71,3 @@ class defaultPageActs {
 		if ($this->user->hasPerm($this->pointer, $this->pageActions[$this->pointer][$_REQUEST['action']]['perm'])) $i->delete();
 	}
 }
-?>

@@ -244,5 +244,3 @@ class Database {
 		unset($this);
 	}
 }
-
-?>

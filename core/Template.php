@@ -82,5 +82,3 @@ class Template extends DBRow {
 }
 
 DBRow::init('Template');
-
-?>

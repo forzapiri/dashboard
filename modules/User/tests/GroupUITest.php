@@ -83,4 +83,3 @@ class GroupUITest extends UITest
 		    	
     }
 }
-?>

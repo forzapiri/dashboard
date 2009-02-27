@@ -132,4 +132,3 @@ function SendChartData( $chart=array() ){
 	echo $xml;
 }
 //====================================
-?>

@@ -83,4 +83,3 @@ if (isset($_GET['PHPUNIT_SELENIUM_TEST_ID'])) {
 
     print serialize($coverage);
 }
-?>

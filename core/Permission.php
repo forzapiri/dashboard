@@ -25,5 +25,3 @@ class Permission extends DBRow {
 	
 }
 DBRow::init('Permission');
-
-?>

@@ -229,4 +229,3 @@ class NDate extends Date {
 	}
 }
 // NDate::test();
-?>

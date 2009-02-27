@@ -326,5 +326,3 @@ if(isset($_REQUEST['id'])){
 	$fl = new DataStorage($_REQUEST['id']);
 	$fl->render();
 }
-
-?>

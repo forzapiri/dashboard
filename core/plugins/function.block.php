@@ -31,5 +31,3 @@ function smarty_function_block($params,&$smarty) {
 	
 	return $smarty->fetch('block.tpl');
 }
-
-?> 
