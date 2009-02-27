@@ -12,8 +12,9 @@ define ('DUMMY_INIT_ROW', -1);
 include_once SITE_ROOT . '/modules/DBTable/include/TableColumn.php';
 
 function underscore2uccamel($text) { // 'menu_item' => 'MenuItem'
-	return implode (array_map ('ucfirst', explode ('_', $text)));
+	return preg_replace('/(^|_)(.)/e', "strtoupper('\\2')", $text);
 }
+
 
 abstract class DBRow {
 	public $chunkManager = false;  // TODO: Make private
@@ -285,7 +286,8 @@ abstract class DBRow {
 		foreach ($this->columns() as $column) {
 			if ($column->noForm()) continue;
 			$name = $column->name();
-			$value = &$this->get($name);
+			$value = call_user_func(array($this, 'get'.underscore2uccamel($name)));
+			// $value = &$this->get($name);
 			$id = $this->quickformPrefix() . $name;
 			$formValue = $column->toForm($value);
 			if ($column->hidden()) {
