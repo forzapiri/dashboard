@@ -113,7 +113,7 @@ class Module_User extends Module {
 	
 	
 	public function setupMainList() {
-		$users = User::getAllUsers();
+		$users = User::getAll();
 		$this->smarty->assign('users', $users);
 	}
 
