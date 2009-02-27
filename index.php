@@ -24,7 +24,7 @@ if (isset($_REQUEST['username']) && isset($_REQUEST['password'])) {
 }
 
 if (@!isset($_REQUEST['module'])) {
-	$_REQUEST['module'] = 'Content';
+	$_REQUEST['module'] = SiteConfig::get('defaultModule');
 }
 
 if(ucfirst($_REQUEST['module']) == 'Content' && @empty($_REQUEST['page'])){
