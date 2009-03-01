@@ -26,7 +26,9 @@ if (isset($_REQUEST['username']) && isset($_REQUEST['password'])) {
 	$auth->start();
 }
 
-if (!SiteConfig::norex() && !SiteConfig::get('live')) {
+if (! (SiteConfig::norex() // If the site isn't live, usually show an error page.
+	   || SiteConfig::get('live')
+	   || (@$_REQUEST['module'] == 'User' && @$_REQUEST['section'] == 'logout'))) {
 	$_REQUEST['module'] = "Content";
 	$_REQUEST['page'] = "_ERROR_";
 }
