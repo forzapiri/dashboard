@@ -8,13 +8,13 @@ class PhotoGallery extends DBRow {
 			DBColumn::make('text', 'name', 'Photo Gallery Name'),
 			DBColumn::make('PhotoGallery(name)', 'parent_gallery_id', 'Parent Photo Gallery'),
 			DBColumn::make('File(description)', 'thumbnail_id', 'Thumbnail Image'),
-			DBColumn::make('textarea', 'description', 'Description', array ('rows' => 16, 'cols' => 50)),
+			DBColumn::make('textbox', 'description', 'Description', array ('rows' => 16, 'cols' => 50)),
 			'timestamp',
 			'//status',
 			);
 		return new DBTable("photo_galleries", __CLASS__, $cols);
 	}
-	static function getAll($where = null) {return parent::getAll($where, __CLASS__);}
+	static function getAll($where = null) {return self::$tables[__CLASS__]->getAllRows($where);}
 	function quickformPrefix() {return 'photo_gallery_';}
 	
 	public function getSubGalleries() {
