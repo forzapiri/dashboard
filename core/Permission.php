@@ -15,10 +15,15 @@ class Permission extends DBRow {
 		return new DBTable("permissions", __CLASS__, $cols);
 	}
 	static function make($id = null) {return parent::make($id, __CLASS__);}
-	static function getAll($where = null) {return parent::getAll($where, __CLASS__);}
+	static function getAll() {
+		$args = func_get_args();
+		array_unshift($args, __CLASS__);
+		return call_user_func_array(array('DBRow', 'getAllRows'), $args);
+	}
 
 	static function hasPerm($group, $class, $key) {
-		return self::getAll('where group_id="'. $group . '" and class="' . $class . '" and `key`="' . $key . '" and status=1');
+		return self::getAll('where group_id=? and class=? and `key`=? and status=1', 'iss',
+							$group, $class, $key);
 	}
 	
 	function quickformPrefix() {return 'permissions_';}

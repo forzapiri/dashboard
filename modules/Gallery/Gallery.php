@@ -37,7 +37,7 @@ class Module_Gallery extends Module {
 			$this->smarty->assign('galleries', $gallery->getSubGalleries());
 			return $this->smarty->fetch('galleries.tpl');
 		} else {
-			$galleries = PhotoGallery::getAll('where parent_gallery_id=0');
+			$galleries = PhotoGallery::getAll('where parent_gallery_id=0', '');
 			$this->smarty->assign('galleries', $galleries);
 			return $this->smarty->fetch('galleries.tpl');
 		}
@@ -47,7 +47,7 @@ class Module_Gallery extends Module {
 		switch($level){
 			case 1:
 			default:
-				$linkItems = PhotoGallery::getAll('where parent_gallery_id=0');
+				$linkItems = PhotoGallery::getAll('where parent_gallery_id=0', '');
 				foreach($linkItems as $linkItem){
 					$linkables[$linkItem->get('id')] = $linkItem->get('name');
 					$linkables[0] = "--Top Level Gallery--";

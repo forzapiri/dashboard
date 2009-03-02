@@ -27,12 +27,16 @@ class Block extends DBRow {
 			);
 		return new DBTable("blocks", __CLASS__, $cols);
 	}
-	static function getAll($where = null) {return parent::getAll($where, __CLASS__);}
+	static function getAll() {
+		$args = func_get_args();
+		array_unshift($args, __CLASS__);
+		return call_user_func_array(array('DBRow', 'getAllRows'), $args);
+	}
 	function quickformPrefix() {return 'blocks_';}
 
 	static function getAllBlocks ($status = null) {
 		if($status == 'active'){
-			return self::getAll("where status=1");
+			return self::getAll("where status=1", '');
 		} else {
 			return self::getAll();
 		}

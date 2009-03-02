@@ -18,7 +18,11 @@ class User extends DBRow {
 		return new DBTable("auth", __CLASS__, $cols);
 	}
 	static function make($id = null) {return parent::make($id, __CLASS__);}
-
+	static function getAll() {
+		$args = func_get_args();
+		array_unshift($args, __CLASS__);
+		return call_user_func_array(array('DBRow', 'getAllRows'), $args);
+	}
 	function quickformPrefix() {return 'user_';}
 	
 	public function hasPerm($class, $key) {

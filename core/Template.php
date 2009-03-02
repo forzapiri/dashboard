@@ -39,7 +39,11 @@ class Template extends DBRow {
 	}
 	
 	static function make($id = null) {return parent::make($id, __CLASS__);}
-	static function getAll($where = null) {return parent::getAll($where, __CLASS__);}
+	static function getAll() {
+		$args = func_get_args();
+		array_unshift($args, __CLASS__);
+		return call_user_func_array(array('DBRow', 'getAllRows'), $args);
+	}
 	
 	public static function getRevision($module, $path) {
 		$result = self::$revisionQuery->fetch($module, $path);

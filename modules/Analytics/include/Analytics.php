@@ -10,12 +10,16 @@ class analytics extends DBRow {
 			);
 		return new DBTable("analytics", __CLASS__, $cols);
 	}
-	static function getAll($where = null) {return self::$tables[__CLASS__]->getAllRows($where);}
+	static function getAll() {
+		$args = func_get_args();
+		array_unshift($args, __CLASS__);
+		return call_user_func_array(array('DBRow', 'getAllRows'), $args);
+	}
 	function quickformPrefix() {return 'analytics_';}
 
 	static function getAllAnalyticss ($status = null) {
 		if($status == 'active'){
-			return self::getAll("where status=1");
+			return self::getAll("where status=1", '');
 		} else {
 			return self::getAll();
 		}

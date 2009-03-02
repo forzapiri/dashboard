@@ -3,7 +3,11 @@
 
 class Chunk extends DBRow {
 	function createTable() {return parent::createTable("chunk", __CLASS__);}
-	static function getAll($where = null) {return parent::getAll($where, __CLASS__);}
+	static function getAll() {
+		$args = func_get_args();
+		array_unshift($args, __CLASS__);
+		return call_user_func_array(array('DBRow', 'getAllRows'), $args);
+	}
 	static function make($id = null) {return parent::make($id, __CLASS__);}
 
 	static function getAllFor($obj, $id = null) { // If $obj is a class name, $id is the object's id
@@ -13,7 +17,7 @@ class Chunk extends DBRow {
 			$class = get_class($obj);
 			$id = $obj->getId();
 		}
-		return ($class && $id) ? self::getAll("where parent_class='$class' and parent=$id") : array();
+		return ($class && $id) ? self::getAll("where parent_class=? and parent=?", 'si', $class, $id) : array();
 	}
 
 	static function revertDrafts($class, $id) {
@@ -65,7 +69,7 @@ class Chunk extends DBRow {
 		if (!($this->getName() && $this->getRole() && $this->getParent())) return $this;
 		$name = e($this->getName());
 		$role = $this->getRole();
-		$c = self::getAll("where role='$role' and name='$name' and (parent is null or parent=0)");
+		$c = self::getAll("where role=? and name=? and (parent is null or parent=0)", 'ss', $role, $name);
 		if (!$c) { // Create the canonical Chunk with this (role, name) pair.
 			$c = Chunk::make();
 			$c->setRole($role);
@@ -89,14 +93,14 @@ class Chunk extends DBRow {
 		default:
 			if (!$count) trigger_error ("Invalid status in getRevision: $statusORcount");
 			$statusClause = "count=$count";
-			$draft = ChunkRevision::getAll("where status='draft'");
+			$draft = ChunkRevision::getAll("where status='draft'", '');
 			if ($draft) { // RESET PREVIOUS draft TO inactive
 				$draft = $draft[0];
 				$draft->setStatus('inactive');
 				$draft->save();
 			}
 		}
-		$all = ChunkRevision::getAll("where parent=$id and $statusClause");
+		$all = ChunkRevision::getAll("where parent=? and $statusClause", 'i', $id);
 		if ($all) {
 			$rev= $all[0];
 		} else {

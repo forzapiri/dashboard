@@ -57,7 +57,7 @@ class Module_Content extends Module implements linkable {
 		switch($level){
 			case 1:
 			default:
-				$linkItems = ContentPage::getAll("where status = '1'");
+				$linkItems = ContentPage::getAll("where status = '1'", '');
 				foreach($linkItems as $linkItem){
 					$linkables[$linkItem->get('id')] = $linkItem->get('name');
 				}

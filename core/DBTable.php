@@ -64,19 +64,32 @@ class DBTable {
 	}
 	
 	private $rowsWhere = array();
-	function getAllRows($where = null) {
-		if (@$this->rowsWhere[$where]) {return $this->rowsWhere[$where];}
+	function getAllRows($where=null, $code=null) {
+		if (!$code && @$this->rowsWhere[$where]) {return $this->rowsWhere[$where];}
 		$name = $this->name();
 		$class = $this->classname;
 		$select = $this->select;
-		$query = $where ? new Query ("$select $where", "") : $this->fetchAllQuery;
-		$results = $query->fetchAll();
+		if ($where && $code === null) {
+			$f = SiteConfig::norex() ? 'trigger_error' : 'error_log';
+			$f("getAll has been promoted to using prepared statements for the where clause\n"
+						   . "For example, getAll('where id=? and title=?', 'is', 23, 'Fun')");
+		}
+		if ($code !== null) {
+			if (func_num_args() != 2+strlen($code))
+				trigger_error ("Length of code does not match number of arguments in DBTable::getAllRows()");
+			$args = func_get_args();
+			array_shift($args);
+			array_shift($args);
+		} else {
+			$code = '';
+			$args = array();
+		}
+		$query = $where ? new Query ("$select $where", $code) : $this->fetchAllQuery;
+		$results = call_user_func_array (array($query, 'fetchAll'), $args);
 		foreach ($results as &$result) {
 			$result = DBRow::make ($result, $class);
-			// Caching now done in DBRow::make.  Calling it for consistency.
-			// $this->rows[$result->get('id')] = $result;  
 		}
-		$this->rowsWhere[$where] = $results;
+		if (!$code) $this->rowsWhere[$where] = $results;
 		return $results;
 	}
 }

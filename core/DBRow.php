@@ -59,12 +59,24 @@ abstract class DBRow {
 		default: false;
 		}
 	}
+
 	
-	static function getAll($where = null, $class = null) {
+	static function getAll($where = null, $class = null) { // OLD STYLE
 		if (!$class) $class = self::$__CLASS__;
 		$table = @self::$tables[$class];
-		if (!$table) trigger_error("Table for $class does not yet exists");
+		if (!$table) trigger_error("Table for $class does not yet exist");
 		else return $table->getAllRows($where);
+	}
+	
+	static function getAllRows($class = null, $where = null) {
+		if (!$class) $class = self::$__CLASS__;
+		$table = @self::$tables[$class];
+		$args = func_get_args();
+		array_shift($args);
+		array_shift($args);
+		array_unshift ($args, $where);
+		if (!$table) trigger_error("Table for $class does not yet exist");
+		else return call_user_func_array (array ($table, 'getAllRows'), $args);
 	}
 
 	static $makeFlag = false;

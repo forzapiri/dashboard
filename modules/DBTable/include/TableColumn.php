@@ -28,9 +28,13 @@ class TableColumn extends DBRow {
 		       	</ol>");
 	}
 	static function make($id = null) {return parent::make($id, __CLASS__);}
-	static function getAll($where = null) {return parent::getAll($where, __CLASS__);}
-	static function getAllTables() {return self::getAll("where type='id'");}
-	static function getAllRows($table) {return self::getAll("where `table`='$table'");}
+	static function getAll() {
+		$args = func_get_args();
+		array_unshift($args, __CLASS__);
+		return call_user_func_array(array('DBRow', 'getAllRows'), $args);
+	}
+	static function getAllTables() {return self::getAll("where type='id'", '');}
+	static function getAllRows($table) {return self::getAll("where `table`=?", 's', $table);}
 	
 	function suggestedMysql() {
 		$t = DBColumn::make($this->get('type'));

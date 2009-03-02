@@ -14,19 +14,23 @@ class PhotoGallery extends DBRow {
 			);
 		return new DBTable("photo_galleries", __CLASS__, $cols);
 	}
-	static function getAll($where = null) {return parent::getAll($where, __CLASS__);}
+	static function getAll() {
+		$args = func_get_args();
+		array_unshift($args, __CLASS__);
+		return call_user_func_array(array('DBRow', 'getAllRows'), $args);
+	}
 	function quickformPrefix() {return 'photo_gallery_';}
 	
 	public function getSubGalleries() {
-		return self::getAll('where parent_gallery_id=' . $this->get('id'));
+		return self::getAll('where parent_gallery_id=?', 'i', $this->get('id'));
 	}
 	
 	public function getGalleryImages() {
-		return PhotoGalleryImage::getAll('where photo_gallery_id=' . $this->get('id'));
+		return PhotoGalleryImage::getAll('where photo_gallery_id=?', 'i', $this->get('id'));
 	}
 	
 	public function getFirstImage(){
-		$images = PhotoGalleryImage::getAll('where photo_gallery_id=' . $this->get('id') . ' limit 1 ');
+		$images = PhotoGalleryImage::getAll('where photo_gallery_id=? limit 1 ' , 'i', $this->get('id'));
 		if (!isset($images[0])){
 			return false;
 		}

@@ -283,7 +283,7 @@ class Page extends defaultPageActs {
 		if (is_null($pointer)) {
 			$pointer = $this->pointer;
 		}
-		$items = call_user_func(array($pointer, 'getAll'), $this->getWhere($pointer));
+		$items = call_user_func(array($pointer, 'getAll'), $this->getWhere($pointer), ''); // TODO: CONVERT TO PREPARED STMT
 		return $items;
 	}
 	
@@ -329,7 +329,7 @@ class Page extends defaultPageActs {
 			
 		list($from, $to) = $pager->getOffsetByPageId();
 		$where .= ' limit ' . ($from - 1) . ', ' . ($this->perPage);
-		$items = call_user_func(array($this->pointer, 'getAll'), $where);
+		$items = call_user_func(array($this->pointer, 'getAll'), $where, '');  // TODO: CONVERT TO PREPARED STMT
 		
 		$this->pager = $pager;
 		

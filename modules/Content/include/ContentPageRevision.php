@@ -11,7 +11,11 @@ class ContentPageRevision extends DBRow {
 			);
 		return new DBTable("content_page_data", __CLASS__, $cols);
 	}
-	static function getAll($where = null) {return self::$tables[__CLASS__]->getAllRows($where);}
+	static function getAll() {
+		$args = func_get_args();
+		array_unshift($args, __CLASS__);
+		return call_user_func_array(array('DBRow', 'getAllRows'), $args);
+	}
 	static function make($id = null) {return parent::make($id, __CLASS__);}
 	function quickformPrefix() {return 'content_page_data_';}
 
@@ -20,7 +24,7 @@ class ContentPageRevision extends DBRow {
 		if(@!$o = $n->getNotificationObject()){
 			$o = $n;
 		}
-		$rs = self::getAll('where parent=' . $o->getParent() . ' and status=1');
+		$rs = self::getAll('where parent=? and status=1', 's', $o->getParent());
 		foreach ($rs as $r) {
 			if ($r->getId() != $o->getId()) {
 				$r->setStatus(false)->save();
