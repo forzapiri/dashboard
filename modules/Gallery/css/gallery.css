@@ -1,0 +1,9 @@
+div.gallery h1{
+	color:#66b3cc;
+	font-family:Tahoma, Arial, sans-serif;
+} 
+
+div.mainText table.galleries tr.galleryTitle td a img{
+	text-decoration: none;
+	border: none;
+}
