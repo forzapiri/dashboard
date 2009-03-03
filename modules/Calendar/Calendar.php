@@ -34,11 +34,21 @@ class Module_Calendar extends Module {
 			 	'Event Name' => 'event_name',
 			 	'Event Start' => 'event_start',
 			 	'Event End' => 'event_end',
-			 	//'Show in Sidebar' => 'status'
 			 ))
 			 ->link(array('calendar_id', array('Calendar', 'id')))
+			 ->on('addedit')->action('EventRegistrant')->noAJAX()
 			 ->name('Calendar Event');
 			 
+		$this->page->with('EventRegistrant')
+			 ->show(array(
+			 	'First Name' => 'first_name',
+			 	'Last Name' => 'last_name',
+			 	'Email Address' => 'email',
+			 	'Phone Number' => 'phone',
+			 	'Paid' => 'status',
+			 ))
+			 ->name('Event Registrant')
+			 ->link(array('event_id', array('CalendarEvent', 'id')));
 		$this->page->with('Calendar');
 	}
 	
