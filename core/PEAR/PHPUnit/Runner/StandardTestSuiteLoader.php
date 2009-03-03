@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: StandardTestSuiteLoader.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: StandardTestSuiteLoader.php 4638 2009-02-14 10:20:47Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.0.0
  */
@@ -59,7 +59,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.13
+ * @version    Release: 3.3.15
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.0.0
  */
@@ -79,6 +79,8 @@ class PHPUnit_Runner_StandardTestSuiteLoader implements PHPUnit_Runner_TestSuite
         if (empty($suiteClassFile)) {
             $suiteClassFile = str_replace(array('_', '\\'), DIRECTORY_SEPARATOR, $suiteClassName) . '.php';
         }
+
+        $suiteClassFile = realpath($suiteClassFile);
 
         if (!class_exists($suiteClassName, FALSE)) {
             if (!file_exists($suiteClassFile)) {
@@ -114,17 +116,19 @@ class PHPUnit_Runner_StandardTestSuiteLoader implements PHPUnit_Runner_TestSuite
             foreach ($loadedClasses as $loadedClass) {
                 $class = new ReflectionClass($loadedClass);
 
-                if ($class->isSubclassOf('PHPUnit_Framework_TestCase')) {
-                    $suiteClassName = $loadedClass;
-                    break;
-                }
-
-                if ($class->hasMethod('suite')) {
-                    $method = $class->getMethod('suite');
-
-                    if (!$method->isAbstract() && $method->isPublic() && $method->isStatic()) {
+                if ($class->getFileName() == $suiteClassFile) {
+                    if ($class->isSubclassOf('PHPUnit_Framework_TestCase')) {
                         $suiteClassName = $loadedClass;
                         break;
+                    }
+
+                    if ($class->hasMethod('suite')) {
+                        $method = $class->getMethod('suite');
+
+                        if (!$method->isAbstract() && $method->isPublic() && $method->isStatic()) {
+                            $suiteClassName = $loadedClass;
+                            break;
+                        }
                     }
                 }
             }
