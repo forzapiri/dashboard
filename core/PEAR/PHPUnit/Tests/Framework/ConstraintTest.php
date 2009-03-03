@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: ConstraintTest.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: ConstraintTest.php 4661 2009-02-23 16:34:27Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.0.0
  */
@@ -56,7 +56,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . '_files' . DIREC
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.13
+ * @version    Release: 3.3.15
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.0.0
  */
@@ -1103,7 +1103,7 @@ class Framework_ConstraintTest extends PHPUnit_Framework_TestCase
         $this->fail();
     }
 
-    public function testConstraintTraversableContains()
+    public function testConstraintArrayContains()
     {
         $constraint = new PHPUnit_Framework_Constraint_TraversableContains('foo');
 
@@ -1127,7 +1127,7 @@ class Framework_ConstraintTest extends PHPUnit_Framework_TestCase
         $this->fail();
     }
 
-    public function testConstraintTraversableContains2()
+    public function testConstraintArrayContains2()
     {
         $constraint = new PHPUnit_Framework_Constraint_TraversableContains('foo');
 
@@ -1147,7 +1147,7 @@ class Framework_ConstraintTest extends PHPUnit_Framework_TestCase
         $this->fail();
     }
 
-    public function testConstraintTraversableNotContains()
+    public function testConstraintArrayNotContains()
     {
         $constraint = new PHPUnit_Framework_Constraint_Not(
           new PHPUnit_Framework_Constraint_TraversableContains('foo')
@@ -1173,7 +1173,7 @@ class Framework_ConstraintTest extends PHPUnit_Framework_TestCase
         $this->fail();
     }
 
-    public function testConstraintTraversableNotContains2()
+    public function testConstraintArrayNotContains2()
     {
         $constraint = new PHPUnit_Framework_Constraint_Not(
           new PHPUnit_Framework_Constraint_TraversableContains('foo')
@@ -1186,6 +1186,61 @@ class Framework_ConstraintTest extends PHPUnit_Framework_TestCase
         catch (PHPUnit_Framework_ExpectationFailedException $e) {
             $this->assertEquals(
               "custom message\nFailed asserting that an array does not contain <string:foo>.",
+              $e->getDescription()
+            );
+
+            return;
+        }
+
+        $this->fail();
+    }
+
+    /**
+     * @covers PHPUnit_Framework_Constraint_TraversableContains
+     */
+    public function testConstraintSplObjectStorageContains()
+    {
+        $object     = new StdClass;
+        $constraint = new PHPUnit_Framework_Constraint_TraversableContains($object);
+        $this->assertEquals("contains \nstdClass Object\n(\n)\n", $constraint->toString());
+
+        $storage = new SplObjectStorage;
+        $this->assertFalse($constraint->evaluate($storage));
+
+        $storage->attach($object);
+        $this->assertTrue($constraint->evaluate($storage));
+
+        try {
+            $constraint->fail(new SplObjectStorage, '');
+        }
+
+        catch (PHPUnit_Framework_ExpectationFailedException $e) {
+            $this->assertEquals(
+              "Failed asserting that an iterator contains \nstdClass Object\n(\n)\n.",
+              $e->getDescription()
+            );
+
+            return;
+        }
+
+        $this->fail();
+    }
+
+    /**
+     * @covers PHPUnit_Framework_Constraint_TraversableContains
+     */
+    public function testConstraintSplObjectStorageContains2()
+    {
+        $object     = new StdClass;
+        $constraint = new PHPUnit_Framework_Constraint_TraversableContains($object);
+
+        try {
+            $constraint->fail(new SplObjectStorage, 'custom message');
+        }
+
+        catch (PHPUnit_Framework_ExpectationFailedException $e) {
+            $this->assertEquals(
+              "custom message\nFailed asserting that an iterator contains \nstdClass Object\n(\n)\n.",
               $e->getDescription()
             );
 

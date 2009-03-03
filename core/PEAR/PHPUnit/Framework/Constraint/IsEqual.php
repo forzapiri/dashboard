@@ -40,7 +40,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: IsEqual.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: IsEqual.php 4661 2009-02-23 16:34:27Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.0.0
  */
@@ -66,7 +66,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.13
+ * @version    Release: 3.3.15
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.0.0
  */
@@ -202,6 +202,26 @@ class PHPUnit_Framework_Constraint_IsEqual extends PHPUnit_Framework_Constraint
 
         if (is_object($a) XOR is_object($b)) {
             return FALSE;
+        }
+
+        if ($a instanceof SplObjectStorage XOR $b instanceof SplObjectStorage) {
+            return FALSE;
+        }
+
+        if ($a instanceof SplObjectStorage) {
+            foreach ($a as $object) {
+                if (!$b->contains($object)) {
+                    return FALSE;
+                }
+            }
+
+            foreach ($b as $object) {
+                if (!$a->contains($object)) {
+                    return FALSE;
+                }
+            }
+
+            return TRUE;
         }
 
         if ($a instanceof DOMDocument || $b instanceof DOMDocument) {

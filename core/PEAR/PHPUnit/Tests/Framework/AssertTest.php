@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: AssertTest.php 4404 2008-12-31 09:27:18Z sb $
+ * @version    SVN: $Id: AssertTest.php 4661 2009-02-23 16:34:27Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 2.0.0
  */
@@ -60,7 +60,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . '_files' . DIREC
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.13
+ * @version    Release: 3.3.15
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 2.0.0
  */
@@ -91,6 +91,29 @@ class Framework_AssertTest extends PHPUnit_Framework_TestCase
         $this->fail();
     }
 
+    public function testAssertSplObjectStorageContainsObject()
+    {
+        $a = new stdClass;
+        $b = new stdClass;
+        $c = new SplObjectStorage;
+        $c->attach($a);
+
+        $this->assertContains($a, $c);
+
+        try {
+            $this->assertContains($b, $c);
+        }
+
+        catch (PHPUnit_Framework_AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    /**
+     * @covers PHPUnit_Framework_Assert::assertContains
+     */
     public function testAssertArrayContainsObject()
     {
         $a = new stdClass;
@@ -231,6 +254,29 @@ class Framework_AssertTest extends PHPUnit_Framework_TestCase
         $this->fail();
     }
 
+    public function testAssertSplObjectStorageNotContainsObject()
+    {
+        $a = new stdClass;
+        $b = new stdClass;
+        $c = new SplObjectStorage;
+        $c->attach($a);
+
+        $this->assertNotContains($b, $c);
+
+        try {
+            $this->assertNotContains($a, $c);
+        }
+
+        catch (PHPUnit_Framework_AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    /**
+     * @covers PHPUnit_Framework_Assert::assertNotContains
+     */
     public function testAssertArrayNotContainsObject()
     {
         $a = new stdClass;
@@ -615,6 +661,60 @@ class Framework_AssertTest extends PHPUnit_Framework_TestCase
         $this->fail();
     }
 
+    public function testAssertEqualsSplObjectStorage()
+    {
+        $a = new SampleClass( 4,  8, 15);
+        $b = new SampleClass(16, 23, 42);
+
+        $c = new SplObjectStorage;
+        $c->attach($a);
+
+        $d = new SplObjectStorage;
+        $d->attach($b);
+
+        $this->assertEquals($c, $c);
+
+        try {
+            $this->assertEquals($c, $d);
+        }
+
+        catch (PHPUnit_Framework_AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    /**
+     * @covers PHPUnit_Framework_Assert::assertNotEquals
+     */
+    public function testAssertNotEqualsSplObjectStorage()
+    {
+        $a = new SampleClass( 4,  8, 15);
+        $b = new SampleClass(16, 23, 42);
+
+        $c = new SplObjectStorage;
+        $c->attach($a);
+
+        $d = new SplObjectStorage;
+        $d->attach($b);
+
+        $this->assertNotEquals($c, $d);
+
+        try {
+            $this->assertNotEquals($c, $c);
+        }
+
+        catch (PHPUnit_Framework_AssertionFailedError $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    /**
+     * @covers PHPUnit_Framework_Assert::assertEquals
+     */
     public function testAssertEqualsString()
     {
         $this->assertEquals('ab', 'ab');

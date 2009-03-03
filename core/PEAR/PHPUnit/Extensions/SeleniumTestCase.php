@@ -39,7 +39,7 @@
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    SVN: $Id: SeleniumTestCase.php 4507 2009-01-19 16:16:21Z sb $
+ * @version    SVN: $Id: SeleniumTestCase.php 4608 2009-02-03 02:51:17Z sb $
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.0.0
  */
@@ -62,7 +62,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
  * @author     Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @copyright  2002-2009 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: 3.3.13
+ * @version    Release: 3.3.15
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.0.0
  */
@@ -157,7 +157,7 @@ abstract class PHPUnit_Extensions_SeleniumTestCase extends PHPUnit_Framework_Tes
 
                     foreach ($files as $file) {
                         $browserSuite->addTest(
-                          new $className($file, array(), $browser),
+                          new $className($file, array(), '', $browser),
                           $classGroups
                         );
                     }
@@ -193,9 +193,9 @@ abstract class PHPUnit_Extensions_SeleniumTestCase extends PHPUnit_Framework_Tes
                               $className . '::' . $name
                             );
 
-                            foreach ($data as $_data) {
+                            foreach ($data as $_dataName => $_data) {
                                 $dataSuite->addTest(
-                                  new $className($name, $_data, $browser),
+                                  new $className($name, $_data, $_dataName, $browser),
                                   $groups
                                 );
                             }
@@ -206,7 +206,7 @@ abstract class PHPUnit_Extensions_SeleniumTestCase extends PHPUnit_Framework_Tes
                         // Test method without @dataProvider.
                         else {
                             $browserSuite->addTest(
-                              new $className($name, array(), $browser), $groups
+                              new $className($name, array(), '', $browser), $groups
                             );
                         }
                     }
@@ -231,9 +231,9 @@ abstract class PHPUnit_Extensions_SeleniumTestCase extends PHPUnit_Framework_Tes
                           $className . '::' . $name
                         );
 
-                        foreach ($data as $_data) {
+                        foreach ($data as $_dataName => $_data) {
                             $dataSuite->addTest(
-                              new $className($name, $_data),
+                              new $className($name, $_data, $_dataName),
                               $groups
                             );
                         }
