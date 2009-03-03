@@ -24,7 +24,7 @@ class Module_Calendar extends Module {
 			 	'Name' => 'name',
 			 	'Link' => array('id', array('Calendar', 'getLink'))
 			 ))
-			 ->on('addedit')->action('CalendarEvent')
+			 ->on('addedit')->action('CalendarEvent')->noAJAX()
 			 ->name('Calendar');
 			 
 		$this->page->with('CalendarEvent')

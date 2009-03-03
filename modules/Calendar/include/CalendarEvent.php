@@ -6,8 +6,8 @@ class CalendarEvent extends DBRow {
 			'id?',
 			DBColumn::make('text', 'event_name', 'Name'),
 			DBColumn::make('textarea', 'event_description', 'Description'),
-			DBColumn::make('date', 'event_start', 'Start Date'),
-			DBColumn::make('date', 'event_end', 'Start Date'),
+			DBColumn::make('datetime', 'event_start', 'Start Date'),
+			DBColumn::make('datetime', 'event_end', 'Start Date'),
 			DBColumn::make('text', 'event_location', 'Location'),
 			DBColumn::make('Calendar(name)', 'calendar_id', 'Calendar'),
 			'//status'

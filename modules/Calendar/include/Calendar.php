@@ -25,7 +25,7 @@ class Calendar extends DBRow {
 	
 	public function getLink() {
 		require_once(SITE_ROOT . '/core/plugins/modifier.urlify.php');
-		$link = '/calendar/' . $this->get('id') . '/' . smarty_modifier_urlify($this->get('name'));
+		$link = '/calendar/' . $this->get('id') . '/';
 		return '<a href="' . $link . '">' . $link . '</a>';
 	}
 }
