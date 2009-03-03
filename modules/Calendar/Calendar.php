@@ -111,9 +111,9 @@ class Module_Calendar extends Module {
 	}
 	
 	public static function getLinkables($level = 0, $id = null){
-		$linkItems = Calendar::getAll();
+		$linkItems = Database::singleton()->query_fetch_all('select * from calendar');
 		foreach($linkItems as $linkItem){
-			$linkables[$linkItem->get('id')] = $linkItem->get('name');
+			$linkables[$linkItem['id']] = $linkItem['name'];
 		}
 		return $linkables;
 	}
