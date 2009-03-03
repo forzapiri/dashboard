@@ -17,6 +17,8 @@
  */
 class Module_Calendar extends Module {
 	
+	public $icon = '/modules/Calendar/images/calendar.png';
+	
 	public function __construct() {
 		$this->page = new Page();
 		$this->page->with('Calendar')
