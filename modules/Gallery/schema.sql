@@ -10,6 +10,7 @@
 # Dump of table photo_galleries
 # ------------------------------------------------------------
 
+DROP TABLE IF EXISTS `photo_galleries`;
 CREATE TABLE `photo_galleries` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(128) default NULL,
@@ -27,6 +28,7 @@ CREATE TABLE `photo_galleries` (
 # Dump of table photo_gallery_images
 # ------------------------------------------------------------
 
+DROP TABLE IF EXISTS `photo_gallery_images`;
 CREATE TABLE `photo_gallery_images` (
   `id` int(11) NOT NULL auto_increment,
   `file_id` int(11) default NULL,

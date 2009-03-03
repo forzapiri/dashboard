@@ -1665,27 +1665,43 @@
 		 * @return {Element} Returns the split element or the replacement element if that is specified.
 		 */
 		split : function(pe, e, re) {
-			var t = this, r = t.createRng(), bef, aft;
+			var t = this, r = t.createRng(), bef, aft, pa;
+
+			function isEmpty(n) {
+				n = t.getOuterHTML(n);
+				n = n.replace(/<(img|hr|table)/gi, '-'); // Keep these convert them to - chars
+				n = n.replace(/<[^>]+>/g, ''); // Remove all tags
+
+				return n.replace(/[ \t\r\n]+|&nbsp;|&#160;/g, '') == '';
+			};
 
 			if (pe && e) {
 				// Get before chunk
 				r.setStartBefore(pe);
 				r.setEndBefore(e);
-				bef = r.cloneContents();
+				bef = r.extractContents();
 
 				// Get after chunk
+				r = t.createRng();
 				r.setStartAfter(e);
 				r.setEndAfter(pe);
-				aft = r.cloneContents();
+				aft = r.extractContents();
 
 				// Insert chunks and remove parent
-				re = re || e.cloneNode(true);
-				t.insertAfter(aft, pe);
-				t.insertAfter(re, pe);
-				t.insertAfter(bef, pe);
-				t.remove(pe);
+				pa = pe.parentNode;
 
-				return re;
+				if (!isEmpty(bef))
+					pa.insertBefore(bef, pe);
+
+				if (re)
+					pa.replaceChild(re, e);
+				else
+					pa.insertBefore(e, pe);
+
+				if (!isEmpty(aft))
+					pa.insertBefore(aft, pe);
+	
+				return re || e;
 			}
 		},
 
