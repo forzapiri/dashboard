@@ -40,10 +40,11 @@ RewriteRule ^sitemap.xml.gz$ /index.php?module=SEO&encoding=gz [NC,L]
 RewriteRule ^sitemap.xml.gz$ /index.php?module=SEO&encoding=gz [NC,L]
 
 RewriteRule ^calendar/?$ /index.php?module=Calendar [NC,L]
-RewriteRule ^calendar/([0-9]+)/([a-zA-z]+)$ /index.php?module=Calendar&calendar_id=$1 [NC,L]
-RewriteRule ^calendar/xml/?(([0-9]+)/([0-9]+))? /index.php?module=Calendar&section=xml&year=$2&month=$3 [NC,L]
+RewriteRule ^calendar/([0-9]+)/$ /index.php?module=Calendar&calendar_id=$1 [NC,L]
+RewriteRule ^calendar/([0-9]+)/([0-9]+)-(.*) /index.php?module=Calendar&calendar_id=$1&event=$2 [NC,L]
+#RewriteRule ^calendar/xml/?(([0-9]+)/([0-9]+))? /index.php?module=Calendar&section=xml&year=$2&month=$3 [NC,L]
 RewriteRule ^calendar/([0-9]+)/([0-9]+)/([0-9]+)/([0-9]+) /index.php?module=Calendar&calendar_id=$1&year=$2&month=$3&day=$4 [NC,L]
-RewriteRule ^calendar/([0-9]+)/([0-9]+)/([0-9]+) /index.php?module=Calendar&year=$1&month=$2&day=$3 [NC,L]
+#RewriteRule ^calendar/([0-9]+)/([0-9]+)/([0-9]+) /index.php?module=Calendar&year=$1&month=$2&day=$3 [NC,L]
 
 RewriteRule ^donate/([a-zA-Z]+)? /index.php?module=Donate&section=$1 [NC,L]
 
