@@ -1,11 +1,28 @@
-# CocoaMySQL dump
-# Version 0.7b5
-# http://cocoamysql.sourceforge.net
+# Sequel Pro dump
+# Version 369
+# http://code.google.com/p/sequel-pro
 #
-# Host: localhost (MySQL 5.0.41)
-# Database: brazilieras
-# Generation Time: 2008-10-29 13:06:49 -0400
+# Host: localhost (MySQL 5.0.75)
+# Database: qss
+# Generation Time: 2009-03-03 15:23:23 -0500
 # ************************************************************
+
+# Dump of table calendar
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `calendar`;
+
+CREATE TABLE `calendar` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `name` text,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+
+INSERT INTO `calendar` (`id`,`name`)
+VALUES
+	(3,'Example Calendar');
+
+
 
 # Dump of table calendar_events
 # ------------------------------------------------------------
@@ -13,30 +30,48 @@
 DROP TABLE IF EXISTS `calendar_events`;
 
 CREATE TABLE `calendar_events` (
-  `event_id` int(11) NOT NULL auto_increment,
-  `event_name` varchar(64) NOT NULL,
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `event_name` varchar(256) default NULL,
   `event_description` text,
-  `event_start` datetime NOT NULL,
+  `event_start` datetime default NULL,
   `event_end` datetime default NULL,
-  `event_owner` int(11) default NULL,
-  `event_reminder` enum('yes','no') NOT NULL default 'yes',
-  `event_location` text,
-  PRIMARY KEY  (`event_id`),
+  `event_owner` int(10) unsigned default NULL,
+  `event_reminder` varchar(256) default NULL,
+  `event_location` varchar(256) default NULL,
+  `calendar_id` int(10) unsigned default NULL,
+  `status` tinyint(1) default NULL,
+  PRIMARY KEY  (`id`),
   KEY `event_owner` (`event_owner`),
-  KEY `event_start` (`event_start`)
-) ENGINE=MyISAM AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
+  KEY `event_start` (`event_start`),
+  FULLTEXT KEY `event_description` (`event_description`)
+) ENGINE=MyISAM AUTO_INCREMENT=72 DEFAULT CHARSET=latin1;
 
-INSERT INTO `calendar_events` (`event_id`,`event_name`,`event_description`,`event_start`,`event_end`,`event_owner`,`event_reminder`,`event_location`) VALUES ('31','dasfsdaf','asdfsadfsadf','2008-07-15 00:00:00',NULL,'1','yes','dfg');
-INSERT INTO `calendar_events` (`event_id`,`event_name`,`event_description`,`event_start`,`event_end`,`event_owner`,`event_reminder`,`event_location`) VALUES ('32','Todays Event','this event is for today','2008-07-11 00:00:00',NULL,'1','yes','office');
-INSERT INTO `calendar_events` (`event_id`,`event_name`,`event_description`,`event_start`,`event_end`,`event_owner`,`event_reminder`,`event_location`) VALUES ('33','17 is a good number','Lorem ipsum dolar sit amet.','2008-07-17 00:00:00',NULL,'1','yes','');
-INSERT INTO `calendar_events` (`event_id`,`event_name`,`event_description`,`event_start`,`event_end`,`event_owner`,`event_reminder`,`event_location`) VALUES ('34','zxcvzxcvzxcv','ZCXvzxcv','2008-07-22 00:00:00',NULL,'1','yes','zxcv');
-INSERT INTO `calendar_events` (`event_id`,`event_name`,`event_description`,`event_start`,`event_end`,`event_owner`,`event_reminder`,`event_location`) VALUES ('35','sdfsdf','sdaf','2008-07-15 00:00:00',NULL,'1','yes','sdfsdf');
-INSERT INTO `calendar_events` (`event_id`,`event_name`,`event_description`,`event_start`,`event_end`,`event_owner`,`event_reminder`,`event_location`) VALUES ('36','Next Month Event','this event falls on the next month','2008-08-06 00:00:00',NULL,'1','yes','');
-INSERT INTO `calendar_events` (`event_id`,`event_name`,`event_description`,`event_start`,`event_end`,`event_owner`,`event_reminder`,`event_location`) VALUES ('37','Better Title','sdfsdf','2008-07-08 00:00:00',NULL,'1','yes','');
-INSERT INTO `calendar_events` (`event_id`,`event_name`,`event_description`,`event_start`,`event_end`,`event_owner`,`event_reminder`,`event_location`) VALUES ('38','New Event','this is a new event','2008-07-17 00:00:00',NULL,'1','yes','');
-INSERT INTO `calendar_events` (`event_id`,`event_name`,`event_description`,`event_start`,`event_end`,`event_owner`,`event_reminder`,`event_location`) VALUES ('39','Chris Event','this is a description','2008-07-22 00:00:00',NULL,'2505','yes','');
-INSERT INTO `calendar_events` (`event_id`,`event_name`,`event_description`,`event_start`,`event_end`,`event_owner`,`event_reminder`,`event_location`) VALUES ('40','dsfg','sdfg','2008-07-25 00:00:00',NULL,'1','yes','');
-INSERT INTO `calendar_events` (`event_id`,`event_name`,`event_description`,`event_start`,`event_end`,`event_owner`,`event_reminder`,`event_location`) VALUES ('41','sdfg','sdfg','2008-07-25 00:00:00',NULL,'2506','yes','');
-INSERT INTO `calendar_events` (`event_id`,`event_name`,`event_description`,`event_start`,`event_end`,`event_owner`,`event_reminder`,`event_location`) VALUES ('42','dfghfdgh','dfgh','2008-08-08 00:00:00',NULL,'1','yes','');
+INSERT INTO `calendar_events` (`id`,`event_name`,`event_description`,`event_start`,`event_end`,`event_owner`,`event_reminder`,`event_location`,`calendar_id`,`status`)
+VALUES
+	(70,'Test Event','<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris adipiscing lacinia mi. Nunc blandit quam eu massa. Suspendisse commodo lacinia nisi. Vestibulum fermentum fermentum magna. Vestibulum arcu erat, pretium a, congue quis, condimentum commodo, nunc. Etiam aliquet. Pellentesque eget quam. Aliquam ut elit vulputate eros feugiat luctus. Aenean faucibus ultricies lacus. Quisque sed orci. Aenean faucibus varius nulla. Vestibulum dignissim dignissim turpis.</p>','2009-02-25 10:02:08','2009-02-25 17:02:08',1,'','',3,0),
+	(71,'Another Event','dfgsd sdfg sdgsdfg sfdgsdfg','2009-03-04 00:00:00','2009-03-09 00:00:00',NULL,NULL,'QSS Office',3,0);
+
+
+
+# Dump of table calendar_registrants
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `calendar_registrants`;
+
+CREATE TABLE `calendar_registrants` (
+  `id` int(11) NOT NULL auto_increment,
+  `event_id` int(11) default NULL,
+  `first_name` varchar(64) default NULL,
+  `last_name` varchar(64) default NULL,
+  `status` int(11) default NULL,
+  `email` varchar(255) default NULL,
+  `phone` varchar(32) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+INSERT INTO `calendar_registrants` (`id`,`event_id`,`first_name`,`last_name`,`status`,`email`,`phone`)
+VALUES
+	(1,70,'Chris','Troup',1,'chris@norex.ca','(519) 271-6572');
+
 
 
