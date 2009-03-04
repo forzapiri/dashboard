@@ -1,0 +1,13 @@
+<h1>{$calendar->get('name')}</h1>
+<br />
+{foreach from=$events item=event}
+<a href="/calendar/{$event->get('id')}-{$event->get('event_name')|urlify}"><h3>{$event->get('event_name')}</h3></a>
+<h6>{$event->get('event_start')|date_format}</h6>
+<h6>{$event->get('event_location')}</h6>
+
+<p>{$event->get('event_description')|strip_tags|truncate:100}
+
+ <a href="/calendar/{$event->get('id')}-{$event->get('event_name')|urlify}">read more</a></p>
+
+<br /><br />
+{/foreach}

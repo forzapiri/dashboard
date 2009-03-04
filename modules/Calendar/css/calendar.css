@@ -1,0 +1,171 @@
+table.calendar {
+	width: 594px;
+}
+
+table.calendar a {
+color: #0a6546;
+font-family:Georgia, "Times New Roman", serif;
+}
+
+table.calendar tbody {
+	width: 100%;
+}
+
+.calendar td {
+	width: 14%;
+}
+
+.calendar td.day {
+height: 80px;
+background-image:url(/modules/Calendar/images/dayBg.jpg);
+background-repeat:repeat-x;
+border:1px solid #c1cec5;
+}
+
+
+.calendar tr.days td {
+padding: 3px;
+}
+
+.calendar td.event_today a {
+	color: #fff !important;
+}
+
+.calendar .next-month a,.calendar .prev-month a {
+font-family:Georgia, "Times New Roman", serif;
+color:#9f0d10;
+}
+
+.calendar .next-month {
+text-align: right;
+}
+
+.calendar .prev-month {
+text-align: left;
+}
+
+.calendar th.day-of-week {
+font-size: 0.7em;
+}
+
+.calendar .day_number {
+	clear: both;
+color:#72756e;
+font-family:Georgia, "Times New Roman", serif;
+}
+
+.calendar td.selected-day .day_number {
+	clear: both;
+color:#938047;
+font-size:14px;
+color:#fff;
+font-weight:700;
+}
+
+.calendar td.day div.event {
+	float: left;
+	clear: both;
+	font-size: 0.6em;
+width: 100%;
+height: 12px;
+overflow: hidden;
+padding:0 0 10px 0;
+}
+
+.calendar td.selected-day div.event {
+	float: left;
+	clear: both;
+	font-size: 0.6em;
+width: 100%;
+height: 12px;
+overflow: hidden;
+}
+
+
+.calendar td.selected-day {
+background-image:url(/modules/Calendar/images/selectedBg.jpg);
+}
+
+div#this_months_events h1 {
+font-size: 1em;
+}
+
+div.event_block {
+padding: 0 0 10px 0;
+}
+
+div.event_block h2 {
+margin: 0;
+padding: 0;
+font-size: 0.8em;
+}
+
+div.event_block p {
+margin: 0;
+padding: 0;
+color: #000;
+}
+
+div.event_block p.date_time {
+text-decoration: italic;
+font-size: 0.6em;
+}
+
+div#this_months_events h1 {
+font-size: 1em;
+}
+
+div.event_block {
+padding: 0 0 15px 0;
+}
+
+div.event_block h2 {
+margin: 0;
+padding: 0;
+font-size: 0.8em;
+font-weight:700;
+}
+
+div.event_block p {
+margin: 0;
+padding: 0;
+color: #000;
+}
+
+div.event_block p.date_time {
+text-decoration: italic;
+font-size: 0.6em;
+}
+
+form#CalendarEvent_addedit fieldset {
+border:none;
+}
+
+form#CalendarEvent_addedit fieldset ol {
+padding:0;
+margin:0;
+list-style-type:none;
+}
+
+form#CalendarEvent_addedit fieldset ol li {
+line-height:25px;
+}
+
+td.today {
+font-size:18px;
+font-weight:700;
+color:#9f0d10;
+padding:10px 0 0 0;
+font-family:Georgia, "Times New Roman", serif;
+}
+
+div#this_months_events h1 {
+text-transform:uppercase;
+border-bottom:1px solid #fdb936;
+}
+
+div.cal_event {
+color:#9f0d10;
+font-size:11px;
+font-weight:700;
+}
