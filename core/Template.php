@@ -47,6 +47,7 @@ class Template extends DBRow {
 	
 	public static function getRevision($module, $path) {
 		$result = self::$revisionQuery->fetch($module, $path);
+		if (!$result) trigger_error ("Template $path of $module does not exist");
 		$result = Template::make($result);
 		return $result;
 	}
