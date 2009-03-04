@@ -269,6 +269,9 @@ abstract class DBRow {
 			$query = new Query ($sql, $types);
 			$query->query($params);
 		}
+		// There could be default values set in MySQL, so retrieve the object after saving it:
+		self::$makeFlag = true;
+		$this->__construct($this->getId());
 		$obj->table()->resetWhereCache();
 		$n = Event_Dispatcher::getInstance(get_class($obj))->post(&$obj, 'onSave');
 		return $this;
