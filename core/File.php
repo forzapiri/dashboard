@@ -150,7 +150,7 @@ class File extends DBRow {
 		else @unlink($file);
 		return $this;
 	}
-	function getAddEditFormSaveHook($form) {
+	function getAddEditFormBeforeSaveHook($form) {
 		$el = $form->getElement('upload_file');
 		if ($el->isUploadedFile()) {
 			$this->insert($_FILES['upload_file']);

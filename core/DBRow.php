@@ -278,8 +278,8 @@ abstract class DBRow {
 	}
 
 	function getAddEditFormHook($form) {}
-	function getAddEditFormSaveHook($form) {}
-	function getAddEditFormBeforeSaveHook($form) {return $this->getAddEditFormSaveHook($form);} // Provided for backward compatability
+	function getAddEditFormSaveHook($form) {} // Method deprecated; called below for backward compatability
+	function getAddEditFormBeforeSaveHook($form) {return $this->getAddEditFormSaveHook($form);}
 	function getAddEditFormAfterSaveHook($form) {}
 	function getAddEditForm($target = null) {
 		if (!$target){
