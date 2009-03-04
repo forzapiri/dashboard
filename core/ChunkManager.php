@@ -71,13 +71,13 @@ class ChunkManager {
 				$form->addElement('html', "\n<script type='text/javascript'>watchChunkSelect($i, '$role', '$class', $parent, $total, $count);</script>\n");
 				$field->setLabel(""); // Inspect the add edit form, add an appropriate class, use JavaScript to watch for change and update content
 			}
-			$el = $field->addElementTo(array ('form' => $form, 'id' => "_chunk_$i"));
-			$field->setLabel($label);
 			if ($chunk && ($chunk->getId() || $chunk->getContent('draft'))) {
-				$el->setValue(DBRow::toForm($chunk->getType(), $chunk->getContent('draft')));
+				$value = $chunk->getContent('draft');
 			} else {
-				$el->setValue($this->previews[$i]);
+				$value = $this->previews[$i];
 			}
+			$el = $field->addElementTo(array ('form' => $form, 'id' => "_chunk_$i", 'value' => $value));
+			$field->setLabel($label);
 		}
 		return ++$i; // Returns the number of form fields which were added
 	}
@@ -126,7 +126,9 @@ class ChunkManager {
 			$i++;
 			$this->createChunkIfNeeded ($i);
 			$type = $field->type();
-			$value = $form->exportValue("_chunk_$i");
+			$rawValue = $form->exportValue("_chunk_$i");
+			$el = $form->getElement("_chunk_$i");
+			$value = DBRow::fromForm($type, $rawValue, $el);
 			$chunk = $this->chunks[$i];
 			$revs = $chunk->countRevisions();
 			$old_rev = $chunk->getRevision('draft');
