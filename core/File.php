@@ -146,8 +146,9 @@ class File extends DBRow {
 		parent::save($notification);
 		if (!$this->getId()) return; // Just a security precaution; this case should not happen.
 		$file = $this->getDirectory() . 'public';
-		if ($perm == 'public') touch($file);
-		else unlink($file);
+		if ($this->getPermission() == 'public') touch($file);
+		else @unlink($file);
+		return $this;
 	}
 	function getAddEditFormSaveHook($form) {
 		$el = $form->getElement('upload_file');
