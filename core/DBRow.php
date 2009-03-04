@@ -318,7 +318,9 @@ abstract class DBRow {
 		}
 		$this->getAddEditFormHook($form);
 		if ($this->chunkable() && ($name = $this->getPageTemplate())) {
-			$template = Template::getRevision('CMS', $name);
+			$template = is_array ($name)
+				? Template::getRevision('Module_' . $name[0], $name[1])
+				: Template::getRevision('CMS', $name);
 			$this->chunkManager->setTemplate($template);
 			$this->chunkManager->insertFormFields($form);
 		}
