@@ -188,6 +188,7 @@ class Image {
 					imagegif($this->im);
 					break;
 				case "image/jpeg":
+				case "image/pjpeg":
 					imagejpeg($this->im);					
 					break;
 				case "image/wbmp":

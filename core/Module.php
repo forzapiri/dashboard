@@ -64,6 +64,12 @@ abstract class Module {
 				if (!is_null($parentSmarty)) {
 					$module->parentSmarty =& $parentSmarty;
 					$module->smarty =& $parentSmarty;
+					if($parentSmarty->compile_id != 'admin'){
+						try {
+							$module->parentSmarty->templateOverride(SiteConfig::get($name."::templateOverride"));
+						} catch (Exception $e){
+						}
+					}
 				} else {
 					$module->smarty = new SmartySite();
 				}
