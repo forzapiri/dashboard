@@ -1,0 +1,93 @@
+.OneRow{
+	clear:both;
+	overflowe:hidden;
+	margin:10px;
+}
+.Cell{
+	float:left;
+	width:200px;
+	margin:10px;
+	padding:10px;
+	text-align:center;
+}
+.Cell:hover{
+	border:4px solid red;
+	margin:6px;
+}
+.Cell a{
+	color:blue;
+}
+.CellInfo{
+	clear:both;
+	overflow:hidden;
+	margin:20px;
+}
+.CellInfoImage{
+	float:left;
+	width:200px;
+}
+.CellInfoDetails{
+	float:left;
+}
+.Label{
+	float:left;
+	width:150px;
+}
+.Field{
+	float:left:
+}
+#TreeGroups{
+	float:right;
+	width:300px;
+}
+#TreeProducts{
+	float:left;
+	width:600px;
+}
+#shipping_class{
+	clear:both;
+	overflow:hidden;
+	margin-bottom:20px;
+}
+#shippingClassSelect{
+	float:left;
+	width:200px;
+}
+#shippingClassDetails{
+	float:left;
+}
+#payment_class{
+	clear:both;
+	overflow:hidden;
+	margin-bottom:20px;
+}
+#paymentClassSelect{
+	float:left;
+	width:200px;
+}
+#paymentClassDetails{
+	float:left;
+}
+
+
+div#autocomplete_choices {
+	position:absolute;
+	width:250px;
+	background-color:white;
+	border:1px solid #888;
+	margin:0px;
+	padding:0px;
+}
+div#autocomplete_choices ul {
+	list-style-type:none;
+	margin:0px;
+	padding:0px;
+}
+div#autocomplete_choices ul li.selected { background-color: #ffb;}
+div#autocomplete_choices ul li {
+	list-style-type:none;
+	display:block;
+	margin:0;
+	padding:10px;
+	cursor:pointer;
+}

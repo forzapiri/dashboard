@@ -1,0 +1,7 @@
+- Include the plugins in the order, when displayin the order to the admin or user, and when sending the confirmation email
+- CSS the module properly
+- Display the products on pages in the client area
+- Use the "select match against" when searching for products (must be full text)
+- When displaying the products of a category (or search for products in a category), take the sub categories into considerations
+- Reports plugins
+- Multiple currencies
