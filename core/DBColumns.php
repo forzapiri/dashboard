@@ -104,7 +104,12 @@ class DBColumnInteger extends DBColumn {
 	}
 	function suggestedMysql() {return "int(11)";}
 }
-class DBColumnSort extends DBColumnInteger {function type() {return 'sort';}}
+class DBColumnSort extends DBColumnInteger {
+	function type() {return 'sort';}
+	function __toString($item, $key) {
+		return '<img src="/images/admin/drag_handle.png" />';
+	}
+}
 
 
 class DBColumnEmail extends DBColumnText {

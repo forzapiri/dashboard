@@ -23,7 +23,7 @@ class Block extends DBRow {
 			DBColumn::make('tinymce', 'content', 'Content'),
 			'timestamp',
 			'//status',
-			DBColumn::make('//integer', 'sort')
+			DBColumn::make('//sort', 'sort')
 			);
 		return new DBTable("blocks", __CLASS__, $cols);
 	}

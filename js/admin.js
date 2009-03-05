@@ -93,20 +93,42 @@ var NorexUI = Class.create(Facebox, {
 		//		$item->setSort($i);
 		//		$item->save();
 		//	}
+		
+		this.reflowRows();
 
 		$$('tbody.sortable').each(function (e) {
 				id = e.identify();
 				Sortable.create(id, {
 					tag: 'tr',
-							onUpdate: function() {
-							new Ajax.Request ("/admin/Property", {
-								method: "post",
-										parameters: { action: 'sort', data: Sortable.serialize(id) }
-								});
-						}
-					});
+					onUpdate: function() {
+						new Ajax.Request (window.location, {
+							method: "post",
+							parameters: { action: 'sort', data: Sortable.serialize(id) },
+							onComplete: function(transport) {
+								ui.updateContent(transport.responseText);
+							}
+						});
+					},
+					onChange: function() {
+						ui.reflowRows();
+					}
+				});
 			}
 		);
+	},
+	
+	reflowRows: function() {
+		var counter = 0;
+		$$('table.admin_list tbody tr').each(function(el) {
+			counter++;
+			el.removeClassName('row1');
+			el.removeClassName('row2');
+			if (counter % 2 == 0) {
+				el.addClassName('row2');
+			} else {
+				el.addClassName('row1');
+			}
+		});
 	},
 	
 	addedit: function(event) {

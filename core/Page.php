@@ -228,6 +228,14 @@ class Page extends defaultPageActs {
 			return;
 		}
 		
+		if (isset($_REQUEST['data']) && isset($_REQUEST['action']) && $_REQUEST['action'] == 'sort') {
+			foreach (getSerializedRequest() as $i => $j) {
+				$item = DBRow::make($j, $this->pointer);
+				$item->set('sort', $i);
+				$item->save();
+			}
+		}
+		
 		$received = null;
 		$idField = call_user_func(array($type, 'quickformPrefix'));
 		$i = call_user_func(array('DBRow', 'make'), @$_REQUEST[$idField . 'id'], $type);
@@ -469,16 +477,24 @@ class Page extends defaultPageActs {
 		
 		$html .= $headfoot;
 		
-		$html .= '</thead><tfoot>' . $headfoot . '</tfoot><tbody>';
+		$html .= '</thead><tfoot>' . $headfoot . '</tfoot>';
+		
+		$html .= '<tbody id="data"';
+		foreach ($items[0]->columns() as $col) {
+			if ($col->type() == 'sort') $html .= ' class="sortable"';
+		}
+		$html .= '>';
+		
+		
 		
 		foreach ($items as $key => $item) {
-			$html .= '<tr class="';
+			$html .= "\n\n" . '<tr class="';
 			if ($key & 1) {
 				$html .= 'row2';
 			} else {
 				$html .= 'row1';
 			}
-			$html .= '">';
+			$html .= '" id="row_' . $item->get('id') . '">';
 			foreach ($this->tables[$this->pointer] as $key => $name) {
 				$html .= '<td>';
 				if (!is_array($name)) {
