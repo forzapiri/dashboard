@@ -66,7 +66,7 @@ if ( $ajaxHelper->isAJAX () ){
 		$smarty->assign_by_ref ( 'user', $_SESSION['authenticated_user'] );
 	}
 	$cachedModules = SiteConfig::get('cachedModules');
-	if (in_array ($_REQUEST['module'], (array) $cachedModules)) {
+	if (!SiteConfig::norex() && in_array ($_REQUEST['module'], (array) $cachedModules)) {
 			$result = $smarty->render ('db:site.tpl', $smarty->templateOverride, false);
 			$pageCache->save($result, CACHED_PAGE_INDEX);
 			echo $result;

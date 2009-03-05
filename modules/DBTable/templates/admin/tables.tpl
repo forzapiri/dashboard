@@ -46,7 +46,7 @@
 <thead>
 	<tr>
 		<th colspan="5" align="center">DBRow</th>
-		<th colspan="3" align="center">------------- MySQL ------------</th>
+		<th colspan="3" align="center">----------- MySQL ----------</th>
 	</tr>
 	<tr>
 		<th valign="center">Name</th> 
@@ -68,12 +68,12 @@
 		<td>{$column->getModifier()}</td>
 		<td class="actions">
 		{if ($column->getName() != 'id')}
-		<form action="/admin/DBTable" method="post" onsubmit="return !thickboxAddEdit(this);">
+		<form action="/admin/DBTable" method="post" onsubmit="return !thickboxAddEdit(this);" style="float: left;">
 			<input type="hidden" name="action" value="addedit" />
 			<input type="hidden" name="id" value="{$column->getId()}" />
 			<input type="image" src="/images/admin/pencil.gif" />
 		</form>
-		<form action="/admin/DBTable" method="post" onsubmit="return !deleteConfirm({$column->getId()});">
+		<form action="/admin/DBTable" method="post" onsubmit="return !deleteConfirm({$column->getId()});" style="float: left;">
             <input type="hidden" name="action" value="delete" />
 			<input type="hidden" name="id" value="{$column->getId()}" />
 			<input type="image" src="/images/admin/page_delete.gif" /></td>

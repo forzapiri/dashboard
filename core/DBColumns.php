@@ -11,17 +11,31 @@ class DBColumnText extends DBColumn {
 }
 
 class DBFileUpload extends DBColumn {
-	function type() { return 'fileupload'; }
-	
+	function type() { return 'file'; }
 	function addElementTo($args) {
 		$value = '';
-		$label = $this->label();
 		extract($args);
+		$label = $this->label() . ($value ? " (currently " . $value->getFilename() . ")": "");
 		$el = $form->addElement ('file', $id, $label);
-		$el->setValue($value);
 		return $el;
 	}
-	function suggestedMysql() {return "integer";}
+	static function fromForm($obj, $el = null) {
+		if ($el->isUploadedFile()) {
+			$image = File::make();
+			$image->insert($_FILES[$el->getName()]);
+			$image->setPublic();
+			$image->save();
+			return $image;
+		}
+	}
+	static function fromDB($obj) {return File::make($obj);}
+	static function toDB($obj) {return $obj->getId();}
+	static function toForm($obj) {return "JOE";}
+	function suggestedMysql() {return "int(11)";}
+}
+
+class DBImage extends DBFileUpload {
+	function type() { return 'image'; }
 }
 
 class DBColumnPassword extends DBColumn {

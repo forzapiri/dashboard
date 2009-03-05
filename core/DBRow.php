@@ -269,14 +269,17 @@ abstract class DBRow {
 			$query = new Query ($sql, $types);
 			$query->query($params);
 		}
+		// There could be default values set in MySQL, so retrieve the object after saving it:
+		self::$makeFlag = true;
+		$this->__construct($this->getId());
 		$obj->table()->resetWhereCache();
 		$n = Event_Dispatcher::getInstance(get_class($obj))->post(&$obj, 'onSave');
 		return $this;
 	}
 
 	function getAddEditFormHook($form) {}
-	function getAddEditFormSaveHook($form) {}
-	function getAddEditFormBeforeSaveHook($form) {return $this->getAddEditFormSaveHook($form);} // Provided for backward compatability
+	function getAddEditFormSaveHook($form) {} // Method deprecated; called below for backward compatability
+	function getAddEditFormBeforeSaveHook($form) {return $this->getAddEditFormSaveHook($form);}
 	function getAddEditFormAfterSaveHook($form) {}
 	function getAddEditForm($target = null) {
 		if (!$target){
@@ -318,7 +321,9 @@ abstract class DBRow {
 		}
 		$this->getAddEditFormHook($form);
 		if ($this->chunkable() && ($name = $this->getPageTemplate())) {
-			$template = Template::getRevision('CMS', $name);
+			$template = is_array ($name)
+				? Template::getRevision('Module_' . $name[0], $name[1])
+				: Template::getRevision('CMS', $name);
 			$this->chunkManager->setTemplate($template);
 			$this->chunkManager->insertFormFields($form);
 		}
@@ -358,16 +363,16 @@ abstract class DBRow {
 			default: return null;
 		}
 	}
-	private static function apply ($func, $type, $value) {
+	private static function apply ($func, $type, $value, $el = null) {
 		$class = @DBColumn::getType($type);
 		if (!$class && class_exists($class)) $class = $type;
 		if (!$class) trigger_error ("$type is Neither a DBColumn type nor a DBColumn class");
-		return call_user_func (array (DBColumn::getType($type), $func), $value);
+		return call_user_func (array (DBColumn::getType($type), $func), $value, $el);
 	}
 	public static function     toDB($type, $value) {return self::apply('toDB',     $type, $value);}
 	public static function   fromDB($type, $value) {return self::apply('fromDB',   $type, $value);}
 	public static function   toForm($type, $value) {return self::apply('toForm',   $type, $value);}
-	public static function fromForm($type, $value) {return self::apply('fromForm', $type, $value);}
+	public static function fromForm($type, $value, $el=null) {return self::apply('fromForm', $type, $value, $el);}
 	function getDraftForms() {
 		if ($this->chunkManager && Chunk::hasDraft($this)) {
 			global $smarty;
