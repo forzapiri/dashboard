@@ -358,3 +358,17 @@ div.info-box .data {
 	float: right;
 	font-weight: bold;
 }
+
+div#left_menu ul {
+float:left;
+clear:left;
+}
+
+div#left_menu ul li {
+clear:left;
+}
+
+div#left_menu ul li ul {
+float:left;
+clear:left;
+}
