@@ -110,7 +110,7 @@ abstract class DBRow {
 			self::$makeFlag = false;
 		}
 		if ($id === DUMMY_INIT_ROW) {return;}
-		if ($this->chunkable()) {$this->chunkManager = new ChunkManager($this);}
+		if ($this->chunkable() && !$this->chunkManager) {$this->chunkManager = new ChunkManager($this);}
 		if (is_array ($id)) {
 			$result = $id;
 		} else if (is_null($id)) {
