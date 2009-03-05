@@ -8,10 +8,11 @@ class Module_Block extends Module {
 		$this->page = new Page();
 		$this->page->with('Block')
 			 ->show(array(
+			 		'Sort Order' => 'sort',
 					'Title' => 'title',
 					'Last Updated' => 'timestamp',
-					'Status' => 'status'
-			 ));
+					'Status' => 'status',
+			 ))->filter('order by sort');
 	}
 	
 	/**
