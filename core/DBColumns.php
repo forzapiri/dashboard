@@ -177,6 +177,20 @@ class DBColumnCheckbox extends DBColumnInteger {
 	function suggestedMysql() {return "tinyint(1)";}
 }
 
+class DBColumnFeatured extends DBColumnCheckbox {
+	function type() {return "featured";}
+	static function toDB($obj, $el) {
+		if ($obj) {
+			$os = $el->getAll("where featured=1 limit 1", '');
+			foreach ($os as $o) {
+				$o->setFeatured(0);
+				$o->save();
+			}
+		}
+		return parent::toDB($obj);
+	}
+}
+
 class DBColumnId extends DBColumnInteger {
 	function type() {return "id";}
 	function addElementTo($args) {
