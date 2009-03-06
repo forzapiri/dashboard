@@ -29,7 +29,7 @@ class DBFileUpload extends DBColumn {
 		}
 	}
 	static function fromDB($obj) {return File::make($obj);}
-	static function toDB($obj) {return $obj->getId();}
+	static function toDB($obj) {return $obj ? $obj->getId() : null;}
 	static function toForm($obj) {return "JOE";}
 	function suggestedMysql() {return "int(11)";}
 }
