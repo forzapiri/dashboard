@@ -138,7 +138,9 @@ class ChunkManager {
 				$rev->setContent(DBRow::toDB($field->type(), $value));
 				$rev->setStatus('active');
 				$rev->save();
-			} else if (DBRow::toDB($type, $value) != $chunk->getRawContent('draft')) { // New revision of old content
+			} else if ($value !== null // null value flags, for instance, an empty file upload; don't save
+					   && (DBRow::toDB($type, $value) != $chunk->getRawContent('draft'))) {
+				// New revision of old content
 				$rev = ChunkRevision::make();
 				$rev->setCount(1+$revs);
 				$rev->setParent($old_rev->getParent());
