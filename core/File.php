@@ -151,7 +151,7 @@ class File extends DBRow {
 		parent::save($notification);
 		if (!$this->getId()) return; // Just a security precaution; this case should not happen.
 		$file = $this->getDirectory() . 'public';
-		if ($this->getPermission() == 'public') touch($file);
+		if ($this->getPermission() == 'public') @touch($file);
 		else @unlink($file);
 		return $this;
 	}
@@ -174,7 +174,7 @@ class File extends DBRow {
 	public function toArray($where = null) {
 		$array = array();
 		foreach (self::getAll($where) as $s) {
-			$array[$s->get('id')] = $s->get('filename');
+			$array[$s->get('id')] = $s->get('description');
 		}
 		return $array;
 	}
