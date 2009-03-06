@@ -31,6 +31,8 @@ class Module_Gallery extends Module {
 		$this->addCSS('/modules/Gallery/css/lightbox.css');
 		$this->addCSS('/modules/Gallery/css/gallery.css');
 		
+		$this->setPageTitle('Photo Gallery');
+		
 		if (isset($_REQUEST['page']) && is_numeric($_REQUEST['page'])) {
 			$gallery = DBRow::make($_REQUEST['page'], 'PhotoGallery');
 			$this->smarty->assign('curgallery', $gallery);
