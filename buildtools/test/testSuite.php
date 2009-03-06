@@ -1,5 +1,4 @@
 <?php
-
 require_once(dirname(__FILE__) . '/../../include/Site.php');
 
 require_once 'PHPUnit/Framework/TestSuite.php';
@@ -47,7 +46,7 @@ class testSuite {
 		$suite->addTestSuite ( 'GroupTest' );
 		
 		
-		/*
+		
 		$dataDir  = dirname(__FILE__).'/../../modules/';
 	
 		$dir  = new DirectoryIterator($dataDir);
@@ -61,14 +60,14 @@ class testSuite {
 						continue;
 					}
 					require_once($dataDir . $file . '/tests/' . $testName);
-					//$suite->addTestSuite ( trim($testName, '.php') );
+					$suite->addTestSuite ( trim($testName, '.php') );
 				}
 			}
 			if (file_exists($dataDir . $fileName . '/schema.sql')) {
 				$sql = file_get_contents($dataDir . $fileName . '/schema.sql');
 				Database::singleton()->multi_query($sql);
 			}
-		}*/
+		}
 		return $suite;
 	}
 }
