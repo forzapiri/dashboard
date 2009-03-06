@@ -27,4 +27,3 @@ function smarty_function_upcoming($params, &$smarty) {
 	return $html;
 }
 
-?>

@@ -13,4 +13,4 @@ CREATE TABLE `content_pages` (
   KEY `status` (`status`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
-INSERT INTO `content_pages` VALUES (1,'Home','2007-12-15 23:23:33',1,'public','home','chunks.tpl');
+INSERT INTO `content_pages` VALUES (1,'Home','2007-12-15 23:23:33',1,'public','home','chunks.tpl','Home');

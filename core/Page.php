@@ -299,7 +299,10 @@ class Page extends defaultPageActs {
 		if (is_null($pointer)) {
 			$pointer = $this->pointer;
 		}
-		$items = call_user_func(array($pointer, 'getCount'), $this->getWhere($pointer), ''); // TODO: CONVERT TO PREPARED STMT
+		if (method_exists ($pointer, 'countAll'))
+			$items = call_user_func(array($pointer, 'countAll'), $this->getWhere($pointer), ''); // TODO: CONVERT TO PREPARED STMT
+		else 
+			$items = count($this->getItems ($pointer));
 		return $items;
 	}
 	

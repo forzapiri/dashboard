@@ -24,4 +24,7 @@ INSERT INTO `permissions` VALUES
 (10,'delete','Group','Delete Groups','',1,1),
 (11,'view','ContentPage','View Content Pages','',1,1),
 (12,'addedit','ContentPage','Add / Edit Content Pages','',1,1),
-(13,'delete','ContentPage','Delete Content Pages','',1,1);
+(13,'delete','ContentPage','Delete Content Pages','',1,1),
+(14,'view','MenuType','View Content Menus','',1,1),
+(15,'addedit','MenuType','Add / Edit Content Menus','',1,1),
+(16,'delete','MenuType','Delete Content Menus','',1,1);

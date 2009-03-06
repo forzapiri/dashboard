@@ -50,4 +50,3 @@ class UserDetails extends DBRow {
 	static function getQuickFormPrefix() {return 'userdetails_';}
 }
 DBRow::init('UserDetails');
-?>

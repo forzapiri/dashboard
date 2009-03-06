@@ -13,7 +13,7 @@ class Calendar extends DBRow {
 		array_unshift($args, __CLASS__);
 		return call_user_func_array(array('DBRow', 'getAllRows'), $args);
 	}
-	static function getCount() {
+	static function countAll() {
 		$args = func_get_args();
 		array_unshift($args, __CLASS__);
 		return call_user_func_array(array('DBRow', 'getCountRows'), $args);
@@ -36,4 +36,3 @@ class Calendar extends DBRow {
 }
 DBRow::init('Calendar');
 
-?>

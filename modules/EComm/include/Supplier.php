@@ -60,4 +60,3 @@ class Supplier extends DBRow {
 	static function getQuickFormPrefix() {return 'supplier_';}
 }
 DBRow::init('Supplier');
-?>

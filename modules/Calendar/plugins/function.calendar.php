@@ -218,4 +218,3 @@ function smarty_function_calendar__day_of_week_abbrev($day_of_week)
 
   return strftime('%a', $timestamp);
 }
-?>

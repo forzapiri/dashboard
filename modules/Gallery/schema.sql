@@ -37,5 +37,9 @@ CREATE TABLE `photo_gallery_images` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
 
-
-
+INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`) VALUES ('addedit','PhotoGallery','Add/Edit Galleries','','1','1');
+INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`) VALUES ('view','PhotoGallery','View Galleries','','1','1');
+INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`) VALUES ('delete','PhotoGallery','Delete Galleries',NULL,'1','1');
+INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`) VALUES ('addedit','PhotoGalleryImage','Add/Edit Gallery Images','','1','1');
+INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`) VALUES ('view','PhotoGalleryImage','View Gallery Images','','1','1');
+INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`) VALUES ('delete','PhotoGalleryImage','Delete Gallery Images',NULL,'1','1');

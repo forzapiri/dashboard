@@ -33,4 +33,3 @@ class OrderComment extends DBRow {
 	static function getQuickFormPrefix() {return 'ordercomment_';}
 }
 DBRow::init('OrderComment');
-?>
