@@ -1,4 +1,4 @@
-#! /Applications/MAMP/bin/php5/bin/php -d safe_mode=Off
+#!/Applications/MAMP/bin/php5/bin/php -d safe_mode=Off
 <?php
 /* PHPUnit
  *
@@ -44,4 +44,9 @@ require_once 'PHPUnit/Util/Filter.php';
 PHPUnit_Util_Filter::addFileToFilter(__FILE__, 'PHPUNIT');
 
 require 'PHPUnit/TextUI/Command.php';
+
+define('PHPUnit_MAIN_METHOD', 'PHPUnit_TextUI_Command::main');
+
+PHPUnit_TextUI_Command::main();
+
 ?>
