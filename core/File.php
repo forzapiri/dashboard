@@ -18,6 +18,11 @@ class File extends DBRow {
 		array_unshift($args, __CLASS__);
 		return call_user_func_array(array('DBRow', 'getAllRows'), $args);
 	}
+	static function getCount() {
+		$args = func_get_args();
+		array_unshift($args, __CLASS__);
+		return call_user_func_array(array('DBRow', 'getCountRows'), $args);
+	}
 
 	function getLink() {return "/" . DATA_STORAGE_DIR . $this->getPath() . $this->getLocalFilename();}
 	function getImgTag($arg = array(), $alt = null) {

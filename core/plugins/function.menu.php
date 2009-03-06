@@ -93,12 +93,12 @@ function adminMenu($params, &$smarty) {
 					foreach ($blah->page->heading as $key => $heading) {
 						$text .= '<li' . (($_REQUEST['section'] == $key) ? ' class="active"' : '') . '><a href="/admin/' . 
 							$module['module'] . '&amp;section=' . $key . '">' . $heading .
-							' (' . count($blah->page->getItems($key)) . ')' .  
+							' (' . $blah->page->getCount($key) . ')' .  
 							'</a></li>';
 					}
 					$text .= '</ul>';
 				} else {
-					$text .= ' <strong>(' . count($blah->page->getItems()) . ')</strong>';
+					$text .= ' <strong>(' . $blah->page->getCount() . ')</strong>';
 				}
 			} else {
 				$text = '<a href="/admin/' . $module['module'] . '"' . @$extra . '>' . $module['display_name'] . '</a>';

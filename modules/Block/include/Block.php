@@ -32,6 +32,11 @@ class Block extends DBRow {
 		array_unshift($args, __CLASS__);
 		return call_user_func_array(array('DBRow', 'getAllRows'), $args);
 	}
+	static function getCount() {
+		$args = func_get_args();
+		array_unshift($args, __CLASS__);
+		return call_user_func_array(array('DBRow', 'getCountRows'), $args);
+	}
 	function quickformPrefix() {return 'blocks_';}
 
 	static function getAllBlocks ($status = null) {

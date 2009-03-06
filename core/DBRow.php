@@ -67,7 +67,8 @@ abstract class DBRow {
 		if (!$table) trigger_error("Table for $class does not yet exist");
 		else return $table->getAllRows($where);
 	}
-	
+
+	// NOTE THAT THE FOLLOWING TWO FUNCTIONS ONLY DIFFER IN ONE LINE --- THE call_user_func_array
 	static function getAllRows($class = null, $where = null) { // NOTE THAT CLASS COMES FIRST
 		if (!$class) $class = self::$__CLASS__;
 		$table = @self::$tables[$class];
@@ -75,6 +76,15 @@ abstract class DBRow {
 		array_shift($args);
 		if (!$table) trigger_error("Table for $class does not yet exist");
 		else return call_user_func_array (array ($table, 'getAllRows'), $args);
+	}
+
+	static function getCountRows($class = null, $where = null) { // NOTE THAT CLASS COMES FIRST
+		if (!$class) $class = self::$__CLASS__;
+		$table = @self::$tables[$class];
+		$args = func_get_args();
+		array_shift($args);
+		if (!$table) trigger_error("Table for $class does not yet exist");
+		else return call_user_func_array (array ($table, 'getCount'), $args);
 	}
 
 	static $makeFlag = false;

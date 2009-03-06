@@ -39,6 +39,19 @@ class MenuItem extends DBRow {
 			);
 		return new DBTable("menu", __CLASS__, $cols);
 	}
+	static function getAll() {
+		$args = func_get_args();
+		array_unshift($args, __CLASS__);
+		return call_user_func_array(array('DBRow', 'getAllRows'), $args);
+	}
+	static function getCount() {
+		$args = func_get_args();
+		array_unshift($args, __CLASS__);
+		return call_user_func_array(array('DBRow', 'getCountRows'), $args);
+	}
+	static function make($id = null) {return parent::make($id, __CLASS__);}
+
+	function quickformPrefix() {return 'menuitem_';}
 	
 
 	function getAddEditFormHook($form) {
@@ -88,14 +101,6 @@ class MenuItem extends DBRow {
 		return parent::save($notification);
 	}
 	
-	static function getAll() {
-		$args = func_get_args();
-		array_unshift($args, __CLASS__);
-		return call_user_func_array(array('DBRow', 'getAllRows'), $args);
-	}
-	static function make($id = null) {return parent::make($id, __CLASS__);}
-	function quickformPrefix() {return 'menuitem_';}
-
 	public function getLinkTarget() {
 		return Module::factory( $this->getModule() )->getLinkable( $this->get('link') );
 	}

@@ -33,9 +33,11 @@ class DBTable {
 			}
 		}
 		$select = "select " . $this->loadColumnNames() . " from `$dbname`";
+		$this->count = "select count(*) from `$dbname`";
 		$this->select = $select;
 		$this->fetchQuery  = new Query("$select where id=?", "i");
 		$this->fetchAllQuery = new Query ($select, "");
+		$this->countAllQuery = new Query ($this->count, "");
 		$this->deleteQuery = new Query("delete from `$dbname` where id=?", "i");
 		
 	}
@@ -64,32 +66,53 @@ class DBTable {
 	}
 	
 	private $rowsWhere = array();
+	// NOTE THAT THE FOLLOWING TWO FUNCTIONS DIFFER IN ONLY ONE PLACE: true/false
 	function getAllRows($where=null, $code=null) {
-		if (!$code && @$this->rowsWhere[$where]) {return $this->rowsWhere[$where];}
+		$args = func_get_args();
+		array_unshift ($args, false);
+		return call_user_func_array (array ($this, 'getCountOrRows'), $args);
+	}
+
+	function getCount($where=null, $code=null) {
+		$args = func_get_args();
+		array_unshift ($args, true);
+		return call_user_func_array (array ($this, 'getCountOrRows'), $args);
+	}
+
+	private function getCountOrRows($count = false, $where=null, $code=null) {
+		$fname = $count ? "getAll" : "getCount";
+		$index = "$fname: $where";
+		if (!$code && @$this->rowsWhere[$index]) {return $this->rowsWhere[$index];}
 		$name = $this->name();
 		$class = $this->classname;
-		$select = $this->select;
+		$select = $count ? $this->count : $this->select;
 		if ($where && $code === null) {
 			$f = SiteConfig::norex() ? 'trigger_error' : 'error_log';
-			$f("getAll has been promoted to using prepared statements for the where clause\n"
-						   . "For example, getAll('where id=? and title=?', 'is', 23, 'Fun')");
+			$f("$fname has been promoted to using prepared statements for the where clause\n"
+						   . "For example, $fname('where id=? and title=?', 'is', 23, 'Fun')");
 		}
 		if ($code !== null) {
-			if (func_num_args() != 2+strlen($code))
-				trigger_error ("Length of code does not match number of arguments in DBTable::getAllRows()");
+			if (func_num_args() != 3+strlen($code))
+				trigger_error ("Length of code does not match number of arguments in DBTable::getCountOrRows()");
 			$args = func_get_args();
+			array_shift($args);
 			array_shift($args);
 			array_shift($args);
 		} else {
 			$code = '';
 			$args = array();
 		}
-		$query = $where ? new Query ("$select $where", $code) : $this->fetchAllQuery;
+		$query = $where ? new Query ("$select $where", $code) :
+			($count ? $this->countAllQuery : $this->fetchAllQuery);
 		$results = call_user_func_array (array($query, 'fetchAll'), $args);
-		foreach ($results as &$result) {
-			$result = DBRow::make ($result, $class);
+		if ($count) {
+			$results = $results[0]['count(*)'];
+		} else {
+			foreach ($results as &$result) {
+				$result = DBRow::make ($result, $class);
+			}
 		}
-		if (!$code) $this->rowsWhere[$where] = $results;
+		if (!$code) $this->rowsWhere[$index] = $results;
 		return $results;
 	}
 }
