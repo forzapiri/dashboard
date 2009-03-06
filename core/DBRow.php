@@ -15,7 +15,6 @@ function underscore2uccamel($text) { // 'menu_item' => 'MenuItem'
 	return preg_replace('/(^|_)(.)/e', "strtoupper('\\2')", $text);
 }
 
-
 abstract class DBRow {
 	public $chunkManager = false;  // TODO: Make private
 	protected static $__CLASS__ = __CLASS__;
@@ -60,7 +59,7 @@ abstract class DBRow {
 		}
 	}
 
-	
+
 	static function getAll($where = null, $class = null) { // OLD STYLE
 		if (!$class) $class = self::$__CLASS__;
 		$table = @self::$tables[$class];
@@ -245,7 +244,7 @@ abstract class DBRow {
 			if ($name == 'id' && $value) {
 				$update = $value;
 			} else {
-				$params[] = &$column->toDB($value);
+				$params[] = &$column->toDB($value, $obj);
 				$sql .= " `$name`=?,";
 				$types .= $column->prepareCode();
 			}
@@ -379,7 +378,7 @@ abstract class DBRow {
 		if (!$class) trigger_error ("$type is Neither a DBColumn type nor a DBColumn class");
 		return call_user_func (array (DBColumn::getType($type), $func), $value, $el);
 	}
-	public static function     toDB($type, $value) {return self::apply('toDB',     $type, $value);}
+	public static function     toDB($type, $value, $el=null) {return self::apply('toDB',     $type, $value, $el);}
 	public static function   fromDB($type, $value) {return self::apply('fromDB',   $type, $value);}
 	public static function   toForm($type, $value) {return self::apply('toForm',   $type, $value);}
 	public static function fromForm($type, $value, $el=null) {return self::apply('fromForm', $type, $value, $el);}
@@ -393,7 +392,7 @@ abstract class DBRow {
 			return "";
 		}
 	}
-	
+
 	public function getObjectType() {
 		return get_class($this);
 	}

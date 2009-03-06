@@ -80,7 +80,7 @@ class DBTable {
 	}
 
 	private function getCountOrRows($count = false, $where=null, $code=null) {
-		$fname = $count ? "getAll" : "getCount";
+		$fname = $count ? "getCount" : "getAll";
 		$index = "$fname: $where";
 		if (!$code && @$this->rowsWhere[$index]) {return $this->rowsWhere[$index];}
 		$name = $this->name();
