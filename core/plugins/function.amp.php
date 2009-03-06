@@ -15,5 +15,5 @@
 function smarty_function_amp($params) {
 	$arg = array_values($params);
 	$arg = $arg[0];
-	return "&$arg";
+	return "&$arg;";
 }
