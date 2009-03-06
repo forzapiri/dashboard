@@ -913,6 +913,14 @@ var Enumerable = (function() {
     return '#<Enumerable:' + this.toArray().inspect() + '>';
   }
 
+
+
+
+
+
+
+
+
   return {
     each:       each,
     eachSlice:  eachSlice,
@@ -1707,6 +1715,8 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
     this.updater = new Ajax.Updater(this.container, this.url, this.options);
   }
 });
+
+
 
 function $(element) {
   if (arguments.length > 1) {
@@ -2598,6 +2608,26 @@ else if (Prototype.Browser.IE) {
       onchange:    v._getEv
     });
   })(Element._attributeTranslations.read.values);
+
+  if (Prototype.BrowserFeatures.ElementExtensions) {
+    (function() {
+      function _descendants(element) {
+        var nodes = element.getElementsByTagName('*'), results = [];
+        for (var i = 0, node; node = nodes[i]; i++)
+          if (node.tagName !== "!") // Filter out comment nodes.
+            results.push(node);
+        return results;
+      }
+
+      Element.Methods.down = function(element, expression, index) {
+        element = $(element);
+        if (arguments.length == 1) return element.firstDescendant();
+        return Object.isNumber(expression) ? _descendants(element)[expression] :
+          Element.select(element, expression)[index || 0];
+      }
+    })();
+  }
+
 }
 
 else if (Prototype.Browser.Gecko && /rv:1\.8\.0/.test(navigator.userAgent)) {
@@ -4149,21 +4179,26 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
   }
 
   function pointer(event) {
-    var docElement = document.documentElement,
-     body = document.body || { scrollLeft: 0, scrollTop: 0 };
-    return {
-      x: event.pageX || (event.clientX +
-        (docElement.scrollLeft || body.scrollLeft) -
-        (docElement.clientLeft || 0)),
-      y: event.pageY || (event.clientY +
-        (docElement.scrollTop || body.scrollTop) -
-        (docElement.clientTop || 0))
-    };
+    return { x: pointerX(event), y: pointerY(event) };
   }
 
-  function pointerX(event) { return Event.pointer(event).x }
+  function pointerX(event) {
+    var docElement = document.documentElement,
+     body = document.body || { scrollLeft: 0 };
 
-  function pointerY(event) { return Event.pointer(event).y }
+    return event.pageX || (event.clientX +
+      (docElement.scrollLeft || body.scrollLeft) -
+      (docElement.clientLeft || 0));
+  }
+
+  function pointerY(event) {
+    var docElement = document.documentElement,
+     body = document.body || { scrollTop: 0 };
+
+    return  event.pageY || (event.clientY +
+       (docElement.scrollTop || body.scrollTop) -
+       (docElement.clientTop || 0));
+  }
 
 
   function stop(event) {
@@ -4372,6 +4407,9 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
     }
 
     var responders = registry.get(eventName);
+
+    if (!responders) return;
+
     var responder = responders.find( function(r) { return r.handler === handler; });
     if (!responder) return element;
 
