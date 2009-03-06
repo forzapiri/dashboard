@@ -63,11 +63,11 @@ class DBRowTest extends PHPUnit_Framework_TestCase {
 	
 	public function testToggle() {
 		$row = DBRow::make(1, 'User');
-		$this->assertEquals(1, $row->get('status'));
+		$this->assertEquals(true, $row->get('status'));
 		$row->toggle();
-		$this->assertEquals(0, $row->get('status'));
+		$this->assertEquals(false, $row->get('status'));
 		$row->toggle();
-		$this->assertEquals(1, $row->get('status'));
+		$this->assertEquals(true, $row->get('status'));
 	}
 
 }
