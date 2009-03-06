@@ -128,4 +128,3 @@ class Product extends DBRow {
 	static function getQuickFormPrefix() {return 'product_';}
 }
 DBRow::init('Product');
-?>

@@ -65,4 +65,3 @@ function smarty_resource_calendar_trusted($tpl_name, &$smarty)
 {
   // unused for templates
 }
-?>

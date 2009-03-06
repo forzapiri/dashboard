@@ -52,4 +52,3 @@ class Order extends DBRow {
 	static function getQuickFormPrefix() {return 'order_';}
 }
 DBRow::init('Order');
-?>

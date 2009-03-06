@@ -65,4 +65,3 @@ class TaxRate extends DBRow {
 	static function getQuickFormPrefix() {return 'taxrate_';}
 }
 DBRow::init('TaxRate');
-?>

@@ -67,4 +67,3 @@ class Session extends DBRow {
 	static function getQuickFormPrefix() {return 'session_';}
 }
 DBRow::init('Session');
-?>

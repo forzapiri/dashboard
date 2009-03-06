@@ -60,4 +60,3 @@ class ProductType extends DBRow {
 	static function getQuickFormPrefix() {return 'producttype_';}
 }
 DBRow::init('ProductType');
-?>

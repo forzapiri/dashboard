@@ -80,4 +80,3 @@ class BlocksAdminUITest extends UITest
     }
 
 }
-?>

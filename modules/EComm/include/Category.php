@@ -75,4 +75,3 @@ class Category extends DBRow {
 	static function getQuickFormPrefix() {return 'category_';}
 }
 DBRow::init('Category');
-?>

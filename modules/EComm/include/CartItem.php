@@ -47,4 +47,3 @@ class CartItem extends DBRow {
 	static function getQuickFormPrefix() {return 'cartitem_';}
 }
 DBRow::init('CartItem');
-?>

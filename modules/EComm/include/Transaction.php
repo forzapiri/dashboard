@@ -78,4 +78,3 @@ class Transaction extends DBRow {
 	static function getQuickFormPrefix() {return 'transaction_';}
 }
 DBRow::init('Transaction');
-?>

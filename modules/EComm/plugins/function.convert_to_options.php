@@ -5,4 +5,3 @@ function smarty_function_convert_to_options($params,&$smarty) {
     $results .= '<option id="' . $key . '">' . $value . '</option>';
   echo $results;
 }
-?>

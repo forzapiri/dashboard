@@ -55,4 +55,3 @@ class TaxClass extends DBRow {
 	static function getQuickFormPrefix() {return 'taxclass_';}
 }
 DBRow::init('TaxClass');
-?>

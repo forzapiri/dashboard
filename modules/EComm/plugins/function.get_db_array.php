@@ -4,4 +4,3 @@
 		$r = Database::singleton()->query_fetch_all($sql);
 		$smarty->assign($params['smarty_var'], $r);
 	}
-?>

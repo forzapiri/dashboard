@@ -7,4 +7,3 @@
 	}
 	 
 	/* vim: set expandtab: */
-?>

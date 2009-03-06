@@ -29,4 +29,3 @@ class OrderDetail extends DBRow {
 	static function getQuickFormPrefix() {return 'orderdetail_';}
 }
 DBRow::init('OrderDetail');
-?>

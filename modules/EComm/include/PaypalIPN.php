@@ -32,4 +32,3 @@ class PaypalIPN extends DBRow {
 	static function getQuickFormPrefix() {return 'paypalipn_';}
 }
 DBRow::init('PaypalIPN');
-?>
