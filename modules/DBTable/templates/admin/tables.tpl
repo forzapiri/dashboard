@@ -59,7 +59,7 @@
 		<th valign="center" width="100">suggested</th>
 	</tr>
 </thead>
-<tbody>
+<tbody id="data" class="sortable">
 {foreach from=$viewtable item=column}
 	<tr class="{cycle values="row1,row2"}">
 		<td>{$column->getName()}</td>

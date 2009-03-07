@@ -6,6 +6,7 @@ CREATE TABLE `dbtable` (
   `label` varchar(50) NOT NULL,
   `type` varchar(1000) NOT NULL,
   `modifier` varchar(20) default NULL,
+  `sort` int(10) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 
