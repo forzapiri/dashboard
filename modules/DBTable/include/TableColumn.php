@@ -10,11 +10,12 @@ class TableColumn extends DBRow {
 			DBColumn::make ('text', 'type', 'Column type'),
 			DBColumn::make ('text', 'label', 'Label'),
 			DBColumn::make ('text', 'name', 'Column name'),
+			'//sort',
 			DBColumn::make ('select', 'modifier', 'Modifier', array ('' => '', 
-																'hidden' => 'Hidden',
-																'required' => 'Required',
-																'no form' => 'No Form Entry')),
-		);
+																	 'hidden' => 'Hidden',
+																	 'required' => 'Required',
+																	 'no form' => 'No Form Entry')),
+			);
 		$result = new DBTable("dbtable", __CLASS__, $cols);
 		return $result;
 	}

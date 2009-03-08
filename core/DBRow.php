@@ -350,7 +350,7 @@ abstract class DBRow {
 				if ($column->noForm()) continue;
 				$name = $column->name();
 				$value = $form->exportValue($this->quickformPrefix() . $name);
-				$this->set($name, $column->fromForm($value));
+				$this->set($name, $column->fromForm($value, $els[$name]));
 			}
 			$this->getAddEditFormBeforeSaveHook($form);
 			$this->save();
