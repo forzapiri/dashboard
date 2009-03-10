@@ -5,7 +5,7 @@
  * @copyright Copyright © 2004-2008, Moxiecode Systems AB, All rights reserved.
  */
 
-(function() {
+(function(tinymce) {
 	var DOM = tinymce.DOM, Event = tinymce.dom.Event, extend = tinymce.extend, Dispatcher = tinymce.util.Dispatcher;
 	var each = tinymce.each, isGecko = tinymce.isGecko, isIE = tinymce.isIE, isWebKit = tinymce.isWebKit;
 	var is = tinymce.is, ThemeManager = tinymce.ThemeManager, PluginManager = tinymce.PluginManager, EditorManager = tinymce.EditorManager;
@@ -682,12 +682,9 @@
 				});
 			}
 
+			// Add visual aids when new contents is added
 			t.onSetContent.add(function() {
-				// Safari needs some time, it will crash the browser when a link is created otherwise
-				// I think this crash issue is resolved in the latest 3.0.4
-				//window.setTimeout(function() {
-					t.addVisual(t.getBody());
-				//}, 1);
+				t.addVisual(t.getBody());
 			});
 
 			// Remove empty contents
@@ -1204,6 +1201,12 @@
 
 			// Theme commands
 			if (t.theme && t.theme.execCommand && t.theme.execCommand(cmd, ui, val)) {
+				t.onExecCommand.dispatch(t, cmd, ui, val, a);
+				return true;
+			}
+
+			// Execute global commands
+			if (tinymce.GlobalCommands.execCommand(t, cmd, ui, val)) {
 				t.onExecCommand.dispatch(t, cmd, ui, val, a);
 				return true;
 			}
@@ -2295,4 +2298,4 @@
 
 		/**#@-*/
 	});
-})();
+})(tinymce);

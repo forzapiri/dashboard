@@ -118,6 +118,12 @@
 	include('ForceBlocks.js');
 	include('ControlManager.js');
 	include('WindowManager.js');
+	include('CommandManager.js');
+	include('commands/RemoveFormat.js');
+	include('commands/BlockQuote.js');
+	include('commands/CutCopyPaste.js');
+	include('commands/InsertHorizontalRule.js');
+	include('commands/UndoRedo.js');
 
 	// Developer API
 	include('xml/Parser.js');

@@ -5,12 +5,8 @@
  * @copyright Copyright © 2004-2008, Moxiecode Systems AB, All rights reserved.
  */
 
-(function() {
+(function(tinymce) {
 	var each = tinymce.each, isIE = tinymce.isIE, isGecko = tinymce.isGecko, isOpera = tinymce.isOpera, isWebKit = tinymce.isWebKit;
-
-	function isBlock(n) {
-		return /^(H[1-6]|HR|P|DIV|ADDRESS|PRE|FORM|TABLE|OL|UL|TD|CAPTION|BLOCKQUOTE|CENTER|DL|DT|DD|DIR|FIELDSET|NOSCRIPT|NOFRAMES|MENU|ISINDEX|SAMP)$/.test(n.nodeName);
-	};
 
 	/**
 	 * This is a internal class and no method in this class should be called directly form the out side.
@@ -24,23 +20,6 @@
 			var t = this, ed = t.editor, f;
 
 			switch (cmd) {
-				case 'Cut':
-				case 'Copy':
-				case 'Paste':
-					try {
-						ed.getDoc().execCommand(cmd, ui, val);
-					} catch (ex) {
-						if (isGecko) {
-							ed.windowManager.confirm(ed.getLang('clipboard_msg'), function(s) {
-								if (s)
-									window.open('http://www.mozilla.org/editor/midasdemo/securityprefs.html', 'mceExternal');
-							});
-						} else
-							ed.windowManager.alert(ed.getLang('clipboard_no_support'));
-					}
-
-					return true;
-
 				// Ignore these
 				case 'mceResetDesignMode':
 				case 'mceBeginUndoLevel':
@@ -57,11 +36,6 @@
 				case 'JustifyRight':
 				case 'JustifyFull':
 					t.mceJustify(cmd, cmd.substring(7).toLowerCase());
-					return true;
-
-				case 'mceEndUndoLevel':
-				case 'mceAddUndoLevel':
-					ed.undoManager.add();
 					return true;
 
 				default:
@@ -85,7 +59,7 @@
 			iv = parseInt(iv);
 
 			if (ed.settings.inline_styles && (!this.queryStateInsertUnorderedList() && !this.queryStateInsertOrderedList())) {
-				each(this._getSelectedBlocks(), function(e) {
+				each(s.getSelectedBlocks(), function(e) {
 					d.setStyle(e, 'paddingLeft', (parseInt(e.style.paddingLeft || 0) + iv) + iu);
 				});
 
@@ -112,7 +86,7 @@
 			iv = parseInt(iv);
 
 			if (ed.settings.inline_styles && (!this.queryStateInsertUnorderedList() && !this.queryStateInsertOrderedList())) {
-				each(this._getSelectedBlocks(), function(e) {
+				each(s.getSelectedBlocks(), function(e) {
 					v = Math.max(0, parseInt(e.style.paddingLeft || 0) - iv);
 					d.setStyle(e, 'paddingLeft', v ? v + iu : '');
 				});
@@ -123,13 +97,14 @@
 			ed.getDoc().execCommand('Outdent', false, null);
 		},
 
+/*
 		mceSetAttribute : function(u, v) {
 			var ed = this.editor, d = ed.dom, e;
 
 			if (e = d.getParent(ed.selection.getNode(), d.isBlock))
 				d.setAttrib(e, v.name, v.value);
 		},
-
+*/
 		mceSetContent : function(u, v) {
 			this.editor.setContent(v);
 		},
@@ -347,7 +322,7 @@
 				if (rm)
 					v = '';
 
-				each(this._getSelectedBlocks(dom.getParent(se.getStart(), dom.isBlock), dom.getParent(se.getEnd(), dom.isBlock)), function(e) {
+				each(se.getSelectedBlocks(dom.getParent(se.getStart(), dom.isBlock), dom.getParent(se.getEnd(), dom.isBlock)), function(e) {
 					dom.setAttrib(e, 'align', '');
 					dom.setStyle(e, 'textAlign', v == 'full' ? 'justify' : v);
 				});
@@ -476,180 +451,6 @@
 			return null;
 		},
 
-		InsertHorizontalRule : function() {
-			// Fix for Gecko <hr size="1" /> issue and IE bug rep(/<a.*?href=\"(.*?)\".*?>(.*?)<\/a>/gi,"[url=$1]$2[/url]");
-			if (isGecko || isIE)
-				this.editor.selection.setContent('<hr />');
-			else
-				this.editor.getDoc().execCommand('InsertHorizontalRule', false, '');
-		},
-
-		RemoveFormat : function() {
-			var ed = this.editor, dom = ed.dom, s = ed.selection, r = s.getW3CRange(), sc, ec, so, eo, n, cont, start, end, ancestor, remove = [];
-
-			function findEndPoint(n, c) {
-				do {
-					if (n.parentNode == c)
-						return n;
-
-					n = n.parentNode;
-				} while(n);
-			};
-
-			function findFormatRoot(n) {
-				var sp;
-
-				dom.getParent(n, function(n) {
-					if (dom.is(n, ed.getParam('removeformat_selector')))
-						sp = n;
-
-					return dom.isBlock(n);
-				}, ed.getBody())
-
-				return sp;
-			};
-
-			function process(n) {
-				function walk(n) {
-					var i, nl;
-
-					if (dom.is(n, ed.getParam('removeformat_selector')))
-						remove.push(n);
-
-					if (nl = n.childNodes) {
-						for (i = nl.length - 1; i >= 0; i--)
-							walk(nl[i]);
-					}
-				};
-
-				walk(n);
-			};
-
-			// Use shorter form
-			sc = r.startContainer;
-			ec = r.endContainer;
-			so = r.startOffset;
-			eo = r.endOffset;
-			cont = r.commonAncestorContainer;
-			bm = s.getBookmark();
-
-			// Scenario 1: Same text node container
-			if (cont.nodeType == 3) { // TEXT_NODE
-				cont = findFormatRoot(sc);
-
-				if (cont.nodeType == 1) { // ELEMENT
-					n = sc.splitText(so);
-					n.splitText(eo - so);
-					dom.split(cont, n);
-
-					s.moveToBookmark(bm);
-				}
-
-				return;
-			}
-
-			// Scenario 2: Selected singe element
-			if (so == eo - 1 && sc.nodeType == 1) { // ELEMENT
-				// Table cell selection breaks in FF, the DOM Range returned from the browser is incorrect
-				if (sc.nodeName != 'TR') {
-					n = sc.childNodes[so];
-					process(dom.split(findFormatRoot(n), n));
-				}
-
-				s.moveToBookmark(bm);
-
-				return;
-			}
-
-			// Split start node and wrap it in a span
-			if (sc.nodeType == 1) // ELEMENT
-				n = sc.childNodes[so];
-			else
-				n = sc.splitText(so);
-
-			// Wrap start text node or element in a span since it might get cloned by the dom.split calls
-			dom.replace(dom.create('span', {id : 'start'}, n.cloneNode(true)), n);
-
-			// Split end node and wrap it in a span
-			if (ec.nodeType == 1) // ELEMENT
-				n = ec.childNodes[eo - 1];
-			else {
-				ec.splitText(eo);
-				n = ec;
-			}
-
-			// Wrap end text node or element in a span since it might get cloned by the dom.split calls
-			dom.replace(dom.create('span', {id : 'end'}, n.cloneNode(true)), n);
-
-			// Split start (left side)
-			n = dom.get('start');
-			start = dom.split(findFormatRoot(n), n);
-
-			// Split end (right side)
-			n = dom.get('end');
-			end = dom.split(findFormatRoot(n), n);
-
-			// Find common ancestor and end points
-			ancestor = dom.findCommonAncestor(start, end);
-			start = findEndPoint(start, ancestor);
-			end = findEndPoint(end, ancestor);
-
-			// Process middle from start to end point
-			for (n = start; n && (n = n.nextSibling) && n != end; )
-				process(n);
-
-			// Process left leaf
-			dom.getParent(dom.get('start'), function(n) {
-				var nl, i;
-
-				if (n.parentNode) {
-					for (n = n.nextSibling; n; n = n.nextSibling)
-						process(n);
-
-					return false;
-				}
-
-				return true;
-			}, start);
-
-			// Process right leaf
-			dom.getParent(dom.get('end'), function(n) {
-				var pr = n;
-
-				while (pr = pr.previousSibling)
-					process(pr);
-			}, end);
-
-			// Process start/end since they might contain elements
-			process(dom.get('start'));
-			process(dom.get('end'));
-
-			// Remove all collected nodes
-			each(remove, function(n) {
-				dom.remove(n, 1);
-			});
-
-			// Remove containers
-			dom.remove('start', 1);
-			dom.remove('end', 1);
-
-			s.moveToBookmark(bm);
-		},
-
-/*
-		RemoveFormat : function() {
-			var t = this, ed = t.editor, s = ed.selection, b;
-
-			// Safari breaks tables
-			if (isWebKit)
-				s.setContent(s.getContent({format : 'raw'}).replace(/(<(span|b|i|strong|em|strike) [^>]+>|<(span|b|i|strong|em|strike)>|<\/(span|b|i|strong|em|strike)>|)/g, ''), {format : 'raw'});
-			else
-				ed.getDoc().execCommand('RemoveFormat', false, null);
-
-			t.mceSetStyleInfo(0, {command : 'removeformat'});
-			ed.addVisual();
-		},
-*/
 		mceSetStyleInfo : function(u, v) {
 			var t = this, ed = t.editor, d = ed.getDoc(), dom = ed.dom, e, b, s = ed.selection, nn = v.wrapper || 'span', b = s.getBookmark(), re;
 
@@ -806,26 +607,6 @@
 				d.execCommand('BackColor', false, val);
 		},
 
-		Undo : function() {
-			var ed = this.editor;
-
-			if (ed.settings.custom_undo_redo) {
-				ed.undoManager.undo();
-				ed.nodeChanged();
-			} else
-				ed.getDoc().execCommand('Undo', false, null);
-		},
-
-		Redo : function() {
-			var ed = this.editor;
-
-			if (ed.settings.custom_undo_redo) {
-				ed.undoManager.redo();
-				ed.nodeChanged();
-			} else
-				ed.getDoc().execCommand('Redo', false, null);
-		},
-
 		FormatBlock : function(ui, val) {
 			var t = this, ed = t.editor, s = ed.selection, dom = ed.dom, bl, nb, b;
 
@@ -965,133 +746,6 @@
 
 		queryStatemceBlockQuote : function() {
 			return !!this.editor.dom.getParent(this.editor.selection.getStart(), function(n) {return n.nodeName === 'BLOCKQUOTE';});
-		},
-
-		mceBlockQuote : function() {
-			var t = this, ed = t.editor, s = ed.selection, dom = ed.dom, sb, eb, n, bm, bq, r, bq2, i, nl;
-
-			function getBQ(e) {
-				return dom.getParent(e, function(n) {return n.nodeName === 'BLOCKQUOTE';});
-			};
-
-			// Get start/end block
-			sb = dom.getParent(s.getStart(), isBlock);
-			eb = dom.getParent(s.getEnd(), isBlock);
-
-			// Remove blockquote(s)
-			if (bq = getBQ(sb)) {
-				if (sb != eb || sb.childNodes.length > 1 || (sb.childNodes.length == 1 && sb.firstChild.nodeName != 'BR'))
-					bm = s.getBookmark();
-
-				// Move all elements after the end block into new bq
-				if (getBQ(eb)) {
-					bq2 = bq.cloneNode(false);
-
-					while (n = eb.nextSibling)
-						bq2.appendChild(n.parentNode.removeChild(n));
-				}
-
-				// Add new bq after
-				if (bq2)
-					dom.insertAfter(bq2, bq);
-
-				// Move all selected blocks after the current bq
-				nl = t._getSelectedBlocks(sb, eb);
-				for (i = nl.length - 1; i >= 0; i--) {
-					dom.insertAfter(nl[i], bq);
-				}
-
-				// Empty bq, then remove it
-				if (/^\s*$/.test(bq.innerHTML))
-					dom.remove(bq, 1); // Keep children so boomark restoration works correctly
-
-				// Empty bq, then remote it
-				if (bq2 && /^\s*$/.test(bq2.innerHTML))
-					dom.remove(bq2, 1); // Keep children so boomark restoration works correctly
-
-				if (!bm) {
-					// Move caret inside empty block element
-					if (!isIE) {
-						r = ed.getDoc().createRange();
-						r.setStart(sb, 0);
-						r.setEnd(sb, 0);
-						s.setRng(r);
-					} else {
-						s.select(sb);
-						s.collapse(0);
-
-						// IE misses the empty block some times element so we must move back the caret
-						if (dom.getParent(s.getStart(), isBlock) != sb) {
-							r = s.getRng();
-							r.move('character', -1);
-							r.select();
-						}
-					}
-				} else
-					t.editor.selection.moveToBookmark(bm);
-
-				return;
-			}
-
-			// Since IE can start with a totally empty document we need to add the first bq and paragraph
-			if (isIE && !sb && !eb) {
-				t.editor.getDoc().execCommand('Indent');
-				n = getBQ(s.getNode());
-				n.style.margin = n.dir = ''; // IE adds margin and dir to bq
-				return;
-			}
-
-			if (!sb || !eb)
-				return;
-
-			// If empty paragraph node then do not use bookmark
-			if (sb != eb || sb.childNodes.length > 1 || (sb.childNodes.length == 1 && sb.firstChild.nodeName != 'BR'))
-				bm = s.getBookmark();
-
-			// Move selected block elements into a bq
-			each(t._getSelectedBlocks(getBQ(s.getStart()), getBQ(s.getEnd())), function(e) {
-				// Found existing BQ add to this one
-				if (e.nodeName == 'BLOCKQUOTE' && !bq) {
-					bq = e;
-					return;
-				}
-
-				// No BQ found, create one
-				if (!bq) {
-					bq = dom.create('blockquote');
-					e.parentNode.insertBefore(bq, e);
-				}
-
-				// Add children from existing BQ
-				if (e.nodeName == 'BLOCKQUOTE' && bq) {
-					n = e.firstChild;
-
-					while (n) {
-						bq.appendChild(n.cloneNode(true));
-						n = n.nextSibling;
-					}
-
-					dom.remove(e);
-					return;
-				}
-
-				// Add non BQ element to BQ
-				bq.appendChild(dom.remove(e));
-			});
-
-			if (!bm) {
-				// Move caret inside empty block element
-				if (!isIE) {
-					r = ed.getDoc().createRange();
-					r.setStart(sb, 0);
-					r.setEnd(sb, 0);
-					s.setRng(r);
-				} else {
-					s.select(sb);
-					s.collapse(1);
-				}
-			} else
-				s.moveToBookmark(bm);
 		},
 
 		_applyInlineStyle : function(na, at, op) {
@@ -1275,87 +929,6 @@
 				ed.onKeyUp.add(kh);
 			} else
 				t._pendingStyles = 0;
-		},
-
-/*
-		_mceBlockQuote : function() {
-			var t = this, s = t.editor.selection, b = s.getBookmark(), bq, dom = t.editor.dom;
-
-			function findBQ(e) {
-				return dom.getParent(e, function(n) {return n.nodeName === 'BLOCKQUOTE';});
-			};
-
-			// Remove blockquote(s)
-			if (findBQ(s.getStart())) {
-				each(t._getSelectedBlocks(findBQ(s.getStart()), findBQ(s.getEnd())), function(e) {
-					// Found BQ lets remove it
-					if (e.nodeName == 'BLOCKQUOTE')
-						dom.remove(e, 1);
-				});
-
-				t.editor.selection.moveToBookmark(b);
-				return;
-			}
-
-			each(t._getSelectedBlocks(findBQ(s.getStart()), findBQ(s.getEnd())), function(e) {
-				var n;
-
-				// Found existing BQ add to this one
-				if (e.nodeName == 'BLOCKQUOTE' && !bq) {
-					bq = e;
-					return;
-				}
-
-				// No BQ found, create one
-				if (!bq) {
-					bq = dom.create('blockquote');
-					e.parentNode.insertBefore(bq, e);
-				}
-
-				// Add children from existing BQ
-				if (e.nodeName == 'BLOCKQUOTE' && bq) {
-					n = e.firstChild;
-
-					while (n) {
-						bq.appendChild(n.cloneNode(true));
-						n = n.nextSibling;
-					}
-
-					dom.remove(e);
-
-					return;
-				}
-
-				// Add non BQ element to BQ
-				bq.appendChild(dom.remove(e));
-			});
-
-			t.editor.selection.moveToBookmark(b);
-		},
-*/
-		_getSelectedBlocks : function(st, en) {
-			var ed = this.editor, dom = ed.dom, s = ed.selection, sb, eb, n, bl = [];
-
-			sb = dom.getParent(st || s.getStart(), isBlock);
-			eb = dom.getParent(en || s.getEnd(), isBlock);
-
-			if (sb)
-				bl.push(sb);
-
-			if (sb && eb && sb != eb) {
-				n = sb;
-
-				while ((n = n.nextSibling) && n != eb) {
-					if (isBlock(n))
-						bl.push(n);
-				}
-			}
-
-			if (eb && sb != eb)
-				bl.push(eb);
-
-			return bl;
 		}
 	});
-})();
-
+})(tinymce);
