@@ -12,6 +12,7 @@ require_once 'GroupTest.php';
 require_once 'DBTableTest.php';
 require_once 'DBColumnsTest.php';
 require_once 'DBRowTest.php';
+require_once 'SQLTest.php';
 
 /**
  * Static test suite.
@@ -24,17 +25,7 @@ class testSuite {
 	public static function suite() {
 		$suite = new PHPUnit_Framework_TestSuite('Dashboard Test Suite');
 		
-		$sqlDir = dirname(__FILE__).'/../sql/';
-		$dir  = new DirectoryIterator($sqlDir);
-		foreach ($dir as $file) {
-			$fileName = $file->getFilename();
-			if ($fileName == '.svn' || $fileName == '.' || $fileName == '..') {
-				continue;
-			}
-			$sql = file_get_contents($sqlDir . $fileName);
-			Database::singleton()->multi_query($sql);
-		}
-		
+		$suite->addTestSuite ( 'SQLTest' );
 		
 		$suite->addTestSuite ( 'DBRowTest' );
 		$suite->addTestSuite ( 'DBColumnTest' );
@@ -62,10 +53,6 @@ class testSuite {
 					require_once($dataDir . $file . '/tests/' . $testName);
 					$suite->addTestSuite ( trim($testName, '.php') );
 				}
-			}
-			if (file_exists($dataDir . $fileName . '/schema.sql')) {
-				$sql = file_get_contents($dataDir . $fileName . '/schema.sql');
-				Database::singleton()->multi_query($sql);
 			}
 		}
 		return $suite;
