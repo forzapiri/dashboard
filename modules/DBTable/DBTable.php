@@ -70,34 +70,42 @@ class Module_DBTable extends Module {
 		$mysqlTable = new MysqlTable($name);
 		$action = @$_REQUEST['action'];
 		switch ($action) {
-			case 'createTable':
-				$col = TableColumn::make();
-				$form = $col->createTableForm('/admin/DBTable');
-				if (!$form->isProcessed()) {
-					return $form->display();
-				} else {
-					$this->loadTableInfo($name);
-				}
-				break;
-			case 'view': 
-				break;
-			case 'addColumn':
-			case 'addedit':
-				if (!$id) $col = TableColumn::make();
-				$col->set('table', $name);
-				$form = $col->getAddEditForm('/admin/DBTable');
-				if (!$form->isProcessed()) {
-					return $form->display();
-				}
-				break;
-			case 'setType':
-				$mysqlTable->create(); // Creates only if not already created
-				$mysqlTable->setType($col->getName(), $col->suggestedMysql());
-				break;			
-			case 'delete':
-				$col->delete();
-				$col = null;
-				break;
+		case 'createTable':
+			$col = TableColumn::make();
+			$form = $col->createTableForm('/admin/DBTable');
+			if (!$form->isProcessed()) {
+				return $form->display();
+			} else {
+				$this->loadTableInfo($name);
+			}
+			break;
+		case 'view': 
+			break;
+		case 'addColumn':
+		case 'addedit':
+			if (!$id) $col = TableColumn::make();
+			$col->set('table', $name);
+			$form = $col->getAddEditForm('/admin/DBTable');
+			if (!$form->isProcessed()) {
+				return $form->display();
+			}
+			break;
+		case 'setType':
+			$mysqlTable->create(); // Creates only if not already created
+			$mysqlTable->setType($col->getName(), $col->suggestedMysql());
+			break;			
+		case 'delete':
+			$col->delete();
+			$col = null;
+			break;
+		case 'sort':
+			var_log ($_REQUEST);
+			foreach (getSerializedRequest() as $i => $j) {
+				$item = TableColumn::make($j);
+				$item->setSort($i);
+				$item->save();
+			}
+			break;
 		}
 		extract ($this->refresh($id));
 		if ($name) $viewtable = $tables[$name];
