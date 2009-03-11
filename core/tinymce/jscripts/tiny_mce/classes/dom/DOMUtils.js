@@ -5,7 +5,7 @@
  * @copyright Copyright © 2004-2008, Moxiecode Systems AB, All rights reserved.
  */
 
-(function() {
+(function(tinymce) {
 	// Shorten names
 	var each = tinymce.each, is = tinymce.is;
 	var isWebKit = tinymce.isWebKit, isIE = tinymce.isIE;
@@ -1667,6 +1667,21 @@
 		split : function(pe, e, re) {
 			var t = this, r = t.createRng(), bef, aft, pa;
 
+			// W3C valid browsers tend to leave empty nodes to the left/right side of the contents, this makes sence
+			// but we don't want that in our code since it serves no purpose
+			// For example if this is chopped:
+			//   <p>text 1<span><b>CHOP</b></span>text 2</p>
+			// would produce:
+			//   <p>text 1<span></span></p><b>CHOP</b><p><span></span>text 2</p>
+			// this function will then trim of empty edges and produce:
+			//   <p>text 1</p><b>CHOP</b><p>text 2</p>
+			function trimEdge(n, na) {
+				n = n[na];
+
+				if (n && n[na] && n[na].nodeType == 1 && isEmpty(n[na]))
+					t.remove(n[na]);
+			};
+
 			function isEmpty(n) {
 				n = t.getOuterHTML(n);
 				n = n.replace(/<(img|hr|table)/gi, '-'); // Keep these convert them to - chars
@@ -1690,6 +1705,9 @@
 				// Insert chunks and remove parent
 				pa = pe.parentNode;
 
+				// Remove right side edge of the before contents
+				trimEdge(bef, 'lastChild');
+
 				if (!isEmpty(bef))
 					pa.insertBefore(bef, pe);
 
@@ -1698,9 +1716,14 @@
 				else
 					pa.insertBefore(e, pe);
 
+				// Remove left site edge of the after contents
+				trimEdge(aft, 'firstChild');
+
 				if (!isEmpty(aft))
 					pa.insertBefore(aft, pe);
-	
+
+				t.remove(pe);
+
 				return re || e;
 			}
 		},
@@ -1745,4 +1768,4 @@
 
 	// Setup page DOM
 	tinymce.DOM = new tinymce.dom.DOMUtils(document, {process_html : 0});
-})();
+})(tinymce);

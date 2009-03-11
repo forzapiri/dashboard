@@ -52,7 +52,7 @@ class DBRowTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals('MenuItem', underscore2uccamel('menu_item'));
 		$this->assertEquals('TestId', underscore2uccamel('test_id'));
 		$this->assertEquals('MenuItem', underscore2uccamel('MenuItem'));
-		$this->assertEquals('Test', underscore2uccamel('test_'));
+		$this->assertEquals('Test_', underscore2uccamel('test_'));
 	}
 	
 	public function testCreateTable() {
@@ -63,11 +63,11 @@ class DBRowTest extends PHPUnit_Framework_TestCase {
 	
 	public function testToggle() {
 		$row = DBRow::make(1, 'User');
-		$this->assertEquals(1, $row->get('status'));
+		$this->assertEquals(true, $row->get('status'));
 		$row->toggle();
-		$this->assertEquals(0, $row->get('status'));
+		$this->assertEquals(false, $row->get('status'));
 		$row->toggle();
-		$this->assertEquals(1, $row->get('status'));
+		$this->assertEquals(true, $row->get('status'));
 	}
 
 }

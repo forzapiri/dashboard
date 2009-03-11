@@ -5,7 +5,7 @@
  * @copyright Copyright © 2004-2006, Moxiecode Systems AB, All rights reserved.
  */
 
-(function() {
+(function(tinymce) {
 	// Shorten names
 	var each = tinymce.each, DOM = tinymce.DOM, isIE = tinymce.isIE, isWebKit = tinymce.isWebKit, Event;
 
@@ -38,7 +38,7 @@
 			var cb, t = this, el = t.events, r;
 
 			// Handle array
-			if (o && o instanceof Array) {
+			if (o && o.hasOwnProperty && o instanceof Array) {
 				r = [];
 
 				each(o, function(o) {
@@ -108,7 +108,7 @@
 			var t = this, a = t.events, s = false, r;
 
 			// Handle array
-			if (o && o instanceof Array) {
+			if (o && o.hasOwnProperty && o instanceof Array) {
 				r = [];
 
 				each(o, function(o) {
@@ -296,4 +296,4 @@
 	// Dispatch DOM content loaded event for IE and Safari
 	Event._wait();
 	tinymce.addUnload(Event._unload);
-})();
+})(tinymce);

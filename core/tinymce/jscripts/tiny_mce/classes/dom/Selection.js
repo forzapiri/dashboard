@@ -5,7 +5,7 @@
  * @copyright Copyright © 2004-2008, Moxiecode Systems AB, All rights reserved.
  */
 
-(function() {
+(function(tinymce) {
 	function trimNl(s) {
 		return s.replace(/[\n\r]+/g, '');
 	};
@@ -136,9 +136,11 @@
 				t.setRng(r);
 
 				// Delete the marker, and hopefully the caret gets placed in the right location
-				d.execCommand('Delete', false, null);
+				// Removed this since it seems to remove &nbsp; in FF and simply deleting it
+				// doesn't seem to affect the caret position in any browser
+				//d.execCommand('Delete', false, null);
 
-				// In case it's still there
+				// Remove the caret position
 				t.dom.remove('__caret');
 			} else {
 				if (r.item) {
@@ -519,14 +521,21 @@
 				}
 			} else {
 				if (c) {
-					fn = first(n);
-					ln = last(n);
+					fn = first(n) || t.dom.select('br:first', n)[0];
+					ln = last(n) || t.dom.select('br:last', n)[0];
 
 					if (fn && ln) {
-						//console.debug(fn, ln);
 						r = d.createRange();
-						r.setStart(fn, 0);
-						r.setEnd(ln, ln.nodeValue.length);
+
+						if (fn.nodeName == 'BR')
+							r.setStartBefore(fn);
+						else
+							r.setStart(fn, 0);
+
+						if (ln.nodeName == 'BR')
+							r.setEndBefore(ln);
+						else
+							r.setEnd(ln, ln.nodeValue.length);
 					} else
 						r.selectNode(n);
 				} else
@@ -585,13 +594,18 @@
 		/**
 		 * Returns the browsers internal range object.
 		 *
+		 * @param {bool} w3c Forces a compatible W3C range on IE.
 		 * @return {Range} Internal browser range object.
 		 */
-		getRng : function() {
-			var t = this, s = t.getSel(), r;
+		getRng : function(w3c) {
+			var t = this, s, r;
+
+			// Found tridentSel object then we need to use that one
+			if (w3c && t.tridentSel)
+				return t.tridentSel.getRangeAt(0);
 
 			try {
-				if (s)
+				if (s = t.getSel())
 					r = s.rangeCount > 0 ? s.getRangeAt(0) : (s.createRange ? s.createRange() : t.win.document.createRange());
 			} catch (ex) {
 				// IE throws unspecified error here if TinyMCE is placed in a frame/iframe
@@ -604,21 +618,6 @@
 				r = isIE ? t.win.document.body.createTextRange() : t.win.document.createRange();
 
 			return r;
-		},
-
-		/**
-		 * Returns a W3C compatible DOM Range object of the current selection even on browsers who doesn't support it.
-		 *
-		 * @return {DOMRange} Range object of the current selection.
-		 */
-		getW3CRange : function() {
-			var t = this;
-
-			// Found tridentSel object then we need to use that one
-			if (t.tridentSel)
-				return t.tridentSel.getRangeAt(0);
-
-			return t.getRng(); // W3C compatible browsers
 		},
 
 		/**
@@ -701,6 +700,30 @@
 			return r.item ? r.item(0) : r.parentElement();
 		},
 
+		getSelectedBlocks : function(st, en) {
+			var t = this, dom = t.dom, sb, eb, n, bl = [];
+
+			sb = dom.getParent(st || t.getStart(), dom.isBlock);
+			eb = dom.getParent(en || t.getEnd(), dom.isBlock);
+
+			if (sb)
+				bl.push(sb);
+
+			if (sb && eb && sb != eb) {
+				n = sb;
+
+				while ((n = n.nextSibling) && n != eb) {
+					if (isBlock(n))
+						bl.push(n);
+				}
+			}
+
+			if (eb && sb != eb)
+				bl.push(eb);
+
+			return bl;
+		},
+
 		destroy : function(s) {
 			var t = this;
 
@@ -713,4 +736,4 @@
 
 		/**#@-*/
 	});
-})();
+})(tinymce);
