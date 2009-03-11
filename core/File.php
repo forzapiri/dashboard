@@ -90,6 +90,7 @@ class File extends DBRow {
 	private function getLocalFilename() {
 		// Replaces the extension with one matching the mime type, if available
 		$filename = $this->getFilename();
+		// Clean up the filename for URLs and filename storage rather than use urlify
 		$filename = preg_replace('/ /', '_', $filename);
 		$filename = preg_replace('/[^0-9a-zA-Z._]/', '', $filename);
 		if (!$filename) return "file.tmp";
@@ -99,7 +100,9 @@ class File extends DBRow {
 		$ext = @$extensions[$type];
 		if (!$ext) $ext = substr ($filename, 1+$pos);
 		if (!$ext) $ext = "tmp";
-		return substr($filename, 0, $pos) . ".$ext";
+		$root = substr ($filename, 0, $pos);
+		$root = preg_replace ('/[.]/', '', $root);
+		return "$root.$ext";
 	}
 
 	function getFullPath(){return $this->getDirectory() . $this->getLocalFilename();}
@@ -167,6 +170,7 @@ class File extends DBRow {
 		'/image/png' => 'png',
 		'/image/gif' => 'gif',
 		'/image/jpeg' => 'jpg',
+		'/image/pjpeg' => 'jpg',
 		'/image/wbmp' => 'wbmp',
 		'/text/css' => 'css',
 		);
