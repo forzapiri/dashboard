@@ -9,11 +9,11 @@ var Facebox = Class.create({
 		};
 		if (extra_set) Object.extend(this.settings, extra_set);
 		
-		if ($('module_content')) {
-			$('module_content').insert({ after: this.settings.facebox_html });
-		} else {
+		//if ($('module_content')) {
+		//	$('module_content').insert({ after: this.settings.facebox_html });
+		//} else {
 			$$('body').first().insert({bottom: this.settings.facebox_html});
-		}
+		//}
 		
 		this.preload = [ new Image(), new Image() ];
 		this.preload[0].src = this.settings.close_image;
@@ -57,13 +57,12 @@ var Facebox = Class.create({
 	
 	loading	: function() {
 		if ($$('#facebox .loading').length == 1) return true;
-		
 		contentWrapper = $$('#facebox .content').first();
 		contentWrapper.update('');
 		contentWrapper.childElements().each(function(elem, i){
 			elem.remove();
 		});
-		contentWrapper.insert({bottom: '<div class="loading"><img src="'+this.settings.loading_image+'"/></div>'});
+		//contentWrapper.insert({bottom: '<div class="loading"><img src="'+this.settings.loading_image+'"/></div>'});
 		/*var pageScroll = document.viewport.getScrollOffsets();
 		$('facebox').setStyle({
 			'top': pageScroll.top + (document.viewport.getHeight() / 8) + 'px',
@@ -88,12 +87,12 @@ var Facebox = Class.create({
 			new Effect.Appear($('overlay'), {duration: 1.0, fps: 100, from: 0.0, to: 0.8});
 		}
 		
-		contentWrapper = $$('#facebox .content').first();
+		contentWrapper = $('facebox').down('div.content');
 		if (klass) contentWrapper.addClassName(klass);
 		contentWrapper.insert({bottom: data});
-		load = $$('#facebox .loading').first();
-		load.remove();
-		$$('#facebox .body').first().childElements().each(function(elem,i){
+		load = $('facebox').down('.loading');
+		if (load) load.remove();
+		$('facebox').down('.body').childElements().each(function(elem,i){
 			elem.show();
 		});
 		//Event.observe(document, 'keypress', this.keyPressListener);
@@ -107,10 +106,10 @@ var Facebox = Class.create({
 	
 	close		: function(){
 		//$('facebox').hide();
-		contentWrapper = $$('#facebox .content').first();
+		contentWrapper = $('facebox').down('div.content');
 		new Effect.Fade($('facebox'), {duration: 0.2, fps: 100});
 		new Effect.Fade($('overlay'), {duration: 1.0, fps: 100});
-		//contentWrapper.update('');
+		contentWrapper.update('');
 	},
 	
 	click_handler	: function(elem, e){
