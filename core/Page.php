@@ -253,30 +253,6 @@ class Page extends defaultPageActs {
 		return false;
 	}
 	
-	public function getOperatingId($pointer = null) {
-		if (is_null($pointer)) {
-			$pointer = $this->pointer;
-		}
-		
-		$id = null;
-		
-		if (isset($this->link[$pointer])) {
-			$prefix = call_user_func(array($this->link[$pointer][1][0], 'quickformPrefix'));
-			if (isset($_REQUEST[$prefix . $this->link[$pointer][1][1]])) {
-				$id = $_REQUEST[$prefix . $this->link[$pointer][1][1]];
-			} else if (!isset($_REQUEST[call_user_func(array($this->pointer, 'quickformPrefix')) . 'id'])) {
-				$prefix = call_user_func(array($pointer, 'quickformPrefix'));
-				$id = $_REQUEST[$prefix . $this->link[$pointer][0]];
-			} else {
-				$prefix = call_user_func(array($this->pointer, 'quickformPrefix'));
-				$n = DBRow::make($_REQUEST[$prefix . 'id'], $pointer);
-				$id = $n->get($this->link[$pointer][0]);
-			}
-			
-		}
-		return $id;
-	}
-	
 	public function getWhere($pointer = null) {
 		$where = null;
 		if (is_null($pointer)) {
@@ -315,7 +291,7 @@ class Page extends defaultPageActs {
 		if (is_null($pointer)) {
 			$pointer = $this->pointer;
 		}
-		$items = call_user_func(array($pointer, 'getAll'), $this->getWhere($pointer), $this->getPrepareString(), $this->getOperatingId()); // TODO: CONVERT TO PREPARED STMT
+		$items = call_user_func(array($pointer, 'getAll'), $this->getWhere($pointer), ''); // TODO: CONVERT TO PREPARED STMT
 		return $items;
 	}
 
@@ -324,7 +300,7 @@ class Page extends defaultPageActs {
 			$pointer = $this->pointer;
 		}
 		if (method_exists ($pointer, 'countAll'))
-			$items = call_user_func(array($pointer, 'countAll'), $this->getWhere($pointer), $this->getPrepareString(), $this->getOperatingId()); // TODO: CONVERT TO PREPARED STMT
+			$items = call_user_func(array($pointer, 'countAll'), $this->getWhere($pointer), ''); // TODO: CONVERT TO PREPARED STMT
 		else 
 			$items = count($this->getItems ($pointer));
 		return $items;
@@ -333,11 +309,18 @@ class Page extends defaultPageActs {
 	public function getPagedItems() {
 		$where = $this->getWhere();
 		$this->perPage = isset($_REQUEST['X-DataLimit']) ? $_REQUEST['X-DataLimit'] : $this->perPage;
+		$sql = 'select count(' . (call_user_func(array($this->pointer, 'createTable'))->name()) . '.id) as count from ' . (call_user_func(array($this->pointer, 'createTable'))->name()) . ' ' . $where;
+		$r = Database::singleton()->query_fetch($sql);
 			
 		$currentPage = @$_REQUEST['pageID'];
 		
 		if (!isset($this->tables[$this->pointer])) $this->perPage = 1000000; /* KLUGE */
 
+		$this->perPage = isset($_REQUEST['X-DataLimit']) ? $_REQUEST['X-DataLimit'] : $this->perPage;
+		$sql = 'select count(' . (call_user_func(array($this->pointer, 'createTable'))->name()) . '.id) as count from ' . (call_user_func(array($this->pointer, 'createTable'))->name()) . ' ' . $where;
+			$r = Database::singleton()->query_fetch($sql);
+			$currentPage = @$_REQUEST['pageID'];
+			
 		require_once('Pager/Pager.php');
 		$pagerOptions = array(
 			    'mode'     => 'Sliding',
@@ -346,7 +329,7 @@ class Page extends defaultPageActs {
 				'append'   => false,  //don't append the GET parameters to the url
 		  	  	'fileName'     => '/admin/' . $_REQUEST['module'] . "&section=" . $this->pointer . "&pageID=%d",
 		    	'path' => '',
-				'totalItems' => $this->getCount()
+				'totalItems' => $r['count']
 		);
 		if (isset($this->link[$this->pointer])) {
 			$prefix = call_user_func(array($this->link[$this->pointer][1][0], 'quickformPrefix'));
@@ -365,32 +348,10 @@ class Page extends defaultPageActs {
 			
 		list($from, $to) = $pager->getOffsetByPageId();
 		$where .= ' limit ' . ($from - 1) . ', ' . ($this->perPage);
-		var_log ($this->pointer);
-		var_log ($where);
-		var_log ($this->getPrepareString());
-		var_log ($this->getOperatingId());
-		$items = call_user_func(array($this->pointer, 'getAll'), $where, $this->getPrepareString(), $this->getOperatingId());  // TODO: CONVERT TO PREPARED STMT
+		$items = call_user_func(array($this->pointer, 'getAll'), $where, '');  // TODO: CONVERT TO PREPARED STMT
 
 		$this->pager = $pager;
 		return $items;
-	}
-	
-	public function getPrepareString($pointer = null) {
-		if (is_null($pointer)) {
-			$pointer = $this->pointer;
-		}
-		$table = call_user_func(array($pointer, 'createTable'), $this->getWhere($pointer));
-		$cols = $table->columns();
-		
-		$code = '';
-		
-		if (isset($this->link[$pointer])) {
-			$prefix = call_user_func(array($this->link[$pointer][1][0], 'quickformPrefix'));
-			if (isset($_REQUEST[$prefix . $this->link[$pointer][1][1]])) {
-				$code .= $cols[$this->link[$pointer][1][1]]->prepareCode();
-			}
-		}
-		return $code;
 	}
 	
 	public function render($pointer = null, $insert = '') {
@@ -404,6 +365,8 @@ class Page extends defaultPageActs {
 		
 		$html = '';
 		
+		$where = $this->getWhere();
+
 		if (!isset($this->tables[$this->pointer])) $this->perPage = 1000000; /* KLUGE */
 
 		$items = $this->getPagedItems();
