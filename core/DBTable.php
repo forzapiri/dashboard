@@ -91,7 +91,7 @@ class DBTable {
 			$f("$fname has been promoted to using prepared statements for the where clause\n"
 						   . "For example, $fname('where id=? and title=?', 'is', 23, 'Fun')");
 		}
-		if ($code !== null && $code != '') {
+		if ($code !== null) {
 			if (func_num_args() != 3+strlen($code))
 				trigger_error ("Length of code does not match number of arguments in DBTable::getCountOrRows()");
 			$args = func_get_args();
