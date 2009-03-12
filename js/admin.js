@@ -349,3 +349,26 @@ function norexFileBrowser (field_name, url, type, win) {
     });
     return false;
   }
+
+var thickboxAddEdit = function(element) {
+	if (!element.nodeType) {
+		Event.stop(element);
+		// Element is bound event listener to an <a href> link
+		return new Ajax.Request(Event.element(element).href, {
+			method: 'get',
+			onSuccess: function(transport) {
+				showThickBox(transport);
+			}, 
+			onComplete: function(transport) {
+				
+			}
+		});
+	} else {
+		// Element is DOM form object
+		return $(element).request({
+			onSuccess: function(transport) {
+				showThickBox(transport);
+			}
+		});
+	}
+}

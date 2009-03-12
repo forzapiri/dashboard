@@ -30,15 +30,12 @@ class DBFileUpload extends DBColumn {
 	}
 	static function fromDB($obj) {return File::make($obj);}
 	static function toDB($obj) {return $obj ? $obj->getId() : null;}
-	static function toForm($obj) {return "";}
+	static function toForm($obj) {return "JOE";}
 	function suggestedMysql() {return "int(11)";}
 }
 
 class DBImage extends DBFileUpload {
 	function type() { return 'image'; }
-}
-class DBFlash extends DBFileUpload {
-	function type() { return 'flash'; }
 }
 
 class DBColumnPassword extends DBColumn {
@@ -107,6 +104,19 @@ class DBColumnInteger extends DBColumn {
 	}
 	function suggestedMysql() {return "int(11)";}
 }
+
+class DBColumnFloat extends DBColumnText {
+	function type() {return 'float';}
+	function prepareCode() {return 'd';}
+	static function toDB($obj){
+		return number_format($obj, 2, ".", "");
+	}
+	static function fromDB($obj){
+		return number_format($obj, 2, ".", "");
+	}
+	function suggestedMysql() {return "float(11,2)";}
+}
+
 class DBColumnSort extends DBColumnInteger {
 	function type() {return 'sort';}
 	function __toString($item, $key) {

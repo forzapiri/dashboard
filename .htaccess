@@ -30,9 +30,6 @@ RewriteRule ^support/? /index.php?module=Support&page=$1 [NC,L]
 
 RewriteRule ^Store/?$ /index.php?module=EComm&section=Category [NC,L]
 RewriteRule ^Store/(Category|ProductType|Supplier|Product|Tree|Search|Cart|IPN|MyAccount)/?(\w*)/?&?(.*) /index.php?module=EComm&section=$1&page=$2&$3 [NC,L]
- 
-#RewriteRule ^store/([A-Za-z]+)/?(.*)?$ /index.php?module=Cart&page=$2&section=$1 [NC,L]
-#RewriteRule ^store/(.*)? /index.php?module=Cart&section=$1 [NC,L]
 
 RewriteRule ^blog/(.*)? /index.php?module=Blog&page=$1 [NC,L]
 RewriteRule ^gallery/([0-9]+)?-?([a-zA-Z0-9\-]+)? /index.php?module=Gallery&page=$1 [NC,L]

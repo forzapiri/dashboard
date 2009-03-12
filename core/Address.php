@@ -41,6 +41,8 @@ class Address extends DBRow {
 	}
 	
 	public function getStateName() {
+		if (!$this->get('state'))
+			return '';
 		$sql = 'select name from states where id=' . $this->get('state');
 		$r = Database::singleton()->query_fetch($sql);
 		return $r['name'];
@@ -57,6 +59,8 @@ class Address extends DBRow {
 	}
 	
 	public function getCountryName() {
+		if (!$this->get('country'))
+			return '';
 		$sql = 'select name from countries where id=' . $this->get('country');
 		$r = Database::singleton()->query_fetch($sql);
 		return $r['name'];
@@ -99,3 +103,4 @@ class Address extends DBRow {
 	}
 }
 DBRow::init('Address');
+?>
