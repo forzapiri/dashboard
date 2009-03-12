@@ -1,5 +1,6 @@
 <?php
 define ('DATA_STORAGE_DIR', 'files/');
+
 class File extends DBRow {
 	function createTable() {
 		$cols = array(
@@ -79,7 +80,7 @@ class File extends DBRow {
 	function getSize() {return filesize($this->getDirectoryFile());}
 
 	/* Perhaps some of these should be private */
-	private function getDirectoryFile() {return $this->getDirectory() . $this->getFilename();}
+	private function getDirectoryFile() {return $this->getDirectory() . $this->getLocalFilename();}
 	private function getDirectory() {return SITE_ROOT . "/" . DATA_STORAGE_DIR . $this->getPath();}
 	private function getPath() {
 		$id = (string) $this->getId();
@@ -142,6 +143,12 @@ class File extends DBRow {
 		if ($data instanceof HTML_QuickForm_file) {$data = $data->getValue();}
 		if (is_array ($data)) return $this->_insert($data['tmp_name'], $data['type'], $data['name'], false);
 		else                  return $this->_insert($data, $type, $filename, true);
+	}
+
+	function &delete(&$notification = null) {
+		@unlink($this->getDirectoryFile());
+		@unlink($this->getDirectory() . 'public');
+		return parent::delete($notification);
 	}
 
 	function getAddEditFormHook($form) {
