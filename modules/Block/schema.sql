@@ -29,6 +29,7 @@ CREATE TABLE `blocks` (
   `timestamp` timestamp NOT NULL default '0000-00-00 00:00:00' on update CURRENT_TIMESTAMP,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `title` (`title`),
+  KEY `status` (`status`),
   KEY `sort` (`sort`)
 ) ENGINE=MyISAM AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
 

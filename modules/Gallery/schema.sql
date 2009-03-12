@@ -20,6 +20,7 @@ CREATE TABLE `photo_galleries` (
   `status` tinyint(1) default '1',
   `thumbnail_id` int(11) default NULL,
   `sort` int(11) default NULL,
+  KEY `parent_gallery_id` (`parent_gallery_id`),
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 
@@ -34,6 +35,7 @@ CREATE TABLE `photo_gallery_images` (
   `file_id` int(11) default NULL,
   `photo_gallery_id` int(11) default '0',
   `title` varchar(64) default NULL,
+  KEY `photo_gallery_id` (`photo_gallery_id`),
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
 

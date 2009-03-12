@@ -10,6 +10,7 @@ CREATE TABLE `content_pages` (
   `page_title` varchar(128) default NULL,
   PRIMARY KEY  (`id`),
   KEY `page_name` (`name`),
+  KEY `url_key`(`url_key`),
   KEY `status` (`status`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 

@@ -365,6 +365,10 @@ class Page extends defaultPageActs {
 			
 		list($from, $to) = $pager->getOffsetByPageId();
 		$where .= ' limit ' . ($from - 1) . ', ' . ($this->perPage);
+		var_log ($this->pointer);
+		var_log ($where);
+		var_log ($this->getPrepareString());
+		var_log ($this->getOperatingId());
 		$items = call_user_func(array($this->pointer, 'getAll'), $where, $this->getPrepareString(), $this->getOperatingId());  // TODO: CONVERT TO PREPARED STMT
 
 		$this->pager = $pager;
