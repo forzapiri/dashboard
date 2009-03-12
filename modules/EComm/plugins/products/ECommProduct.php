@@ -1,5 +1,4 @@
 <?php
-require "ECommProduct_interface.php";
 class ECommProduct{
 	protected $pluginName = '';
 	protected $pluginDetails = '';
@@ -90,7 +89,7 @@ class ECommProduct{
 			$abortMsg = urlencode($abortMsg);
 			$abortMsg = str_replace("%","%25", $abortMsg);//The % sign should be replaced with %25 so Apache rewrite rules will work properly
 			if (!$abortURL)
-				$abortURL = '/Store/Category/';
+				$abortURL = Module_EComm::getModulePrefix() . 'Category/';
 			header('location: ' . $abortURL . '&msg=' . $abortMsg);
 			exit; 
 		}
@@ -106,8 +105,30 @@ class ECommProduct{
 		}
 		return $result;
 	}
+	
+	public function hasAdminInterface(){}
+	public function getAdminInterface(){}
+	
+	public function adminHookBeforeDisplayForm(&$product, &$form){}
+	public function adminHookBeforeSave(&$product, &$form){}
+	public function adminHookAfterSave(&$product, &$form){}
+	public function adminHookBeforeDelete(&$product){}
+	public function adminHookAfterDelete(&$product){}
+	public function adminHookBeforeDisplayOrder(&$orderDetail){}
+	
+	public function clientHookBeforeDisplayProduct(&$product, &$ecommModule){}
+	public function clientHookBeforeAddToCart(&$product, &$ecommModule){}
+	public function clientHookAfterAddToCart(&$cartItem, &$ecommModule){}
+	public function clientHookBeforeDisplayCartItem(&$cartItem, &$ecommModule){}
+	public function calculatePrice(&$cartItem){}
+	
+	public function getProperty($propertyName, $product){}
+	
+	public function getPluginProperty($pluginName, $propertyName, $product){
+		return $this->getPlugin($pluginName)->getProperty($propertyName, $product);
+	}
 }
-foreach(SiteConfig::get("EComm::productPlugins") as $plugin){
-	ECommProduct::init($plugin);
-}
+ECommProduct::init("AlternativePics",true);
+ECommProduct::init("ProductProperties",false);
+ECommProduct::init("ChangeProductPrice",false);
 ?>

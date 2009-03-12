@@ -25,22 +25,22 @@ class Session extends DBRow {
 		
 		$result = Database::singleton()->query_fetch($sql);
 		if (!$result){
-			$session = Session::make(null,'Session');
+			$session = DBRow::make('', 'Session');
 			$session->setIpAddress($_SERVER['REMOTE_ADDR']);
 			$session->setStatus(1);
 			$session->save();
 			$_SESSION["ECommSessionId"] = $session->getId();
 		}
 		else{
-			$session =  Session::make($result['id'],'Session');
+			$session = DBRow::make($result['id'], 'Session');
 		}
 		return $session;
 	}
 	
 	//This method will be called right after the transaction is created.
-	//Its purpose is to not allow the client from messing arround with the old session by adding new products for example.
+	//Its purpose is to disallow the client from messing with the old session by adding new products for example.
 	public function reGenerateSession(){
-		$newSession = Session::make(null,'Session');
+		$newSession = DBRow::make('', 'Session');
 		$newSession->setIpAddress($this->getIpAddress());
 		$newSession->setStatus($this->getStatus());
 		$newSession->setUser($this->getUser());
@@ -59,7 +59,7 @@ class Session extends DBRow {
 		$results = Database::singleton()->query_fetch_all($sql);
 		
 		foreach ($results as &$result) {
-			$result = Session::make($result['id'],'Session');
+			$result = DBRow::make($result['id'], 'Session');
 		}
 		
 		return $results;
@@ -67,3 +67,4 @@ class Session extends DBRow {
 	static function getQuickFormPrefix() {return 'session_';}
 }
 DBRow::init('Session');
+?>

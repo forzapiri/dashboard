@@ -9,7 +9,7 @@ class TaxRate extends DBRow {
 			DBColumn::make('!select', 'country', 'Country', Address::getCountries()),
 			DBColumn::make('!select', 'province', 'Province / State', Address::getStates()),
 			DBColumn::make('!select', 'tax_class', 'Tax Class', TaxClass::getAllTaxClassesIdAndName()),
-			DBColumn::make('!money', 'tax_rate', 'Tax Rate %'),
+			DBColumn::make('!float', 'tax_rate', 'Tax Rate %'),
 			DBColumn::make('timestamp', 'date_added', 'Date Added'),
 			DBColumn::make('//text', 'last_modified', 'Last Modified'),
 			DBColumn::make('tinymce', 'details', 'Details')
@@ -19,10 +19,6 @@ class TaxRate extends DBRow {
 	
 	public function getAddEditFormSaveHook($form){
 		$this->setLastModified(date('Y-m-d G:i:s'));
-	}
-	
-	public function getTaxRate(){//This function has to be overridden because we want to display only two numbers after the decimal
-		return round($this->get("tax_rate"),2);
 	}
 	
 	public function getAddEditFormHook($form){
@@ -35,7 +31,7 @@ class TaxRate extends DBRow {
 
 	public static function calculateTax($taxClass, $productPrice, $address){
 		if (!$address)
-			$address = Address::make(null,'Address');
+			$address = DBRow::make('', 'Address');
 		$country = $address->getCountry();
 		$province = $address->getState();
 		$sql = 'select `tax_rate` from ecomm_tax_rate where country = "' . e($country) . '" AND 
@@ -57,7 +53,7 @@ class TaxRate extends DBRow {
 		$results = Database::singleton()->query_fetch_all($sql);
 		
 		foreach ($results as &$result) {
-			$result = TaxRate::make($result['id'],'TaxRate');
+			$result = DBRow::make($result['id'], 'TaxRate');
 		}
 		
 		return $results;
@@ -65,3 +61,4 @@ class TaxRate extends DBRow {
 	static function getQuickFormPrefix() {return 'taxrate_';}
 }
 DBRow::init('TaxRate');
+?>

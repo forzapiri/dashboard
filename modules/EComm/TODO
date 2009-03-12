@@ -1,7 +1,42 @@
-- Include the plugins in the order, when displayin the order to the admin or user, and when sending the confirmation email
-- CSS the module properly
-- Display the products on pages in the client area
-- Use the "select match against" when searching for products (must be full text)
-- When displaying the products of a category (or search for products in a category), take the sub categories into considerations
-- Reports plugins
-- Multiple currencies
+- Bugs to be fixed:
+	  - Products: When browsing among pages, if you click on the edit icon and go back to the page that you were browsing, you cannot move to other pages.
+	  - Fix the getQuickFormPrefix static function problem
+
+
+
+Features to be added soon:
+	* - Display the product through quickform so it can be controlled easily from the plugins
+	* - Allow the plugin to be called, something like: /Store/Plugin/AlternativPictures&action=whatever
+	* - Check all the plugins before going to the payment and move the minimum payment to a plugin
+	  - Add SiteConfig for the delta value and for the number of recordds per page
+	  - SiteConfigs: Include shipping address, billing address, shipping class, payment, delivery directions, phone number (that applies on the checkout process and on the user details as well).
+	  - Add a few plugins such as the alternative pictures and the change all prices
+	  - Change some types in the include files: for example, use the File class instead of the Image class, use a timestamp class, an imaage class with a checkbox for "no picture
+	  - CSS the module properly
+	  - Tax rates: one for countries (e.g. the tax in canada is 14% while the tax in the states is 8%). And a tax for catchall
+	  - Call the plugins when displaying the cart table and when displaying the search results / products in a category
+	
+
+
+Feature to be added later:
+	* - Reports plugins
+	* - Display the products on pages in the client area
+	* - The possibility of non-logged in users to checkout and buy products (quick checkout, use only an email address which the system creates an account based on)
+	  - Use the "select match against" when searching for products (must be full text)
+	  - When displaying the products of a category (or search for products in a category), take the sub categories into considerations
+	  - Multiple currencies
+	
+
+
+Other stuff:
+	  - Fix the User class: When adding the same username twice
+	  - Push the address fix to github
+	  - Push the javascript file as well: admin.js
+
+
+
+Done:
+	* - Revise the orders in the admin area and post comments
+	* - Include the plugins in the order (in OrderDetails class), when displaying the order to the admin or user, and when sending the confirmation email
+	* - Generate the SQL script and include the module record and the site config variables in it.
+	

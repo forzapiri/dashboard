@@ -31,7 +31,9 @@
 
 <b>Products:</b><br/>
 {foreach from=$orderItems item=orderItem}
-	{$orderItem->getQuantity()} X <a href="/Store/Product/{$orderItem->getProduct()}" target="_blank">{$orderItem->getProductName()}</a><br/>
+	{$orderItem->getQuantity()} X <a href="{$module->getModulePrefix()}Product/{$orderItem->getProduct()}" target="_blank">{$orderItem->getProductName()}</a>
+	{$orderItem->getProductPluginInfo()}
+	<br/>
 {/foreach}
 
 <br/>

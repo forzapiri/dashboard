@@ -17,9 +17,8 @@ class CanadaPost extends ECommShipping{
 		$userId = @$_SESSION['authenticated_user']->getId();
 		$userDetails = UserDetails::getUserDetailsBasedOnUserId($userId);
 		$shippingAddress = $userDetails->getAddress('shipping_address');
-		if ($shippingAddress->getCountry())
-			if ($shippingAddress->getCountryName() == "Canada")
-				$result -= 20.00;
+		if ($shippingAddress->getCountryName() == "Canada")
+			$result -= 20.00;
 		return $result;
 	}
 	

@@ -10,7 +10,8 @@
 	{assign var="counter" value=$counter+1}
 	
 	{assign var="objId" value=$obj->getId()}
-	{assign var="detailsURL" value="/Store/$section/$objId"}
+	{assign var="modulePrefix" value=$module->getModulePrefix()}
+	{assign var="detailsURL" value="$modulePrefix$section/$objId"}
 	
 	{if $counter % $itemsPerRow == 1 || $itemsPerRow == 1}
 		<div class="OneRow">

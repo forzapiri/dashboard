@@ -23,7 +23,7 @@ class CartItem extends DBRow {
 		$results = Database::singleton()->query_fetch_all($sql);
 		
 		foreach ($results as &$result) {
-			$result = CartItem::make($result['id'],'CartItem');
+			$result = DBRow::make($result['id'], 'CartItem');
 		}
 		return $results;
 	}
@@ -32,7 +32,7 @@ class CartItem extends DBRow {
 		$productId = $this->getProduct();
 		if ($this->cartItemProduct && $this->cartItemProduct->getId() == $productId)
 			return $this->cartItemProduct;
-		$this->cartItemProduct = Product::make($productId,'Product');
+		$this->cartItemProduct = DBRow::make($productId, 'Product');
 		return $this->cartItemProduct;
 	}
 	
@@ -47,3 +47,4 @@ class CartItem extends DBRow {
 	static function getQuickFormPrefix() {return 'cartitem_';}
 }
 DBRow::init('CartItem');
+?>

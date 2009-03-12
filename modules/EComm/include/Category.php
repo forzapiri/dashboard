@@ -58,20 +58,22 @@ class Category extends DBRow {
 		$results = Database::singleton()->query_fetch_all($sql);
 		
 		foreach ($results as &$result) {
-			$result = Category::make($result['id'],'Category');
+			$result = DBRow::make($result['id'], 'Category');
 		}
 		
 		return $results;
 	}
 	
 	public function displayBreadCrumb(){
+		//TODO: display the current category as plain text instead of a link (a simple default parameter can do it)
 		$result = '';
 		if (!$this->getId())
-			return '<a href="/Store/Category">Back to categories</a>';
-		$parent = Category::make($this->getParentCategory(),'Category');
-		return $parent->displayBreadCrumb() . ' | <a href="/Store/Category/' . $this->getId() . '">' . $this->getName() . '</a>';
+			return '<a href="' . Module_EComm::getModulePrefix() . 'Category">Back to categories</a>';
+		$parent = DBRow::make($this->getParentCategory(), 'Category');
+		return $parent->displayBreadCrumb() . ' | <a href="' . Module_EComm::getModulePrefix() . 'Category/' . $this->getId() . '">' . $this->getName() . '</a>';
 	}
 	
 	static function getQuickFormPrefix() {return 'category_';}
 }
 DBRow::init('Category');
+?>

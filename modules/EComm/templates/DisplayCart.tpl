@@ -7,7 +7,7 @@
 <h2>Returning Customer</h2>
 {if !$loggedIn}
 	<p>Please enter your username and password below.</p>
-	<form method="post" action="/Store/Cart/&action=Checkout">
+	<form method="post" action="{$module->getModulePrefix()}Cart/&action=Checkout">
 		<fieldset class="hidden">
 			<label for="username" class="element">Username:</label><div class="element"><input type="text" id="username" name="username" /></div>
 			<label for="password" class="element">Password:</label><div class="element"><input type="password" id="password" name="password" /></div>
@@ -15,7 +15,7 @@
 		</fieldset>
 	</form>
 {else}
-	<form method="post" action="/Store/Cart/&action=Checkout">
+	<form method="post" action="{$module->getModulePrefix()}Cart/&action=Checkout">
 		<fieldset class="hidden">
 			<input type="submit" name="btnSubmit" value="Checkout" />
 			<input type="button" name="btnLogout" value="Logout" onclick="javascript:document.location='/user/logout';" />

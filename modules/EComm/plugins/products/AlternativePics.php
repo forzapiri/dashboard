@@ -1,5 +1,5 @@
 <?php
-class AlternativePics extends ECommProduct implements ECommProduct_interface {
+class AlternativePics extends ECommProduct{
 	public function __construct(){
 		$this->pluginName = "Alternative images";
 		$this->pluginDetails = "Allow the administrator to upload more than one image per product";
@@ -27,7 +27,7 @@ class AlternativePics extends ECommProduct implements ECommProduct_interface {
 		if ($newAltImage->isUploadedFile()) {
 			$im = new Image();
 			$imageId = $im->insert($newAltImage->getValue());
-			$obj = AlternativeImage::make(null,'AlternativeImage');
+			$obj = DBRow::make('', 'AlternativeImage');
 			$obj->setProduct($product->getId());
 			$obj->setImage($imageId);
 			$obj->save();
@@ -38,7 +38,17 @@ class AlternativePics extends ECommProduct implements ECommProduct_interface {
 		//return (array('abort'=> '1', 'msg' => "You cannot delete products"));
 	}
 	
-	public function clientHookBeforeDisplay(&$product, &$ecommModule){
+	public function adminHookBeforeDisplayOrder(&$orderDetail){
+		$altPics = AlternativeImage::getAll($orderDetail->getProduct());
+		$html = "";
+		foreach ($altPics as $pic)
+			$html .= "<img src=\"/images/image.php?id=" . $pic->getImage() . "&cliph=50\">";
+		return (array(
+					'HTML' => $html 
+				));
+	}
+	
+	public function clientHookBeforeDisplayProduct(&$product, &$ecommModule){
 		$altPics = AlternativeImage::getAll($product->getId());
 		$ecommModule->smarty->assign('altPics', $altPics);
 		$ecommModule->smarty->assign('product', $product);
@@ -56,7 +66,7 @@ class AlternativePics extends ECommProduct implements ECommProduct_interface {
 		return (array(
 				'abort' => $abort,
 				'msg'   => 'You cannot add this product to the cart',
-				'url'   => '/Store/Product/' . $product->getId()
+				'url'   => Module_EComm::getModulePrefix() . 'Product/' . $product->getId()
 			));
 	}
 	
@@ -102,7 +112,7 @@ class AlternativeImage extends DBRow {
 		$sql = 'select `id` from ecomm_product_alternative_image where product = "' . e($productId) . '"';
 		$results = Database::singleton()->query_fetch_all($sql);
 		foreach ($results as &$result) {
-			$result = AlternativeImage::make($result['id'],'AlternativeImage');
+			$result = DBRow::make($result['id'], 'AlternativeImage');
 		}
 		return $results;
 	}

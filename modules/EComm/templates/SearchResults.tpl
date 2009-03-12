@@ -7,9 +7,11 @@
 {assign var="counter" value="0"}
 {foreach from=$products item=product}
 	{assign var="counter" value=$counter+1}
-
+	
 	{assign var="objId" value=$product->getId()}
-	{assign var="detailsURL" value="/Store/Product/$objId&returnURL=$returnURL"}
+	{assign var="modulePrefix" value=$module->getModulePrefix()}
+	{assign var="productURL" value="Product/$objId&returnURL=$returnURL"}
+	{assign var="detailsURL" value="$modulePrefix$productURL"}
 
 	{if $counter % $itemsPerRow == 1 || $itemsPerRow == 1}
 		<div class="OneRow">
@@ -24,7 +26,7 @@
 		</a>
 		<br/>
 		<a href="{$detailsURL}">
-			{$product->getName()} (({$counter}))
+			{$product->getName()} ({$counter})
 		</a>
 		<br/>
 		{$CurrencySign} {$product->getPrice()}

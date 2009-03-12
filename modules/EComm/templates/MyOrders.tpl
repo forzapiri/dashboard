@@ -15,7 +15,7 @@
 		<td><b>{$obj->getStatus()}</b></td>
 		<td>{$CurrencySign} {$obj->getCostTotal()|string_format:"%.2f"}</td>
 		<td>
-			<form method="POST" action="/Store/MyAccount/&action=MyOrders" style="float: left;" onSubmit="return !requestOrderDetails(this);">
+			<form method="POST" action="{$module->getModulePrefix()}MyAccount/&action=MyOrders" style="float: left;" onSubmit="return !requestOrderDetails(this);">
 				<input type="hidden" name="order_id" value="{$obj->getId()}" />
 				<input type="image" name="view" id="view" value="view" src="/modules/EComm/images/view_order.png" />
 			</form>

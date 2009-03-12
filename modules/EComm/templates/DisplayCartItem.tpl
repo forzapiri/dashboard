@@ -1,4 +1,5 @@
 {if $msg}<center><h2>{$msg}</h2></center>{/if}
+{assign var=product value=$cartItem->getCartItemProduct()}
 {if $product}
 	<h2>Product: {$product->getName()}</h2>
 	<div class="CellInfo">
@@ -23,7 +24,7 @@
 			<b>Product Type: </b>{$product->getProducttype()|get_db_value:ecomm_product_type:id:name}<br style="clear:both;"/>
 			<b>Supplier: </b>{$product->getSupplier()|get_db_value:ecomm_supplier:id:name}<br style="clear:both;"/>
 			<br style="clear:both;"/>
-			<b>Quantity: </b>{$cartItem->getQuantity()}<b/>
+			<b>Quantity: </b>{$cartItem->getQuantity()}
 			<br style="clear:both;"/><br/>
 			{$html}
 		</div>

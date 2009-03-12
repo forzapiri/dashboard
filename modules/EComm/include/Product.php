@@ -12,7 +12,7 @@ class Product extends DBRow {
 			DBColumn::make('!select', 'tax_class', 'Tax Class',Module_EComm::getIndexes("ecomm_tax_class","id","name",0)),
 			DBColumn::make('!integer', 'stock_quantity', 'Stock Quantity'),
 			DBColumn::make('//integer', 'image', 'Image'),
-			DBColumn::make('!money', 'price', 'Price (' . SiteConfig::get("EComm::CurrencySign") . ")"),
+			DBColumn::make('!float', 'price', 'Price (' . SiteConfig::get("EComm::CurrencySign") . ")"),
 			DBColumn::make('timestamp', 'date_added', 'Date Added'),
 			DBColumn::make('//text', 'last_modified', 'Last Modified'),
 			DBColumn::make('select', 'status', 'Status',array('1'=>'Active','0'=>'Inactive')),
@@ -21,11 +21,24 @@ class Product extends DBRow {
 		return new DBTable("ecomm_product", __CLASS__, $cols);
 	}
 	
-	public function getPrice(){//This function has to be overridden because we want to display only two numbers after the decimal
-		return number_format($this->get("price"), 2);
-	}
-	
 	public function getAddEditFormHook($form){
+		//The following four hidden variable are necessary so we can go to the page and the filters the user was viewing before editing this product
+		if (@$_REQUEST["pageID"]){
+			$form->setConstants( array ( 'pageID' => $_REQUEST["pageID"]));
+			$form->addElement( 'hidden', 'pageID' );
+		}
+		if (@$_REQUEST["Supplier"]){
+			$form->setConstants( array ( 'Supplier' => $_REQUEST["Supplier"]));
+			$form->addElement( 'hidden', 'Supplier' );
+		}
+		if (@$_REQUEST["Category"]){
+			$form->setConstants( array ( 'Category' => $_REQUEST["Category"]));
+			$form->addElement( 'hidden', 'Category' );
+		}
+		if (@$_REQUEST["ProductType"]){
+			$form->setConstants( array ( 'ProductType' => $_REQUEST["ProductType"]));
+			$form->addElement( 'hidden', 'ProductType' );
+		}
 		$newImage = $form->addElement('file', $this->quickformPrefix() . "image_upload", 'Image');
 		$form->addElement('checkbox', $this->quickformPrefix() . 'no_image', 'No image');
 		if ($this->getImage()) {
@@ -47,7 +60,7 @@ class Product extends DBRow {
 		else{
 			$newImage = $form->addElement('file', $this->quickformPrefix() . "image_upload", 'Image');
 			if ($newImage->isUploadedFile()) {
-				$im =new Image();
+				$im = new Image();
 				$id = $im->insert($newImage->getValue());
 				$this->setImage($id);
 			}
@@ -67,14 +80,16 @@ class Product extends DBRow {
 		$results = Database::singleton()->query_fetch_all($sql);
 		
 		foreach ($results as &$result) {
-			$result = Product::make($result['id'],'Product');
+			$result = DBRow::make($result['id'], 'Product');
 		}
 		
 		return $results;
 	}
 	
-	public static function searchProducts($params, $filter=true){//This function returns the products that belong to a category, product type, and/or supplier
+	public static function searchProducts($params, $filter=true, $from = null, $limit = null){//This function returns the products that belong to a category, product type, and/or supplier
 		$sql  = 'select `id` from ecomm_product where 1=1';
+		if (isset($params["onlyCount"]))
+			$sql  = 'select count(*) as product_cnt from ecomm_product where 1=1';
 		
 		if ($filter)
 			$sql .= " and status=1";
@@ -96,10 +111,17 @@ class Product extends DBRow {
 			elseif ($params["PriceOp"] == "between")
 				$sql .= ' and price >= "' . e($params["Price1"]) . '" and price <= "' . e($params["Price2"]) . '"';
 		}
+		if (isset($params["onlyCount"])){
+			$results = Database::singleton()->query_fetch($sql);
+			return $results["product_cnt"];
+		}
+		
 		$sql .= ' order by ecomm_product.name';
+		if ($from && $limit)
+			$sql .= " limit $from, $limit";
 		$results = Database::singleton()->query_fetch_all($sql);
 		foreach ($results as &$result) {
-			$result = Product::make($result['id'],'Product');
+			$result = DBRow::make($result['id'], 'Product');
 		}
 		
 		return $results;
@@ -119,12 +141,23 @@ class Product extends DBRow {
 		$sql .= ' order by ecomm_product.name';
 		$results = Database::singleton()->query_fetch_all($sql);
 		foreach ($results as &$result) {
-			$result = Product($result['id'],'Product');
+			$result = DBRow::make($result['id'], 'Product');
 		}
 		
 		return $results;
 	}
 	
+	/*
+	 * The following function is meant to be used for displaying some of the plugin data in tables, if necessary
+	 * However, if you can do whatever you want to do using plugins, it is better not to use this method
+	 */
+	public function getPluginProperty($pluginName, $propertyName){
+		require_once SITE_ROOT . '/modules/EComm/plugins/products/ECommProduct.php';
+		$ECommPlugins = new ECommProduct();
+		return $ECommPlugins->getPluginProperty($pluginName, $propertyName, $this);
+	}
+	
 	static function getQuickFormPrefix() {return 'product_';}
 }
 DBRow::init('Product');
+?>

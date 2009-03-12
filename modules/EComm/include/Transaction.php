@@ -20,41 +20,24 @@ class Transaction extends DBRow {
 			DBColumn::make('text', 'billing_postal', 'Billing Postal'), 
 			DBColumn::make('text', 'billing_province', 'Billing Province'), 
 			DBColumn::make('text', 'billing_country', 'Billing Country'), 
-			DBColumn::make('text', 'cost_subtotal', 'Sub Total'), 
-			DBColumn::make('text', 'cost_tax', 'Tax'), 
-			DBColumn::make('text', 'cost_shipping', 'Shipping Cost'), 
-			DBColumn::make('text', 'cost_total', 'Total'), 
+			DBColumn::make('float', 'cost_subtotal', 'Sub Total'), 
+			DBColumn::make('float', 'cost_tax', 'Tax'), 
+			DBColumn::make('float', 'cost_shipping', 'Shipping Cost'), 
+			DBColumn::make('float', 'cost_total', 'Total'), 
 			DBColumn::make('text', 'ip', 'IP Address'), 
 			DBColumn::make('text', 'shipping_class', 'Shipping Class'), 
 			DBColumn::make('text', 'payment_class', 'Payment Class'), 
 			DBColumn::make('text', 'created', 'Timestamp'),
-			DBColumn::make('textbox', 'delivery_instructions', 'Delivery Instructions'),
+			DBColumn::make('textarea', 'delivery_instructions', 'Delivery Instructions'),
 			DBColumn::make('text', 'status', 'Status'),
 		);
 		return new DBTable("ecomm_transaction", __CLASS__, $cols);
 	}
 	
-	//The following functions have to be overridden because we want to display only two numbers after the decimal
-	public function getCostSubtotal(){
-		return number_format($this->get("cost_subtotal"), 2);
-	}
-	
-	public function getCostTax(){
-		return number_format($this->get("cost_tax"), 2);
-	}
-	
-	public function getCostShipping(){
-		return number_format($this->get("cost_shipping"), 2);
-	}
-	
-	public function getCostTotal(){
-		return number_format($this->get("cost_total"), 2);
-	}
-	
 	public static function getTransactionBasedOnTID($tid){
 		$sql = 'select `id` from ecomm_transaction  where tid like "' . e($tid) . '"';
 		$result = Database::singleton()->query_fetch($sql);
-		$obj = Transaction::make($result['id'],'Transaction');
+		$obj = DBRow::make($result['id'], 'Transaction');
 		return $obj;
 	}
 	
@@ -71,10 +54,11 @@ class Transaction extends DBRow {
 		$results = Database::singleton()->query_fetch_all($sql);
 		
 		foreach ($results as &$result) {
-			$result = Transaction::make($result['id'],'Transaction');
+			$result = DBRow::make($result['id'], 'Transaction');
 		}
 		return $results;
 	}
 	static function getQuickFormPrefix() {return 'transaction_';}
 }
 DBRow::init('Transaction');
+?>

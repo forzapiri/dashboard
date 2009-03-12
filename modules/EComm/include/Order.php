@@ -21,16 +21,16 @@ class Order extends DBRow {
 			DBColumn::make('text', 'billing_postal', 'Billing Postal'), 
 			DBColumn::make('text', 'billing_province', 'Billing Province'), 
 			DBColumn::make('text', 'billing_country', 'Billing Country'), 
-			DBColumn::make('text', 'cost_subtotal', 'Sub Total'), 
-			DBColumn::make('text', 'cost_tax', 'Tax'), 
-			DBColumn::make('text', 'cost_shipping', 'Shipping Cost'), 
-			DBColumn::make('text', 'cost_total', 'Total'), 
+			DBColumn::make('float', 'cost_subtotal', 'Sub Total'), 
+			DBColumn::make('float', 'cost_tax', 'Tax'), 
+			DBColumn::make('float', 'cost_shipping', 'Shipping Cost'), 
+			DBColumn::make('float', 'cost_total', 'Total'), 
 			DBColumn::make('text', 'ip', 'IP Address'), 
 			DBColumn::make('text', 'shipping_class', 'Shipping Class'), 
 			DBColumn::make('text', 'payment_class', 'Payment Class'), 
 			DBColumn::make('text', 'created', 'Timestamp'),
-			DBColumn::make('textbox', 'delivery_instructions', 'Delivery Instructions'),
-			DBColumn::make('text', 'status', 'Status')
+			DBColumn::make('textarea', 'delivery_instructions', 'Delivery Instructions'),
+			DBColumn::make('text', 'status', 'Status'),
 		);
 		return new DBTable("ecomm_order", __CLASS__, $cols);
 	}
@@ -38,17 +38,18 @@ class Order extends DBRow {
 	public static function getAll($allOrders = false, $userId = null){
 		$sql = 'select `id` from ecomm_order where 1=1';
 		if (!$allOrders)
-			$sql .= ' and status like "Pending"';
+			$sql .= ' and status not like "Complete"';
 		if ($userId)
 			$sql .= ' and user = "' . e($userId) . '"';
 		$sql .= ' order by id desc';
 		$results = Database::singleton()->query_fetch_all($sql);
 		
 		foreach ($results as &$result) {
-			$result = Order::make($result['id'],'Order');
+			$result = DBRow::make($result['id'], 'Order');
 		}
 		return $results;
 	}
 	static function getQuickFormPrefix() {return 'order_';}
 }
 DBRow::init('Order');
+?>

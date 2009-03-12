@@ -1,7 +1,7 @@
 {if $msg}<center><h2>{$msg}</h2></center>{/if}
 {if $product}
 	<h2>Product: {$product->getName()}</h2>
-	<form method=POST action="/Store/Cart/&action=Add">
+	<form method=POST action="{$module->getModulePrefix()}Cart/&action=Add">
 		<input type="hidden" name="productId" value="{$product->getId()}">
 		<input type="hidden" name="returnURL" value="{$returnURL}">
 		<div class="CellInfo">

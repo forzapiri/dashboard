@@ -1,4 +1,4 @@
-<form method="POST" action="/Store/Search/">
+<form method="POST" action="{$module->getModulePrefix()}Search/">
 	<input type="hidden" name="action" value="Advanced">
 	<div class="OneRow">
 		<div class="Label">Product Name</div>
@@ -51,7 +51,7 @@
 		</div>
 	</div>
 	<input type="submit" name="btnSubmit" value="Search">
-	<a href="/Store/Search&action=Simple">Simple Search</a>
+	<a href="{$module->getModulePrefix()}Search&action=Simple">Simple Search</a>
 </form>
 {if $btnSubmit}
 	{include file="SearchResults.tpl"}

@@ -287,14 +287,14 @@ class Page extends defaultPageActs {
 			$where = ' where ';
 			$prefix = call_user_func(array($this->link[$pointer][1][0], 'quickformPrefix'));
 			if (isset($_REQUEST[$prefix . $this->link[$pointer][1][1]])) {
-				$where .= $this->link[$pointer][0] . '=?'; //. $_REQUEST[$prefix . $this->link[$pointer][1][1]];
+				$where .= $this->link[$pointer][0] . '=' . (int)e($_REQUEST[$prefix . $this->link[$pointer][1][1]]);
 			} else if (!isset($_REQUEST[call_user_func(array($this->pointer, 'quickformPrefix')) . 'id'])) {
 				$prefix = call_user_func(array($pointer, 'quickformPrefix'));
-				$where .= $this->link[$pointer][0] . '=?'; // . $_REQUEST[$prefix . $this->link[$pointer][0]];
+				$where .= $this->link[$pointer][0] . '=' . e($_REQUEST[$prefix . $this->link[$pointer][0]]);
 			} else {
 				$prefix = call_user_func(array($this->pointer, 'quickformPrefix'));
 				$n = DBRow::make($_REQUEST[$prefix . 'id'], $pointer);
-				$where .= $this->link[$pointer][0] . '=?'; // . $n->get($this->link[$pointer][0]);
+				$where .= $this->link[$pointer][0] . '=' . e($n->get($this->link[$pointer][0]));
 			}
 			
 		}

@@ -18,22 +18,22 @@ class UserDetails extends DBRow {
 		$sql = 'select `id` from ecomm_user_details where user = "' . e($userId) . '"';
 		$result = Database::singleton()->query_fetch($sql);
 		if (!@$result['id']){
-			$obj = UserDetails::make(null,'UserDetails');
+			$obj = DBRow::make('', 'UserDetails');
 			$obj->setUser($userId);
 			$obj->save();
 		}
 		else{
-			$obj = UserDetails::make($result['id'],'UserDetails');
+			$obj = DBRow::make($result['id'], 'UserDetails');
 		}
 		return $obj;
 	}
 	
 	public function getAddress($type){
 		if ($type == "billing_address"){
-			$add = Address::make($this->getBillingAddress(),'Address');
+			$add = DBRow::make($this->getBillingAddress(), 'Address');
 		}
 		else{//$type is shipping_address
-			$add = Address::make($this->getShippingAddress(),'Address');
+			$add = DBRow::make($this->getShippingAddress(), 'Address');
 		}
 		return $add;
 	}
@@ -50,3 +50,4 @@ class UserDetails extends DBRow {
 	static function getQuickFormPrefix() {return 'userdetails_';}
 }
 DBRow::init('UserDetails');
+?>

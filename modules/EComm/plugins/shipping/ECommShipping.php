@@ -89,7 +89,8 @@ class ECommShipping{
 		return "This plugin does not have any admin interface";
 	}
 }
-foreach(SiteConfig::get("EComm::shippingPlugins") as $plugin){
-	ECommShipping::init($plugin);
-}
+ECommShipping::init("CanadaPost");
+ECommShipping::init("FedEx",false);
+ECommShipping::init("NewMethod",false);
+ECommShipping::init("EAndA",false);
 ?>

@@ -11,5 +11,5 @@
 		{$group->getDetails()}
 	</div>
 </div>
-<a href="/Store/Supplier">Back to suppliers</a>
+<a href="{$module->getModulePrefix()}Supplier">Back to suppliers</a>
 <br style="clear:both;"/>

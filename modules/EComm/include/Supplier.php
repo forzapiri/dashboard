@@ -52,7 +52,7 @@ class Supplier extends DBRow {
 		$results = Database::singleton()->query_fetch_all($sql);
 		
 		foreach ($results as &$result) {
-			$result = Supplier::make($result['id'],'Supplier');
+			$result = DBRow::make($result['id'], 'Supplier');
 		}
 		
 		return $results;
@@ -60,3 +60,4 @@ class Supplier extends DBRow {
 	static function getQuickFormPrefix() {return 'supplier_';}
 }
 DBRow::init('Supplier');
+?>

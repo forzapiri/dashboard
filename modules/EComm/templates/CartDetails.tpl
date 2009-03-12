@@ -16,8 +16,8 @@ Here are the items in your cart:<br/>
 		{math equation="x * y" x=$productPrice y=$quantity assign=totalProductPrice}
 		<tr id="row_{$cartProduct->getId()}" name="row_{$cartProduct->getId()}">
 			<td><a href="javascript:removeProductFromCart({$cartProduct->getId()})"><img border=0 src="/modules/EComm/images/delete.gif"></a></td>
-			<td><a href="/Store/Cart/&action=displayCartProduct&cartItemId={$cartProduct->getId()}&returnURL={$page}">{$product->getName()}</a></td>
-			<td>{*<img src="/images/image.php?id={$product->getImage()}&cliph=40">*}</td>
+			<td><a href="{$module->getModulePrefix()}Cart/&action=displayCartProduct&cartItemId={$cartProduct->getId()}&returnURL={$page}">{$product->getName()}</a></td>
+			<td><img src="/images/image.php?id={$product->getImage()}&cliph=40"></td>
 			<td>{$quantity}</td>
 			<td>{$CurrencySign} {$productPrice|string_format:"%.2f"}</td>
 			<td>{$CurrencySign} {$totalProductPrice|string_format:"%.2f"}</td>

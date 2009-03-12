@@ -35,7 +35,7 @@ class TaxClass extends DBRow {
 		$results = Database::singleton()->query_fetch_all($sql);
 		
 		foreach ($results as &$result) {
-			$result = TaxClass::make($result['id'],'TaxClass');
+			$result = DBRow::make($result['id'], 'TaxClass');
 		}
 		
 		return $results;
@@ -55,3 +55,4 @@ class TaxClass extends DBRow {
 	static function getQuickFormPrefix() {return 'taxclass_';}
 }
 DBRow::init('TaxClass');
+?>

@@ -52,7 +52,7 @@ class ProductType extends DBRow {
 		$results = Database::singleton()->query_fetch_all($sql);
 		
 		foreach ($results as &$result) {
-			$result = ProductType::make($result['id'],'ProductType');
+			$result = DBRow::make($result['id'], 'ProductType');
 		}
 		
 		return $results;
@@ -60,3 +60,4 @@ class ProductType extends DBRow {
 	static function getQuickFormPrefix() {return 'producttype_';}
 }
 DBRow::init('ProductType');
+?>

@@ -58,7 +58,8 @@ class ECommPayment{
 			return;
 		if (!isset(ECommPayment::$activePaymentPlugin[$className])){
 			require "$className.php";
-			ECommPayment::$activePaymentPlugin[$className] = new $className;
+			ECommPayment::$activePaymentPlugin[$className] = new $className();
+		}
 		//If this is the first plugin, make it the default one
 		if (count(ECommPayment::$activePaymentPlugin) == 1)
 			$isDefault = true;
@@ -76,8 +77,7 @@ class ECommPayment{
 		}
 	}
 }
-}
-foreach(SiteConfig::get("EComm::paymentPlugins") as $plugin){
-	ECommPayment::init($plugin);
-}
+ECommPayment::init("Paypal");
+ECommPayment::init("CreditCard",false);
+ECommPayment::init("NewPaymentMethod",false);
 ?>

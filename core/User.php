@@ -59,3 +59,4 @@ class User extends DBRow {
 	}
 }
 DBRow::init('User');
+?>

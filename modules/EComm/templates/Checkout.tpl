@@ -10,13 +10,13 @@ Check out as user: {$username}<br/>
 	{include file="Address.tpl" address=$userDetails->getAddress('billing_address') adr_type="billing_address"}
 </div>
 
-{if $displayShipping}
 <h1>Shipping Address</h1>
 <div id="shipping_address">
 	{include file="Address.tpl" address=$userDetails->getAddress('shipping_address') adr_type="shipping_address"}
 </div>
 
 <h1>Shipping Class</h1>
+<div id="shipping_class">
 	{assign var="shipping_plugins" value=$shippingClass->getActivePluginIDs()}
 	<div id="shippingClassSelect">
 		<select id="shipping_option" name="shipping_option" onChange="javascript:changeShippingClass();">
@@ -27,11 +27,11 @@ Check out as user: {$username}<br/>
 	</div>
 	<div id="shippingClassDetails">{$shippingClassDetails}</div>
 </div>
+
 <h1>Delivery Directions:</h1>
 <div id="delivery_directions">
 	<textarea id="delivery_direction_textarea" cols="50" rows="10"></textarea>
 </div>
-{/if}
 
 <h1>Payment Information</h1>
 <div id="payment_class">

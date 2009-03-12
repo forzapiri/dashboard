@@ -26,10 +26,11 @@ class OrderComment extends DBRow {
 		$results = Database::singleton()->query_fetch_all($sql);
 		
 		foreach ($results as &$result) {
-			$result = OrderComment::make($result['id'],'OrderComment');
+			$result = DBRow::make($result['id'], 'OrderComment');
 		}
 		return $results;
 	}
 	static function getQuickFormPrefix() {return 'ordercomment_';}
 }
 DBRow::init('OrderComment');
+?>

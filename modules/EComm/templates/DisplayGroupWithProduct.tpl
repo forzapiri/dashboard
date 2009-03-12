@@ -1,7 +1,7 @@
-{assign var="returnURL" value="/Store"}
+{assign var="returnURL" value=$module->getModulePrefix()}
 {if $group}
 	{assign var="secId" value=$group->getId()}
-	{assign var="returnURL" value="/Store/$section/$secId"}
+	{assign var="returnURL" value="$returnURL$section/$secId"}
 {/if}
 
 {if $group && $section=="Category"}

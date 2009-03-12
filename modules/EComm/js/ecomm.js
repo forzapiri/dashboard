@@ -1,3 +1,7 @@
+function getModulePrefix(){
+	return "/Store/";
+}
+
 function expandTree(id, action){
 	//First, change the text of the hyper link from (+) to (-)
 	//Also, change the URL from expandTree to collapseTree
@@ -5,7 +9,7 @@ function expandTree(id, action){
 	document.getElementById('group_' + id).href="javascript:collapseTree(" + id + ", '" + action + "')";
 	
 	var subGroupsDiv = $('children_' + id); 
-	new Ajax.Request('/Store/Tree/' + id + '&action=' + action, {
+	new Ajax.Request(getModulePrefix() + 'Tree/' + id + '&action=' + action, {
 		method: 'post',
 		parameters: { },
 		onComplete: function(transport) {
@@ -28,7 +32,7 @@ function displayProducts(id, action){
 	if (action == "Category")
 		expandTree(id, action);
 	var productsDiv = $('TreeProducts'); 
-	st = "/Store/" + action + "/" + id;
+	st = getModulePrefix() + action + "/" + id;
 	new Ajax.Request(st, {
 		method: 'post',
 		parameters: { },
@@ -40,7 +44,7 @@ function displayProducts(id, action){
 
 function removeProductFromCart(id){
 	if (confirm('Are you sure you want to remove this product from your shopping cart?')){
-		new Ajax.Request('/Store/Cart/&action=Delete&id=' + id, {
+		new Ajax.Request(getModulePrefix() + 'Cart/&action=Delete&id=' + id, {
 			method: 'get',
 			parameters: { },
 			onComplete: function(transport) {
@@ -61,7 +65,7 @@ function getCartInfo(){
 	if(document.getElementById('cartDetailsSubTotal') == null){
 		return;
 	}
-	new Ajax.Request('/Store/Cart/&action=Details', {
+	new Ajax.Request(getModulePrefix() + 'Cart/&action=Details', {
 		method: 'get',
 		parameters: { },
 		onComplete: function(transport) {
@@ -79,7 +83,7 @@ function getCartInfo(){
 function addressEdit( element) {
 	var section = element;
 	var element = $(element);
-	return new Ajax.Request('/Store/Cart/&action=Address', {
+	return new Ajax.Request(getModulePrefix() + 'Cart/&action=Address', {
 		method: 'post',
 		parameters: { 'adr_type': section},
 		onSuccess: function(transport) {
@@ -103,7 +107,7 @@ function addressEdit( element) {
 function changeShippingClass(){
 	var details = $('shippingClassDetails');
 	shippingClass = document.getElementById("shipping_option").options[document.getElementById("shipping_option").selectedIndex].value;
-	new Ajax.Request('/Store/Cart/&action=ShippingChange', {
+	new Ajax.Request(getModulePrefix() + 'Cart/&action=ShippingChange', {
 		method: 'post',
 		parameters: { 'shippingClass': shippingClass},
 		onComplete: function(transport) {
@@ -118,7 +122,7 @@ function changePaymentClass(submitForm){
 	var details = $('paymentClassDetails');
 	var form = $('payment_form');
 	paymentClass = document.getElementById("payment_option").options[document.getElementById("payment_option").selectedIndex].value;
-	new Ajax.Request('/Store/Cart/&action=PaymentChange', {
+	new Ajax.Request(getModulePrefix() + 'Cart/&action=PaymentChange', {
 		method: 'post',
 		parameters: { 'paymentClass': paymentClass},
 		onComplete: function(transport) {
@@ -134,7 +138,7 @@ function changePaymentClass(submitForm){
 function checkBeforePayment(){
 	var deliveryInstructions = document.getElementById('delivery_direction_textarea').value;
 	//Make sure all the information is consistent before proceeding to payment
-	new Ajax.Request('/Store/Cart/&action=CheckBeforePayment', {
+	new Ajax.Request(getModulePrefix() + 'Cart/&action=CheckBeforePayment', {
 		method: 'post',
 		parameters: { 'deliveryInstructions': deliveryInstructions},
 		onComplete: function(transport) {

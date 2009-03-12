@@ -24,7 +24,7 @@ class PaypalIPN extends DBRow {
 		$results = Database::singleton()->query_fetch_all($sql);
 		
 		foreach ($results as &$result) {
-			$result = PaypalIPN::make($result['id'],'PaypalIPN');
+			$result = DBRow::make($result['id'], 'PaypalIPN');
 		}
 		return $results;
 	}
@@ -32,3 +32,4 @@ class PaypalIPN extends DBRow {
 	static function getQuickFormPrefix() {return 'paypalipn_';}
 }
 DBRow::init('PaypalIPN');
+?>

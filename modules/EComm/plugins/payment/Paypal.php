@@ -5,14 +5,13 @@ class Paypal extends ECommPayment{
 	
 	public function __construct(){
 		$this->paymentName = "Paypal";
-		$this->paymentDetails = "PayPal is the safer, easier way to make an online payment or set up a merchant account.<br/>
-								 Paypal is the answer";
+		$this->paymentDetails = "Using Paypal, you can pay using a paypal account or credit card";
 		$this->hostName = SiteConfig::get('EComm::PaypalHostName');
 		$this->accountEmail = SiteConfig::get('EComm::PaypalBusinessEmailAddress');
 	}
 
 	public function getPaymentForm(){
-		$form = new Form('payment_form', 'payment_form', '/Store/Payment');
+		$form = new Form('payment_form', 'payment_form', Module_EComm::getModulePrefix() . 'Payment');
 		$paypalHost = 'https://' . $this->hostName . '/cgi-bin/webscr';
 		$form->updateAttributes(array( 'action' => $paypalHost));
 		$form->updateAttributes(array( 'onSubmit' => "return checkBeforePayment()"));
@@ -40,7 +39,7 @@ class Paypal extends ECommPayment{
 			$form->setConstants( array ( 'business' => $this->accountEmail ) );
 			$form->addElement( 'hidden', 'business' );
 			
-			$form->setConstants( array ( 'return' => "http://" . $_SERVER['HTTP_HOST'] . "/Store/IPN/&action=OrderComplete&tid=$tid" ) );
+			$form->setConstants( array ( 'return' => "http://" . $_SERVER['HTTP_HOST'] . Module_EComm::getModulePrefix() . "IPN/&action=OrderComplete&tid=$tid" ) );
 			$form->addElement( 'hidden', 'return' );
 			
 			$cartDetails = Module_EComm::getCartDetails($sessionId, $cartItems);
@@ -105,7 +104,7 @@ class Paypal extends ECommPayment{
 		$header .= "Content-Type: application/x-www-form-urlencoded\r\n";
 		$header .= "Content-Length: " . strlen($req) . "\r\n\r\n";
 		$fp = fsockopen("ssl://" . $this->hostName, 443, $errno, $errstr, 15);
-		$paypalIPN = new PaypalIPN();
+		$paypalIPN = DBRow::make('', 'PaypalIPN');
 		if (!$fp) {
 			$paypalIPN->setMemo("HTTP ERROR. $errstr $errno. There was an issue processing your request. Please contact a system administrator.");
 			$result = false;

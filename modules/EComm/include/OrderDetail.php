@@ -22,10 +22,21 @@ class OrderDetail extends DBRow {
 		$results = Database::singleton()->query_fetch_all($sql);
 		
 		foreach ($results as &$result) {
-			$result = OrderDetail::make($result['id'],'OrderDetail');
+			$result = DBRow::make($result['id'], 'OrderDetail');
 		}
 		return $results;
 	}
+	
+	public function getProductPluginInfo(){
+		require_once SITE_ROOT . '/modules/EComm/plugins/products/ECommProduct.php';
+		$hookResults = ECommProduct::adminPluginHooks("BeforeDisplayOrder", $this);
+		$result = "";
+		foreach ($hookResults as $pluginResult)
+			$result .= $pluginResult["HTML"];
+		return $result;
+	}
+	
 	static function getQuickFormPrefix() {return 'orderdetail_';}
 }
 DBRow::init('OrderDetail');
+?>
