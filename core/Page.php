@@ -411,7 +411,7 @@ class Page extends defaultPageActs {
 			}
 		}
 		if (!$this->user->hasPerm($this->pointer, 'view')) {
-			return $html . $this->error('view');
+			return $html . $this->error('this user has no permissions to view this');
 		}
 		
 		if (isset($this->pre[$this->pointer]) || count($items) == 0) {
