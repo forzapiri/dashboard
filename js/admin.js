@@ -54,7 +54,7 @@ var Message = Class.create({
 var NorexUI = Class.create(Facebox, {
 	
 	initialize: function($super) {
-		$super();
+		//$super();
 		this.updateEvents();
 	},
 	
@@ -180,7 +180,7 @@ var NorexUI = Class.create(Facebox, {
 		});
 	},
 	createDone: function(item) {
-		result=window.frames["filetarget"].document.body.innerHTML;
+		result=document.getElementById('filetarget').contentDocument.body.innerHTML;
 		val = result.evalJSON();
 			var all = val.all;
 			
@@ -205,12 +205,10 @@ var NorexUI = Class.create(Facebox, {
 				i++;
 			});
 			ui.close();
-			$('filetarget').remove();
 	},
 	
 	createHandler: function(item, type) {
 		if ($F(item) != 'new') return;
-		
 		new Ajax.Request('/admin/DMS', {
 			method: 'post',
 			parameters: { 'X-CreateClass': type },
@@ -218,14 +216,19 @@ var NorexUI = Class.create(Facebox, {
 				ui.loading();
 				ui.reveal(transport.responseText);
 				
-				var displaybox = $$('div#facebox div.content')[0]; 
+				var displaybox = $('facebox').down('div.content'); //$$('div#facebox div.content')[0];
 				var form = displaybox.down('form');
 				
-				var iframe = Builder.node('iframe', {name: 'filetarget', id: 'filetarget'});
+				if (!$('filetarget')) {
+					var iframe = Builder.node('iframe', {name: 'filetarget', id: 'filetarget'});
+				} else {
+					var iframe = $('filetarget');
+				}
 				
 				iframe.hide();
 				displaybox.appendChild(iframe);
 				form.target = iframe.name;
+				
 				
 				$(form).observe('submit', function(event){
 					iframe.onload = function() {
