@@ -1,6 +1,6 @@
 <?php
 
-class analytics extends DBRow {
+class Analytics extends DBRow {
 	function createTable() {
 		
 		$cols = array(
@@ -30,4 +30,4 @@ class analytics extends DBRow {
 		}
 	}
 }
-DBRow::init('analytics');
+DBRow::init('Analytics');

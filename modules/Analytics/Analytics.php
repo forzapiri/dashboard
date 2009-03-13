@@ -23,7 +23,7 @@ class Module_Analytics extends Module {
 	
 	public function __construct() {
 		$this->page = new Page();
-		$this->page->with('analytics')
+		$this->page->with('Analytics')
 			 ->show(array(
 					'Code' => 'content',
 					'Last Updated' => 'timestamp',
@@ -31,7 +31,7 @@ class Module_Analytics extends Module {
 			 ->name('Analytics Script')
 			 ->showCreate(false);
 			 
-		$this->page->with('analytics'); 
+		$this->page->with('Analytics'); 
 	}
 
 	function getAdminInterface() {
