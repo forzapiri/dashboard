@@ -276,7 +276,7 @@ class Page extends defaultPageActs {
 		}
 		if (isset($this->filter[$pointer])) {
 			if (!is_array($this->filter[$pointer])) {
-				$where .= $this->filter[$pointer];
+				$where .= ' ' . $this->filter[$pointer];
 			}
 		}
 		
