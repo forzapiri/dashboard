@@ -43,6 +43,7 @@ CREATE TABLE `calendar_events` (
   PRIMARY KEY  (`id`),
   KEY `event_owner` (`event_owner`),
   KEY `event_start` (`event_start`),
+  KEY `event_end` (`event_end`),
   FULLTEXT KEY `event_description` (`event_description`)
 ) ENGINE=MyISAM AUTO_INCREMENT=72 DEFAULT CHARSET=latin1;
 

@@ -32,7 +32,7 @@ CREATE TABLE `menu` (
   `menuid` int(11) default NULL,
   PRIMARY KEY  (`id`),
   KEY `parentid` (`parentid`),
-  KEY `sort` (`sort`)
+  KEY `menuid` (`menuid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=57 DEFAULT CHARSET=utf8;
 
 --

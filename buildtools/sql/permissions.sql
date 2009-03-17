@@ -2,12 +2,14 @@ DROP TABLE IF EXISTS `permissions`;
 
 CREATE TABLE `permissions` (
   `id` int(10) unsigned NOT NULL auto_increment,
-  `key` text,
-  `class` text,
-  `name` text,
-  `description` text,
+  `key` varchar(100),
+  `class` varchar(100),
+  `name` varchar(100),
+  `description` varchar(256),
   `group_id` int(11) default NULL,
   `status` tinyint(1) default NULL,
+  KEY `class` (`class`),
+  KEY `group_id` (`group_id`),
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
