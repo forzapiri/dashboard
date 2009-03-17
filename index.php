@@ -34,7 +34,7 @@ if (! (SiteConfig::norex() // If the site isn't live, usually show an error page
 }
 
 if (@!isset($_REQUEST['module'])) {
-	$_REQUEST['module'] = 'Content';
+	$_REQUEST['module'] = SiteConfig::get('defaultModule');
 }
 
 if(ucfirst($_REQUEST['module']) == 'Content' && @empty($_REQUEST['page'])){
