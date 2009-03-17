@@ -1,0 +1,1 @@
+iNSERT INTO `templates` (`module`, `path`, `data`, `timestamp`, `id`, `name`) VALUES ('CMS','splash.tpl','',NULL,NULL,'Splash Page');
