@@ -76,7 +76,8 @@ class ChunkManager {
 			} else {
 				$value = $this->previews[$i];
 			}
-			$el = $field->addElementTo(array ('form' => $form, 'id' => "_chunk_$i", 'value' => $value));
+			$formValue = DBRow::toForm($chunk->getType(), $value);
+			$el = $field->addElementTo(array ('form' => $form, 'id' => "_chunk_$i", 'value' => $formValue));
 			$field->setLabel($label);
 		}
 		return ++$i; // Returns the number of form fields which were added

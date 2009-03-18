@@ -15,7 +15,7 @@ class DBFileUpload extends DBColumn {
 	function addElementTo($args) {
 		$value = '';
 		extract($args);
-		$label = $this->label() . ($value ? " (currently " . $value->getFilename() . ")": "");
+        $label = $this->label() . ($value ? " (currently $value)": "");
 		$el = $form->addElement ('file', $id, $label);
 		return $el;
 	}
@@ -30,7 +30,7 @@ class DBFileUpload extends DBColumn {
 	}
 	static function fromDB($obj) {return File::make($obj);}
 	static function toDB($obj) {return $obj ? $obj->getId() : null;}
-	static function toForm($obj) {return "JOE";}
+    static function toForm($obj) {return $obj->getFilename();}
 	function suggestedMysql() {return "int(11)";}
 }
 
