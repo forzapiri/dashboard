@@ -363,6 +363,27 @@ class DBColumnCode extends DBColumn{
 		return $el;
 	}
 }
+
+class DBCaptcha extends DBColumn {
+	function type() {return 'captcha';}
+	function ignored() {return true;}
+	function addElementTo($args) {
+		require_once(SITE_ROOT . '/core/captchalib/securimage.php');
+		$value = null;
+		extract ($args);
+		$label = $this->label();
+		$el = $form->addElement ('captcha', $id, $label);
+		$form->addRule($id, 'CAPTCHA Required', 'required', "", 'client');
+		
+		$captcha = new Securimage();
+		
+		$form->registerRule('checkcaptcha', 'callback', 'check', $captcha);
+		$form->addRule($id, 'CAPTCHA is incorrect', 'checkcaptcha');
+		
+		$el->setValue($value);
+		return $el;
+	}
+}
 /* ----------------------------- PUT NEW CLASSES ABOVE THIS LINE! ---------------------- */
 DBColumn::registerClasses();
 /* ------------------------------------------------------------------------------------- */
