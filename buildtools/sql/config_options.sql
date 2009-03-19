@@ -53,8 +53,8 @@ INSERT INTO `config_options` VALUES
 (13,'Menu','numberWithSubmenus','Number of main menus which have submenus','int','1',0,'0'),
 (14,'Menu','templates','Templates which are selectable by the Client','list','menu_rendertop',0,'0'),
 (15,NULL,'modules','Active modules in display order','list','Content, Menu, User, Block, Analytics',0,'0'),
-(16,NULL,'cachedModules','Modules that should use caching layer','list','Content',0,'0');
-(17,NULL,'defaultModule','Default Module loaded when none specified(eg /)','string','Content','0','1');
+(16,NULL,'cachedModules','Modules that should use caching layer','list','Content',0,'0'),
+(17,NULL,'defaultModule','Default Module loaded when none specified(eg /)','string','Content','0','1'),
 (18,NULL,'live','Set true to make site live','enum(live,)','',0,'0');
 /*!40000 ALTER TABLE `config_options` ENABLE KEYS */;
 UNLOCK TABLES;
