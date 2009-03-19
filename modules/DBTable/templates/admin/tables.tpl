@@ -68,7 +68,7 @@
 		<td>{$column->getModifier()}</td>
 		<td class="actions">
 		{if ($column->getName() != 'id')}
-		<form action="/admin/DBTable" method="post" onsubmit="return !thickboxAddEdit(this);" style="float: left;">
+		<form action="/admin/DBTable" method="post" class="norexui_addedit" style="float: left;">
 			<input type="hidden" name="action" value="addedit" />
 			<input type="hidden" name="id" value="{$column->getId()}" />
 			<input type="image" src="/images/admin/pencil.gif" />
