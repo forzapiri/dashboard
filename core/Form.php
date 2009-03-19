@@ -17,6 +17,7 @@ HTML_Quickform::registerElementType('fckeditor', 'HTML_Quickform_fckeditor.php',
 HTML_Quickform::registerElementType('tinymce', 'HTML_Quickform_tinymce.php', 'HTML_Quickform_tinymce');
 HTML_Quickform::registerElementType('swfchart', 'HTML_Quickform_swfchart.php', 'HTML_Quickform_swfchart');
 HTML_Quickform::registerElementType('dbimage', 'HTML_Quickform_dbimage.php', 'HTML_Quickform_dbimage');
+HTML_Quickform::registerElementType('captcha', 'HTML_Quickform_captcha.php', 'HTML_Quickform_captcha');
 
 /**
  * Create object oriented Forms
