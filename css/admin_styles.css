@@ -372,3 +372,9 @@ div#left_menu ul li ul {
 float:left;
 clear:left;
 }
+
+span.error {
+	border: none;
+	padding: 0;
+	margin: 0;
+}
