@@ -11,7 +11,7 @@ class HTML_QuickForm_captcha extends HTML_QuickForm_static {
     }
     
     function toHtml() {
-    	$string = '<img src="/images/securimage_show.php" alt="' . $this->getLabel() . '" /><br />';
+    	$string = '<img src="/images/securimage_show.php?tid=' . date('U') . '" alt="' . $this->getLabel() . '" /><br />';
     	$string .= '<input type="text" name="' . $this->getName() . '" />';
     	return $string;
     }
