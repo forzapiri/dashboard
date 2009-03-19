@@ -96,6 +96,14 @@ class SiteConfigLongstringType extends SiteConfigType {
 }
 SiteConfigType::register(new SiteConfigLongstringType());
 /*  ----------------------------------------------------------- */
+class SiteConfigTinyMCEType extends SiteConfigType {
+	function _getName() {return 'tinymce';}
+	function _setFormField ($form, $config) {
+		$form->addElement('tinymce', 'siteconfig_value', SiteConfig::norex() ? 'Value' : '');
+	}
+}
+SiteConfigType::register(new SiteConfigTinyMCEType());
+/*  ----------------------------------------------------------- */
 class SiteConfigListType extends SiteConfigType {
 	function _getName() {return 'list';}
 	function _getValue($val) {
