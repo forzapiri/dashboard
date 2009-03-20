@@ -76,7 +76,7 @@ class ChunkManager {
 			} else {
 				$value = $this->previews[$i];
 			}
-			$formValue = DBRow::toForm($chunk->getType(), $value);
+			$formValue = DBRow::toForm($field->type(), $value);
 			$el = $field->addElementTo(array ('form' => $form, 'id' => "_chunk_$i", 'value' => $formValue));
 			$field->setLabel($label);
 		}
