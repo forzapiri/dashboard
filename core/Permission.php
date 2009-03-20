@@ -28,17 +28,8 @@ class Permission extends DBRow {
 
 	static private $warned = false;
 	static function hasPerm($group, $class, $key) {
-		$perm = self::getAll('where group_id=? and class=? and `key`=? and status=1', 'iss',
-							 $group, $class, $key);
-		if ($perm) {
-			return true;
-		} else if (SiteConfig::norex()) {
-			if (!self::$warned) {
-				trigger_error ("Warning: norex() circumventing non-existent permission $group $class $key (limit of one such warning given)");
-				self::$warned = true;
-			}
-			return true;
-		} else return false;
+		return !!self::getAll('where group_id=? and class=? and `key`=? and status=1', 'iss',
+							  $group, $class, $key);
 	}
 
 	function quickformPrefix() {return 'permissions_';}
