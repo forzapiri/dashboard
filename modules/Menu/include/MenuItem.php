@@ -63,18 +63,28 @@ class MenuItem extends DBRow {
 			$options[] = $linkable;
 			$form->getElement($this->quickformPrefix() . 'module')->addOption($linkable, $linkable);
 		}
+		$form->getElement($this->quickformPrefix() . 'module')->addOption('Web Link', 'Web Link');
 		
 		if ($this->getModule() == null) $this->setModule('Content');
 		
-		$module = Module::factory($this->getModule());
-		$linkables = @call_user_func(array($module, 'getLinkables'));
+		if ($this->get('module') != 'Web Link') {
 		
-		$el->_options = null;
-		if(count($linkables) > 0){
-			foreach ($linkables as $key => $itm) {
-				$el->addOption($itm, $key);
+			$module = Module::factory($this->getModule());
+			$linkables = @call_user_func(array($module, 'getLinkables'));
+			
+			$el->_options = null;
+			if(count($linkables) > 0){
+				foreach ($linkables as $key => $itm) {
+					$el->addOption($itm, $key);
+				}
 			}
+		} else {
+			$form->removeElement($this->quickformPrefix() . 'link');
+			$newlink = $form->createElement('text', $this->quickformPrefix() . 'link', 'Link To');
+			$newlink->setValue($this->get('link'));
+			$form->insertElementBefore($newlink, $this->quickformPrefix() . 'parentid');
 		}
+		
 		$menuid = $this->getMenuid();
 		 // TODO:  WHY ISN'T THIS SET ALREADY ON A CREATE MENU?
 		if (!$menuid) $menuid = $_REQUEST[$this->quickformPrefix() . 'menuid'];
@@ -102,6 +112,7 @@ class MenuItem extends DBRow {
 	}
 	
 	public function getLinkTarget() {
+		if ($this->get('module') == 'Web Link') return $this->get('link');
 		return Module::factory( $this->getModule() )->getLinkable( $this->get('link') );
 	}
 	

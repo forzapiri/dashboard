@@ -25,7 +25,18 @@ var menuitems = function(type) {
 			var opts = transport.responseText.evalJSON();
 			
 			menu.enable();
-
+			
+			if (opts == 'WEBLINK') {
+				var box = Builder.node('input', {type: 'text', name: 'menuitem_link', id: 'menuitem_link'});
+				
+				menu.id = 'old';
+				menu.name = 'old';
+				menu.hide();
+				
+				menu.insert({after: box});
+				return;
+			}
+			
 			var i = 0;
 			opts.each(function(el) {
 				var opt = new Option(el.value, el.key);

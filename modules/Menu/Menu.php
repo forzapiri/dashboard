@@ -52,6 +52,10 @@ class Module_Menu extends Module {
 						header('Content-type: application/javascript');
 						$obj = &Event_Dispatcher::getInstance('MenuItem')->post(&$this, 'linkables');
 
+						if ($_REQUEST['module'] == 'Web Link') {
+							return json_encode('WEBLINK');
+						}
+						
 						$module = Module::factory($_REQUEST['module']);
 						$links = @call_user_func(array($module, 'getLinkables'));
 						$result = array();
