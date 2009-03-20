@@ -28,8 +28,8 @@ class Permission extends DBRow {
 
 	static private $warned = false;
 	static function hasPerm($group, $class, $key) {
-		return !!self::getAll('where group_id=? and class=? and `key`=? and status=1', 'iss',
-							  $group, $class, $key);
+		return self::getAll('where group_id=? and class=? and `key`=? and status=1', 'iss',
+							$group, $class, $key);
 	}
 
 	function quickformPrefix() {return 'permissions_';}
