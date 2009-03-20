@@ -99,7 +99,6 @@ class Module_DBTable extends Module {
 			$col = null;
 			break;
 		case 'sort':
-			var_log ($_REQUEST);
 			foreach (getSerializedRequest() as $i => $j) {
 				$item = TableColumn::make($j);
 				$item->setSort($i);

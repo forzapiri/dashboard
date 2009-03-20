@@ -82,7 +82,9 @@
 		</td>
 		<td width="100">{$mysqltable->getType($column->getName())}</td>
 		<td valign="right" width="5">
-			{if ($column->suggestedMysql() && ($column->suggestedMysql() != $mysqltable->getType($column->getName())))}
+			{if    $column->getName() != 'id'
+			    && $column->suggestedMysql()
+			    && ($column->suggestedMysql() != $mysqltable->getType($column->getName()))}
 				<form action="/admin/DBTable" method="post" onsubmit="return !formSubmit(this);">
 				<input type="hidden" name="action" value="setType" />
 				<input type="hidden" name="table" value="{$table}" />
