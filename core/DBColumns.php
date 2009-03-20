@@ -304,8 +304,8 @@ class DBColumnDateTime extends DBColumnTimestamp {
 }
 
 class DBColumnEnum extends DBColumnSelect {
-	function __construct($name, $label, $modifier, $options) {
-		parent::__construct ($name, $label, $modifier, array_combine ($options, $options));
+	function __construct($name=null, $label=null, $modifier=null, $options=null) {
+		parent::__construct ($name, $label, $modifier, $options ? array_combine ($options, $options) : array());
 	}
 	function type() {return "enum";}
 	function suggestedMysql() {return "enum('" . implode("','", $this->options()) . "')";}
