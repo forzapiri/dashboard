@@ -34,7 +34,17 @@
  */
 
 class Module_SiteConfig extends Module {
+	public function __construct() {
+		parent::__construct();
+		$this->page = new Page();
+		$this->page->with('SiteConfig')
+			->show(array('Description' => 'description',
+						 'Value(s)' => 'value'))
+			->name('Site Configuration');
+		
+	}
 	
+
 	public $icon = '/modules/SiteConfig/images/cog.png';
 	
 	/**
@@ -66,7 +76,7 @@ class Module_SiteConfig extends Module {
 			break;
 		default:
 		}
-		$siteconfigs = SiteConfig::getAllSiteConfigs();
+		$siteconfigs = SiteConfig::getAll();
 		$this->smarty->assign('siteconfigs', $siteconfigs);
 		return $this->smarty->fetch( 'admin/siteconfigs.tpl' );
 	}

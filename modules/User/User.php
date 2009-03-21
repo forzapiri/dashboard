@@ -44,14 +44,7 @@ class Module_User extends Module {
 			 
 			 
 		$this->page->with('Permission')
-/*			 ->show(array(
-			 	'Group Name' => array('group_id', array('Group', 'getName')),
-			 	'Type of Object' => 'class',
-			 	'Name' => 'name',
-				'Status' => 'status',
-				))
-			 ->name('Permission')
-*/			 ->heading('Permission Management');
+			 ->heading('Permission Management');
 			 
 		$this->page->with('User');
 	}

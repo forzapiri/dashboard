@@ -270,10 +270,7 @@ class SiteConfig {
 		
 	}
 
-	/** 
-	 * Return an array of all existing objects of this type in the database
-	 */
-	public static function getAllSiteConfigs() {
+	public static function getAll() {
 		$sql = 'select * from config_options ' . (self::programmer() ? '' : 'where editable="1" ') . 'order by module, sort, name';
 		$results = Database::singleton()->query_fetch_all($sql);
 		foreach ($results as &$result) {

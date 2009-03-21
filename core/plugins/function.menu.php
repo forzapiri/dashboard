@@ -15,11 +15,9 @@
  * @param smarty Reference to the calling smarty class.
  */
 function smarty_function_menu($params, &$smarty) {
-	if ($params['admin']) {
-		return adminMenu($params, $smarty);
-	} else {
-		return frontendMenu($params, $smarty);
-	}
+	return ($params['admin'])
+		? adminMenu($params, $smarty)
+		: frontendMenu($params, $smarty);
 }
 
 function adminMenu($params, &$smarty) {

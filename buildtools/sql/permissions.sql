@@ -29,4 +29,7 @@ INSERT INTO `permissions` VALUES
 (13,'delete','ContentPage','Delete Content Pages','',1,1),
 (14,'view','MenuType','View Content Menus','',1,1),
 (15,'addedit','MenuType','Add / Edit Content Menus','',1,1),
-(16,'delete','MenuType','Delete Content Menus','',1,1);
+(16,'delete','MenuType','Delete Content Menus','',1,1),
+(17,'view','SiteConfig','View Site Configuration','',1,1),
+(18,'addedit','SiteConfig','Add / Edit Site Configuration','',1,1),
+(19,'delete','SiteConfig','Delete Site Configuration','',1,1);
