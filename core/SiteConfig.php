@@ -34,11 +34,20 @@ class SiteConfig {
 	public static function programmer($truth = false) {
 		if (!isset(self::$programmer)) {
 			$u = @$_SESSION['authenticated_user'];
-			self::$programmer = $u && $u->getUsername() == 'norex' && $u->getName() == 'Norex' && $u->getLastName() == 'Development';
+			if (!$u) return false;
+			if (!@$u->column('programmer')) {
+				User::logout(false);
+				echo 'Add column programmer to auth.<br/>
+  You have been logged out.<br/>
+    (1) Rerun auth.sql OR add a column named programmer paralleling the status column.<br/>
+    (2) Make the norex User a progarmmer.';
+				die();
+			}
+			self::$programmer = $u->getProgrammer();
 			$p = @$_SESSION['programmerAsAdmin'];
 			$_SESSION['programmerAsAdmin'] = isset($_REQUEST['siteconfigToggleProgrammer']) ? !$p: !!$p;
 		}
-		return $truth ? self::$programmer : !$_SESSION['programmerAsAdmin'];
+		return self::$programmer && ($truth || !$_SESSION['programmerAsAdmin']);
 	}
 
 	private static function load() {

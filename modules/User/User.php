@@ -169,15 +169,7 @@ class Module_User extends Module {
 				break;
 			
 			case 'logout':
-				unset($_SESSION['authenticated_user']);
-				$auth_container = DBRow::make(null,"User");
-				$auth = new Auth($auth_container, null, 'authInlineHTML');
-				$auth->logout();
-				
-				header('Location: /');
-				exit;
-				break;
-
+				User::logout();
 			default:
 				if(@$_SESSION['authenticated_user']){
 					$u =& $_SESSION['authenticated_user'];

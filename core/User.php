@@ -13,6 +13,7 @@ class User extends DBRow {
 			DBColumn::make('text', 'name', 'First Name'),
 			DBColumn::make('text', 'last_name', 'Last Name'),
 			DBColumn::make('!email', 'email', 'Email'),
+			DBColumn::make('//checkbox', 'programmer', 'Programmer'),
 			DBColumn::make('status', 'status', 'Status'),
 			);
 		return new DBTable("auth", __CLASS__, $cols);
@@ -57,6 +58,18 @@ class User extends DBRow {
 		}
 		return $array;
 	}
+
+	public static function logout($redirect = true) {
+		require_once(SITE_ROOT . '/core/PEAR/Auth.php');
+		unset($_SESSION['authenticated_user']);
+		$auth_container = DBRow::make(null,"User");
+		$auth = new Auth($auth_container, null, 'authInlineHTML');
+		$auth->logout();
+		if ($redirect) {
+			header('Location: /');
+			exit;
+		}
+	}		
 }
 DBRow::init('User');
 ?>
