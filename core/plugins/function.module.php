@@ -26,8 +26,7 @@ function smarty_function_module($params,&$smarty) {
 	}
 }
 
-/* Check to see if the module provides an admin interface, and if so returns
- * it.
+/* Check to see if the module provides an admin interface, and if so return it.
  */
 function adminInterface($params,&$smarty) {
 	if ($params['class'] == 'Dashboard') {

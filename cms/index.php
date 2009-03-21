@@ -40,7 +40,7 @@ if ($auth->checkAuth()) {
 	
 	// assign the requested module
 	$smarty->assign('module', $requestedModule);
-	$smarty->assign('norex', SiteConfig::norex());
+	$smarty->assign('programmer', SiteConfig::programmer());
 	
 	$config = Config::singleton();
 	foreach($config->getActiveModules() as $m) {
@@ -62,7 +62,8 @@ if ($auth->checkAuth()) {
 		if (!isset($_REQUEST['module'])) {
 			$requestedModule = 'Dashboard';
 			$smarty->assign ( 'module', $requestedModule );
-			$smarty->assign ( 'module_title', 'Dashboard' );
+			$tmp = SiteConfig::programmer() ? "Programmer" : "Admininistrator";
+			$smarty->assign ( 'module_title', "Dashboard - $tmp's View");
 		} else {
 			$smarty->content[$requestedModule] = Module::factory($requestedModule, $smarty)->getAdminInterface();
 			$smarty->assign ( 'module', $requestedModule );

@@ -26,7 +26,7 @@
  *  SiteConfig::set('DMS::option', $value)
  *  
  *  New options are added by explicitly editing the db table config_options 
- *    OR by viewing the admin page with NOREX on.
+ *    OR by viewing the admin page as a Programmer
  *  To add a new type, see examples in include/SiteConfigType.php
  * 
  *  Note that "sort" only suggests the sort order within a module.  The primary sort

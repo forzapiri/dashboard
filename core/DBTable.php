@@ -87,7 +87,7 @@ class DBTable {
 		$class = $this->classname;
 		$select = $count ? $this->count : $this->select;
 		if ($where && $code === null) {
-			$f = SiteConfig::norex() ? 'trigger_error' : 'error_log';
+			$f = SiteConfig::programmer() ? 'trigger_error' : 'error_log';
 			$f("$fname has been promoted to using prepared statements for the where clause\n"
 						   . "For example, $fname('where id=? and title=?', 'is', 23, 'Fun')");
 		}

@@ -26,7 +26,7 @@ if (isset($_REQUEST['username']) && isset($_REQUEST['password'])) {
 	$auth->start();
 }
 
-if (! (SiteConfig::norex() // If the site isn't live, usually show an error page.
+if (! (SiteConfig::programmer() // If the site isn't live, usually show an error page.
 	   || SiteConfig::get('live')
 	   || (@$_REQUEST['module'] == 'User' && @$_REQUEST['section'] == 'logout'))) {
 	$_REQUEST['module'] = "Content";
@@ -66,7 +66,7 @@ if ( $ajaxHelper->isAJAX () ){
 		$smarty->assign_by_ref ( 'user', $_SESSION['authenticated_user'] );
 	}
 	$cachedModules = SiteConfig::get('cachedModules');
-	if (!SiteConfig::norex() && in_array ($_REQUEST['module'], (array) $cachedModules)) {
+	if (!SiteConfig::programmer() && in_array ($_REQUEST['module'], (array) $cachedModules)) {
 			$result = $smarty->render ('db:site.tpl', $smarty->templateOverride, false);
 			$pageCache->save($result, CACHED_PAGE_INDEX);
 			echo $result;

@@ -29,14 +29,16 @@ class SiteConfig {
 	protected $value = null;
 	protected $sort = null;
 	protected $editable = null;
-	private static $norex;
+	private static $programmer;
 	private static $cache;
-	public static function norex() {
-		if (!isset(self::$norex)) {
+	public static function programmer($truth = false) {
+		if (!isset(self::$programmer)) {
 			$u = @$_SESSION['authenticated_user'];
-			self::$norex = $u && $u->getUsername() == 'norex' && $u->getName() == 'Norex' && $u->getLastName() == 'Development';
+			self::$programmer = $u && $u->getUsername() == 'norex' && $u->getName() == 'Norex' && $u->getLastName() == 'Development';
+			$p = @$_SESSION['programmerAsAdmin'];
+			$_SESSION['programmerAsAdmin'] = isset($_REQUEST['siteconfigToggleProgrammer']) ? !$p: !!$p;
 		}
-		return self::$norex;
+		return $truth ? self::$programmer : !$_SESSION['programmerAsAdmin'];
 	}
 
 	private static function load() {
@@ -201,7 +203,7 @@ class SiteConfig {
 
 	public function getAddEditForm($target = '/admin/SiteConfig') {
 		$form = new Form('SiteConfig_addedit', 'post', $target);
-		$norex = self::norex();
+		$programmer = self::programmer();
 		
 		$form->setConstants( array ( 'action' => 'addedit') );
 		$form->addElement( 'hidden', 'action' );
@@ -212,12 +214,12 @@ class SiteConfig {
 			// $defaultValues ['siteconfig_value'] = $this->getRawValue();
 			// $form->setDefaults( $defaultValues );
 		} else {
-			if (!$norex) {
+			if (!$programmer) {
 				error_log ("Attempt was made to create a new config option.");
 				die();
 			}
 		}
-		if (!$norex) {
+		if (!$programmer) {
 			$form->addElement('html', 'siteconfig_description', 'Description')->setValue($this->getDescription());
 			SiteConfigType::setFormField($form, $this);
 		} else {
@@ -232,7 +234,7 @@ class SiteConfig {
 		$form->getElement('siteconfig_value')->setValue(SiteConfigType::getDisplayString($this));
 		$form->addElement('submit', 'siteconfig_submit', 'Submit');
 		if ($form->validate() && $form->isSubmitted() && isset($_REQUEST['siteconfig_submit'])) {
-			if ($norex) {
+			if ($programmer) {
 				$this->setModule($form->exportValue('siteconfig_module'));
 				$this->setName($form->exportValue('siteconfig_name'));
 				$this->setDescription($form->exportValue('siteconfig_description'));
@@ -250,7 +252,7 @@ class SiteConfig {
 	 * Return an array of all existing objects of this type in the database
 	 */
 	public static function getAllSiteConfigs() {
-		$sql = 'select * from config_options ' . (self::norex() ? '' : 'where editable="1" ') . 'order by module, sort, name';
+		$sql = 'select * from config_options ' . (self::programmer() ? '' : 'where editable="1" ') . 'order by module, sort, name';
 		$results = Database::singleton()->query_fetch_all($sql);
 		foreach ($results as &$result) {
 		        $result = self::$cache[$result['id']];

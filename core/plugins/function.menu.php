@@ -23,13 +23,8 @@ function smarty_function_menu($params, &$smarty) {
 }
 
 function adminMenu($params, &$smarty) {
-	// Query for the items in reverse order to make it easier to build the menu string, since the last element
-	// is not CSS classed. It is impossible to determine if the current element will be the last active module
-	// providing an admin interface, so this is the best way to do it.
-	//$activeModules = array_reverse(Config::getActiveModules());
 	$activeModules = Config::getActiveModules();
-	
-	$initial = '<li class="borderRight' . (!isset($_REQUEST['module']) ? " active" : '') . '"><a href="/admin/" style="background-image: url(/images/admin/dashboard_active.png);">Dashboard</a></li>';
+	$initial = '<li class="borderRight' . (!isset($_REQUEST['module']) ? " active" : '') . '"><a href="/admin/" style="background-image: url(/images/admin/dashboard_active.png)">Dashboard</a></li>';
 	$adminItems = array($initial);
 	
 	$i = 0;
@@ -42,7 +37,7 @@ function adminMenu($params, &$smarty) {
 		$test = new ReflectionClass($blah);
 		
 		$moduleflag = false;
-		if (SiteConfig::norex())
+		if (SiteConfig::programmer())
 			$moduleflag = true;
 		else if ($blah->page) {
 			foreach ($blah->page->tables as $key => $table) {
@@ -76,12 +71,9 @@ function adminMenu($params, &$smarty) {
 			} else {
 				$liClass = ' class="' . $active . '"';
 			}
-			if (isset($blah->icon)) {
-				$extra = ' style="background-image: url(' . $blah->icon . ');"';
-			} else {
-				$extra = ' style="background-image: url(/modules/Content/images/application_edit.png);"';
-			}
-			
+			$extra = SiteConfig::programmer() && !$module['enabled'] ? " text-decoration: line-through;" : "";
+			$image = isset($blah->icon) ? $blah->icon : '/modules/Content/images/application_edit.png';
+			$extra = " style='background-image: url($image); $extra'";
 			if (isset($blah->page)) {
 				$text = '';
 				if (count($blah->page->heading) > 0) {
@@ -89,14 +81,14 @@ function adminMenu($params, &$smarty) {
 				}
 				$text .= '<a href="/admin/' . $module['module'] . '"' . @$extra . '>' . $module['display_name'] . '</a>';
 				if (count($blah->page->heading) > 0) {
-					$text .= '<ul' . (($module['module'] != $_REQUEST['module']) ? ' style="display: none;"' : '') . '>';
+					$text .= ' <ul' . (($module['module'] != $_REQUEST['module']) ? ' style="display: none;"' : '') . '>';
 					foreach ($blah->page->heading as $key => $heading) {
-						$text .= '<li' . (($_REQUEST['section'] == $key) ? ' class="active"' : '') . '><a href="/admin/' . 
+						$text .= "\n  <li" . (($_REQUEST['section'] == $key) ? ' class="active"' : '') . '><a href="/admin/' . 
 							$module['module'] . '&amp;section=' . $key . '">' . $heading .
 							' (' . $blah->page->getCount($key) . ')' .  
 							'</a></li>';
 					}
-					$text .= '</ul>';
+					$text .= "\n </ul>";
 				} else {
 					$text .= ' <strong>(' . $blah->page->getCount() . ')</strong>';
 				}
@@ -104,14 +96,16 @@ function adminMenu($params, &$smarty) {
 				$text = '<a href="/admin/' . $module['module'] . '"' . @$extra . '>' . $module['display_name'] . '</a>';
 			}
 			
-			$adminItems[] = '<li' . $liClass . '>' . $text  . '</li>';
+			$adminItems[] = "<li $liClass>$text</li>";
 		}
-		
+	}
+	if (SiteConfig::programmer(true)) {
+		$adminItems[] = "<li>&nbsp;</li>";
+		$text = "Switch View";
+		$adminItems[] = "<a href='/admin?siteconfigToggleProgrammer'><li>$text</li></a>";
 	}
 	
-	$menuString = '<ul>';
-	$menuString .= implode(null, $adminItems);
-	$menuString .= '</ul>';
+	$menuString = "<ul>\n" . implode("\n", $adminItems) . "\n</ul>\n";
 	
 	return $menuString;
 }
