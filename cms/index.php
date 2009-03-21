@@ -20,6 +20,8 @@ $auth_container = new CMSAuthContainer();
 $auth = new Auth($auth_container, null, 'authHTML');
 $auth->start();
 
+SiteConfig::warnInstall();
+
 if ($auth->checkAuth()) {
 	if (!isset($_SESSION['authenticated_user']) || $_SESSION['authenticated_user']->hasPerm('CMS', 'view') == false) {
 		header('Location: /');

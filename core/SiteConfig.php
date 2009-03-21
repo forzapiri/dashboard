@@ -19,6 +19,7 @@
 /* SEE ../SiteConfig.php FOR MODULE USAGE INFORMATION */
 
 require_once "SiteConfigType.php";
+
 class SiteConfig {
 	/* Columns from db */
 	protected $id = null;
@@ -31,18 +32,30 @@ class SiteConfig {
 	protected $editable = null;
 	private static $programmer;
 	private static $cache;
+
+	public static function warnInstall() {
+		$query = new Query ("describe `auth`", '');
+		$results = $query->fetchAll();
+		$u = @$_SESSION['authenticated_user'];
+		if ($u && !@$u->column('programmer')) {
+			User::logout(false);
+			echo "Had to log you out for latest change to take.";
+		}
+		foreach ($results as $result) {
+			if ($result['Field'] == 'programmer') return;
+		}
+		User::logout(false);
+		echo 'Add column programmer to auth.<br/>
+  You have been logged out.<br/>
+    (1) Rerun auth.sql OR add a column named programmer paralleling the status column.<br/>
+    (2) Make the norex User a programmer.';
+		die();
+	}
+
 	public static function programmer($truth = false) {
 		if (!isset(self::$programmer)) {
 			$u = @$_SESSION['authenticated_user'];
 			if (!$u) return false;
-			if (!@$u->column('programmer')) {
-				User::logout(false);
-				echo 'Add column programmer to auth.<br/>
-  You have been logged out.<br/>
-    (1) Rerun auth.sql OR add a column named programmer paralleling the status column.<br/>
-    (2) Make the norex User a progarmmer.';
-				die();
-			}
 			self::$programmer = $u->getProgrammer();
 			$p = @$_SESSION['programmerAsAdmin'];
 			$_SESSION['programmerAsAdmin'] = isset($_REQUEST['siteconfigToggleProgrammer']) ? !$p: !!$p;

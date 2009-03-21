@@ -26,6 +26,8 @@ if (isset($_REQUEST['username']) && isset($_REQUEST['password'])) {
 	$auth->start();
 }
 
+SiteConfig::warnInstall();
+
 if (! (SiteConfig::programmer() // If the site isn't live, usually show an error page.
 	   || SiteConfig::get('live')
 	   || (@$_REQUEST['module'] == 'User' && @$_REQUEST['section'] == 'logout'))) {
