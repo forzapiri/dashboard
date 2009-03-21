@@ -61,7 +61,8 @@ class Module_Gallery extends Module {
 	public function getLinkable($id){
 		$page = PhotoGallery::make($id, 'PhotoGallery');
 		if ($page->get('id')){
-			return '/gallery/' . $page->get('id') . '-' . $page->get('name');
+			require_once (SITE_ROOT . '/core/plugins/modifier.urlify.php');
+			return '/gallery/' . $page->get('id') . '-' . smarty_modifier_urlify($page->get('name'));
 		}
 		return '/gallery/';
 	}
