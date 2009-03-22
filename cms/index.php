@@ -22,8 +22,7 @@ SiteConfig::warnInstall();
 
 if ($auth->checkAuth()) {
 	if (!isset($_SESSION['authenticated_user']) || $_SESSION['authenticated_user']->hasPerm('CMS', 'view') == false) {
-		header('Location: /');
-		die();
+		User::logout();
 	}
 	/* Aggressively clear cache just in case this admin request changes static web pages.
 	 * 
