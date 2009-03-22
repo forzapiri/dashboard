@@ -23,7 +23,7 @@ abstract class DBRow {
 	private static function _get_name($col) {
 		if (is_object($col)) return $col->name();
 		preg_match('/([a-zA-Z]+)/', $col, $matches);
-		return var_log($matches[1]);
+		return $matches[1];
 	}
 	function createTable($table, $class, $customColumns = array()) {
 		$cols = $customColumns;
