@@ -20,16 +20,21 @@ abstract class DBRow {
 	protected static $__CLASS__ = __CLASS__;
 	protected static $tables = array();
 	private $values = array();
+	private static function _get_name($col) {
+		if (is_object($col)) return $col->name();
+		preg_match('/([a-zA-Z]+)/', $col, $matches);
+		return var_log($matches[1]);
+	}
 	function createTable($table, $class, $customColumns = array()) {
 		$cols = $customColumns;
 		$columns = TableColumn::getAllRows($table);
 		$done = array();
 		foreach ($cols as $col) {
-			$done[is_object($col) ? $col->name() : $col] = true;
+			$done[self::_get_name($col)] = true;
 		}
 		foreach ($columns as $col) {
 			$name = $col->get('name');
-			if (isset($done[$name])) {
+			if (isset($done[$name]) && $name != 'id') {
 				 error_log ("Warning: column $name is specified twice; check both in $class.php and in dbtable");
 			} else {
 				$cols[] = DBColumn::make ($col->get('type'), $name, $col->get('label'),
