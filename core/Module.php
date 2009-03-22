@@ -35,12 +35,6 @@ abstract class Module {
 		protected $template;
 		public $name;
 		
-		public function onPreDelete(Event_Notification &$notification) {}
-		public function onPreSave(Event_Notification &$notification) {}
-		public function onPreToggle(Event_Notification &$notification) {}
-		public function onDelete(Event_Notification &$notification) {}
-		public function onSave(Event_Notification &$notification) {}
-		public function onToggle(Event_Notification &$notification) {}
 		public function __construct() {}
 		
 		/**
@@ -74,8 +68,6 @@ abstract class Module {
 				} else {
 					$module->smarty = new SmartySite();
 				}
-				
-				$module->dispatcher = &Event_Dispatcher::getInstance($name);
 				
 				// Set up module's Smarty resouce. Make sure it has its own template directory
 				// as well as a unique compile id. Using the class name is a clever way of avoiding

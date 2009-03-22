@@ -5,11 +5,6 @@ class Module_Content extends Module implements linkable {
 	
 	public function __construct() {
 		parent::__construct();
-		$dispatcher = &Event_Dispatcher::getInstance('ContentPage');
-		$dispatcher->addNestedDispatcher(Event_Dispatcher::getInstance());
-		
-		$dispatcher->addObserver(array('ContentPage', 'checkForHome'), 'onPreDelete');
-		
 		$this->page = new Page();
 		$this->page->with('ContentPage')
 			->show(array('Name' => 'name',

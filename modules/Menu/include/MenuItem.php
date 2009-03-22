@@ -56,7 +56,6 @@ class MenuItem extends DBRow {
 
 	function getAddEditFormHook($form) {
 		$el =& $form->getElement($this->quickformPrefix() . 'link');
-		$obj = &Event_Dispatcher::getInstance('MenuItem')->post($this, 'linkables');
 		$options = array();
 		$form->getElement($this->quickformPrefix() . 'module')->_options = null;
 		foreach(SiteConfig::get('linkables') as $linkable){
@@ -103,12 +102,11 @@ class MenuItem extends DBRow {
 	}
 	
 
-	function &save(&$notification = null) {
+	function &save() {
 		if (!$this->getId()) {
-			parent::save($notification);
 			$this->setSort($this->getId());
 		}
-		return parent::save($notification);
+		return parent::save();
 	}
 	
 	public function getLinkTarget() {
@@ -117,7 +115,6 @@ class MenuItem extends DBRow {
 	}
 	
 	public function getLinkables() {
-		$obj = &Event_Dispatcher::getInstance('MenuItem')->post($this, 'linkables');
 		$a = array();
 		if (!$this->linkables) return $a;
 		foreach ($this->linkables as $key => $link) {

@@ -16,10 +16,6 @@
 class Module_User extends Module {
 	
 	public $icon = '/images/admin/user.png';
-	
-	protected $group_dispatcher = null;
-
-	
 	public function __construct() {
 		parent::__construct();
 		$this->page = new Page();
@@ -303,7 +299,6 @@ class Module_User extends Module {
 		} else {
 			$user->setActiveStatus(1);
 		}
-		$notification = &$this->dispatcher->post($user, 'onSave');
 
 		$this->setupMainList();
 		$this->template = 'admin/user_table.tpl';

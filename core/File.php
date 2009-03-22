@@ -145,10 +145,10 @@ class File extends DBRow {
 		else                  return $this->_insert($data, $type, $filename, true);
 	}
 
-	function &delete(&$notification = null) {
+	function &delete() {
 		@unlink($this->getDirectoryFile());
 		@unlink($this->getDirectory() . 'public');
-		return parent::delete($notification);
+		return parent::delete();
 	}
 
 	function getAddEditFormHook($form) {
@@ -157,8 +157,8 @@ class File extends DBRow {
 
 	function setPublic() {$this->setPermission('public');}
 	function setPrivate() {$this->setPermission('private');}
-	function &save(&$notification = null) {
-		parent::save($notification);
+	function &save() {
+		parent::save();
 		if (!$this->getId()) return; // Just a security precaution; this case should not happen.
 		$file = $this->getDirectory() . 'public';
 		if ($this->getPermission() == 'public') @touch($file);

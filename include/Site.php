@@ -322,12 +322,3 @@ if (file_exists(SITE_ROOT . '/templates/local')) {
 }
 $smarty->compile_dir = SITE_ROOT . '/cache/templates';
 $smarty->plugins_dir[] = SITE_ROOT . '/core/plugins';
-
-require_once 'Event/Dispatcher.php';
-			$global = &Event_Dispatcher::getInstance();
-			$global->addObserver(array('Module', 'onSave'), 'onSave');
-			$global->addObserver(array('Module', 'onDelete'), 'onDelete');
-			$global->addObserver(array('Module', 'onToggle'), 'onToggle');
-			$global->addObserver(array('Module', 'onPreSave'), 'onPreSave');
-			$global->addObserver(array('Module', 'onPreDelete'), 'onPreDelete');
-			$global->addObserver(array('Module', 'onPreToggle'), 'onPreToggle');
