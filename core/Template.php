@@ -29,7 +29,7 @@ class Template extends DBRow {
 			'//timestamp',
 			DBColumn::make('text', 'name', 'Name')
 			);
-		$table = new DBTable("templates", __CLASS__, $cols);
+		$table = parent::createTable("templates", __CLASS__, $cols);
 		
 		$sql = $table->loadColumnNames(); // This just returns a comma-separated list of those column names that are not delay loaded.
 		self::$revisionQuery = new Query ("select $sql from templates where module=? and path=? order by timestamp desc limit 1", "ss");

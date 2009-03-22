@@ -24,7 +24,7 @@ class MenuType extends DBRow {
 			DBColumn::make('select', 'template', 'Template', array())
 			);
 			
-		return new DBTable("menus", __CLASS__, $cols);
+		return parent::createTable("menus", __CLASS__, $cols);
 	}
 	static function make($id = null) {return parent::make($id, __CLASS__);}
 	static function getAll() {

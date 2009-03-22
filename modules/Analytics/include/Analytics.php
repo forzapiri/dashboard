@@ -8,7 +8,7 @@ class Analytics extends DBRow {
 			DBColumn::make('code', 'content', 'Content'),
 			'timestamp'
 			);
-		return new DBTable("analytics", __CLASS__, $cols);
+		return parent::createTable("analytics", __CLASS__, $cols);
 	}
 	static function getAll() {
 		$args = func_get_args();

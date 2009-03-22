@@ -25,7 +25,7 @@ abstract class DBRow {
 		$columns = TableColumn::getAllRows($table);
 		$done = array();
 		foreach ($cols as $col) {
-			$done[$col->name()] = true;
+			$done[is_object($col) ? $col->name() : $col] = true;
 		}
 		foreach ($columns as $col) {
 			$name = $col->get('name');

@@ -37,7 +37,7 @@ class MenuItem extends DBRow {
 			DBColumn::make('//integer', 'sort'),
 			DBColumn::make('?integer', 'menuid', 'Menu')
 			);
-		return new DBTable("menu", __CLASS__, $cols);
+		return parent::createTable("menu", __CLASS__, $cols);
 	}
 	static function getAll() {
 		$args = func_get_args();

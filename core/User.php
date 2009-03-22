@@ -16,7 +16,7 @@ class User extends DBRow {
 			DBColumn::make('//checkbox', 'programmer', 'Programmer'),
 			DBColumn::make('status', 'status', 'Status'),
 			);
-		return new DBTable("auth", __CLASS__, $cols);
+		return parent::createTable("auth", __CLASS__, $cols);
 	}
 	static function make($id = null) {return parent::make($id, __CLASS__);}
 	static function getAll() {

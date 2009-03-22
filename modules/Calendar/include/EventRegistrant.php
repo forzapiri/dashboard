@@ -11,7 +11,7 @@ class EventRegistrant extends DBRow {
 			DBColumn::make('!text', 'phone', 'Phone Number'),
 			DBColumn::make('status', 'status', 'Paid'),
 			);
-		return new DBTable("calendar_registrants", __CLASS__, $cols);
+		return parent::createTable("calendar_registrants", __CLASS__, $cols);
 	}
 	static function make($id = null) {return parent::make($id, __CLASS__);}
 	static function getAll() {

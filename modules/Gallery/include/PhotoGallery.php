@@ -12,7 +12,7 @@ class PhotoGallery extends DBRow {
 			'timestamp',
 			'//status',
 			);
-		return new DBTable("photo_galleries", __CLASS__, $cols);
+		return parent::createTable("photo_galleries", __CLASS__, $cols);
 	}
 	static function getAll() {
 		$args = func_get_args();

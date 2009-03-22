@@ -6,7 +6,7 @@ class Calendar extends DBRow {
 			'id?',
 			DBColumn::make('text', 'name', 'Name'),
 			);
-		return new DBTable("calendar", __CLASS__, $cols);
+		return parent::createTable("calendar", __CLASS__, $cols);
 	}
 	public static function getAll() {
 		$args = func_get_args();

@@ -9,7 +9,7 @@ class PhotoGalleryImage extends DBRow {
 			DBColumn::make('File(description)', 'file_id', 'Image'),
 			DBColumn::make('PhotoGallery(name)', 'photo_gallery_id', 'Parent Photo Gallery'),
 			);
-		return new DBTable("photo_gallery_images", __CLASS__, $cols);
+		return parent::createTable("photo_gallery_images", __CLASS__, $cols);
 	}
 	static function make($id = null) {return parent::make($id, __CLASS__);}
 	static function getAll() {

@@ -25,7 +25,7 @@ class Block extends DBRow {
 			'//status',
 			DBColumn::make('//sort', 'sort')
 			);
-		return new DBTable("blocks", __CLASS__, $cols);
+		return parent::createTable("blocks", __CLASS__, $cols);
 	}
 	static function getAll() {
 		$args = func_get_args();

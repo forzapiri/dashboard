@@ -12,7 +12,7 @@ class Permission extends DBRow {
 			DBColumn::make('Group(name)', 'group_id', 'Group Name'),
 			'//status'
 			);
-		return new DBTable("permissions", __CLASS__, $cols);
+		return parent::createTable("permissions", __CLASS__, $cols);
 	}
 	static function make($id = null) {return parent::make($id, __CLASS__);}
 	static function getAll() {
