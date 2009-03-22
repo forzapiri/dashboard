@@ -100,8 +100,16 @@ function adminMenu($params, &$smarty) {
 	}
 	if (SiteConfig::programmer(true)) {
 		$adminItems[] = "<li>&nbsp;</li>";
-		$text = "Switch View";
-		$adminItems[] = "<a href='/admin?siteconfigToggleProgrammer'><li>$text</li></a>";
+		$options = "<option value=''>Switch View</option>\n";
+		$options .= "<option value='Programmer'>Programmer</option>\n";
+		foreach (Group::getAll() as $group) {
+			$name=$group->getName();
+			$options .= "  <option value='$name'>$name</option>\n";
+		}
+		$name = "programmerSelection";
+		$select = "<select id='$name' name='$name' onChange='document.programmerForm.submit()'>\n$options\n</select>\n";
+		$form = "<form name='programmerForm' action='/admin' method='post'>\n$select\n</form>\n";
+		$adminItems[] = $form;
 	}
 	
 	$menuString = "<ul>\n" . implode("\n", $adminItems) . "\n</ul>\n";

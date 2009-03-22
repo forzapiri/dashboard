@@ -13,9 +13,7 @@
 /**
  * Require the site initialization file
  */
-
 require_once (dirname(__FILE__) . "/../include/Site.php");
-
 $auth_container = new CMSAuthContainer();
 $auth = new Auth($auth_container, null, 'authHTML');
 $auth->start();

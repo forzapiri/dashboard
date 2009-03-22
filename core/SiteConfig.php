@@ -54,13 +54,21 @@ class SiteConfig {
 
 	public static function programmer($truth = false) {
 		if (!isset(self::$programmer)) {
+			if (!isset($_SESSION['programmerView']))
+				$_SESSION['programmerView'] = 'Programmer';
 			$u = @$_SESSION['authenticated_user'];
 			if (!$u) return false;
-			self::$programmer = $u->getProgrammer();
-			$p = @$_SESSION['programmerAsAdmin'];
-			$_SESSION['programmerAsAdmin'] = isset($_REQUEST['siteconfigToggleProgrammer']) ? !$p: !!$p;
+			self::$programmer = $u->getProgrammer();			
+			if ($p = @$_REQUEST['programmerSelection']) {
+				$t = Group::getAll("where name=?", "s", $p);
+				if ($t) {
+					$u->setGroup($t[0]->getId());
+					$_SESSION['authenticated_user'] = $u;
+				}
+				$_SESSION['programmerView'] = $p;
+			}
 		}
-		return self::$programmer && ($truth || !$_SESSION['programmerAsAdmin']);
+		return self::$programmer && ($truth || $_SESSION['programmerView'] == 'Programmer');
 	}
 
 	private static function load() {
