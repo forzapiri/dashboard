@@ -67,10 +67,11 @@ class SiteConfig {
 			$u = @$_SESSION['authenticated_user'];
 			if (!$u) return false;
 			self::$programmer = $u->getProgrammer();			
-			if ($p = @$_REQUEST['programmerSelection']) {
-				$t = Group::getAll("where name=?", "s", $p);
+			if ($p = @$_REQUEST['programmerEmulating']) {
+				$t = Group::getAll("where name=?", "s", $p=='Programmer' ? 'Administrator' : $p);
 				if ($t) {
 					$u->setGroup($t[0]->getId());
+					$u->save();
 					$_SESSION['authenticated_user'] = $u;
 				}
 				$_SESSION['programmerView'] = $p;
