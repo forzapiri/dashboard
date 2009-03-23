@@ -46,11 +46,11 @@ class Module_DMS extends Module {
 			
 			return $form->display();
 		}
-		
 		$page = new Page();
 		$page->with('File')
 			->show(array(
-				'Filename' => 'filename'
+				'Filename' => 'filename',
+				'Description' => 'description'
 			));
 			
 		return $page->render();
