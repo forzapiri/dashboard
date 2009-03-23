@@ -28,6 +28,13 @@ class Permission extends DBRow {
 
 	static private $warned = false;
 	static function hasPerm($group, $class, $key) {
+		if (SiteConfig::programmer() && $class=='Template') {
+			$p = Permission::make();
+			$p->setGroup($group);
+			$p->setClass($class);
+			$p->setKey($key);
+			return array ($p);
+		}
 		return self::getAll('where group_id=? and class=? and `key`=? and status=1', 'iss',
 							$group, $class, $key);
 	}
