@@ -106,7 +106,7 @@ function adminMenu($params, &$smarty) {
 			$name=$group->getName();
 			$options .= "  <option value='$name'>$name</option>\n";
 		}
-		$name = "programmerSelection";
+		$name = "programmerEmulating";
 		$select = "<select id='$name' name='$name' onChange='document.programmerForm.submit()'>\n$options\n</select>\n";
 		$form = "<form name='programmerForm' action='/admin' method='post'>\n$select\n</form>\n";
 		$adminItems[] = $form;

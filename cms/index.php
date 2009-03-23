@@ -58,11 +58,11 @@ if ($auth->checkAuth()) {
 		echo Module::factory($requestedModule, $smarty)->getAdminInterface();
 		die();
 	} else {
+		$smarty->assign ('emulating', SiteConfig::emulating());
 		if (!isset($_REQUEST['module'])) {
 			$requestedModule = 'Dashboard';
 			$smarty->assign ( 'module', $requestedModule );
-			$tmp = SiteConfig::programmer() ? "Programmer" : "Admininistrator";
-			$smarty->assign ( 'module_title', "Dashboard - $tmp's View");
+			$smarty->assign ( 'module_title', "Dashboard");
 		} else {
 			$smarty->content[$requestedModule] = Module::factory($requestedModule, $smarty)->getAdminInterface();
 			$smarty->assign ( 'module', $requestedModule );

@@ -12,6 +12,7 @@ class Module_Content extends Module implements linkable {
 						 'Published' => 'status',
 						 'Draft' => array('id', array('ContentPage', 'getDraftForms'))))
 			->on('addedit')->noAJAX()
+			->filter('order by name')
 			->name('Content Page');
 	}
 	
