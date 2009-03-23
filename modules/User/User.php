@@ -20,7 +20,7 @@ class Module_User extends Module {
 		parent::__construct();
 		$this->page = new Page();
 		$this->page->with('User')
-			->filter ("where username!='norex'")
+			->filter ("where username!='norex' order by username")
 			 ->show(array(
 			 	'Username' => 'username',
 			 	'Name' => 'name',
@@ -63,7 +63,7 @@ class Module_User extends Module {
 		if (@$_REQUEST['section'] !== 'Permission') return "";
 		
 		$handler = new PermHandler();
-		$groups = Group::getAll();
+		$groups = Group::getAll('order by name', '');
 		if (!$groups) return "";
 
 		$selected = (integer) @$_REQUEST['group'];
