@@ -162,7 +162,7 @@ div#content {
 }
 
 div#footer {
-	position: absolute;
+	position: fixed;
 	clear: both;
 	bottom: 0px;
 	height: 24px;
