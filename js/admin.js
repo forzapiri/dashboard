@@ -280,11 +280,10 @@ function initRTE(mode, theme, name, stylesheet, bodyId, bodyClass) {
 		mode : mode,
 		theme : theme,
 		elements : name,
-		plugins : "safari,spellchecker,style,table,advimage,advlink,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,fullscreen,visualchars",
-		theme_advanced_buttons2_add : "separator,insertdate,inserttime,preview,separator,forecolor,backcolor",
-		theme_advanced_buttons2_add_before: "cut,copy,paste,pastetext,pasteword,separator,search,replace,separator",
-		theme_advanced_buttons3_add_before : "tablecontrols,separator",
-		theme_advanced_buttons3_add : "iespell,media,advhr,separator,print,separator,fullscreen",
+		plugins : "safari,spellchecker,style,advimage,advlink,iespell,inlinepopups,contextmenu,paste",
+		theme_advanced_buttons1_add : "forecolor,backcolor",
+		theme_advanced_buttons1_add_before: "cut,copy,paste,pastetext,pasteword",
+		theme_advanced_buttons3 : "",
 		theme_advanced_toolbar_location : "top",
 		theme_advanced_toolbar_align : "left",
 		dialog_type : "modal",
@@ -302,7 +301,8 @@ function initRTE(mode, theme, name, stylesheet, bodyId, bodyClass) {
 		theme_advanced_resizing : true,
 		apply_source_formatting : true,
 		spellchecker_languages : "+English=en,Danish=da,Dutch=nl,Finnish=fi,French=fr,German=de,Italian=it,Polish=pl,Portuguese=pt,Spanish=es,Swedish=sv",
-		oninit: "resizeFacebox"
+		oninit: "resizeFacebox",
+		width: "600"
 	});
 	
 	

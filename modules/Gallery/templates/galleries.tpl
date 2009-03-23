@@ -2,7 +2,7 @@
 	<h3>{$curgallery->get('name')}</h3>
 	{foreach from=$curgallery->getGalleryImages() item=image}
 		<div class="gallery_thumb">
-		<a href="{$image->get('file')->getImageLink()}" rel="lightbox[{$curgallery->get('name')}]">{$image->get('file')->getImgTag('w=150&h=131')}</a>
+		<a href="{$image->get('file')->getImageLink('w=800')}" rel="lightbox[{$curgallery->get('name')}]">{$image->get('file')->getImgTag('w=150&h=131')}</a>
 		</div>
 	{/foreach}
 {/if}

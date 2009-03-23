@@ -38,7 +38,7 @@ class Module_Templater extends Module {
 							'Path' => 'path',
 							'Timestamp' => 'timestamp'
 					 ))
-					 ->pre('<h1>Micro Managing Templates</h1>. <a href="/admin/Templater" style="color:white;"><h3> click here to go back to main interface </h3></a>')
+					 ->pre('<h2>Micro Managing Templates</h2><a href="/admin/Templater" style="color:white;"><h5 style="color:red!important;"> click here to go back to main interface </h5></a>')
 					 ->filter('order by timestamp desc')
 					 ->paging(50);
 				return $page->render();
