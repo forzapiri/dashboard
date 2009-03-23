@@ -200,7 +200,9 @@ class ChunkManager {
 					$$var = $pair[1];
 				else trigger_error ("Variable $var not recognized in ChunkManager::setTemplate()");
 			}
-			$this->fields[] = DBColumn::make($type, '', $label);
+			$this->fields[] = ('A' <= $type[0] and $type[0] <= 'Z')
+				? new DBColumnClass($type, '', $label)
+				: DBColumn::make($type, '', $label);
 			$this->roles[] = $role;
 			$this->previews[] = $this->convertPreview($preview);
 		}

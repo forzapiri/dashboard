@@ -343,10 +343,10 @@ abstract class DBRow {
 		}
 	}
 	private static function apply ($func, $type, $value, $el = null) {
-		$class = @DBColumn::getType($type);
-		if (!$class && class_exists($class)) $class = $type;
-		if (!$class) trigger_error ("$type is Neither a DBColumn type nor a DBColumn class");
-		return call_user_func (array (DBColumn::getType($type), $func), $value, $el);
+		$class = ('A' <= $type[0] and $type[0] <= 'Z')
+			? "DBColumnClass"
+			: DBColumn::getType($type);
+		return call_user_func (array ($class, $func), $value, $el);
 	}
 	public static function     toDB($type, $value, $el=null) {return self::apply('toDB',     $type, $value, $el);}
 	public static function   fromDB($type, $value) {return self::apply('fromDB',   $type, $value);}
