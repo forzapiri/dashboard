@@ -35,18 +35,9 @@ class Module_DBTable extends Module {
 	}
 	
 	private static $dbtables = false;
-	private function tableExists ($table) {
-		error_log("Can you use MysqlTable::tableExists instead of DBTable.php's ??");
-		// TODO: Code duplicated in MysqlTable.  Use it.
-		if (!self::$dbtables) {
-			$query = new Query("show tables", '');
-			array_flatten ($query->fetchAll(), 0, $dbtables);
-		} else return !!array_search ($table, self::$dbtables);
-	}
-	
 	private function loadTableInfo ($table) { // $table is a string
 		// TODO: Code duplicated in MysqlTable.  Use it.
-		if (!$this->tableExists($table)) {return;}
+		if (!MysqlTable::tableExists($table)) {return;}
 		$query = new Query ("describe `$table`", '');
 		$cols = $query->fetchAll();
 		foreach ($cols as $c) {

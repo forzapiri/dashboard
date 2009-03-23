@@ -24,7 +24,7 @@ class MenuType extends DBRow {
 			DBColumn::make('select', 'template', 'Template', array())
 			);
 			
-		return new DBTable("menus", __CLASS__, $cols);
+		return parent::createTable("menus", __CLASS__, $cols);
 	}
 	static function make($id = null) {return parent::make($id, __CLASS__);}
 	static function getAll() {
@@ -53,7 +53,7 @@ class MenuType extends DBRow {
 			$templates = Template::getAllTemplates();
 			$options = array();
 			$user_templates = SiteConfig::get('Menu::templates');
-			if (SiteConfig::norex()) {
+			if (SiteConfig::programmer()) {
 				foreach ($templates as $itm) {
 					$path = $itm->getPath();
 					$options[$path] = $path;
@@ -63,7 +63,7 @@ class MenuType extends DBRow {
 					$options[$itm . '.tpl'] =  $itm;
 				}
 			}
-			$el = ((count($user_templates) == 1 || $n <= SiteConfig::get('Menu::minimumNumber')) && !SiteConfig::norex())
+			$el = ((count($user_templates) == 1 || $n <= SiteConfig::get('Menu::minimumNumber')) && !SiteConfig::programmer())
 			       ? $form->addElement('hidden', $user_templates[0] . '.tpl')
 			       : $form->addElement('select', $id, 'Template', $options);
 			$el->setValue($value);

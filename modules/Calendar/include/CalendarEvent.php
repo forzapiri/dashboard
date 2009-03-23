@@ -12,7 +12,7 @@ class CalendarEvent extends DBRow {
 			DBColumn::make('Calendar(name)', 'calendar_id', 'Calendar'),
 			'//status'
 			);
-		return new DBTable("calendar_events", __CLASS__, $cols);
+		return parent::createTable("calendar_events", __CLASS__, $cols);
 	}
 	static function getAll() {
 		$args = func_get_args();

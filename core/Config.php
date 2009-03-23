@@ -78,14 +78,13 @@ class Config {
 		// A module Foo is reported as active if
 		// (1)  It is listed in the modules table
 		// (2)  The file modules/Foo/Foo.php is readable, and
-		// (3)  You are norex() OR the module is listed in SiteConfig::modules
-		$norex = SiteConfig::norex();
-		if ($norex || is_null(self::$activeModules)) { // WHEN YOU FIRST LOG IN AS NOREX, CAN'T USE CACHED COPY
-			if ($norex) {
-				$modules = scandir(SITE_ROOT . '/modules/');
-			} else {
-				$modules = SiteConfig::get('modules');
-			}
+		// (3)  You are programmer() OR the module is listed in SiteConfig::modules
+		$programmer = SiteConfig::programmer();
+		// WHEN YOU FIRST LOG IN AS programmer, CAN'T USE CACHED COPY
+		// LAZY SOLUTION: JUST DISABLE CACHING FOR programmer
+		if ($programmer || is_null(self::$activeModules)) {
+			$enabled_modules = SiteConfig::get('modules');
+			$modules = $programmer ? scandir(SITE_ROOT . '/modules/') : $enabled_modules;
 			self::$modules_flipped = array_flip($modules);
 			$sql = '';
 			foreach ($modules as $module) {
@@ -98,18 +97,20 @@ class Config {
 			$active = array();
 			foreach ($modules as $mod) {
 				$name = $mod['module'];
-				if (is_readable (SITE_ROOT . '/modules/' . "$name/$name.php"))				
+				if (is_readable (SITE_ROOT . '/modules/' . "$name/$name.php")) {
 					$active[$mod['id']] = $mod;
+					$module['enabled'] = true;
+				}
 			}
 			usort($active, array('Config', 'compare'));
-			if ($norex) {
+			if ($programmer) {
 				foreach ($active as &$module) {
 					$module['display_name'] = $module['module'];
+					$module['enabled'] = in_array ($module['module'], $enabled_modules);
 				}
 			}
 			self::$activeModules = $active;
 		}
-			
 		return self::$activeModules;
 	}
 

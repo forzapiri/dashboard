@@ -26,7 +26,7 @@
  *  SiteConfig::set('DMS::option', $value)
  *  
  *  New options are added by explicitly editing the db table config_options 
- *    OR by viewing the admin page with NOREX on.
+ *    OR by viewing the admin page as a Programmer
  *  To add a new type, see examples in include/SiteConfigType.php
  * 
  *  Note that "sort" only suggests the sort order within a module.  The primary sort
@@ -34,7 +34,17 @@
  */
 
 class Module_SiteConfig extends Module {
+	public function __construct() {
+		parent::__construct();
+		$this->page = new Page();
+		$this->page->with('SiteConfig')
+			->show(array('Description' => 'description',
+						 'Value(s)' => 'value'))
+			->name('Site Configuration');
+		
+	}
 	
+
 	public $icon = '/modules/SiteConfig/images/cog.png';
 	
 	/**
@@ -57,16 +67,18 @@ class Module_SiteConfig extends Module {
 			}
 			break;
 		case 'toggle':
+			if (!SiteConfig::programmer()) break;
 			$option->setEditable(1 - $option->getEditable());
 			$option->save();
 			break;			
 		case 'delete':
+			if (!SiteConfig::programmer()) break;
 			$option->delete();
 			$option = NULL;
 			break;
 		default:
 		}
-		$siteconfigs = SiteConfig::getAllSiteConfigs();
+		$siteconfigs = SiteConfig::getAll();
 		$this->smarty->assign('siteconfigs', $siteconfigs);
 		return $this->smarty->fetch( 'admin/siteconfigs.tpl' );
 	}

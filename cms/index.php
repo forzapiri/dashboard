@@ -13,17 +13,16 @@
 /**
  * Require the site initialization file
  */
-
 require_once (dirname(__FILE__) . "/../include/Site.php");
-
 $auth_container = new CMSAuthContainer();
 $auth = new Auth($auth_container, null, 'authHTML');
 $auth->start();
 
+SiteConfig::warnInstall();
+
 if ($auth->checkAuth()) {
 	if (!isset($_SESSION['authenticated_user']) || $_SESSION['authenticated_user']->hasPerm('CMS', 'view') == false) {
-		header('Location: /');
-		die();
+		User::logout();
 	}
 	/* Aggressively clear cache just in case this admin request changes static web pages.
 	 * 
@@ -40,7 +39,7 @@ if ($auth->checkAuth()) {
 	
 	// assign the requested module
 	$smarty->assign('module', $requestedModule);
-	$smarty->assign('norex', SiteConfig::norex());
+	$smarty->assign('programmer', SiteConfig::programmer());
 	
 	$config = Config::singleton();
 	foreach($config->getActiveModules() as $m) {
@@ -59,10 +58,11 @@ if ($auth->checkAuth()) {
 		echo Module::factory($requestedModule, $smarty)->getAdminInterface();
 		die();
 	} else {
+		$smarty->assign ('emulating', SiteConfig::emulating());
 		if (!isset($_REQUEST['module'])) {
 			$requestedModule = 'Dashboard';
 			$smarty->assign ( 'module', $requestedModule );
-			$smarty->assign ( 'module_title', 'Dashboard' );
+			$smarty->assign ( 'module_title', "Dashboard");
 		} else {
 			$smarty->content[$requestedModule] = Module::factory($requestedModule, $smarty)->getAdminInterface();
 			$smarty->assign ( 'module', $requestedModule );

@@ -8,6 +8,7 @@ CREATE TABLE `analytics` (
   `id` int(11) NOT NULL auto_increment,
   `content` text,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `status` tinyint(1) NOT NULL default 1,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
@@ -21,4 +22,4 @@ INSERT INTO modules VALUES(null ,'Analytics', 'Google Analytics');
 DELETE FROM `permissions` WHERE class = 'Analytics';
 INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`) VALUES ('view','Analytics','View Analytics','','1','1');
 INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`) VALUES ('addedit','Analytics','Add/Edit Analytics','','1','1');
-INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`) VALUES ('delete','Analytics','Delete Analytics','','1','0');
+INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`) VALUES ('delete','Analytics','Delete Analytics','','1','1');

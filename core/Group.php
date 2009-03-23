@@ -7,7 +7,7 @@ class Group extends DBRow {
 			'id?',
 			DBColumn::make('text', 'name', 'Group Name')
 			);
-		return new DBTable("auth_groups", __CLASS__, $cols);
+		return parent::createTable("auth_groups", __CLASS__, $cols);
 	}
 	static function make($id = null) {return parent::make($id, __CLASS__);}
 	static function getAll() {

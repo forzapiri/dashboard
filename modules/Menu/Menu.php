@@ -19,14 +19,6 @@ class Module_Menu extends Module {
 	
 	public function __construct() {
 		parent::__construct();
-		$dispatcher = &Event_Dispatcher::getInstance('Menu');
-		$dispatcher->addNestedDispatcher(Event_Dispatcher::getInstance());
-		
-		$menuitem_dispatcher = Event_Dispatcher::getInstance('MenuItem');
-		$menuitem_dispatcher->addNestedDispatcher($dispatcher);
-		
-		$menuitem_dispatcher->addObserver(array('Menu', 'moveItem'), 'onMoveItem');
-		
 		$this->page = new Page();
 		$this->page->with('MenuType')
 			->show(array('Name' => 'name'))
@@ -50,8 +42,11 @@ class Module_Menu extends Module {
 				switch (@$_REQUEST['action']) {
 					case 'linkables':
 						header('Content-type: application/javascript');
-						$obj = &Event_Dispatcher::getInstance('MenuItem')->post(&$this, 'linkables');
 
+						if ($_REQUEST['module'] == 'Web Link') {
+							return json_encode('WEBLINK');
+						}
+						
 						$module = Module::factory($_REQUEST['module']);
 						$links = @call_user_func(array($module, 'getLinkables'));
 						$result = array();

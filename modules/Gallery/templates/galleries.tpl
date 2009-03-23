@@ -1,18 +1,10 @@
 {if $curgallery && $curgallery->getGalleryImages()}
-
-	{counter assign='count' start=0 print=0}
-	<table width="700" class="galleries">
+	<h3>{$curgallery->get('name')}</h3>
 	{foreach from=$curgallery->getGalleryImages() item=image}
-		{if $count is div by 4}
-			{if $count!=0}
-				</tr>
-			{/if}
-			<tr align="center" valign="middle" class="galleryTitle">
-		{/if}
-		<td align="center"><a href="{$image->get('file')->getImageLink()}" rel="lightbox[{$curgallery->get('name')}]">{$image->get('file')->getImgTag('w=150&h=131')}</a></td>
-		{counter assign='count' print=0}
+		<div class="gallery_thumb">
+		<a href="{$image->get('file')->getImageLink('w=800')}" rel="lightbox[{$curgallery->get('name')}]">{$image->get('file')->getImgTag('w=150&h=131')}</a>
+		</div>
 	{/foreach}
-	</tr></table>
 {/if}
 
 {if $galleries}

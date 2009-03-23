@@ -20,16 +20,21 @@ abstract class DBRow {
 	protected static $__CLASS__ = __CLASS__;
 	protected static $tables = array();
 	private $values = array();
+	private static function _get_name($col) {
+		if (is_object($col)) return $col->name();
+		preg_match('/([a-zA-Z]+)/', $col, $matches);
+		return $matches[1];
+	}
 	function createTable($table, $class, $customColumns = array()) {
 		$cols = $customColumns;
 		$columns = TableColumn::getAllRows($table);
 		$done = array();
 		foreach ($cols as $col) {
-			$done[$col->name()] = true;
+			$done[self::_get_name($col)] = true;
 		}
 		foreach ($columns as $col) {
 			$name = $col->get('name');
-			if (isset($done[$name])) {
+			if (isset($done[$name]) && $name != 'id') {
 				 error_log ("Warning: column $name is specified twice; check both in $class.php and in dbtable");
 			} else {
 				$cols[] = DBColumn::make ($col->get('type'), $name, $col->get('label'),
@@ -185,66 +190,37 @@ abstract class DBRow {
 		return $this;
 	}
 
-	function &delete(&$notification = null) {
-		if($notification != null){
-			$obj = &$notification->getNotificationObject();
-		} else {
-			$obj = &$this;
-		}
-		if (!$obj->get('id')) return $this;
-		$n = Event_Dispatcher::getInstance(get_class($obj))->post(&$obj, 'onPreDelete');
-		if ($n->isNotificationCancelled()) {
-			return $this;
-		}
-		
-		$obj->table()->deleteRow($obj->get('id'));
-		$obj->table()->resetWhereCache();
-		$n = Event_Dispatcher::getInstance(get_class($obj))->post(&$obj, 'onDelete');
-
+	function &delete() {
+		if (!$this->get('id')) return $this;
+		$this->table()->deleteRow($this->get('id'));
+		$this->table()->resetWhereCache();
 		return $this;
 	}
 	
-	public function &toggle(&$notification = null) {
-		if($notification != null){
-			$obj = &$notification->getNotificationObject();
-		} else {
-			$obj = &$this;
-		}
-		$n = Event_Dispatcher::getInstance(get_class($obj))->post(&$obj, 'onPreToggle');
-		if ($n->isNotificationCancelled()) {
-			return $this;
-		}
-		
-		$obj->set('status', 1 - $obj->get('status'))->save();
-		$obj->table()->resetWhereCache();
-		$n = Event_Dispatcher::getInstance(get_class($obj))->post(&$obj, 'onToggle');
-		
+	public function &toggle() {
+		$this->set('status', 1 - $this->get('status'))->save();
+		$this->table()->resetWhereCache();
 		return $this;
 	}
 
-	function &save(&$notification = null) {
+	function &save() {
 		// This version creates the query on a per-call basis.
 		// This is useful if some entries of an object to "update" haven't been loaded.
 		// TODO:  Implement a version that caches the prepared statement in other cases.
-		if($notification != null){
-			$obj = &$notification->getNotificationObject();
-		} else {
-			$obj = &$this;
-		}
 		$update = false;
 		$sql = "";
 		$types = '';
 		$params = array();
 		/* Build up sql prepared statement and type string in parallel */
-		foreach ($obj->columns() as $column) {
+		foreach ($this->columns() as $column) {
 			$name = $column->name();
-			$value = &$obj->values[$name];
+			$value = &$this->values[$name];
 			if ($value === null) continue;
 			if ($column->ignored()) continue;
 			if ($name == 'id' && $value) {
 				$update = $value;
 			} else {
-				$params[] = &$column->toDB($value, $obj);
+				$params[] = &$column->toDB($value, $this);
 				$sql .= " `$name`=?,";
 				$types .= $column->prepareCode();
 			}
@@ -259,18 +235,13 @@ abstract class DBRow {
 			$sql = " set $sql";
 		}
 		
-		$n = Event_Dispatcher::getInstance(get_class($obj))->post(&$obj, 'onPreSave');
-		if ($n->isNotificationCancelled()) {
-			return $this;
-		}
-		
-		$table = $obj->table()->name();
+		$table = $this->table()->name();
 		if ($update === false) {
 			$sql = "insert into `$table`" . $sql;
 			$query = new Query ($sql, $types);
 			$id = $query->insert($params);
-			$obj->values['id'] = $id;
-			$obj->table()->setCache($id, $obj);
+			$this->values['id'] = $id;
+			$this->table()->setCache($id, $this);
 		} else {
 			$sql = "update `$table`" . $sql . " where id=?";
 			$params[] = $update;
@@ -281,8 +252,7 @@ abstract class DBRow {
 		// There could be default values set in MySQL, so retrieve the object after saving it:
 		self::$makeFlag = true;
 		$this->__construct($this->getId());
-		$obj->table()->resetWhereCache();
-		$n = Event_Dispatcher::getInstance(get_class($obj))->post(&$obj, 'onSave');
+		$this->table()->resetWhereCache();
 		return $this;
 	}
 

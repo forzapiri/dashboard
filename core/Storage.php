@@ -13,7 +13,7 @@ class Storage extends DBRow implements StorageInterface {
 			DBColumn::make('text', 'filename', 'Served File Name'),
 			DBColumn::make('text', 'content_type', 'Content Type'),
 			);
-		return new DBTable("storage", __CLASS__, $cols);
+		return parent::createTable("storage", __CLASS__, $cols);
 	}
 	static function getAll() {
 		$args = func_get_args();

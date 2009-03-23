@@ -30,6 +30,7 @@ CREATE TABLE `auth` (
   `name` varchar(255) NOT NULL,
   `last_name` varchar(255) default NULL,
   `email` varchar(255) NOT NULL,
+  `programmer` tinyint(1) NOT NULL default '0',
   `status` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
@@ -40,7 +41,8 @@ CREATE TABLE `auth` (
 
 LOCK TABLES `auth` WRITE;
 /*!40000 ALTER TABLE `auth` DISABLE KEYS */;
-INSERT INTO `auth` VALUES (1,'norex','0188127235a7cf49b79a46f31d77b135','norexcms49340bf2c7fff6.82647904',1,'2008-07-20 21:56:56','Norex','Development','bugs@norex.ca',1),(22,'admin','f93077a467ac40a77e4f89d8e6010e1c','norexcms495801d5e2aeb0.87084163',1,'2008-12-28 22:41:04','Norex','Administrator','wolfe@norex.ca',1);
+INSERT INTO `auth` VALUES (1,'norex','0188127235a7cf49b79a46f31d77b135','norexcms49340bf2c7fff6.82647904',1,'2008-07-20 21:56:56','Norex','Development','bugs@norex.ca',1,1),
+(22,'admin','f93077a467ac40a77e4f89d8e6010e1c','norexcms495801d5e2aeb0.87084163',1,'2008-12-28 22:41:04','Norex','Administrator','wolfe@norex.ca',0,1);
 /*!40000 ALTER TABLE `auth` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

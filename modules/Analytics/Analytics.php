@@ -27,6 +27,7 @@ class Module_Analytics extends Module {
 			 ->show(array(
 					'Code' => 'content',
 					'Last Updated' => 'timestamp',
+			 		'Status' => 'status'
 			 ))
 			 ->Pre('<div>
 			 <p>To view Analytics for your site, visit <a href="http://google.com/analytics" target="new">The Google Analytics </a> page. </p>

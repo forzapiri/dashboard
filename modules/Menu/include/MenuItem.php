@@ -37,7 +37,7 @@ class MenuItem extends DBRow {
 			DBColumn::make('//integer', 'sort'),
 			DBColumn::make('?integer', 'menuid', 'Menu')
 			);
-		return new DBTable("menu", __CLASS__, $cols);
+		return parent::createTable("menu", __CLASS__, $cols);
 	}
 	static function getAll() {
 		$args = func_get_args();
@@ -56,25 +56,34 @@ class MenuItem extends DBRow {
 
 	function getAddEditFormHook($form) {
 		$el =& $form->getElement($this->quickformPrefix() . 'link');
-		$obj = &Event_Dispatcher::getInstance('MenuItem')->post($this, 'linkables');
 		$options = array();
 		$form->getElement($this->quickformPrefix() . 'module')->_options = null;
 		foreach(SiteConfig::get('linkables') as $linkable){
 			$options[] = $linkable;
 			$form->getElement($this->quickformPrefix() . 'module')->addOption($linkable, $linkable);
 		}
+		$form->getElement($this->quickformPrefix() . 'module')->addOption('Web Link', 'Web Link');
 		
 		if ($this->getModule() == null) $this->setModule('Content');
 		
-		$module = Module::factory($this->getModule());
-		$linkables = @call_user_func(array($module, 'getLinkables'));
+		if ($this->get('module') != 'Web Link') {
 		
-		$el->_options = null;
-		if(count($linkables) > 0){
-			foreach ($linkables as $key => $itm) {
-				$el->addOption($itm, $key);
+			$module = Module::factory($this->getModule());
+			$linkables = @call_user_func(array($module, 'getLinkables'));
+			
+			$el->_options = null;
+			if(count($linkables) > 0){
+				foreach ($linkables as $key => $itm) {
+					$el->addOption($itm, $key);
+				}
 			}
+		} else {
+			$form->removeElement($this->quickformPrefix() . 'link');
+			$newlink = $form->createElement('text', $this->quickformPrefix() . 'link', 'Link To');
+			$newlink->setValue($this->get('link'));
+			$form->insertElementBefore($newlink, $this->quickformPrefix() . 'parentid');
 		}
+		
 		$menuid = $this->getMenuid();
 		 // TODO:  WHY ISN'T THIS SET ALREADY ON A CREATE MENU?
 		if (!$menuid) $menuid = $_REQUEST[$this->quickformPrefix() . 'menuid'];
@@ -93,20 +102,19 @@ class MenuItem extends DBRow {
 	}
 	
 
-	function &save(&$notification = null) {
+	function &save() {
 		if (!$this->getId()) {
-			parent::save($notification);
 			$this->setSort($this->getId());
 		}
-		return parent::save($notification);
+		return parent::save();
 	}
 	
 	public function getLinkTarget() {
+		if ($this->get('module') == 'Web Link') return $this->get('link');
 		return Module::factory( $this->getModule() )->getLinkable( $this->get('link') );
 	}
 	
 	public function getLinkables() {
-		$obj = &Event_Dispatcher::getInstance('MenuItem')->post($this, 'linkables');
 		$a = array();
 		if (!$this->linkables) return $a;
 		foreach ($this->linkables as $key => $link) {

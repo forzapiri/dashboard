@@ -16,15 +16,11 @@
 class Module_User extends Module {
 	
 	public $icon = '/images/admin/user.png';
-	
-	protected $group_dispatcher = null;
-
-	
 	public function __construct() {
 		parent::__construct();
 		$this->page = new Page();
 		$this->page->with('User')
-			->filter ("where username!='norex'")
+			->filter ("where username!='norex' order by username")
 			 ->show(array(
 			 	'Username' => 'username',
 			 	'Name' => 'name',
@@ -44,14 +40,7 @@ class Module_User extends Module {
 			 
 			 
 		$this->page->with('Permission')
-/*			 ->show(array(
-			 	'Group Name' => array('group_id', array('Group', 'getName')),
-			 	'Type of Object' => 'class',
-			 	'Name' => 'name',
-				'Status' => 'status',
-				))
-			 ->name('Permission')
-*/			 ->heading('Permission Management');
+			 ->heading('Permission Management');
 			 
 		$this->page->with('User');
 	}
@@ -74,7 +63,7 @@ class Module_User extends Module {
 		if (@$_REQUEST['section'] !== 'Permission') return "";
 		
 		$handler = new PermHandler();
-		$groups = Group::getAll();
+		$groups = Group::getAll('order by name', '');
 		if (!$groups) return "";
 
 		$selected = (integer) @$_REQUEST['group'];
@@ -169,15 +158,7 @@ class Module_User extends Module {
 				break;
 			
 			case 'logout':
-				unset($_SESSION['authenticated_user']);
-				$auth_container = DBRow::make(null,"User");
-				$auth = new Auth($auth_container, null, 'authInlineHTML');
-				$auth->logout();
-				
-				header('Location: /');
-				exit;
-				break;
-
+				User::logout();
 			default:
 				if(@$_SESSION['authenticated_user']){
 					$u =& $_SESSION['authenticated_user'];
@@ -318,7 +299,6 @@ class Module_User extends Module {
 		} else {
 			$user->setActiveStatus(1);
 		}
-		$notification = &$this->dispatcher->post($user, 'onSave');
 
 		$this->setupMainList();
 		$this->template = 'admin/user_table.tpl';

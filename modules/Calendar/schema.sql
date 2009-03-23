@@ -75,4 +75,10 @@ VALUES
 	(1,70,'Chris','Troup',1,'chris@norex.ca','(519) 271-6572');
 
 
+INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`) VALUES ('addedit','Calendar','Add/Edit Calendars','','1','1');
+INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`) VALUES ('view','Calendar','View Calendars','','1','1');
+INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`) VALUES ('delete','Calendar','Delete Calendars',NULL,'1','1');
+INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`) VALUES ('addedit','CalendarEvent','Add/Edit Calendar Events','','1','1');
+INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`) VALUES ('view','CalendarEvent','View Calendar Events','','1','1');
+INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`) VALUES ('delete','CalendarEvent','Delete Calendar Events',NULL,'1','1');
 

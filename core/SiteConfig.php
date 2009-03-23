@@ -19,6 +19,7 @@
 /* SEE ../SiteConfig.php FOR MODULE USAGE INFORMATION */
 
 require_once "SiteConfigType.php";
+
 class SiteConfig {
 	/* Columns from db */
 	protected $id = null;
@@ -29,14 +30,54 @@ class SiteConfig {
 	protected $value = null;
 	protected $sort = null;
 	protected $editable = null;
-	private static $norex;
+	private static $programmer;
 	private static $cache;
-	public static function norex() {
-		if (!isset(self::$norex)) {
-			$u = @$_SESSION['authenticated_user'];
-			self::$norex = $u && $u->getUsername() == 'norex' && $u->getName() == 'Norex' && $u->getLastName() == 'Development';
+
+	public static function warnInstall() {
+		$query = new Query ("describe `auth`", '');
+		$results = $query->fetchAll();
+		$u = @$_SESSION['authenticated_user'];
+		if ($u && !@$u->column('programmer')) {
+			User::logout(false);
+			echo "Had to log you out for latest change to take.";
 		}
-		return self::$norex;
+		foreach ($results as $result) {
+			if ($result['Field'] == 'programmer') return;
+		}
+		User::logout(false);
+		echo 'Add column programmer to auth.<br/>
+  You have been logged out.<br/>
+    (1) Rerun auth.sql OR add a column named programmer paralleling the status column.<br/>
+    (2) Make the norex User a programmer.';
+		die();
+	}
+
+	public static function emulating() {
+		if (!self::programmer(true)) return false;
+		if (self::programmer()) return "Programmer";
+		$u = $_SESSION['authenticated_user'];
+		$group = Group::make($u->getGroup());
+		return $group->getName();
+	}
+
+	public static function programmer($truth = false) {
+		if (!isset(self::$programmer)) {
+			if (!isset($_SESSION['programmerView']))
+				$_SESSION['programmerView'] = 'Programmer';
+			$u = @$_SESSION['authenticated_user'];
+			if (!$u) return false;
+			self::$programmer = $u->getProgrammer();			
+			if ($p = @$_REQUEST['programmerEmulating']) {
+				$t = Group::getAll("where name=?", "s", $p=='Programmer' ? 'Administrator' : $p);
+				if ($t) {
+					$u->setGroup($t[0]->getId());
+					$u->save();
+					$_SESSION['authenticated_user'] = $u;
+				}
+				$_SESSION['programmerView'] = $p;
+			}
+		}
+		return self::$programmer && ($truth || $_SESSION['programmerView'] == 'Programmer');
 	}
 
 	private static function load() {
@@ -201,7 +242,7 @@ class SiteConfig {
 
 	public function getAddEditForm($target = '/admin/SiteConfig') {
 		$form = new Form('SiteConfig_addedit', 'post', $target);
-		$norex = self::norex();
+		$programmer = self::programmer();
 		
 		$form->setConstants( array ( 'action' => 'addedit') );
 		$form->addElement( 'hidden', 'action' );
@@ -212,12 +253,12 @@ class SiteConfig {
 			// $defaultValues ['siteconfig_value'] = $this->getRawValue();
 			// $form->setDefaults( $defaultValues );
 		} else {
-			if (!$norex) {
+			if (!$programmer) {
 				error_log ("Attempt was made to create a new config option.");
 				die();
 			}
 		}
-		if (!$norex) {
+		if (!$programmer) {
 			$form->addElement('html', 'siteconfig_description', 'Description')->setValue($this->getDescription());
 			SiteConfigType::setFormField($form, $this);
 		} else {
@@ -232,7 +273,7 @@ class SiteConfig {
 		$form->getElement('siteconfig_value')->setValue(SiteConfigType::getDisplayString($this));
 		$form->addElement('submit', 'siteconfig_submit', 'Submit');
 		if ($form->validate() && $form->isSubmitted() && isset($_REQUEST['siteconfig_submit'])) {
-			if ($norex) {
+			if ($programmer) {
 				$this->setModule($form->exportValue('siteconfig_module'));
 				$this->setName($form->exportValue('siteconfig_name'));
 				$this->setDescription($form->exportValue('siteconfig_description'));
@@ -246,11 +287,8 @@ class SiteConfig {
 		
 	}
 
-	/** 
-	 * Return an array of all existing objects of this type in the database
-	 */
-	public static function getAllSiteConfigs() {
-		$sql = 'select * from config_options ' . (self::norex() ? '' : 'where editable="1" ') . 'order by module, sort, name';
+	public static function getAll() {
+		$sql = 'select * from config_options ' . (self::programmer() ? '' : 'where editable="1" ') . 'order by module, sort, name';
 		$results = Database::singleton()->query_fetch_all($sql);
 		foreach ($results as &$result) {
 		        $result = self::$cache[$result['id']];

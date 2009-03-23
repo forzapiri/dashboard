@@ -2,7 +2,7 @@
 /*
  * Suggested naming convention for new types:
  * lowerCaseCamel is a raw type, while UpperCaseCamel is a reference to an object.
- * So 'image' is a blob, while 'Image' is an id which references the Image table.
+ * So 'image' is a blob, while 'Image' is an id for an Image object.
  */
 
 class DBColumnText extends DBColumn {

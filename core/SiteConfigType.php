@@ -7,7 +7,7 @@ abstract class SiteConfigType {
 	function _getDisplayString($val) {return (string) $val;} // Return the string which will be displayed in the admin page
 	function _getFormValue($form) {return $form->exportValue('siteconfig_value');}
 	function _setFormField ($form, $config) {         // Set the form field siteconfig_value and add any required rules. 
-		$form->addElement('text', 'siteconfig_value', SiteConfig::norex() ? 'Value' : '');
+		$form->addElement('text', 'siteconfig_value', SiteConfig::programmer() ? 'Value' : '');
 	}
 
 	/* Implementation follows */	
@@ -83,7 +83,7 @@ class SiteConfigEnumType extends SiteConfigType {
 		preg_match('/^[a-z]+\((.*)\)$/', $config->getRawType(), $matches);
 		$options = split (',', $matches[1]);
 		$options = array_combine ($options, $options);
-		$form->addElement('select', 'siteconfig_value', SiteConfig::norex() ? 'Value' : '', $options);
+		$form->addElement('select', 'siteconfig_value', SiteConfig::programmer() ? 'Value' : '', $options);
 	}
 }
 SiteConfigType::register(new SiteConfigEnumType());
@@ -91,7 +91,7 @@ SiteConfigType::register(new SiteConfigEnumType());
 class SiteConfigLongstringType extends SiteConfigType {
 	function _getName() {return 'longstring';}
 	function _setFormField ($form, $config) {
-		$form->addElement('textarea', 'siteconfig_value', SiteConfig::norex() ? 'Value' : '');
+		$form->addElement('textarea', 'siteconfig_value', SiteConfig::programmer() ? 'Value' : '');
 	}
 }
 SiteConfigType::register(new SiteConfigLongstringType());
@@ -99,7 +99,7 @@ SiteConfigType::register(new SiteConfigLongstringType());
 class SiteConfigTinyMCEType extends SiteConfigType {
 	function _getName() {return 'tinymce';}
 	function _setFormField ($form, $config) {
-		$form->addElement('tinymce', 'siteconfig_value', SiteConfig::norex() ? 'Value' : '');
+		$form->addElement('tinymce', 'siteconfig_value', SiteConfig::programmer() ? 'Value' : '');
 	}
 }
 SiteConfigType::register(new SiteConfigTinyMCEType());
@@ -113,7 +113,7 @@ class SiteConfigListType extends SiteConfigType {
 		$config->setValue(implode (", ", array_map ('trim', $value)));
 	}
 	function _setFormField ($form, $config) {         // Set the form field siteconfig_value and add any required rules. 
-		$form->addElement('text', 'siteconfig_value', (SiteConfig::norex() ? 'Value' : ''), array('size' => 60));
+		$form->addElement('text', 'siteconfig_value', (SiteConfig::programmer() ? 'Value' : ''), array('size' => 60));
 	}
 	function _getDisplayString($val) {return implode ($this->_getValue($val), ", ");}
 }

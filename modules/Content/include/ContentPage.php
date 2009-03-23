@@ -1,7 +1,6 @@
 <?php
 class ContentPage extends DBRow {
 	function createTable() {
-		
 		$cols = array(
 			'id?',
 			DBColumn::make('text', 'name', 'Page Name'),
@@ -11,7 +10,7 @@ class ContentPage extends DBRow {
 			'//timestamp',
 			'//status'
 			);
-		return new DBTable("content_pages", __CLASS__, $cols);
+		return parent::createTable("content_pages", __CLASS__, $cols);
 	}
 	static function make($id = null) {return parent::make($id, __CLASS__);}
 	static function getAll() {
