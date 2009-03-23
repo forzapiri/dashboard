@@ -30,7 +30,7 @@
 <div id="main_window">
 
 <div id='module_title'>
-	  <h1>{$module_title}</h1>
+	  <h1>{$module_title}{if $emulating} - {$emulating}'s View{/if}</h1>
   </div>
   
   <div id="content">

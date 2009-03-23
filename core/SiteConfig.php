@@ -52,6 +52,14 @@ class SiteConfig {
 		die();
 	}
 
+	public static function emulating() {
+		if (!self::programmer(true)) return false;
+		if (self::programmer()) return "Programmer";
+		$u = $_SESSION['authenticated_user'];
+		$group = Group::make($u->getGroup());
+		return $group->getName();
+	}
+
 	public static function programmer($truth = false) {
 		if (!isset(self::$programmer)) {
 			if (!isset($_SESSION['programmerView']))
