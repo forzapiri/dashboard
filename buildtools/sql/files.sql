@@ -25,6 +25,6 @@ CREATE TABLE `files` (
   `filename` varchar(255) default NULL,
   `type` varchar(255) default NULL,
   `description` text,
-  `permission` enum('public','private'),
+  `permission` enum('public','private') default 'public',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;

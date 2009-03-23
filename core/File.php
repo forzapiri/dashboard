@@ -135,6 +135,7 @@ class File extends DBRow {
 			error_log ("$Method of file $tempurl to $dir$file failed.");
 			return false;
 		}
+		$this->setPublic();
 	}
 	
 	function insert($data, $type = null, $filename = null) {
