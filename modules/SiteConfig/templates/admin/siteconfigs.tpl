@@ -1,11 +1,11 @@
-{if $norex}
+{if $programmer}
 <p style="width: 100%; text-align: right;"><a href="/admin/SiteConfig&amp;action=addedit" class="create">Create new configuration variable</a></p>
 {/if}
 
 <table border="0" cellspacing="0" cellpadding="0" class="admin_list">
 <thead>
 	<tr>
-{if $norex}
+{if $programmer}
 		<th valign="center">Name</th>
 		<th valign="center">Type</th>
 		<th valign="center">Sort</th>
@@ -18,7 +18,7 @@
 <tbody>
 	{foreach from=$siteconfigs item=siteconfig}
 	<tr class="{cycle values="row1,row2"}">
-{if $norex}
+{if $programmer}
 		<td>{$siteconfig->getName(true)}</td>
 		<td>{$siteconfig->getRawType()|truncate:30}</td>
 		<td>{$siteconfig->getSort()}</td>
@@ -30,7 +30,7 @@
 {/if}
 
 		<td class="actions">
-{if $norex}
+{if $programmer}
 		<form action="/admin/SiteConfig" method="post" class="norexui_toggle" style="float: left;">
 			<input type="hidden" name="action" value="toggle" />
 			<input type="hidden" name="NOREX" value="1" />
@@ -43,7 +43,7 @@
 			<input type="hidden" name="siteconfig_id" value="{$siteconfig->getId()}" />
 			<input type="image" src="/images/admin/pencil.gif" />
 		</form>
-{if $norex}
+{if $programmer}
 		<form action="/admin/SiteConfig" method="post" onsubmit="return !deleteConfirm({$siteconfig->getId()});" style="float: left;">
             <input type="hidden" name="action" value="delete" />
 			<input type="hidden" name="siteconfig_id" value="{$siteconfig->getId()}" />

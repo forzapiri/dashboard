@@ -5,7 +5,7 @@
 <div id="buttons">
 	<ul id="primary">
 		<li><a href="/admin/Menu&amp;section=menuitem&action=addedit&n={$n}&menuitem_menu_id={$curmenu->getId()}" title="Create Menu Item" class="create">Create Menu Item</a></li>
-{if $norex || ($n>$minimumNumber && $templates|@count>1)}
+{if $programmer || ($n>$minimumNumber && $templates|@count>1)}
 		<li><a href="/admin/Menu&amp;section=menutype&action=addedit&n={$n}&menutype_id={$curmenu->getId()}" class="other" title="Edit Menu Template">Menu Template</a></li>
 {/if}
 {if $n>$minimumNumber}

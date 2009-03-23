@@ -67,10 +67,12 @@ class Module_SiteConfig extends Module {
 			}
 			break;
 		case 'toggle':
+			if (!SiteConfig::programmer()) break;
 			$option->setEditable(1 - $option->getEditable());
 			$option->save();
 			break;			
 		case 'delete':
+			if (!SiteConfig::programmer()) break;
 			$option->delete();
 			$option = NULL;
 			break;

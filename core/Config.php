@@ -80,7 +80,7 @@ class Config {
 		// (2)  The file modules/Foo/Foo.php is readable, and
 		// (3)  You are programmer() OR the module is listed in SiteConfig::modules
 		$programmer = SiteConfig::programmer();
-		// WHEN YOU FIRST LOG IN AS NOREX, CAN'T USE CACHED COPY
+		// WHEN YOU FIRST LOG IN AS programmer, CAN'T USE CACHED COPY
 		// LAZY SOLUTION: JUST DISABLE CACHING FOR programmer
 		if ($programmer || is_null(self::$activeModules)) {
 			$enabled_modules = SiteConfig::get('modules');
