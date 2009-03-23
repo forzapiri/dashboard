@@ -27,6 +27,7 @@ class Module_Analytics extends Module {
 			 ->show(array(
 					'Code' => 'content',
 					'Last Updated' => 'timestamp',
+			 		'Status' => 'status'
 			 ))
 			 ->name('Analytics Script')
 			 ->showCreate(false);

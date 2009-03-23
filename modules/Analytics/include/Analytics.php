@@ -6,7 +6,8 @@ class Analytics extends DBRow {
 		$cols = array(
 			'id?',
 			DBColumn::make('code', 'content', 'Content'),
-			'timestamp'
+			'timestamp',
+			'//status'
 			);
 		return parent::createTable("analytics", __CLASS__, $cols);
 	}
