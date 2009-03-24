@@ -7,26 +7,34 @@ function watchChunkSelect(sort, role, parent_class, parent_id, n, i) { // We are
 	var next = $('_chunk_next_'+sort);
 	var text = div.down('input');
 	var rev = i;
-	text.hide();
-	checkArrows(i, n);
+	if (text) {
+		text.hide();
+		checkArrows(i, n);
+	}
 	select.observe('change', onChange.bind(this));
-	prev.observe('click', onChange.bind(this));
-	next.observe('click', onChange.bind(this));
+	if (text) {
+		prev.observe('click', onChange.bind(this));
+		next.observe('click', onChange.bind(this));
+	}
 	function checkArrows(i, n) {
 		rev = i;
 		if (i > 1) prev.show(); else prev.hide();
 		if (i < n) next.show(); else next.hide();
 	}
 	function onChange(event) {
-		if (select.value == '__new__') {
+		if (text && select.value == '__new__') {
 			text.show();
 			prev.hide();
 			next.hide();
 			return;
 		}
-		text.hide();
-		var ed = tinyMCE.get('_chunk_'+sort);
-		ed.setProgressState(1); // Show progress
+		if (text) {
+			text.hide();
+			var ed = tinyMCE.get('_chunk_'+sort);
+			var input = $('_chunk_'+sort);
+			if (typeof(ed) == 'undefined') ed = false;
+			if (ed) ed.setProgressState(1); // Show progress
+		}
 		if (select.value == '' && parent_id == 0)
 			return;
 		var i=0; // Meaning latest version
@@ -41,14 +49,19 @@ function watchChunkSelect(sort, role, parent_class, parent_id, n, i) { // We are
 						   parameters: $params,
 						   onSuccess: function (t) {
 								  var result = t.responseText.evalJSON(true);
-								  ed.setContent(result.content ? result.content : '');
-								  ed.save();
-								  ed.setProgressState(0);
+								  var content = result.content ? result.content : '';
+								  if (ed) {
+									  ed.setContent(content);
+									  ed.save();
+									  ed.setProgressState(0);
+								  } else {
+									  input.update(content);
+								  }
 								  checkArrows(result.i, result.n);
 							  }.bind(this),
 						   onFailure: function(){
 								  alert('Failed to locate existing content; sorry.');
-								  ed.setProgressState(0);
+								  if (ed) ed.setProgressState(0);
 							  }.bind(this)
 						  });
 	}

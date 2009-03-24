@@ -38,6 +38,8 @@ TODO:
 class ChunkManager {
 	private $fields = array(); // Fields are of type DBColumn
 	private $roles = array();
+	private $readOnly = array();
+	private $hidden = array();
 	private $previews = array();
 	private $chunks = array();
 	private $object = null;
@@ -51,17 +53,23 @@ class ChunkManager {
 			$i++;
 			$label = $field->label();
 			$chunk = @$this->chunks[$i];
-			if ($role = $this->roles[$i]) {
+			$hidden = $this->hidden[$i] && !SiteConfig::programmer();
+			$readOnly = $hidden || ($this->readOnly[$i] && !SiteConfig::programmer());
+			if (!$hidden && $role = $this->roles[$i]) {
 				$form->addElement('html', "\n<div id=_select_text_$i>");
 				$el = array();
-				$el[] = $s = $form->createElement('select', "select", "", self::getSelection($role));
+				$el[] = $s = $hidden
+					? $form->createElement('hidden', 'select')
+					: $form->createElement('select', "select", "", self::getSelection($role, $readOnly));
 				if ($chunk && $chunk->getRole() && $chunk->getName()) {
 					$s->setValue($chunk->getName());
 					$chunk = $chunk->getActualChunk();
 				}
-				$el[] = $form->createElement('text', "text", ""); // THESE FIELDS ARE HIDDEN AND/OR HANDLED BY chunks.js
-				$el[] = $form->createElement('image', 'prev', "/images/admin/arrow_left.gif", array('onclick' => 'return false', 'id'=>"_chunk_prev_".$i));
-				$el[] = $form->createElement('image', 'next', "/images/admin/arrow_right.gif", array('onclick' => 'return false', 'id'=>"_chunk_next_".$i));
+				if (!$readOnly) {
+					$el[] = $form->createElement('text', "text", ""); // THESE FIELDS ARE HIDDEN AND/OR HANDLED BY chunks.js
+					$el[] = $form->createElement('image', 'prev', "/images/admin/arrow_left.gif", array('onclick' => 'return false', 'id'=>"_chunk_prev_".$i));
+					$el[] = $form->createElement('image', 'next', "/images/admin/arrow_right.gif", array('onclick' => 'return false', 'id'=>"_chunk_next_".$i));
+				}
 				$form->addGroup($el, "_chunk_name_$i", $label, '&nbsp;&nbsp;&nbsp;');
 				$form->addElement('html', "\n</div>");
 				$class = get_class($this->object);
@@ -77,19 +85,32 @@ class ChunkManager {
 				$value = $this->previews[$i];
 			}
 			$formValue = DBRow::toForm($field->type(), $value);
-			$el = $field->addElementTo(array ('form' => $form, 'id' => "_chunk_$i", 'value' => $formValue));
-			$field->setLabel($label);
+			if ($readOnly) {
+				$el = $form->createElement ('hidden', "_chunk_$i");
+				$el->setValue($formValue);
+			} else {
+				$el = $field->addElementTo(array ('form' => $form, 'id' => "_chunk_$i", 'value' => $formValue));
+				$field->setLabel($label);
+			}
 		}
 		return ++$i; // Returns the number of form fields which were added
 	}
 
 	private $form;
-	private function getName ($i, &$isNew) { // TODO: make second arg optional
+    private function getName ($i, &$isNew) { // TODO: make second arg optional
 		$isNew = false;
 		if ($this->roles[$i]) {
 			$pair = $this->form->exportValue("_chunk_name_$i");
-			$isNew = $pair['select'] == '__new__';
-			return $isNew ? $pair['text'] : $pair['select'];
+			if (is_array ($pair)) {
+				$isNew = $pair['select'] == '__new__';
+				return $isNew ? $pair['text'] : $pair['select'];
+			}
+			else if (is_object($value = $this->form->exportValue("_chunk_$i".'[select]'))) {
+				return null;
+			}
+			else {
+				return $value;
+			}
 		}
 		else return '';
 	}
@@ -109,6 +130,7 @@ class ChunkManager {
 
 	private function createChunkIfNeeded ($i) {
 		$chunk = @$this->chunks[$i];
+		$readOnly = $this->readOnly[$i];
 		/* Canonical Chunk will be created by Chunk->getRevision() if needed */
 		if (!$chunk) {
 			$chunk = $this->newChunk($i, false);
@@ -126,6 +148,7 @@ class ChunkManager {
 		foreach ($this->fields as $field) {
 			$i++;
 			$this->createChunkIfNeeded ($i);
+			if ($this->readOnly[$i] && !SiteConfig::programmer()) continue;
 			$type = $field->type();
 			$rawValue = $form->exportValue("_chunk_$i");
 			$el = $form->getElement("_chunk_$i");
@@ -191,12 +214,14 @@ class ChunkManager {
 			$label = $req[1];
 			$args = explode(';', trim($req[2]));
 			$role = null;
+			$readOnly = false;
+			$hidden = false;
 			$type = null;
 			$preview = "";
 			foreach ($args as $arg) {
 				$pair = explode('=', trim($arg));
 				$var = $pair[0];
-				if (in_array ($var, array ("type", "role", "preview")))
+				if (in_array ($var, array ("type", "role", "preview", "readOnly", "hidden")))
 					$$var = $pair[1];
 				else trigger_error ("Variable $var not recognized in ChunkManager::setTemplate()");
 			}
@@ -204,19 +229,22 @@ class ChunkManager {
 				? new DBColumnClass($type, '', $label)
 				: DBColumn::make($type, '', $label);
 			$this->roles[] = $role;
+			$this->hidden[] = !!$hidden;
+			$this->readOnly[] = !!$readOnly || !!$hidden;
 			$this->previews[] = $this->convertPreview($preview);
 		}
 	}
 
 	static private $selectQuery = null;
-	static private function getSelection($role) {
+	static private function getSelection($role, $readOnly=false) {
 		if (!self::$selectQuery) {
 			self::$selectQuery = new Query('select name from chunk where role=? and !isnull(role) and !isnull(name) group by name order by name', 's');
 		}
 		$result = self::$selectQuery->fetchAll($role);
 		$names = array();
 		foreach ($result as $val) $names[$val['name']] = $val['name'];
-		return array_merge (array(''=>'', '__new__'=>'Create Name for Reuse:'), $names);
+		$options = $readOnly ? $names : array_merge (array(''=>'', '__new__'=>'Create Name for Reuse:'), $names);
+		return $options;
 	}
 
 	static function fieldAdminRequest() {
