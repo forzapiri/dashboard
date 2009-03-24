@@ -32,7 +32,7 @@ INSERT INTO `permissions` VALUES
 (16,'delete','MenuType','Delete Content Menus','',1,1),
 (17,'view','SiteConfig','View Site Configuration','',1,1),
 (18,'addedit','SiteConfig','Add / Edit Site Configuration','',1,1),
-(19,'delete','SiteConfig','Delete Site Configuration','',1,1);
-(20,'view','Template','View Template','',1,1);
-(21,'addedit','Template','Add/Edit Template','',1,1);
+(19,'delete','SiteConfig','Delete Site Configuration','',1,1),
+(20,'view','Template','View Template','',1,1),
+(21,'addedit','Template','Add/Edit Template','',1,1),
 (22,'delete','Template','Delete Template','',1,1);
