@@ -44,9 +44,10 @@ if(ucfirst($_REQUEST['module']) == 'Content' && @empty($_REQUEST['page'])){
 }
 
 
-if(ucfirst($_REQUEST['module']) == 'Content' && ucfirst(@$_REQUEST['page']) == SiteConfig::get('Content::defaultPage')){
-	$smarty->assign('ishome', true);
-}
+$isHome = ucfirst($_REQUEST['module']) == 'Content'
+	&& (strtolower(ucfirst(@$_REQUEST['page']))
+		== strtolower(SiteConfig::get('Content::defaultPage')));
+$smarty->assign('ishome', $isHome);
 
 require_once 'HTML/AJAX/Helper.php';
 $ajaxHelper = new HTML_AJAX_Helper ( );
