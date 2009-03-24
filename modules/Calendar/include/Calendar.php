@@ -21,11 +21,12 @@ class Calendar extends DBRow {
 	function quickformPrefix() {return 'calendar_';}
 	
 	public function getAllCalendarEvents($calendar, $year, $month) {
-		
-		return CalendarEvent::getAll('where event_start >=? and event_end <? and calendar_id=? order by event_start', 'ssi', 
-			$year . '-' . $month . '-01',
-			$year . '-' . ($month + 1) . '-01',
-			$calendar);
+		$calendar = (integer) $calendar;
+		$restrict = $calendar ? 'calendar_id=?' : '0=?';
+		return CalendarEvent::getAll("where event_start >=? and event_end <? and $restrict order by event_start", 'ssi', 
+									 $year . '-' . $month . '-01',
+									 $year . '-' . ($month + 1) . '-01',
+									 $calendar);
 	}
 	
 	public function getLink() {
