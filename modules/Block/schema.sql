@@ -33,6 +33,8 @@ CREATE TABLE `blocks` (
   KEY `sort` (`sort`)
 ) ENGINE=MyISAM AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
 
+
+DELETE FROM `permissions` WHERE class = 'Blocks';
 INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`) VALUES ('addedit','Block','Add/Edit Blocks','','1','1');
 INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`) VALUES ('view','Block','View Blocks','','1','1');
 INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`) VALUES ('delete','Block','Delete Blocks',NULL,'1','1');

@@ -17,8 +17,6 @@ CREATE TABLE `analytics` (
 DELETE FROM modules WHERE module = 'Analytics';
 INSERT INTO modules VALUES(null ,'Analytics', 'Google Analytics');
 
-#remove permissions and re-create them.:
-#
 DELETE FROM `permissions` WHERE class = 'Analytics';
 INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`) VALUES ('view','Analytics','View Analytics','','1','1');
 INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`) VALUES ('addedit','Analytics','Add/Edit Analytics','','1','1');
