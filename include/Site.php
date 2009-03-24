@@ -10,8 +10,6 @@
  */
 error_reporting(E_ALL);
 
-date_default_timezone_set("America/Halifax");
-
 function var_log($var, $prefix="") {
 	if ($prefix) $prefix .= ': ';
    	if ($var === null) $var = 'NULL';
@@ -63,6 +61,11 @@ include_once(SITE_ROOT . '/core/libs/Smarty_Compiler.class.php');
 include_once(SITE_ROOT . '/include/fb.php');
 
 session_start();
+
+//FIX for PHP 5.3
+//set the default timezone as set in the Administration interface, else use the best timezone in the world.
+if (!SiteConfig::get('defaultTimeZone')) date_default_timezone_set("America/Halifax");
+else date_default_timezone_set(SiteConfig::get('defaultTimeZone'));
 
 //date_default_timezone_set('America/Halifax');
 define('DISPLAY_TYPE_TABLE', 'table');
