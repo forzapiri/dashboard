@@ -41,9 +41,9 @@ class Block extends DBRow {
 
 	static function getAllBlocks ($status = null) {
 		if($status == 'active'){
-			return self::getAll("where status=1", '');
+			return self::getAll("where status=1 order by sort", '');
 		} else {
-			return self::getAll();
+			return self::getAll('order by sort');
 		}
 	}
 }
