@@ -34,24 +34,6 @@ class Module_DBTable extends Module {
 		return array ('tables' => $tables, 'rows' => $rows, 'col' => @$col);
 	}
 	
-	private static $dbtables = false;
-	private function loadTableInfo ($table) { // $table is a string
-		// TODO: Code duplicated in MysqlTable.  Use it.
-		if (!MysqlTable::tableExists($table)) {return;}
-		$query = new Query ("describe `$table`", '');
-		$cols = $query->fetchAll();
-		foreach ($cols as $c) {
-			$name = $c['Field'];
-			if ($name == 'id') continue;
-			$col = TableColumn::make();
-			$col->set('table', $table);
-			$col->set('name', $name);
-			$col->set('type', 'text'); // TODO: Guess the field type?  Don't bother?
-			$col->set('label', ucwords(str_replace('_', ' ', $name)));
-			$col->save();
-		}
-	}
-	
 	function getAdminInterface() {
 		$id = @$_REQUEST['id'];
 		extract ($this->refresh($id));
@@ -66,8 +48,6 @@ class Module_DBTable extends Module {
 			$form = $col->createTableForm('/admin/DBTable');
 			if (!$form->isProcessed()) {
 				return $form->display();
-			} else {
-				$this->loadTableInfo($name);
 			}
 			break;
 		case 'view': 
