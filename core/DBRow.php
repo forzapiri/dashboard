@@ -317,7 +317,7 @@ abstract class DBRow {
 			}
 			$_SESSION['form_uniqids'][$uniqid] = 'submitted';
 			foreach ($this->columns() as $column) {
-				if ($column->noForm()) continue;
+				if ($column->noForm() || $column->ignored()) continue;
 				$name = $column->name();
 				$value = $form->exportValue($this->quickformPrefix() . $name);
 				$form->getElement($this->quickformPrefix() . $name)->setValue($value);
