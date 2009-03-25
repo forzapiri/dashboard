@@ -57,6 +57,9 @@ INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status
 INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`) VALUES ('view','Video','View Gallery Videos','','1','1');
 INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`) VALUES ('delete','Video','Delete Gallery Videos',NULL,'1','1');
 
+DELETE from `modules` where `module`="VideoGallery";
+INSERT INTO `modules` set `module`="VideoGallery", `display_name`="YouTube Videos";
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
