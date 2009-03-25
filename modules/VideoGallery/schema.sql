@@ -46,6 +46,17 @@ CREATE TABLE `videos` (
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
+
+DELETE FROM `permissions` WHERE class = 'VideoGallery';
+INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`) VALUES ('addedit','VideoGallery','Add/Edit Video Galleries','','1','1');
+INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`) VALUES ('view','VideoGallery','View Video Galleries','','1','1');
+INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`) VALUES ('delete','VideoGallery','Delete Video Galleries',NULL,'1','1');
+
+DELETE FROM `permissions` WHERE class = 'Video';
+INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`) VALUES ('addedit','Video','Add/Edit Gallery Videos','','1','1');
+INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`) VALUES ('view','Video','View Gallery Videos','','1','1');
+INSERT INTO `permissions` (`key`,`class`,`name`,`description`,`group_id`,`status`) VALUES ('delete','Video','Delete Gallery Videos',NULL,'1','1');
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
