@@ -286,7 +286,12 @@ class SiteConfig {
 		return $form;
 		
 	}
-
+	static function countAll() {
+		$sql = 'select count(id) as count from config_options' . (self::programmer() ? '' : 'where editable="1" ');
+		$results = Database::singleton()->query_fetch($sql);
+		return $results['count'];
+	}
+	
 	public static function getAll() {
 		$sql = 'select * from config_options ' . (self::programmer() ? '' : 'where editable="1" ') . 'order by module, sort, name';
 		$results = Database::singleton()->query_fetch_all($sql);
