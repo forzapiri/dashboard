@@ -1,0 +1,9 @@
+<h3>Bulk Upload Photos</h3>
+<form action="/admin/Gallery" method="post" enctype="multipart/form-data">
+<input type="hidden" name="MAX_FILE_SIZE" value="30000000" />
+<input type="hidden" name="{$item->quickFormPrefix()}id" value="{$item->get('id')}" />
+<input type="hidden" name="section" value="PhotoGallery" />
+<input type="hidden" name="action" value="addedit" />
+<input type="file" name="zip_file" />
+<input type="submit" name="bulk_submit" value="Send ZIP File" />
+</form>

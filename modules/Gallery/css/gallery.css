@@ -1,6 +1,261 @@
-.gallery_thumb {
-	float: left;
-	width: 150px;
-	height: 131px;
-	margin: 0 10px 10px 0;
+* {
+  margin: 0;
+  padding: 0;
+}
+
+#galleryList {
+  margin-left: 40px;
+}
+#galleryList li {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+#pg_Holder {
+  font-family: Arial;
+  width: 650px;
+  margin-top: 10px;
+  margin-left: 20px;
+  background: #FFF;
+}
+#pg_Holder div.hr {
+  clear: both;
+  height: 10px;
+  border-bottom: 1px dotted #999;
+  width: 620px;
+  margin-bottom: 10px;
+  line-height: 10px;
+  font-size: 0em;
+  margin-left: 15px;
+}
+#pg_Top {
+  float: left;
+  height: 16px;
+  line-height: 16px;
+  font-size: 0em;
+}
+#pg_TopLeft {
+  width: 15px;
+  height: 16px;
+  background-image: url('/images/modules/gallery/gall_topleft_corner.gif');
+  float: left;
+}
+#pg_TopMiddle {
+  background-color: #333;
+  float: left;
+  height: 16px;
+  width: 620px;
+}
+#pg_TopRight {
+  width: 15px;
+  height: 16px;
+  background-image: url('/images/modules/gallery/gall_topright_corner.gif');
+  float: left;
+}
+#pg_MainArea {
+  clear: left;
+  float: left;
+  width: 100%;
+  background-color: #333;
+}
+#pg_MainArea h1 {
+  font-size: 14px;
+  color: #FFF;
+  margin-bottom: 10px;
+  padding-left: 25px;
+}
+#pg_DetailsHolder {
+  position: relative;
+  width: 600px;
+  height: 400px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: #333;
+  margin-left: 25px;
+}
+#pg_ImageHolder {
+  float: left;
+  width: 600px;
+  height: 400px;
+  background-repeat: no-repeat;
+  background-color: #333;
+}
+#pg_InfoHolder {
+  display: none;
+  background: #fff;
+  padding: 10px;
+  font-size: 11px;
+}
+#pg_MoreInfoButton {
+  clear: both;
+  float: right;
+  text-align: center;
+  padding-right: 10px;
+}
+#pg_MoreInfoButton a {
+  background-image: url('/images/modules/gallery/gall_moreinfo_tab.gif');
+  background-repeat: no-repeat;
+  width: 85px;
+  height: 21px;
+  font-size: 11px;
+  color: #999;
+  line-height: 21px;
+  font-weight: bold;
+  text-decoration: none;
+}
+#pg_MoreInfoButton a:hover {
+  color: #333;
+}
+#pg_EnlargeButton {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding-right:10px;
+}
+#pg_ThumbNav {
+  clear: left;
+  float: none;
+  width: 610px;
+  margin-left: 20px;
+}
+#pg_ThumbList {
+  display: block;
+  float: left;
+  list-style: none;
+	width: 566px;
+	text-align: center;
+}
+#pg_ThumbList li {
+  display: block;
+  float: left;
+  background: none;
+  text-align: center;
+  margin-bottom: 10px;
+  padding-left: 7px;
+  padding-right: 6px;
+}
+#pg_ThumbList li div {
+  float: left;
+  width: 100px;
+	text-align: center;
+	background: #FFF;
+  padding-top: 5px;
+}
+#pg_ThumbList li h2 {
+  font-size: 9px;
+  line-height: 9px;
+  padding: 5px;
+  text-align: left;
+}
+#pg_Bottom {
+  clear: left;
+  float: none;
+  height: 15px;
+  line-height: 15px;
+  font-size: 0em;
+}
+#pg_BottomLeft {
+  width: 15px;
+  height: 15px;
+  background-image: url('/images/modules/gallery/gall_bottomleft_corner.gif');
+  float: left;
+}
+#pg_BottomMiddle {
+  background-color: #333;
+  float: left;
+  height: 15px;
+  width: 620px;
+}
+#pg_BottomRight {
+  width: 15px;
+  height: 15px;
+  background-image: url('/images/modules/gallery/gall_bottomright_corner.gif');
+  float: right;
+}
+
+/*Photo Gallery Styles*/
+div.photoHolder {
+width:125px;
+float:left;
+margin:0 30px 30px 0;
+}
+
+div.photo {
+width:115px;
+height:79px;
+float:left;
+background-color:#fff;
+padding:0;
+margin:0;
+overflow: hidden;
+border:5px solid #577a38;
+text-align: center;
+}
+
+div.photo img {
+padding:0;
+margin:0;
+height:79px;
+border:none;
+}
+
+div.photoInfo {
+width:125px;
+float:left;
+text-align:center;
+background-color:#577a38;
+color:#fff;
+font-weight: bold;
+height:40px;
+font-size:12px;
+}
+
+div.photoFooter {
+float:left;
+background-image:url(/images/photoFooter.jpg);
+background-repeat:no-repeat;
+width:125px;
+height:10px;
+}
+
+div.galHolder {
+width:125px;
+float:left;
+margin:0 20px 30px 0;
+}
+
+div.gal {
+width:115px;
+height:79px;
+overflow: hidden;
+float:left;
+background-color:#fff;
+text-align: center;
+padding:0;
+margin:0;
+border:5px solid #532813;
+}
+
+div.gal img {
+padding:0;
+margin:0;
+border:none;
+}
+
+div.galInfo {
+width:125px;
+float:left;
+text-align:center;
+background-color:#532813;
+color:#fff;
+font-weight: bold;
+height:40px;
+font-size:12px;
+}
+
+div.galFooter {
+float:left;
+background-repeat:no-repeat;
+width:125px;
+height:10px;
 }

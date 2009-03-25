@@ -24,6 +24,9 @@ class PhotoGalleryImage extends DBRow {
 	}
 	function quickformPrefix() {return 'photo_gallery_image_';}
 
+	public function getThumb($w = 115, $h = 79) {
+		return $this->get('file')->getImgTag('w=' . $w . '&h=' . $h);
+	}
 }
 
 DBRow::init('PhotoGalleryImage');

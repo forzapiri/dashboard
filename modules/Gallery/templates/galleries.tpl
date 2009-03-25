@@ -1,32 +1,43 @@
-{if $curgallery && $curgallery->getGalleryImages()}
-	<h3>{$curgallery->get('name')}</h3>
-	{foreach from=$curgallery->getGalleryImages() item=image}
-		<div class="gallery_thumb">
-		<a href="{$image->get('file')->getImageLink('w=800')}" rel="lightbox[{$curgallery->get('name')}]">{$image->get('file')->getImgTag('w=150&h=131')}</a>
+{if $galleries}
+	<h1 style="clear: both;">Photo Galleries</h1>
+	<p>Choose an album to view pictures</p>
+	{foreach from=$galleries item=gallery}
+	
+	<div class="galHolder">
+		<div class="gal">
+			<a href="/gallery/{$gallery->get('id')}-{$gallery->get('name')|urlify}" title="{$gallery->get('name')}">
+				{$gallery->get('thumbnail')->getImgTag('w=115&h=79')}
+			</a>
 		</div>
+		<div class="galInfo">
+			{$gallery->get('name')}
+		</div>
+
+		<div class="galFooter">
+			&nbsp;
+		</div>
+	</div>
 	{/foreach}
 {/if}
 
-{if $galleries}
-	<p>Please choose a gallery below...</p><br />
-	{counter assign='count' start=0 print=0}
-	<table width="700" border="0" cellspacing="0" cellpadding="0" class="galleries">
-	{foreach from=$galleries item=gallery}
-		{if $count is div by 4}
-			{if $count!=0}
-				</tr>
-			{/if}
-			<tr align="center" valign="middle" class="galleryTitle">
-		{/if}
-		<td>
-		{if $gallery->getFirstImage()}
-			<a href="/gallery/{$gallery->get('id')}-{$gallery->get('name')|urlify}">
-			{$gallery->get('thumbnail')->getImgTag()}
-			</a><br>
-		{/if}
-		<a href="/gallery/{$gallery->get('id')}-{$gallery->get('name')|urlify}">
-		{$gallery->get('name')}</a></td>
-		{counter assign='count' print=0}
+{if $curgallery && $curgallery->getGalleryImages()}
+	<h3 style="clear: both;">{$curgallery->get('name')}</h3>
+	{foreach from=$curgallery->getGalleryImages() item=image}
+	
+	<div class="photoHolder">
+		<div class="photo">
+		<a href="{$image->get('file')->getImageLink('w=800&h=600')}" rel="lightbox[{$curgallery->get('name')}]" class="lbOn" title="{$image->get('title')}">
+			{$image->get('file')->getImgTag('h=79&w=115')}
+			</a>
+		</div>
+		<div class="photoInfo">
+			{$image->get('title')}
+		</div>
+	
+		<div class="photoFooter">
+			&nbsp;
+		</div>
+	</div>
 	{/foreach}
 </tr></table>
 {/if}
