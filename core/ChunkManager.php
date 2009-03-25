@@ -201,7 +201,10 @@ class ChunkManager {
 		return implode("\n",$list);
 	}
 	
+	private $_templateSet=false;
+	function templateIsSet() {return $this->_templateSet;}
 	function setTemplate($template) {
+		$this->_templateSet = true;
 		if (!$template) return array();
 		if (is_object ($template)) $template = $template->getData();
 		$titlechars = '[^"\']';

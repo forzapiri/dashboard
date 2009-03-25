@@ -403,7 +403,7 @@ class Page extends defaultPageActs {
 			if (isset($_REQUEST[$prefix . 'id'])) {
 				$r = $this->catchActions();
 				$i = DBRow::make($_REQUEST[$prefix . 'id'], $class);
-				$f = $i->getAddEditForm('/admin/' . $_REQUEST['module']);
+				$f = $i->getAddEditForm('/admin/' . $_REQUEST['module'], false);
 				// BUG:  CHRIS THINKS THIS WAS INSERTED TO MASK A BUG IN DBROW, PERHAPS...  WE SHALL SEE.
 				$i = DBRow::make($i->getId(), $class); //$i->__construct($i->getId());
 				$f = $i->getAddEditForm('/admin/' . $_REQUEST['module']);

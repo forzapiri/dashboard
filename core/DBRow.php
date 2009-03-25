@@ -260,7 +260,7 @@ abstract class DBRow {
 	function getAddEditFormSaveHook($form) {} // Method deprecated; called below for backward compatability
 	function getAddEditFormBeforeSaveHook($form) {return $this->getAddEditFormSaveHook($form);}
 	function getAddEditFormAfterSaveHook($form) {}
-	function getAddEditForm($target = null) {
+	function getAddEditForm($target = null, $initChunks=true) {
 		if (!$target){
 			$target = '/admin/' . get_class($this);
 		}
@@ -299,7 +299,7 @@ abstract class DBRow {
 			$els[$name] = $el;
 		}
 		$this->getAddEditFormHook($form);
-		if ($this->chunkable() && ($name = $this->getPageTemplate())) {
+		if ($initChunks && $this->chunkable() && ($name = $this->getPageTemplate())) {
 			$template = is_array ($name)
 				? Template::getRevision('Module_' . $name[0], $name[1])
 				: Template::getRevision('CMS', $name);
