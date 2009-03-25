@@ -1,6 +1,9 @@
 <?php
 
 class Module_VideoGallery extends Module {
+	
+	public $icon = '/modules/VideoGallery/images/icon.png';
+	
 	public function __construct() {
 		$this->page = new Page();
 		$this->page->with('VideoGallery')
@@ -28,7 +31,7 @@ class Module_VideoGallery extends Module {
 	
 	public function getUserInterface($params = null) {
 		if (isset($_REQUEST['page']) && is_numeric($_REQUEST['page'])) {
-			$gallery = DBRow::make($_REQUEST['page'], 'VideoGallery');
+			$gallery = DBRow::make((int)$_REQUEST['page'], 'VideoGallery');
 			$this->smarty->assign('gallery', $gallery);
 			return $this->smarty->fetch('galleries.tpl');
 		}
@@ -39,10 +42,10 @@ class Module_VideoGallery extends Module {
 			case 1:
 			default:
 				$linkItems = VideoGallery::getAll();
-				foreach($linkItems as $linkItem){
+				foreach(@$linkItems as $linkItem){
 					$linkables[$linkItem->get('id')] = $linkItem->get('name');
-					$linkables[0] = "--Top Level Gallery--";
 				}
+				$linkables[0] = "--Top Level Gallery--";
 				return $linkables;
 		}
 	}
@@ -51,9 +54,9 @@ class Module_VideoGallery extends Module {
 		$page = VideoGallery::make($id, 'VideoGallery');
 		if ($page->get('id')){
 			require_once (SITE_ROOT . '/core/plugins/modifier.urlify.php');
-			return '/videogallery/' . $page->get('id') . '-' . smarty_modifier_urlify($page->get('name'));
+			return '/videos/' . $page->get('id') . '-' . smarty_modifier_urlify($page->get('name'));
 		}
-		return '/videogallery/';
+		return '/videos/';
 	}
 }
 
