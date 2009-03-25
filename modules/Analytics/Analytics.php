@@ -21,6 +21,8 @@
 
 class Module_Analytics extends Module {
 	
+	public $icon = '/modules/Analytics/images/google.png';
+	
 	public function __construct() {
 		$this->page = new Page();
 		$this->page->with('Analytics')
