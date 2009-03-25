@@ -316,6 +316,7 @@ abstract class DBRow {
 				return $form;
 			}
 			$_SESSION['form_uniqids'][$uniqid] = 'submitted';
+			$id = $this->getId();
 			foreach ($this->columns() as $column) {
 				if ($column->noForm()) continue;
 				$name = $column->name();
