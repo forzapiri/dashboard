@@ -22,7 +22,7 @@ class Chunk extends DBRow {
 			$class = get_class($obj);
 			$id = $obj->getId();
 		}
-		return ($class && $id) ? self::getAll("where parent_class=? and parent=?", 'si', $class, $id) : array();
+		return ($class && $id) ? self::getAll("where parent_class=? and parent=? order by sort", 'si', $class, $id) : array();
 	}
 
 	static function revertDrafts($class, $id) {
