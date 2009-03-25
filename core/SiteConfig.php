@@ -287,7 +287,7 @@ class SiteConfig {
 		
 	}
 	static function countAll() {
-		$sql = 'select count(id) as count from config_options' . (self::programmer() ? '' : 'where editable="1" ');
+		$sql = 'select count(id) as count from config_options' . (self::programmer() ? '' : ' where editable="1" ');
 		$results = Database::singleton()->query_fetch($sql);
 		return $results['count'];
 	}
