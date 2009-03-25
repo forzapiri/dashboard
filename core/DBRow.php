@@ -316,11 +316,11 @@ abstract class DBRow {
 				return $form;
 			}
 			$_SESSION['form_uniqids'][$uniqid] = 'submitted';
-			$id = $this->getId();
 			foreach ($this->columns() as $column) {
 				if ($column->noForm()) continue;
 				$name = $column->name();
 				$value = $form->exportValue($this->quickformPrefix() . $name);
+				$form->getElement($this->quickformPrefix() . $name)->setValue($value);
 				$this->set($name, $column->fromForm($value, $els[$name]));
 			}
 			$this->getAddEditFormBeforeSaveHook($form);
