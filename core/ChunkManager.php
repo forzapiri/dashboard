@@ -53,9 +53,10 @@ class ChunkManager {
 			$i++;
 			$label = $field->label();
 			$chunk = @$this->chunks[$i];
-			$hidden = $this->hidden[$i] && !SiteConfig::programmer();
-			$readOnly = $hidden || ($this->readOnly[$i] && !SiteConfig::programmer());
-			if (!$hidden && $role = $this->roles[$i]) {
+			$hidden = $this->hidden[$i];
+			$readOnly = $this->readOnly[$i];
+			$role = $this->roles[$i];
+			if ($role) {
 				$form->addElement('html', "\n<div id=_select_text_$i>");
 				$el = array();
 				$el[] = $s = $hidden
@@ -130,13 +131,19 @@ class ChunkManager {
 
 	private function createChunkIfNeeded ($i) {
 		$chunk = @$this->chunks[$i];
-		$readOnly = $this->readOnly[$i];
 		/* Canonical Chunk will be created by Chunk->getRevision() if needed */
 		if (!$chunk) {
 			$chunk = $this->newChunk($i, false);
 			$this->chunks[$i] = $chunk;
 		}
 		$name = $this->getName($i, $new);
+		if (!$name
+			&& $this->readOnly[$i]
+			&& ($role = $this->roles[$i])
+			&& ($all = self::getSelection ($role, true))) {
+			// Set this to somemthing; don't just leave it blank.
+			$name = array_shift ($all);
+		}
 		$chunk->setName ($name);
 		$chunk->setSort($i);
 		$chunk->save();
@@ -148,7 +155,8 @@ class ChunkManager {
 		foreach ($this->fields as $field) {
 			$i++;
 			$this->createChunkIfNeeded ($i);
-			if ($this->readOnly[$i] && !SiteConfig::programmer()) continue;
+			if ($this->readOnly[$i])
+				continue;
 			$type = $field->type();
 			$rawValue = $form->exportValue("_chunk_$i");
 			$el = $form->getElement("_chunk_$i");
@@ -232,8 +240,8 @@ class ChunkManager {
 				? new DBColumnClass($type, '', $label)
 				: DBColumn::make($type, '', $label);
 			$this->roles[] = $role;
-			$this->hidden[] = !!$hidden;
-			$this->readOnly[] = !!$readOnly || !!$hidden;
+			$this->hidden[] = $hidden && !SiteConfig::programmer();
+			$this->readOnly[] = ($readOnly || $hidden) && !SiteConfig::programmer();
 			$this->previews[] = $this->convertPreview($preview);
 		}
 	}
@@ -241,7 +249,7 @@ class ChunkManager {
 	static private $selectQuery = null;
 	static private function getSelection($role, $readOnly=false) {
 		if (!self::$selectQuery) {
-			self::$selectQuery = new Query('select name from chunk where role=? and !isnull(role) and !isnull(name) group by name order by name', 's');
+			self::$selectQuery = new Query('select name from chunk where role=? and role!="" and !isnull(role) and name!="" and !isnull(name) group by name order by name', 's');
 		}
 		$result = self::$selectQuery->fetchAll($role);
 		$names = array();
