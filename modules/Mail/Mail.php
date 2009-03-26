@@ -217,8 +217,6 @@ class Module_Mail extends Module {
 	}
 	
 	public function getUserInterface($params) {
-		$this->parentSmarty->templateOverride = 'db:site_buttons.tpl';
-		
 		switch (@$_REQUEST['section']) {
 		case 'collect':
 			// collect client data
@@ -236,58 +234,12 @@ class Module_Mail extends Module {
 			die();
 			//params['user'] . '/' . $params['mso_id'];
 		case 'signup':
-			if(@!is_null($_REQUEST['newsletter_email']) || @!is_null($_REQUEST['infocollect_email'])){
-				$i = DBRow::make(null,'InfoCollect');
-				$i->set('email', isset($_REQUEST['newsletter_email']) ? $_REQUEST['newsletter_email'] : $_REQUEST['infocollect_email']);
-				$form = $i->getAddEditForm('/mail/signup');
-					
-				if (!$form->isProcessed()) {
-					$pageid = ContentPage::keytoid('keep-in-touch');
-					$revid = ContentPage::activeRev($pageid['id']);
-					$rev = ContentPageRevision::make($revid['id']);
-					$this->smarty->assign('content', $rev);
-					$this->setPageTitle($rev->get('page_title'));
-					$page = ContentPage::make($pageid['id']);
-					$this->parentSmarty->templateOverride = 'db:' . $page->get('page_template');
-					return '<h1>' . $rev->get('page_title') . '</h1>' . $rev->get('content') . $form->display();
-				}
-					
+			if(@!is_null($_REQUEST['newsletter_email'])){
 				include_once('include/MailUser.php');
-				//trim($_REQUEST['newsletter_name']);
-				//$name = explode(" ", $_REQUEST['newsletter_name']);
 				$nUser = new MailUser();
-				$nUser->setEmail($_REQUEST['infocollect_email']);
-				$nUser->setFirstName($_REQUEST['infocollect_first_name']);
-				$nUser->setLastName($_REQUEST['infocollect_last_name']);
+				$nUser->setEmail($_REQUEST['newsletter_email']);
 				$nUser->save();
-					
-				$match = array('address' => $_REQUEST['infocollect_street_address'] . ', ' . $_REQUEST['infocollect_city'],
-							   'first_name' => $_REQUEST['infocollect_first_name'], 'last_name' => $_REQUEST['infocollect_last_name']);
-					
-				$id = Contact::matchContact($match);
-				if (!$id) {
-					$h = DBRow::make(null, 'Household');
-					$h->set('street_address', $_REQUEST['infocollect_street_address']);
-					$h->set('city', $_REQUEST['infocollect_city']);
-					$h->set('postal_code', $_REQUEST['infocollect_postal_code']);
-					$h->set('state', 7);
-					$h->set('country', 31);
-					$h->save();
-						
-					$c = DBRow::make(null, 'Contact');
-					$c->set('contact', 1);
-					$c->set('first_name', $_REQUEST['infocollect_first_name']);
-					$c->set('last_name', $_REQUEST['infocollect_last_name']);
-					$c->set('phone', $_REQUEST['infocollect_phone']);
-					$c->set('address_id', $h->get('id'));
-					$c->set('email', $_REQUEST['infocollect_email']);
-					$c->save();
-				} else {
-					$c = DBRow::make($id, 'Contact');
-					$c->set('contact', 1);
-					$c->save();
-				}
-					
+				
 				return $this->smarty->fetch('newslettersignedup.tpl');
 			}
 			break;
