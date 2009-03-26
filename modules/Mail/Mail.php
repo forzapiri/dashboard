@@ -190,7 +190,7 @@ class Module_Mail extends Module {
 			$body = $mime->get();
 			$hdrs = $mime->headers($hdrs);
 				
-			$mail =& Mail::factory('mail');
+			$mail =& Mail::factory('sendmail');
 			$mail->send($user->getEmail(), $hdrs, $body);
 			
 			$log = new MailDeliveryLog();
