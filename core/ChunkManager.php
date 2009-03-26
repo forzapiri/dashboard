@@ -160,6 +160,7 @@ class ChunkManager {
 			$type = $field->type();
 			$rawValue = $form->exportValue("_chunk_$i");
 			$el = $form->getElement("_chunk_$i");
+			$el->setValue($rawValue);
 			$value = DBRow::fromForm($type, $rawValue, $el);
 			$chunk = $this->chunks[$i];
 			$revs = $chunk->countRevisions();
