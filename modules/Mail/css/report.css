@@ -1,0 +1,15 @@
+@CHARSET "UTF-8";
+
+div.status {
+	width: 98px;
+	height: 12px;
+	background-image: url(/modules/Mail/images/progress_back.png);
+	padding: 0 1px 0 1px;
+	float: left;
+	margin-right: 3px;
+}
+
+td.report_status {
+	font-size: 0.8em;
+	font-weight: 900;
+}
