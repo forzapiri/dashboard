@@ -21,13 +21,15 @@ function smarty_function_menu($params, &$smarty) {
 }
 
 function adminMenu($params, &$smarty) {
+	if(empty($_REQUEST['module']))$_REQUEST['module']=null;
+	if(empty($_REQUEST['section']))$_REQUEST['section']=null;
 	$activeModules = Config::getActiveModules();
 	$initial = '<li class="borderRight' . (!isset($_REQUEST['module']) ? " active" : '') . '"><a href="/admin/" style="background-image: url(/images/admin/dashboard_active.png)">Dashboard</a></li>';
 	$adminItems = array($initial);
 	
 	$i = 0;
 	foreach ($activeModules as $module) {
-		$i++;
+		++$i;
 		// Use object reflection to reverse engineer the class functions
 		$modulename = 'Module_' . $module['module'];
 		include_once SITE_ROOT . '/modules/' . $module['module'] . '/' . $module['module'] . '.php';
@@ -61,9 +63,10 @@ function adminMenu($params, &$smarty) {
 			//}
 			unset($liClass);
 			unset($active);
-			if ($module['module'] == $_REQUEST['module']) {
-				$active = ' active"';
-			}
+			
+			if ($module['module'] == $_REQUEST['module']) $active = ' active"';
+			else $active = null;
+			
 			
 			if ($i != count($activeModules)) {
 				$liClass = ' class="borderRight' . $active . '"';

@@ -27,7 +27,7 @@ class Module_Block extends Module {
 	}
 	
 	function getUserInterface($params) {
-		include ('include/Block.php');
+		include_once ('include/Block.php');
 		$b = Block::getAllBlocks('active');
 		
 		$this->smarty->assign('blocks', $b);
