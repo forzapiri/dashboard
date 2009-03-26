@@ -81,11 +81,28 @@ function getSerializedRequest() {
 // To avoid having 'require' and 'include' all over the place, try
 // and autoload the class from the core directory.
 function __autoload($class_name) {
-	if (@include_once SITE_ROOT . '/core/' . $class_name . '.php') return;
-	if (@include_once SITE_ROOT . '/modules/' . $_REQUEST['module'] . '/include/' . $class_name . '.php') return;
-	foreach (Config::getActiveModules() as $module) {
-		if (@include_once SITE_ROOT . '/modules/' . $module['module'] . '/include/' . $class_name . '.php') return;
+	//if (@include_once SITE_ROOT . '/core/' . $class_name . '.php') return;
+	if(is_file(SITE_ROOT.'/core/'. $class_name . '.php')){
+		//error_reporting(0);
+		include_once SITE_ROOT .'/core/'. $class_name . '.php';
+		//error_reporting(E_ALL);
+		return true;
 	}
+	
+	//if (@include_once SITE_ROOT . '/modules/' . $_REQUEST['module'] . '/include/' . $class_name . '.php') return;
+	if(is_file(SITE_ROOT . '/modules/' . $_REQUEST['module'] . '/include/' . $class_name . '.php')){
+		error_reporting(E_ALL);
+		include_once SITE_ROOT . '/modules/' . $_REQUEST['module'] . '/include/' . $class_name . '.php';
+		return true;
+	}
+	foreach (Config::getActiveModules() as $module) {
+		//if (@include_once SITE_ROOT . '/modules/' . $module['module'] . '/include/' . $class_name . '.php') return;
+		if(is_file(SITE_ROOT . '/modules/' . $module['module'] . '/include/' . $class_name . '.php')){
+			include_once SITE_ROOT . '/modules/' . $module['module'] . '/include/' . $class_name . '.php';
+			return true;
+		}	
+	}
+
 }
 
 function e($itm) {
