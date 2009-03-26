@@ -300,11 +300,6 @@ class Module_Mail extends Module {
 				$list->removeListUser($user->getId());
 			}
 				
-			$c = Contact::getAll('where contacts.email="' . $user->getEmail() . '"');
-			foreach ($c as $contact) {
-				$contact->set('contact', 0);
-				$contact->save();
-			}
 			return 'You have been unsubscribed from all mailing lists';
 		}
 	}
