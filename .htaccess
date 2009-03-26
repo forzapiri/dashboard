@@ -34,6 +34,7 @@ RewriteRule ^Store/(Category|ProductType|Supplier|Product|Tree|Search|Cart|IPN|M
 
 RewriteRule ^blog/(.*)? /index.php?module=Blog&page=$1 [NC,L]
 RewriteRule ^gallery/([0-9]+)?-?([a-zA-Z0-9\-]+)? /index.php?module=Gallery&page=$1 [NC,L]
+RewriteRule ^videos/([0-9]+)?-?([a-zA-Z0-9\-]+)? /index.php?module=VideoGallery&page=$1 [NC,L]
 
 RewriteRule ^sitemap.xml$ /index.php?module=SEO [NC,L]
 RewriteRule ^sitemap.xml.gz$ /index.php?module=SEO&encoding=gz [NC,L]

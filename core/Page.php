@@ -403,10 +403,12 @@ class Page extends defaultPageActs {
 			if (isset($_REQUEST[$prefix . 'id'])) {
 				$r = $this->catchActions();
 				$i = DBRow::make($_REQUEST[$prefix . 'id'], $class);
-				$f = $i->getAddEditForm('/admin/' . $_REQUEST['module'], false);
-				// BUG:  CHRIS THINKS THIS WAS INSERTED TO MASK A BUG IN DBROW, PERHAPS...  WE SHALL SEE.
-				$i = DBRow::make($i->getId(), $class); //$i->__construct($i->getId());
 				$f = $i->getAddEditForm('/admin/' . $_REQUEST['module']);
+				DBRow::$makeFlag = true; // OK to run the constructor without make.  This one is on purpose.
+				$i->__construct($i->getId());
+				// BUG:  CHRIS THINKS THIS WAS INSERTED TO MASK A BUG IN DBROW, PERHAPS...  WE SHALL SEE.
+				// $i = DBRow::make($i->getId(), $class); //$i->__construct($i->getId());
+				// $f = $i->getAddEditForm('/admin/' . $_REQUEST['module']);
 				$html .= $f->display();
 			}
 		}

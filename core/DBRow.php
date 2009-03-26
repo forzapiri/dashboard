@@ -276,7 +276,7 @@ abstract class DBRow {
 		$form->addElement ('hidden', 'uniqid');
 		
 		foreach ($this->columns() as $column) {
-			if ($column->noForm()) continue;
+			if ($column->noForm() || $column->ignored()) continue;
 			$name = $column->name();
 			$value = call_user_func(array($this, 'get'.underscore2uccamel($name)));
 			// $value = &$this->get($name);
@@ -317,9 +317,10 @@ abstract class DBRow {
 			}
 			$_SESSION['form_uniqids'][$uniqid] = 'submitted';
 			foreach ($this->columns() as $column) {
-				if ($column->noForm()) continue;
+				if ($column->noForm() || $column->ignored()) continue;
 				$name = $column->name();
 				$value = $form->exportValue($this->quickformPrefix() . $name);
+				$form->getElement($this->quickformPrefix() . $name)->setValue($value);
 				$this->set($name, $column->fromForm($value, $els[$name]));
 			}
 			$this->getAddEditFormBeforeSaveHook($form);

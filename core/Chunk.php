@@ -22,7 +22,7 @@ class Chunk extends DBRow {
 			$class = get_class($obj);
 			$id = $obj->getId();
 		}
-		return ($class && $id) ? self::getAll("where parent_class=? and parent=?", 'si', $class, $id) : array();
+		return ($class && $id) ? self::getAll("where parent_class=? and parent=? order by sort", 'si', $class, $id) : array();
 	}
 
 	static function revertDrafts($class, $id) {
@@ -154,7 +154,7 @@ class Chunk extends DBRow {
 class ChunkList { // Just so that the template doesn't need to pass in an iterating index
 	private $list, $ptr=0;
 	function __construct($list) {$this->list = $list;}
-	function get($ignored_string) {return $this->list[$this->ptr++];}
+	function get($ignored_string=null) {return $this->list[$this->ptr++];}
 }
 
 DBRow::init('Chunk');

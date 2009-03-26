@@ -14,6 +14,7 @@ class Module_Gallery extends Module {
 			
 		$this->page->with('PhotoGalleryImage')
 			->show(array(
+				'Image' => array('id', array('PhotoGalleryImage', 'getThumb')),
 				'Title' => 'title',
 			))
 			->name('Photo Gallery Image')
@@ -23,6 +24,63 @@ class Module_Gallery extends Module {
 	}
 	
 	public function getAdminInterface() {
+		
+		if (class_exists('ZipArchive') && @$_REQUEST['section'] == 'PhotoGallery') {
+			$itm = DBRow::make($_REQUEST[call_user_func(array($this->page->pointer, 'quickFormPrefix')) . 'id'], $this->page->pointer);
+			$this->smarty->assign('item', $itm);
+			$this->page->with('PhotoGalleryImage')
+				->pre($this->smarty->fetch('bulkupload.htpl'));
+			$this->page->with('PhotoGallery');
+			
+			if (isset($_REQUEST['bulk_submit']) && isset($_FILES['zip_file']) && $_FILES['zip_file']['error'] == 0) {
+				$zip = new ZipArchive();
+				
+				if ($zip->open($_FILES['zip_file']['tmp_name'])!==TRUE) {
+   		 			exit("cannot open <$filename>\n");
+				}
+				
+				
+				for ($i=0; $i<$zip->numFiles;$i++) {
+					set_time_limit(30);
+					$f = ($zip->statIndex($i));
+					$fp = $zip->getStream($f['name']);
+					
+					$tmpfname = tempnam("/tmp", "gallery_image");
+
+					$temp = fopen($tmpfname, "w+");
+					
+					while (!feof($fp)) {
+        				fwrite($temp, fread($fp, 2));
+    				}
+    				fseek($temp, 0);
+    				
+    				if ($a = @getimagesize($tmpfname)) {
+    					if ($a['mime'] == 'image/jpeg' || 
+    						$a['mime'] == 'image/png' ||
+    						$a['mime'] == 'image/gif' ||
+    						$a['mime'] == 'image/pjpeg' ||
+    						$a['mime'] == 'image/wbmp') {
+    						
+    						$newFile = DBRow::make(null, 'File');
+    						$newFile->insert($tmpfname,'image/jpeg',$f['name']);
+    						$newFile->set('description', $f['name']);
+    						$newFile->save();
+    						
+    						$pgi = DBRow::make(null, 'PhotoGalleryImage');
+    						$pgi->set('title', $f['name']);
+    						$pgi->set('file_id', $newFile->get('id'));
+    						$pgi->set('photo_gallery_id', $itm->get('id'));
+    						$pgi->save();
+    					}
+    				}
+    				
+    				fclose($temp);
+    				fclose($fp);
+				}
+			}
+			
+		}
+		
 		return $this->page->render();
 	}
 	
