@@ -58,10 +58,12 @@ class Database {
 		 * include the database configuration file. Contains username, password, etc.
 		 */
 		include_once (dirname(__FILE__) . '/../include/db-config.php');
-		global $dbhost;
-		global $dbuser;
-		global $dbpass;
-		global $dbase;
+		if (empty($dbhost) && empty($dbuser) && empty($dbpass) && empty($dbase)) {
+			global $dbhost;
+			global $dbuser;
+			global $dbpass;
+			global $dbase;
+		}
 		//include(SITE_ROOT.'/include/db-config.php');
 		if (empty($dbhost) && empty($dbuser) && empty($dbpass) && empty($dbase)) {
 			printf ("<h1>Check that db-config.php is installed properly.</h1>");
