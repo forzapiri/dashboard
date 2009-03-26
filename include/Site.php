@@ -36,7 +36,7 @@ define('DEBUG', isset($_REQUEST['DEBUG']));
 
 $startTime = microtime(true);
 
-define('SITE_ROOT', realpath(dirname(__FILE__) . '/../'));
+if (!defined('SITE_ROOT')) define('SITE_ROOT', realpath(dirname(__FILE__) . '/../'));
 set_include_path(get_include_path() . PATH_SEPARATOR . SITE_ROOT . '/core' . PATH_SEPARATOR . SITE_ROOT . '/core/PEAR' . PATH_SEPARATOR . '/usr/share/php/');
 
 function error_handler($errno, $errstr, $errfile, $errline) {
