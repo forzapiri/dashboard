@@ -10,11 +10,6 @@ Website : http://dezinerfolio.com
 * The Variable names have been compressed to achive a higher level of compression.
 */
 
-// Prototype Method to get the element based on ID
-function $_$(d){
-	return document.getElementById(d);
-}
-
 // set or get the current display style of the div
 function dsp(d,v){
 	if(v==undefined){
@@ -52,7 +47,7 @@ t=10;
 
 //Collapse Timer is triggered as a setInterval to reduce the height of the div exponentially.
 function ct(d){
-	d = $_$(d);
+	d = $(d);
 	if(sh(d)>0){
 		v = Math.round(sh(d)/d.s);
 		v = (v<1) ? 1 :v ;
@@ -69,7 +64,7 @@ function ct(d){
 
 //Expand Timer is triggered as a setInterval to increase the height of the div exponentially.
 function et(d){
-	d = $_$(d);
+	d = $(d);
 	if(sh(d)<d.maxh){
 		v = Math.round((d.maxh-sh(d))/d.s);
 		v = (v<1) ? 1 :v ;
@@ -115,7 +110,7 @@ function cc(n,v){
 //Accordian Initializer
 function Accordian(d,s,tc){
 	// get all the elements that have id as content
-	l=$_$(d).getElementsByTagName('div');
+	l=$(d).getElementsByTagName('div');
 	c=[];
 	for(i=0;i<l.length;i++){
 		h=l[i].id;
@@ -126,12 +121,12 @@ function Accordian(d,s,tc){
 	for(i=0;i<l.length;i++){
 		h=l[i].id;
 		if(h.substr(h.indexOf('-')+1,h.length)=='header'){
-			d=$_$(h.substr(0,h.indexOf('-'))+'-content');
+			d=$(h.substr(0,h.indexOf('-'))+'-content');
 			d.style.display='none';
 			d.style.overflow='hidden';
 			d.maxh =sh(d);
 			d.s=(s==undefined)? 7 : s;
-			h=$_$(h);
+			h=$(h);
 			h.tc=tc;
 			h.c=c;
 			// set the onclick function for each header.
@@ -140,13 +135,13 @@ function Accordian(d,s,tc){
 					cn=this.c[i];
 					n=cn.substr(0,cn.indexOf('-'));
 					if((n+'-header')==this.id){
-						ex($_$(n+'-content'));
-						n=$_$(n+'-header');
+						ex($(n+'-content'));
+						n=$(n+'-header');
 						cc(n,'__');
 						n.className=n.className+' '+n.tc;
 					}else{
-						cl($_$(n+'-content'));
-						cc($_$(n+'-header'),'');
+						cl($(n+'-content'));
+						cc($(n+'-header'),'');
 					}
 				}
 			}
