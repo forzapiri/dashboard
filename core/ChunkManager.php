@@ -56,12 +56,10 @@ class ChunkManager {
 			$hidden = $this->hidden[$i];
 			$readOnly = $this->readOnly[$i];
 			$role = $this->roles[$i];
-			if ($role) {
+			if ($role && !$hidden) {
 				$form->addElement('html', "\n<div id=_select_text_$i>");
 				$el = array();
-				$el[] = $s = $hidden
-					? $form->createElement('hidden', 'select')
-					: $form->createElement('select', "select", "", self::getSelection($role, $readOnly));
+				$el[] = $s = $form->createElement('select', "select", "", self::getSelection($role, $readOnly));
 				if ($chunk && $chunk->getRole() && $chunk->getName()) {
 					$s->setValue($chunk->getName());
 					$chunk = $chunk->getActualChunk();
