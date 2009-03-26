@@ -159,7 +159,23 @@ class Image {
 		imagecopy($im, $this->im, 0, ($width - imagesy($this->im)) / 2, 0, 0, $width, imagesy($this->im));
 		$this->im = $im;
 	}
-	
+	public function mask($mask){
+			//mask is a url 
+			if(substr($mask,-3)!='png'){
+				error_log('Mask Provided was not of image type PNG.');
+				return false;
+			}
+			//find height and width
+				$width = imagesx($this->im);
+				$height = imagesy($this->im);
+			//enable alpha blending
+				imagealphablending($this->im,true);
+			//create image mask var
+				$mask = imagecreatefrompng($mask);
+			//merge the files
+				imagecopy($this->im,$mask,0,0,0,0,$width,$height);
+			return true;
+	}
 	public function border($color) {
 		$im =& $this->im;
 		$color = hexdec($color);
