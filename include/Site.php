@@ -103,7 +103,7 @@ function __autoload($class_name) {
 	}
 	
 	//if (@include_once SITE_ROOT . '/modules/' . $_REQUEST['module'] . '/include/' . $class_name . '.php') return;
-	if(is_file(SITE_ROOT . '/modules/' . $_REQUEST['module'] . '/include/' . $class_name . '.php')){
+	if(isset($_REQUEST['module']) && is_file(SITE_ROOT . '/modules/' . $_REQUEST['module'] . '/include/' . $class_name . '.php')){
 		error_reporting(E_ALL);
 		include_once SITE_ROOT . '/modules/' . $_REQUEST['module'] . '/include/' . $class_name . '.php';
 		return true;
