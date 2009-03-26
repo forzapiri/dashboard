@@ -24,6 +24,7 @@
 /**
  * Require the site initialization file
  */
+
 require_once (dirname(__FILE__) . "/../include/Site.php");
 $auth_container = new CMSAuthContainer();
 $auth = new Auth($auth_container, null, 'authHTML');
@@ -46,8 +47,9 @@ if ($auth->checkAuth()) {
 	$smarty->compile_id = 'admin';
 	
 	// This is currently a hack since my url-rewriting syntax keeps a trailing slash on the module name
-	$requestedModule = trim(@$_GET['module'], '/');
-	
+	if(!empty($_GET['module']))$requestedModule = trim($_GET['module'], '/');
+	else $requestedModule = '';
+
 	// assign the requested module
 	$smarty->assign('module', $requestedModule);
 	$smarty->assign('programmer', SiteConfig::programmer());

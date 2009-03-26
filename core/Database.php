@@ -59,7 +59,7 @@ class Database {
 		 */
 		include_once (dirname(__FILE__) . '/../include/db-config.php');
 		//include(SITE_ROOT.'/include/db-config.php');
-		if (!(@$dbhost && @$dbuser && @$dbpass && @$dbase)) {
+		if (empty($dbhost) && empty($dbuser) && empty($dbpass) && empty($dbase)) {
 			printf ("<h1>Check that db-config.php is installed properly.</h1>");
 			die();
 		}

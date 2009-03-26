@@ -273,17 +273,19 @@ class ChunkManager {
 	}
 
 	static function fieldAdminRequest() {
-		switch (@$_REQUEST['action']) { // CHUNKS
-		case 'chunk_revertdrafts':
-			Chunk::revertDrafts($_REQUEST['section'], $_REQUEST['id']);
-			break;
-		case 'chunk_makeactive':
-			Chunk::makeDraftActive($_REQUEST['section'], $_REQUEST['id']);
-			break;
-		case 'chunk_load':  // Response to AJAX request only.
-			echo Chunk::loadChunk();
-			die();
-		default: // Fall through
+		if(!empty($_REQUEST['action'])){
+			switch ($_REQUEST['action']) { // CHUNKS
+			case 'chunk_revertdrafts':
+				Chunk::revertDrafts($_REQUEST['section'], $_REQUEST['id']);
+				break;
+			case 'chunk_makeactive':
+				Chunk::makeDraftActive($_REQUEST['section'], $_REQUEST['id']);
+				break;
+			case 'chunk_load':  // Response to AJAX request only.
+				echo Chunk::loadChunk();
+				die();
+			default: // Fall through
+			}
 		}
 	}
 }
