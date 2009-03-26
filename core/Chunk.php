@@ -159,12 +159,19 @@ class Chunk extends DBRow {
 
 	static function loadChunk() { // Load the chunk from $_REQUEST and update draft
 		// CHUNKS: Response to AJAX request only.
-		$role = e(@$_REQUEST['role']);
-		$name = e(@$_REQUEST['name']);
-		$parent_class = e(@$_REQUEST['section']);
-		$parent = (int) @$_REQUEST['id'];
-		$sort = (int) @$_REQUEST['sort'];
-		$count = (int) @$_REQUEST['i'];
+		if(!empty($_REQUEST['role']))$role = e($_REQUEST['role']);
+		else $role = '';
+		if(!empty($_REQUEST['name']))$name = e($_REQUEST['name']);
+		else $name = '';
+		if(!empty($_REQUEST['section']))$parent_class = e($_REQUEST['section']);
+		else $parent_class = '';
+		if(!empty($_REQUEST['id']))$parent = e($_REQUEST['id']);
+		else $parent = '';
+		if(!empty($_REQUEST['sort']))$sort = e($_REQUEST['sort']);
+		else $sort = '';
+		if(!empty($_REQUEST['i']))$count = e($_REQUEST['i']);
+		else $count = '';
+		
 		$status = $count ? $count : 'draft';
 		if ($role && $name) $result = ChunkRevision::getNamedChunkFormField($role, $name, $status);
 		else if ($parent_class && $parent) $result = ChunkRevision::getChunkFormField ($parent_class, $parent, $sort, $status);
