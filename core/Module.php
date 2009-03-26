@@ -90,7 +90,7 @@ abstract class Module {
 				$module->smarty->plugins_dir[] = SITE_ROOT . '/core/plugins';
 				$module->smarty->compile_id = $classname;
 				
-				$module->smarty->assign('module', &$module);
+				$module->smarty->assign('module', $module);
 				
 				if (@isset($_SESSION['authenticated_user'])) {
 					$module->user = User::make($_SESSION['authenticated_user']->getId());
