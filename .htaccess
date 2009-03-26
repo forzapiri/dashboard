@@ -1,3 +1,4 @@
+php_value memory_limit 16M
 #RewriteRule [.*] http://woz.norex.ca/gone.html [NC,L]
 
 RewriteEngine On
