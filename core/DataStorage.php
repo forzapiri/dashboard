@@ -315,7 +315,7 @@ class DataStorage {
 }
 
 if (isset($_REQUEST['browser'])) {
-	include ('../include/Site.php');
+	include_once ('../include/Site.php');
 	
 	echo DataStorage::fileBrowser($_REQUEST['type']);
 }
