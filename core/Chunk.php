@@ -154,7 +154,7 @@ class Chunk extends DBRow {
 class ChunkList { // Just so that the template doesn't need to pass in an iterating index
 	private $list, $ptr=0;
 	function __construct($list) {$this->list = $list;}
-	function get($ignored_string) {return $this->list[$this->ptr++];}
+	function get($ignored_string=null) {return $this->list[$this->ptr++];}
 }
 
 DBRow::init('Chunk');
