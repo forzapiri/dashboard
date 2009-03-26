@@ -51,6 +51,7 @@ class Module_Mail extends Module {
 						
 				break;
 			}
+			$this->addJS('/core/PEAR/data/HTML_QuickForm_advmultiselect/qfamsHandler.js');
 			$this->addJS('/modules/Mail/js/list_edit.js');
 				
 			$lists = MailList::getAllMailLists();
