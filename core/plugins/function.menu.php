@@ -54,6 +54,8 @@ function adminMenu($params, &$smarty) {
 					$moduleflag = true;
 				}
 			}
+		} else {
+			$moduleflag = true;
 		}
 		if (!$moduleflag) continue;
 		
