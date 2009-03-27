@@ -11,7 +11,7 @@ Website : http://dezinerfolio.com
 */
 
 if ('undefined' == typeof($)) {
-	function $_$(d){
+	function $(d){
         return document.getElementById(d);
 	}
 }
