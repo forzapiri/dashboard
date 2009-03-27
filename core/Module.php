@@ -37,6 +37,7 @@ abstract class Module {
 		public $version;
 		protected $template;
 		public $name;
+		private static $cache;
 		
 		public function __construct() {}
 		
@@ -51,6 +52,10 @@ abstract class Module {
 		 * @return ref|bool Reference to loaded module
 		 */
 		public static final function &factory($name, &$parentSmarty = null) {
+			if (isset(self::$cache[$name])) {
+				return self::$cache[$name];
+			}
+			
 			$ok = SiteConfig::programmer() || in_array ($name, SiteConfig::get('modules'));
 			$ok = $ok && file_exists($inc = SITE_ROOT . "/modules/$name/$name.php"); // ? null : include_once $inc;
 			if ($ok) {
@@ -100,6 +105,7 @@ abstract class Module {
 					$module->user = User::make($_SESSION['authenticated_user']->getId());
 					$module->smarty->assign_by_ref('user', $module->user);
 				} 
+				self::$cache[$name] = $module;
 				return $module;
 			} else {
 				$module = false;

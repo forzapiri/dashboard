@@ -36,13 +36,17 @@ class Module_Content extends Module implements linkable {
 			->on('addedit')->noAJAX()
 			->filter('order by name')
 			->name('Content Page');
+			
+		if (SiteConfig::get('Content::restrictedPages') == 'true') {
+			$this->page->tables['ContentPage']['Restricted to Group'] = array('allowed_group_id', array('Group', 'getName'));
+		}
 	}
 	
 	function getUserInterface() {
 		$pageid = @$_REQUEST['id'];
 		if (@$_REQUEST['action'] == 'viewdraft') { // CHUNKS:  Admin preview of a page; allow preview only if visitor has addedit privilege
 			if (!$this->user->hasPerm('ContentPage', 'addedit')) {
-				return $this->smarty->dispErr('404', &$this);
+				return $this->smarty->dispErr('404', $this);
 			}
 			$status = $_REQUEST['status'];
 			$page = ContentPage::make($pageid);
@@ -52,7 +56,16 @@ class Module_Content extends Module implements linkable {
 			$pageid = $pageid['id'];
 			$page = ContentPage::make($pageid);
 			if (!$page->getStatus()) {
-				return $this->smarty->dispErr('404', &$this);
+				return $this->smarty->dispErr('404', $this);
+			}
+			
+			if (SiteConfig::get('Content::restrictedPages') == 'true' && ($page->get('allowed_group_id') != 0 && (!isset($_SESSION['authenticated_user']) || $page->get('allowed_group_id') != $_SESSION['authenticated_user']->get('group')))) {
+				$auth_container = new CMSAuthContainer();
+				$auth = new Auth($auth_container, null, 'authHTML');
+				$auth->start();
+				$auth->checkAuth();
+				$s = new SmartySite();
+				return $this->smarty->dispErr('401', $this, null, $s->fetch('login.tpl'));
 			}
 		}
 		$this->smarty->assign('content',$page);

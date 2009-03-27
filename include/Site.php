@@ -99,9 +99,8 @@ function __autoload($class_name) {
 		include $coref;
 		return;
 	}
-	
-	//if (@include_once SITE_ROOT . '/modules/' . $_REQUEST['module'] . '/include/' . $class_name . '.php') return;
-	if(file_exists($modf = SITE_ROOT . '/modules/' . $_REQUEST['module'] . '/include/' . $class_name . '.php')){
+	$module = empty($_REQUEST['module']) ? '' : $_REQUEST['module'];
+	if(file_exists($modf = SITE_ROOT . '/modules/' . $module . '/include/' . $class_name . '.php')){
 		include $modf;
 		return;
 	}
@@ -277,6 +276,9 @@ class SmartySite extends Smarty {
 	
 	function dispErr($err, &$obj, $page = null, $error_message = null){
 		switch($err){
+			case '401':
+				header("HTTP/1.1 401 Unauthorized"); 
+				break;
 			case '404':
 				header("HTTP/1.1 404 Not Found"); 
 				break;

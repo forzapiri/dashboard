@@ -37,9 +37,9 @@ class Menu {
 	private $pubOnly;
 	private $followContentMenus;
 	
-	public function __construct($menu_id = 1, $onlyactive = false, $pubOnly = false, $id = 0, $followContentMenus = false) {
+	public function __construct($menu_id = 1, $onlyactive = false, $pubOnly = true, $id = 0, $followContentMenus = false) {
 		$this->onlyactive = $onlyactive;
-		$this->pubOnly = $pubOnly;
+		$this->pubOnly = SiteConfig::get('Content::restrictedPages') == 'true';
 		$this->followContentMenus = $followContentMenus;
 
 		$this->menu_id = $menu_id;
@@ -83,7 +83,7 @@ class Menu {
 			if ($id != 0 && $this->followContentMenus) {
 				$item = MenuItem::make($id);
 				if ($this->getModInfo($item->module_id) == 'Content' && $this->followContentMenus) {
-					include_once(SITE_ROOT . '/modules/Content/include/CMSPage.php');
+					include_once(SITE_ROOT . '/modules/Content/include/ContentPage.php');
 					$page = new CMSPage($item->getLinkId());
 					$revs = $page->getActiveRevisions();
 					$child = @$revs[0]->getSubMenu();
@@ -95,9 +95,9 @@ class Menu {
 
 			foreach ($children as $child) {
 				if ($child['module'] == 'Content' && ($this->pubOnly || $this->followContentMenus)) {
-					include_once(SITE_ROOT . '/modules/Content/include/CMSPage.php');
-					$data = new CMSPage($child['link']);
-					if ($this->pubOnly && $data->getAccess() != 'public') continue;
+					include_once(SITE_ROOT . '/modules/Content/include/ContentPage.php');
+					$data = ContentPage::make($child['link']);
+					if ($this->pubOnly && ($data->get('allowed_group_id') != 0 && (!isset($_SESSION['authenticated_user']) || $data->get('allowed_group_id') != $_SESSION['authenticated_user']->get('group')))) continue;
 				}
 				$id = $child['id'];
 				if (isset($this->nodes[$id])) {continue;}
