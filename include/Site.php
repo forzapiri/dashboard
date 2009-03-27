@@ -1,13 +1,26 @@
 <?php
-
 /**
- * Site Initialization
+ *  This file is part of Dashboard.
  *
- * @author Christopher Troup <chris@norex.ca>
- * @package CMS
- * @subpackage Core
- * @version 2.0
+ *  Dashboard is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Dashboard is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Dashboard.  If not, see <http://www.gnu.org/licenses/>.
+ *  
+ *  @license http://www.gnu.org/licenses/gpl.txt
+ *  @copyright Copyright 2007-2009 Norex Core Web Development
+ *  @author See CREDITS file
+ *
  */
+
 error_reporting(E_ALL);
 
 function var_log($var, $prefix="") {
@@ -81,11 +94,28 @@ function getSerializedRequest() {
 // To avoid having 'require' and 'include' all over the place, try
 // and autoload the class from the core directory.
 function __autoload($class_name) {
-	if (@include_once SITE_ROOT . '/core/' . $class_name . '.php') return;
-	if (@include_once SITE_ROOT . '/modules/' . $_REQUEST['module'] . '/include/' . $class_name . '.php') return;
-	foreach (Config::getActiveModules() as $module) {
-		if (@include_once SITE_ROOT . '/modules/' . $module['module'] . '/include/' . $class_name . '.php') return;
+	//if (@include_once SITE_ROOT . '/core/' . $class_name . '.php') return;
+	if(is_file(SITE_ROOT.'/core/'. $class_name . '.php')){
+		//error_reporting(0);
+		include_once SITE_ROOT .'/core/'. $class_name . '.php';
+		//error_reporting(E_ALL);
+		return true;
 	}
+	
+	//if (@include_once SITE_ROOT . '/modules/' . $_REQUEST['module'] . '/include/' . $class_name . '.php') return;
+	if(isset($_REQUEST['module']) && is_file(SITE_ROOT . '/modules/' . $_REQUEST['module'] . '/include/' . $class_name . '.php')){
+		error_reporting(E_ALL);
+		include_once SITE_ROOT . '/modules/' . $_REQUEST['module'] . '/include/' . $class_name . '.php';
+		return true;
+	}
+	foreach (Config::getActiveModules() as $module) {
+		//if (@include_once SITE_ROOT . '/modules/' . $module['module'] . '/include/' . $class_name . '.php') return;
+		if(is_file(SITE_ROOT . '/modules/' . $module['module'] . '/include/' . $class_name . '.php')){
+			include_once SITE_ROOT . '/modules/' . $module['module'] . '/include/' . $class_name . '.php';
+			return true;
+		}	
+	}
+
 }
 
 function e($itm) {

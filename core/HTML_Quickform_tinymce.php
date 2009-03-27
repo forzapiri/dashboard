@@ -1,45 +1,26 @@
 <?php
-
 /**
- * Custom HTML_Quickform elementtype voor FCKeditor textarea
+ *  This file is part of Dashboard.
  *
- * This elementtype builds an FCKeditor instance for PEAR::HTML_Quickform
- * class. It extends HTML_Quickform
+ *  Dashboard is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * 1. Place this file in the FCK directory (where fckeditor.php is)
+ *  Dashboard is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * 2. Register the element type in Quickform.
- *    ! Make sure the path to this class file is relative to the location of the
- *      script that is calling this command.
- *        HTML_Quickform::registerElementType('fckeditor'
- *                                           ,'path/to/HTML_Quickform_fckeditor.php'
- *                                           ,'HTML_Quickform_fckeditor');
+ *  You should have received a copy of the GNU General Public License
+ *  along with Dashboard.  If not, see <http://www.gnu.org/licenses/>.
+ *  
+ *  @license http://www.gnu.org/licenses/gpl.txt
+ *  @copyright Copyright 2007-2009 Norex Core Web Development
+ *  @author See CREDITS file
  *
- * 3. Create an instance in the Quickform object, here with some config options. See
- *    $_aFckConfigProps for all the possible options.
- *    ! The basepath (here in $sFCKBasePath) should be absolute to de documentroot
- *      of the webserver.
- *    ! It seems that StylesXmlPath needs the same absolute path as basepath.
- *
- *        $oQFElement = HTML_Quickform::createElement ('fckeditor'      // QF type
- *                                                    ,'myfckinstance'  // element name
- *                                                    ,'The Label');    // label
- *        $sFCKBasePath = '/path/from/documentroot/to/fckdir/';
- *        $oQFElement->setFCKProps($sFCKBasePath     // BasePath
- *                                ,'Basic'           // Toolbarset
- *                                ,'800'             // Width
- *                                ,'300'             // Height
- *                                ,array('SkinPath'                 => 'editor/skins/office2003/'
- *                                      ,'DefaultLanguage'          => 'nl'
- *                                      ,'StylesXmlPath'            => 'path/to/fckstyles.xml'
- *                                      ,'UseBROnCarriageReturn'    => 'true'
- *                                      ,'StartupFocus'             => 'false'
- *                                      ,'CustomConfigurationsPath' => 'config.js'
- *                                      ,'EditorAreaCSS'            => 'fck_editorarea.css'));
- *
- * @author Jordi Backx <jbackx@westsitemedia.nl>
- * @version 1.1
  */
+
 class HTML_Quickform_tinymce extends HTML_Quickform_element {
 
 	/**

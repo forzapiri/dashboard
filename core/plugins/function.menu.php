@@ -1,19 +1,26 @@
 <?php
-
 /**
- * Smarty plugin to build the menus in the admin and frontend interfaces.
- * @file function.menu.php
- * @package Smarty
- * @subpackage plugins
+ *  This file is part of Dashboard.
+ *
+ *  Dashboard is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Dashboard is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Dashboard.  If not, see <http://www.gnu.org/licenses/>.
+ *  
+ *  @license http://www.gnu.org/licenses/gpl.txt
+ *  @copyright Copyright 2007-2009 Norex Core Web Development
+ *  @author See CREDITS file
+ *
  */
 
-/* Generate Menus. Choose which menu should be generated on the basis of the input parameters. Currently, two
- * types of menus are supported -- admin and frontend. $param['admin'] switches between generating admin interface (true) 
- * and the frontend interface (false)
- * 
- * @param admin True for admin menu, false for frontend interface menu
- * @param smarty Reference to the calling smarty class.
- */
 function smarty_function_menu($params, &$smarty) {
 	return ($params['admin'])
 		? adminMenu($params, $smarty)
@@ -21,13 +28,15 @@ function smarty_function_menu($params, &$smarty) {
 }
 
 function adminMenu($params, &$smarty) {
+	if(empty($_REQUEST['module']))$_REQUEST['module']=null;
+	if(empty($_REQUEST['section']))$_REQUEST['section']=null;
 	$activeModules = Config::getActiveModules();
 	$initial = '<li class="borderRight' . (!isset($_REQUEST['module']) ? " active" : '') . '"><a href="/admin/" style="background-image: url(/images/admin/dashboard_active.png)">Dashboard</a></li>';
 	$adminItems = array($initial);
 	
 	$i = 0;
 	foreach ($activeModules as $module) {
-		$i++;
+		++$i;
 		// Use object reflection to reverse engineer the class functions
 		$modulename = 'Module_' . $module['module'];
 		include_once SITE_ROOT . '/modules/' . $module['module'] . '/' . $module['module'] . '.php';
@@ -45,6 +54,8 @@ function adminMenu($params, &$smarty) {
 					$moduleflag = true;
 				}
 			}
+		} else {
+			$moduleflag = true;
 		}
 		if (!$moduleflag) continue;
 		
@@ -61,9 +72,10 @@ function adminMenu($params, &$smarty) {
 			//}
 			unset($liClass);
 			unset($active);
-			if ($module['module'] == $_REQUEST['module']) {
-				$active = ' active"';
-			}
+			
+			if ($module['module'] == $_REQUEST['module']) $active = ' active"';
+			else $active = null;
+			
 			
 			if ($i != count($activeModules)) {
 				$liClass = ' class="borderRight' . $active . '"';

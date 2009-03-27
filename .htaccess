@@ -1,3 +1,4 @@
+php_value memory_limit 16M
 #RewriteRule [.*] http://woz.norex.ca/gone.html [NC,L]
 
 RewriteEngine On
@@ -17,6 +18,8 @@ RewriteRule ^file/([0-9]+)/?(.*)?$ /core/DataStorage.php?id=$1 [L]
 RewriteRule ^image/([0-9]+)/?(.*)?$ /images/image.php?id=$1 [L]
 
 RewriteRule ^mail/(.*)/(.*)/norexLink.jpg$	/index.php?module=Mail&section=collect&user=$1&mso_id=$2 [NC,L]
+RewriteRule ^mail/signup$	/index.php?module=Mail&section=signup [NC,L]
+RewriteRule ^mail/unsubscribe/([0-9]+)-([A-Fa-f0-9]+)$	/index.php?module=Mail&section=unsubscribe&user=$1&sha=$2 [NC,L]
 
 RewriteRule ^user/(.*)?/?                  /index.php?module=User&section=$1 [NC,L]
 

@@ -1,23 +1,26 @@
 <?php
 /**
- * This file provides a framework for Modules
- * @author Christopher Troup <chris@norex.ca>
- * @package CMS
- * @version 2.0
+ *  This file is part of Dashboard.
+ *
+ *  Dashboard is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Dashboard is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Dashboard.  If not, see <http://www.gnu.org/licenses/>.
+ *  
+ *  @license http://www.gnu.org/licenses/gpl.txt
+ *  @copyright Copyright 2007-2009 Norex Core Web Development
+ *  @author See CREDITS file
+ *
  */
 
-/**
- * The module class provides a factory method to build Modules. 
- * 
- * You should never to to instantiate this class by itself. Instead you should access it
- * with something like:
- * <code>
- * $module = Module::factory('my_module');
- * </code>
- * @todo Provide handling for $_GET and $_POST variables and parse them into variable arrays.
- * @package CMS
- * @subpackage Core
- */
 abstract class Module {
 	
 		/**
@@ -90,7 +93,7 @@ abstract class Module {
 				$module->smarty->plugins_dir[] = SITE_ROOT . '/core/plugins';
 				$module->smarty->compile_id = $classname;
 				
-				$module->smarty->assign('module', &$module);
+				$module->smarty->assign('module', $module);
 				
 				if (@isset($_SESSION['authenticated_user'])) {
 					$module->user = User::make($_SESSION['authenticated_user']->getId());
