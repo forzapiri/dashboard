@@ -57,7 +57,7 @@ $old_error_handler = set_error_handler('error_handler', E_ERROR | E_PARSE);
  * Check if there is a cached copy of the request.
  */
 require_once('Cache/Lite.php');
-define ('CACHED_PAGE_INDEX', isset($_SERVER['REQUEST_URI']) ? null : $_SERVER['REQUEST_URI']); // I think it's reasonable to treat this string as the index to cache by
+define ('CACHED_PAGE_INDEX', isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : null); // I think it's reasonable to treat this string as the index to cache by
 $options = array(
     'cacheDir' => SITE_ROOT . '/cache/pages/',
     'lifeTime' => 60*60*24*7 // 1 week
