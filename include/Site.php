@@ -101,7 +101,7 @@ function __autoload($class_name) {
 	}
 	
 	//if (@include_once SITE_ROOT . '/modules/' . $_REQUEST['module'] . '/include/' . $class_name . '.php') return;
-	if(file_exists($modf = SITE_ROOT . '/modules/' . $_REQUEST['module'] . '/include/' . $class_name . '.php')){
+	if(isset($_REQUEST['module']) && file_exists($modf = SITE_ROOT . '/modules/' . $_REQUEST['module'] . '/include/' . $class_name . '.php')){
 		include $modf;
 		return;
 	}
