@@ -99,9 +99,8 @@ function __autoload($class_name) {
 		include $coref;
 		return;
 	}
-	
-	//if (@include_once SITE_ROOT . '/modules/' . $_REQUEST['module'] . '/include/' . $class_name . '.php') return;
-	if(isset($_REQUEST['module']) && file_exists($modf = SITE_ROOT . '/modules/' . $_REQUEST['module'] . '/include/' . $class_name . '.php')){
+	$module = empty($_REQUEST['module']) ? '' : $_REQUEST['module'];
+	if(file_exists($modf = SITE_ROOT . '/modules/' . $module . '/include/' . $class_name . '.php')){
 		include $modf;
 		return;
 	}
