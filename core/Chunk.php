@@ -37,6 +37,15 @@ class Chunk extends DBRow {
 	}
 	static function make($id = null) {return parent::make($id, __CLASS__);}
 
+	static private $deleteQuery = null;
+	static function deleteAllFor($obj) {
+		if (!self::$deleteQuery) self::$deleteQuery = new Query ("delete from chunk_revision where parent=?", 'i');
+		$chunks = self::getAllFor($obj);
+		foreach ($chunks as $chunk) {
+			self::$deleteQuery->query($chunk->getId());
+			$chunk->delete();
+		}
+	}
 	static function getAllFor($obj, $id = null) { // If $obj is a class name, $id is the object's id
 		if ($id) {
 			$class = $obj;

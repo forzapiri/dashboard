@@ -214,6 +214,7 @@ abstract class DBRow {
 
 	function &delete() {
 		if (!$this->get('id')) return $this;
+		if ($this->chunkManager) Chunk::deleteAllFor($this);
 		$this->table()->deleteRow($this->get('id'));
 		$this->table()->resetWhereCache();
 		return $this;
