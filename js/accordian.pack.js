@@ -10,6 +10,12 @@ Website : http://dezinerfolio.com
 * The Variable names have been compressed to achive a higher level of compression.
 */
 
+if ('undefined' == typeof($)) {
+	function $_$(d){
+        return document.getElementById(d);
+	}
+}
+
 // set or get the current display style of the div
 function dsp(d,v){
 	if(v==undefined){
