@@ -52,8 +52,9 @@ abstract class Module {
 		 */
 		public static final function &factory($name, &$parentSmarty = null) {
 			$ok = SiteConfig::programmer() || in_array ($name, SiteConfig::get('modules'));
-			$ok = $ok && is_file(include_once (SITE_ROOT . "/modules/$name/$name.php"))  ? null : include_once(SITE_ROOT."/modules/$name/$name.php");
+			$ok = $ok && file_exists($inc = SITE_ROOT . "/modules/$name/$name.php"); // ? null : include_once $inc;
 			if ($ok) {
+				include_once $inc;
 				$classname = 'Module_' . $name;
 				
 				$module = new $classname;
