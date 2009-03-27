@@ -65,7 +65,7 @@ class Database {
 			global $dbase;
 		}
 		//include(SITE_ROOT.'/include/db-config.php');
-		if (empty($dbhost) && empty($dbuser) && empty($dbpass) && empty($dbase)) {
+		if (empty($dbhost) || empty($dbuser) || empty($dbpass) || empty($dbase)) {
 			printf ("<h1>Check that db-config.php is installed properly.</h1>");
 			die();
 		}
@@ -249,7 +249,7 @@ class Database {
 	}
 
 	public function __destruct() {
-		@mysqli_close($this->link);
+		mysqli_close($this->link);
 		unset($this);
 	}
 }

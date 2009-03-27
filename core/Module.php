@@ -52,7 +52,7 @@ abstract class Module {
 		 */
 		public static final function &factory($name, &$parentSmarty = null) {
 			$ok = SiteConfig::programmer() || in_array ($name, SiteConfig::get('modules'));
-			$ok = $ok && @include_once (SITE_ROOT . "/modules/$name/$name.php");
+			$ok = $ok && is_file(include_once (SITE_ROOT . "/modules/$name/$name.php"))  ? null : include_once(SITE_ROOT."/modules/$name/$name.php");
 			if ($ok) {
 				$classname = 'Module_' . $name;
 				
@@ -95,7 +95,7 @@ abstract class Module {
 				
 				$module->smarty->assign('module', $module);
 				
-				if (@isset($_SESSION['authenticated_user'])) {
+				if (isset($_SESSION['authenticated_user'])) {
 					$module->user = User::make($_SESSION['authenticated_user']->getId());
 					$module->smarty->assign_by_ref('user', $module->user);
 				} 
