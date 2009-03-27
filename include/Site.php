@@ -57,7 +57,7 @@ $old_error_handler = set_error_handler('error_handler', E_ERROR | E_PARSE);
  * Check if there is a cached copy of the request.
  */
 require_once('Cache/Lite.php');
-define ('CACHED_PAGE_INDEX', @$_SERVER['REQUEST_URI']); // I think it's reasonable to treat this string as the index to cache by
+define ('CACHED_PAGE_INDEX', isset($_SERVER['REQUEST_URI']) ? null : $_SERVER['REQUEST_URI']); // I think it's reasonable to treat this string as the index to cache by
 $options = array(
     'cacheDir' => SITE_ROOT . '/cache/pages/',
     'lifeTime' => 60*60*24*7 // 1 week
@@ -95,24 +95,21 @@ function getSerializedRequest() {
 // and autoload the class from the core directory.
 function __autoload($class_name) {
 	//if (@include_once SITE_ROOT . '/core/' . $class_name . '.php') return;
-	if(is_file(SITE_ROOT.'/core/'. $class_name . '.php')){
-		//error_reporting(0);
-		include_once SITE_ROOT .'/core/'. $class_name . '.php';
-		//error_reporting(E_ALL);
-		return true;
+	if(file_exists($coref = SITE_ROOT.'/core/'. $class_name . '.php')){
+		include $coref;
+		return;
 	}
 	
 	//if (@include_once SITE_ROOT . '/modules/' . $_REQUEST['module'] . '/include/' . $class_name . '.php') return;
-	if(is_file(SITE_ROOT . '/modules/' . $_REQUEST['module'] . '/include/' . $class_name . '.php')){
-		error_reporting(E_ALL);
-		include_once SITE_ROOT . '/modules/' . $_REQUEST['module'] . '/include/' . $class_name . '.php';
-		return true;
+	if(file_exists($modf = SITE_ROOT . '/modules/' . $_REQUEST['module'] . '/include/' . $class_name . '.php')){
+		include $modf;
+		return;
 	}
 	foreach (Config::getActiveModules() as $module) {
 		//if (@include_once SITE_ROOT . '/modules/' . $module['module'] . '/include/' . $class_name . '.php') return;
-		if(is_file(SITE_ROOT . '/modules/' . $module['module'] . '/include/' . $class_name . '.php')){
-			include_once SITE_ROOT . '/modules/' . $module['module'] . '/include/' . $class_name . '.php';
-			return true;
+		if(file_exists($modsf = SITE_ROOT . '/modules/' . $module['module'] . '/include/' . $class_name . '.php')){
+			include $modsf;
+			return;
 		}	
 	}
 
