@@ -167,5 +167,29 @@ class Menu {
 		}
 		return $returnLinks;
 	}
-	public function cookieCrumbsTo() {return array();} // STUB FOR NEW CODE
+	private static $cookieQuery = null;
+	private static $mainMenu = null;
+	public static function mainMenu() {
+		if (!self::$mainMenu) self::$mainMenu = new Menu(1, true);  // true = only active menus
+		return self::$mainMenu;
+	}
+	public static function cookieCrumbsTo ($module, $link) {
+		$menu = self::mainMenu();
+		if (!self::$cookieQuery) {
+			self::$cookieQuery = new Query("select id, menuid from menu where module=? and link=? order by id desc", "si");
+		}
+		$result = self::$cookieQuery->fetch($module, $link);
+		if (!$result) return array();
+		$id = $result['id'];
+		$crumbs = array();
+		if (isset($menu->nodes[$id]) && $menu->nodes[$id]) {
+			$crumb = $menu->nodes[$id];
+			while ($crumb->parentItem) {
+				$crumbs[] = $crumb;
+				$crumb = $crumb->parentItem;
+			}
+		}
+		$crumbs = array_reverse($crumbs);
+		return $crumbs;
+	}
 }
