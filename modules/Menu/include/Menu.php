@@ -192,4 +192,15 @@ class Menu {
 		$crumbs = array_reverse($crumbs);
 		return $crumbs;
 	}
+
+	public static function submenuFor ($module, $link) {
+		// Find the main nav on the path to the root of the main navigation, and return its children.
+		// Only provide a submenu if there are multiple children
+		$crumbs = self::cookieCrumbsTo($module, $link);
+		if (!$crumbs) return array();
+		$primary = $crumbs[0];
+		$children = $primary->children;
+		if (count($children) <= 1) return array();
+		else return $children;
+	}
 }
