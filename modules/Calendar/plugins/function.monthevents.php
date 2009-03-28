@@ -33,5 +33,3 @@ function smarty_function_monthevents($params,&$smarty) {
 	require_once('function.calendar.php');
 	$r = smarty_function_calendar(array('url_format'=>'/calendar/%Y/%m/%d', 'month'=>$month, 'year'=>$year), $smarty);
 }
-
-?> 

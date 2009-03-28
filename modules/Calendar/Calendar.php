@@ -66,6 +66,7 @@ class Module_Calendar extends Module {
 	 * @return string
 	 */
 	public function getAdminInterface() {
+		$this->addJS('/js/linkDates.js');
 		return $this->page->render();
 	}
 
@@ -140,5 +141,3 @@ class Module_Calendar extends Module {
 		return '/calendar/' . $id . '/';
 	}
 }
-
-?>
