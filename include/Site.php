@@ -276,6 +276,9 @@ class SmartySite extends Smarty {
 	
 	function dispErr($err, &$obj, $page = null, $error_message = null){
 		switch($err){
+			case '401':
+				header("HTTP/1.1 401 Unauthorized"); 
+				break;
 			case '404':
 				header("HTTP/1.1 404 Not Found"); 
 				break;

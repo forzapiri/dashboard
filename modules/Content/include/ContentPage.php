@@ -32,6 +32,10 @@ class ContentPage extends DBRow {
 			'//timestamp',
 			'//status'
 			);
+			
+		if (SiteConfig::get('Content::restrictedPages') == 'true') {
+			$cols[] = DBColumn::make('Group(name)', 'allowed_group_id', 'Restricted to Group'); 
+		}
 		return parent::createTable("content_pages", __CLASS__, $cols);
 	}
 	static function make($id = null) {return parent::make($id, __CLASS__);}
