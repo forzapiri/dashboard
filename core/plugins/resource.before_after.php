@@ -27,7 +27,11 @@ function smarty_resource_before_after_source ($tpl_name, &$tpl_source, &$smarty_
 	if (!$smarty_obj->_fetch_resource_info($params)) return false;
 	$content = $params['source_content'];
 	$match = explode($args[1], $content);
-	if (2 != count($match)) return false;
+	$count = count($match)-1;
+	if (1 != $count) {
+		trigger_error ("Resource $file has $count occurrences of string '$content'; should have exactly 1");
+		return false;
+	}
 	switch ($args[0]) {
 	case 'before': $tpl_source = $match[0]; break;
 	case 'after': $tpl_source = $match[1]; break;

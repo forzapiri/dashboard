@@ -311,8 +311,17 @@ class DBColumnDateTime extends DBColumnTimestamp {
 	function addElementTo ($args) {
 		$value = null;
 		extract ($args);
+		$date = new NDate($value);
+		$date_options = array(
+			'language' => 'en',
+			'format' => 'M d Y',
+			'maxYear' => $date->get('%Y')+5,
+			'format'=>'d-M-Y h:ia',
+			'optionIncrement' => array('i' => 5),
+			'minYear' => $date->get('%Y')-2);
 		$label = $this->label();
-		$el = $form->addElement ('date', $id, $label, array('format'=>'d-M-Y H:i:s'));
+		var_log ($value);
+		$el = $form->addElement ('date', $id, $label, $date_options);
 		$el->setValue($value);
 		return $el;
 	}

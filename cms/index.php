@@ -33,8 +33,13 @@ $auth->start();
 SiteConfig::warnInstall();
 
 if ($auth->checkAuth()) {
-	if (!isset($_SESSION['authenticated_user']) || $_SESSION['authenticated_user']->hasPerm('CMS', 'view') == false) {
-		User::logout();
+	if (!isset($_SESSION['authenticated_user']) || !$_SESSION['authenticated_user']->hasPerm('CMS', 'view')) {
+		/* We need a way to for the programmer to see the admin interface anyway
+		 * so she can switch emulation to another group.
+		 */
+		if (SiteConfig::programmer(true))
+			$smarty->assign('programmerSneakingIn', true);
+		else User::logout();
 	}
 	/* Aggressively clear cache just in case this admin request changes static web pages.
 	 * 

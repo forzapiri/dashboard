@@ -90,11 +90,25 @@ class Module_User extends Module {
 			$p->save();
 		default:
 		}
-
+		$activeModules = Config::getActiveModules();
+		$activeClasses = array('CMS' => true);
+		foreach ($activeModules as $module) {
+			$module = 'Module_' . $module['module'];
+			$module = new $module();
+			if (!empty($module->page)) {
+				foreach ($module->page->tables as $key => $table) {
+					$activeClasses[$key] = true;
+				}
+			}
+		}
 		$query = new Query('select class from permissions group by class order by class', '');
-		$classes = $query->fetchAll();
-		foreach ($classes as &$class) $class = $class['class'];
-
+		$allClasses = $query->fetchAll();
+		$classes = array();
+		foreach ($allClasses as $class) {
+			$class = $class['class'];
+			if (isset ($activeClasses[$class]))
+				$classes[] = $class;
+		}
 		$this->smarty->assign('groups', $groups);
 		$this->smarty->assign('selected', $selected);
 		$this->smarty->assign('classes', $classes);

@@ -46,6 +46,11 @@ class CalendarEvent extends DBRow {
 		return call_user_func_array(array('DBRow', 'getCountRows'), $args);
 	}
 	function quickformPrefix() {return 'calendar_events_';}
+	function getAddEditFormBeforeSaveHook() {$this->setCalendarId(1);}
+	function getAddEditFormHook($form) {
+		$script = '<script type="text/javascript">linkStartEndTimes("calendar_events_event_start","calendar_events_event_end",false)</script>';
+		$form->addElement ('html', $script);
+	}
 }
 DBRow::init('CalendarEvent');
 

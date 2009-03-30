@@ -1,3 +1,4 @@
+{if !$programmerSneakingIn} {* If spans entire file *}
 <p class="dashboard">We understand that good online marketing comes from being able to effectively communicate with your customers. 
 We understand that this means being able to demonstrate how your unique competitive advantages are well aligned 
 with your target markets needs. In addition to traditional internet marketing techniques, our creative team and 
@@ -53,4 +54,4 @@ additional tools such as print and other media forms play important supporting r
 <li><h3>Site Name</h3><p>{siteconfig get="CMSname"}</p></li>
 </ul>
 </div>
-
+{/if}
