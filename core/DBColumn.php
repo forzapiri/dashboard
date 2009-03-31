@@ -168,20 +168,25 @@ class DBColumnClass extends DBColumnId { // A column type for an id, where the i
 	function addElementTo($args) {
 		$value = null;
 		$label = $this->label();
+		$options = array();
 		extract ($args);
 		$dummy = DBRow::make(null, $this->class);
 		$rows = $dummy->table()->getAllRows();
 		$col = $this->options();
 		$col = $col ? $col[0] : 'id';
-		if ($col) {
+		$col = $col ? $col : 'id';
+		if ($this->class == 'MenuType') {
+			$col = 'name';
+			array_shift($rows);
+		} else {
 			$options[0] = '-- NONE --';
 			$options['new'] = '-- Create New --';
-			foreach ($rows as $row) {
-				$options[$row->get('id')] = $row->get($col);
-			}
-			$el = $form->addElement ('select', $id, $label, $options, array('onchange' => 'ui.createHandler(this, \'' . $this->class . '\')'));
-			$el->setValue($value);
-			return $el;
 		}
+		foreach ($rows as $row) {
+			$options[$row->get('id')] = $row->get($col);
+		}
+		$el = $form->addElement ('select', $id, $label, $options, array('onchange' => 'ui.createHandler(this, \'' . $this->class . '\')'));
+		$el->setValue($value);
+		return $el;
 	}
 }
