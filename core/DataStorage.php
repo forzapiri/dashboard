@@ -319,6 +319,7 @@ class DataStorage {
 		$smarty->template_dir = SITE_ROOT . '/cms/templates';
 		
 		$smarty->addJS($tinyMCE->basepath . '/tiny_mce/tiny_mce_popup.js');
+		$smarty->addCSS('/css/protomenu.css');
 		$smarty->addJS($tinyMCE->basepath . '/tiny_mce/utils/mctabs.js');
 		$smarty->addCSS($tinyMCE->basepath . '/tiny_mce/themes/advanced/skins/default/dialog.css');
 		$smarty->addCSS('/css/tiny_mce_filebrowser.css');
@@ -339,6 +340,12 @@ if (isset($_REQUEST['browser'])) {
 	include_once ('../include/Site.php');
 	
 	echo DataStorage::fileBrowser($_REQUEST['type']);
+}
+
+if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete' && isset($_REQUEST['id'])) {
+	include ('../include/Site.php');
+	$sql = 'delete from images where id=' . $_REQUEST['id'];
+	$result = Database::singleton()->query($sql);
 }
 
 if(isset($_REQUEST['id'])){
