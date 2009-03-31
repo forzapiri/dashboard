@@ -107,6 +107,11 @@ class Image {
 		}
 	}
 	
+	public function delete() {
+		$sql = 'delete from images where id=' . $this->getId();
+		$result = Database::singleton()->query($sql);
+	}
+	
 	public function insert($data) {
 		$fp = fopen($data['tmp_name'], 'r');
 		$content = fread($fp, filesize($data['tmp_name']));
