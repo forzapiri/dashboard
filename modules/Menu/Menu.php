@@ -126,7 +126,6 @@ class Module_Menu extends Module {
 			$menu = new Menu(1, true );
 			$type = MenuType::make(1);
 		}
-
 		$this->smarty->assign( 'menu', $menu->getRoots() );
 
 		return $this->smarty->fetch( 'db:' . $type->getTemplate() );

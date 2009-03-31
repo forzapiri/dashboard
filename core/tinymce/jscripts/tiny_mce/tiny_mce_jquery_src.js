@@ -621,7 +621,7 @@ tinymce.create('tinymce.util.Dispatcher', {
 			s = t.settings = s || {};
 
 			// Strange app protocol or local anchor
-			if (/^(mailto|news|javascript|about):/i.test(u) || /^\s*#/.test(u)) {
+			if (/^(mailto|tel|news|javascript|about):/i.test(u) || /^\s*#/.test(u)) {
 				t.source = u;
 				return;
 			}
@@ -1464,7 +1464,8 @@ tinymce.create('static tinymce.util.XHR', {
 
 				r = r.parentNode;
 
-				if (r == d.body)
+				// No node type or document type
+				if (!r.nodeType || r.nodeType == 9 || r.nodeName.toLowerCase() == 'body')
 					break;
 			}
 
@@ -3080,13 +3081,6 @@ tinymce.create('static tinymce.util.XHR', {
 	// Expose the selection object
 	tinymce.dom.TridentSelection = Selection;
 })();
-/*!
- * Sizzle CSS Selector Engine - v0.9.1
- *  Copyright 2009, The Dojo Foundation
- *  Released under the MIT, BSD, and GPL Licenses.
- *  More information: http://sizzlejs.com/
- */
-
 (function(tinymce) {
 	// Shorten names
 	var each = tinymce.each, DOM = tinymce.DOM, isIE = tinymce.isIE, isWebKit = tinymce.isWebKit, Event;
@@ -3761,19 +3755,24 @@ tinymce.create('static tinymce.util.XHR', {
 		select : function(n, c) {
 			var t = this, r = t.getRng(), s = t.getSel(), b, fn, ln, d = t.win.document;
 
-			function first(n) {
-				return n ? d.createTreeWalker(n, NodeFilter.SHOW_TEXT, null, false).nextNode() : null;
-			};
+			function find(n, start) {
+				var walker, o;
 
-			function last(n) {
-				var c, o, w;
+				if (n) {
+					walker = d.createTreeWalker(n, NodeFilter.SHOW_TEXT, null, false);
 
-				if (!n)
-					return null;
+					// Find first/last non empty text node
+					while (n = walker.nextNode()) {
+						o = n;
 
-				w = d.createTreeWalker(n, NodeFilter.SHOW_TEXT, null, false);
-				while (c = w.nextNode())
-					o = c;
+						if (tinymce.trim(n.nodeValue).length != 0) {
+							if (start)
+								return n;
+							else
+								o = n;
+						}
+					}
+				}
 
 				return o;
 			};
@@ -3796,8 +3795,8 @@ tinymce.create('static tinymce.util.XHR', {
 				}
 			} else {
 				if (c) {
-					fn = first(n) || t.dom.select('br:first', n)[0];
-					ln = last(n) || t.dom.select('br:last', n)[0];
+					fn = find(n, 1) || t.dom.select('br:first', n)[0];
+					ln = find(n, 0) || t.dom.select('br:last', n)[0];
 
 					if (fn && ln) {
 						r = d.createRange();
@@ -3951,7 +3950,7 @@ tinymce.create('static tinymce.util.XHR', {
 				n = sb;
 
 				while ((n = n.nextSibling) && n != eb) {
-					if (isBlock(n))
+					if (dom.isBlock(n))
 						bl.push(n);
 				}
 			}
@@ -11548,6 +11547,7 @@ var tinyMCE = window.tinyMCE = tinymce.EditorManager;
 		if (ed.settings.custom_undo_redo) {
 			ed.undoManager.undo();
 			ed.nodeChanged();
+			return true;
 		}
 
 		return false; // Run browser command
@@ -11559,6 +11559,7 @@ var tinyMCE = window.tinyMCE = tinymce.EditorManager;
 		if (ed.settings.custom_undo_redo) {
 			ed.undoManager.redo();
 			ed.nodeChanged();
+			return true;
 		}
 
 		return false; // Run browser command

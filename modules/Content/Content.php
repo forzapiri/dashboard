@@ -71,6 +71,8 @@ class Module_Content extends Module implements linkable {
 		$this->smarty->assign('content',$page);
 		$this->parentSmarty->templateOverride = $page->getSmartyResource();
 		$this->setPageTitle($page->get('page_title'));
+		$this->smarty->assign ('crumbs', Menu::cookieCrumbsTo("Content", $pageid));
+		$this->smarty->assign ('submenu', Menu::submenuFor("Content", $pageid));
 		/* CHUNKS */
 		$this->smarty->assign ('chunks', Chunk::getAllContentFor($page, $status));
 		return $this->smarty->fetch('db:content.tpl');
