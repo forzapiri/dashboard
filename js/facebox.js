@@ -106,10 +106,13 @@ var Facebox = Class.create({
 	
 	close		: function(){
 		//$('facebox').hide();
-		contentWrapper = $('facebox').down('div.content');
-		new Effect.Fade($('facebox'), {duration: 0.2, fps: 100});
+		new Effect.Fade($('facebox'), {duration: 0.2, fps: 100, 
+			afterFinish: function() {
+				contentWrapper = $('facebox').down('div.content');
+				contentWrapper.update('');
+			} 
+		});
 		new Effect.Fade($('overlay'), {duration: 1.0, fps: 100});
-		contentWrapper.update('');
 	},
 	
 	click_handler	: function(elem, e){
