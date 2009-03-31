@@ -285,7 +285,12 @@ var NorexUI = Class.create(Facebox, {
 		} else {
 			event.stop(event);
 		}
-	}
+	},
+
+	clearcaches: function() {
+			new Ajax.Request("/buildtools/install/clearcaches.php", {});
+			return false;
+		}
 });
 
 var ui;

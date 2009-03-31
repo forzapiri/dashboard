@@ -122,6 +122,7 @@ function adminMenu($params, &$smarty) {
 		$select = "<select id='$name' name='$name' onChange='document.programmerForm.submit()'>\n$options\n</select>\n";
 		$form = "<form name='programmerForm' action='/admin' method='post'>\n$select\n</form>\n";
 		$adminItems[] = $form;
+		$adminItems[] = "<input type='submit' value='Clear Cache' onclick='ui.clearcaches()'></input>";
 	}
 	
 	$menuString = "<ul>\n" . implode("\n", $adminItems) . "\n</ul>\n";
