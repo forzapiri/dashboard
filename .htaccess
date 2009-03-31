@@ -23,6 +23,7 @@ RewriteRule ^mail/unsubscribe/([0-9]+)-([A-Fa-f0-9]+)$	/index.php?module=Mail&se
 
 RewriteRule ^user/(.*)?/?                  /index.php?module=User&section=$1 [NC,L]
 
+RewriteRule ^content/(.*)/(.*) /index.php?module=Content&page=$1 [NC,L]
 RewriteRule ^content/(.*)? /index.php?module=Content&page=$1 [NC,L]
 
 RewriteRule ^ad/(.*)? /index.php?module=Advertise&section=ad&page=$1 [NC,L]
