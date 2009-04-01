@@ -78,27 +78,33 @@ class ChunkManager {
 			$hidden = $this->hidden[$i];
 			$readOnly = $this->readOnly[$i];
 			$role = $this->roles[$i];
+			$el = array();
+			if ($field->showChunkRevisions()) {
+				$prev = "<input type='image' src='/images/admin/arrow_left.gif' onclick='return false' id='_chunk_prev_$i' name='_chunk_prev_$i[prev]'></img>";
+				$next = "<input type='image' src='/images/admin/arrow_right.gif' onclick='return false' id='_chunk_next_$i' name='_chunk_next_$i[next]'></img>";
+				$class = get_class($this->object);
+				$parent = $this->object->getId();
+				$total = $chunk ? $chunk->countRevisions() : 0;
+				$count = $chunk ? $chunk->getCount('draft') : 0;
+				$revisionNav = "&nbsp;&nbsp;&nbsp;&nbsp;\n<span class='revHistoryButtons'>\n$prev\n$next\n</span>\n";
+				$revisionScript = "\n<script type='text/javascript'>watchChunkSelect($i, '$role', '$class', $parent, $total, $count);</script>\n";
+			} else {
+				$revisionNav = "";
+			}
 			if ($role && !$hidden) {
-				$form->addElement('html', "\n<div id=_select_text_$i>");
-				$el = array();
 				$el[] = $s = $form->createElement('select', "select", "", self::getSelection($role, $readOnly));
 				if ($chunk && $chunk->getRole() && $chunk->getName()) {
 					$s->setValue($chunk->getName());
 					$chunk = $chunk->getActualChunk();
 				}
-				if (!$readOnly) {
-					$el[] = $form->createElement('text', "text", ""); // THESE FIELDS ARE HIDDEN AND/OR HANDLED BY chunks.js
-					$el[] = $form->createElement('image', 'prev', "/images/admin/arrow_left.gif", array('onclick' => 'return false', 'id'=>"_chunk_prev_".$i));
-					$el[] = $form->createElement('image', 'next', "/images/admin/arrow_right.gif", array('onclick' => 'return false', 'id'=>"_chunk_next_".$i));
-				}
-				$form->addGroup($el, "_chunk_name_$i", $label, '&nbsp;&nbsp;&nbsp;');
+				if (!$readOnly) {$el[] = $form->createElement('text', "text", "");} // THESE FIELDS ARE HIDDEN AND/OR HANDLED BY chunks.js
+				$form->addElement('html', "\n<div id=_select_text_$i>");
+				$form->addGroup($el, "_chunk_name_$i", "$label$revisionNav", '&nbsp;&nbsp;&nbsp;');
 				$form->addElement('html', "\n</div>");
-				$class = get_class($this->object);
-				$parent = $this->object->getId();
-				$total = $chunk ? $chunk->countRevisions() : 0;
-				$count = $chunk ? $chunk->getCount('draft') : 0;
-				$form->addElement('html', "\n<script type='text/javascript'>watchChunkSelect($i, '$role', '$class', $parent, $total, $count);</script>\n");
+
 				$field->setLabel(""); // Inspect the add edit form, add an appropriate class, use JavaScript to watch for change and update content
+			} else {
+				$field->setLabel("$label$revisionNav");
 			}
 			if ($chunk && ($chunk->getId() || $chunk->getContent('draft'))) {
 				$value = $chunk->getContent('draft');
@@ -111,8 +117,9 @@ class ChunkManager {
 				$el->setValue($formValue);
 			} else {
 				$el = $field->addElementTo(array ('form' => $form, 'id' => "_chunk_$i", 'value' => $formValue));
-				$field->setLabel($label);
+				$field->setLabel("$label");
 			}
+			if (!empty($revisionScript)) $form->addElement('html', "$revisionScript");
 		}
 		return ++$i; // Returns the number of form fields which were added
 	}
@@ -281,7 +288,7 @@ class ChunkManager {
 
 	static function fieldAdminRequest() {
 		if(!empty($_REQUEST['action'])){
-			switch ($_REQUEST['action']) { // CHUNKS
+			switch ($_REQUEST['action']) {
 			case 'chunk_revertdrafts':
 				Chunk::revertDrafts($_REQUEST['section'], $_REQUEST['id']);
 				break;
