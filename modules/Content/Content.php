@@ -43,6 +43,15 @@ class Module_Content extends Module implements linkable {
 	}
 	
 	function getUserInterface() {
+		if(ucfirst($_REQUEST['module']) == 'Content' && @empty($_REQUEST['page'])){
+			$_REQUEST['page'] = SiteConfig::get('Content::defaultPage');
+		}
+		
+		$isHome = ucfirst($_REQUEST['module']) == 'Content'
+			&& (strtolower(ucfirst(@$_REQUEST['page']))
+				== strtolower(SiteConfig::get('Content::defaultPage')));
+		$this->parentSmarty->assign('ishome', $isHome);
+		
 		$pageid = @$_REQUEST['id'];
 		if (@$_REQUEST['action'] == 'viewdraft') { // CHUNKS:  Admin preview of a page; allow preview only if visitor has addedit privilege
 			if (!$this->user->hasPerm('ContentPage', 'addedit')) {

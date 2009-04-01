@@ -109,7 +109,8 @@ class MenuItem extends DBRow {
 	
 
 	function &save() {
-		if (!$this->getId()) {
+		if (!$this->getSort()) {
+			parent::save();
 			$this->setSort($this->getId());
 		}
 		return parent::save();
