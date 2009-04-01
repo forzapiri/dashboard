@@ -67,6 +67,14 @@ if ( $ajaxHelper->isAJAX () ){
 	$smarty->plugins_dir[] = SITE_ROOT . '/core/plugins';
 	$smarty->compile_id = 'CMS';
 
+	//load the request uri into an array for smarty to access globally.
+	$inurl = strtolower($_SERVER['REQUEST_URI']);
+	$inurl = split('/',$inurl);
+	$inurl = array_reverse($inurl);
+	$inurl = array_flip($inurl);
+	$smarty->assign('path',$inurl);
+
+	
 	$smarty->assign ( 'module', $_REQUEST['module'] );
 	if (isset($_SESSION['authenticated_user'])) {
 		$smarty->assign_by_ref ( 'user', $_SESSION['authenticated_user'] );
