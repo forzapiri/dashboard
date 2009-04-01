@@ -97,6 +97,9 @@ class Chunk extends DBRow {
 			$rev = $chunk->getRevision($status);
 			if ($rev->getStatus() == 'draft') self::$hasDraftFlag = true;
 			$chunk = DBRow::fromDB($type, $rev->getContent());
+			if ($type == 'MenuType') {
+				$chunk = Module::factory('Menu')->getUserInterface(array('id' => $chunk));
+			}
 		}
 		return new ChunkList($chunks);
 	}

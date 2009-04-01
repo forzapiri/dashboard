@@ -80,6 +80,7 @@ abstract class DBRow {
 	function columns() {return $this->table()->columns();}
 	function quickformPrefix() {return "";}
 	function chunkable() {return false;}
+	public function chunks() { return Chunk::getAllContentFor($this, 'active');}
 	function addElementTo($form, $id, $formValue) {
 		switch ($id) {
 		default: false;

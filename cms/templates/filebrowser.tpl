@@ -1,13 +1,13 @@
 <html>
 <head>
-<link rel="stylesheet" href="{foreach from=$css.norm item=cssUrl}{$cssUrl},{/foreach}/css/tiny_mce_filebrowser.css" type="text/css" />
+<link rel="stylesheet" href="{foreach from=$css.norm item=cssUrl}{$cssUrl},{/foreach}/css/tiny_mce_filebrowser.css,/css/protomenu.css" type="text/css" />
 {if $css.print|@count > 0}
 	<link rel="stylesheet" href="{foreach from=$css.print item=cssUrl}{$cssUrl}{if $css.print|@key < $css.print|@count},{/if}{/foreach}" type="text/css" media="print" />
 {/if}
 {if $css.screen|@count > 0}
 	<link rel="stylesheet" href="{foreach from=$css.screen item=cssUrl}{$cssUrl}{if $css.screen|@key < $css.screen|@count},{/if}{/foreach}" type="text/css" media="screen" />
 {/if}
-<script type="text/javascript" src="/js/prototype.js"></script>
+<script type="text/javascript" src="/js/prototype.js,/js/scriptaculous.js,/js/protomenu.js"></script>
 {foreach from=$js item=jsUrl}
 <script type="text/javascript" src="{$jsUrl}"></script>
 {/foreach}
@@ -35,6 +35,22 @@ var fileInfo = function(el) {
 	var info = $(el).down('div.fileinfo');
 	$('fileInfoShow').update(info.innerHTML);
 }
+var myMenuItems = [
+  {
+    name: 'Delete',
+    className: 'delete',
+    callback: function(event) {
+      var el = event.element().up('div');
+      new Ajax.Request('/core/DataStorage.php', {
+      	method: 'post',
+      	parameters: {id: el.identify(), action: 'delete'},
+      	onSuccess: function(transport) {
+      		Effect.Fade(el);
+      	}
+      });
+    }
+  }
+]
 
 
 {/literal}
@@ -67,7 +83,7 @@ var fileInfo = function(el) {
 <td valign="top">
 	{if $type == 'image'}
 		{foreach from=$images item=image}
-			<div onclick="doSubmit({$image.id}, 'image');" onmouseover="fileInfo(this);" class="filebrowsericon"/>
+			<div onclick="doSubmit({$image.id}, 'image');" onmouseover="fileInfo(this);" class="filebrowsericon" id="{$image.id}" />
 				<img src="/images/image.php?id={$image.id}&clipw=48" />
 				<br />
 				{math equation="x / 1024" x=$image.filesize assign=size}
@@ -103,6 +119,17 @@ var fileInfo = function(el) {
 </td>
 </tr>
 </table>
+{literal}
+<script type="text/javascript">
+new Proto.Menu({
+  selector: '.filebrowsericon', // context menu will be shown when element with id of "contextArea" is clicked
+  className: 'menu desktop', // this is a class which will be attached to menu container (used for css styling)
+  menuItems: myMenuItems // array of menu items
+})
+</script>
+{/literal}
+
+
 </body>
 
 </html>
