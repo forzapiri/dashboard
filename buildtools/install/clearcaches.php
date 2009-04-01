@@ -45,9 +45,9 @@ function rmdir_recurse($path)
 function chmodCacheDirectories() {clearCacheDirectories(false);}
 
 function clearCacheDirectories($rm = true) {
-	$dir = scandir(SITE_ROOT . 'cache');
+	$dir = scandir(SITE_ROOT . '/cache');
 	foreach ($dir as $file) {
-		$filename = SITE_ROOT . 'cache/' . $file;
+		$filename = SITE_ROOT . '/cache/' . $file;
 		if (is_dir ($filename) && substr($file,0,1) != '.') { // Doesn't touch .* files
 			if ($rm) rmdir_recurse ($filename);
 			@chmod ($filename, 0777);
