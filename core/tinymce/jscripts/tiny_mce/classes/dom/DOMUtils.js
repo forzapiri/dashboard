@@ -213,7 +213,7 @@
 			}
 
 			while (n) {
-				if (n == r)
+				if (n == r || !n.nodeType || n.nodeType === 9)
 					break;
 
 				if (!f || f(n)) {
@@ -706,12 +706,14 @@
 		 * Returns the absolute x, y position of a node. The position will be returned in a object with x, y fields.
 		 *
 		 * @param {Element/String} n HTML element or element id to get x, y position from.
+		 * @param {Element} ro Optional root element to stop calculations at.
 		 * @return {object} Absolute position of the specified element object with x, y fields.
 		 */
-		getPos : function(n) {
+		getPos : function(n, ro) {
 			var t = this, x = 0, y = 0, e, d = t.doc, r;
 
 			n = t.get(n);
+			ro = ro || d.body;
 
 			// Use getBoundingClientRect on IE, Opera has it but it's not perfect
 			if (n && isIE && !t.stdMode) {
@@ -729,21 +731,6 @@
 				x += r.offsetLeft || 0;
 				y += r.offsetTop || 0;
 				r = r.offsetParent;
-			}
-
-			r = n;
-			while (r) {
-				// Opera 9.25 bug fix, fixed in 9.50
-				if (!/^table-row|inline.*/i.test(t.getStyle(r, "display", 1))) {
-					x -= r.scrollLeft || 0;
-					y -= r.scrollTop || 0;
-				}
-
-				r = r.parentNode;
-
-				// No node type or document type
-				if (!r.nodeType || r.nodeType == 9 || r.nodeName.toLowerCase() == 'body')
-					break;
 			}
 
 			return {x : x, y : y};
