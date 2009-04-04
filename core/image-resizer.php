@@ -19,8 +19,8 @@
  *  nocache		does not read image from the cache
  *  quality		(0-100, default: 90) quality of output image
  *  type 		output image type jpg, png, or gif
- *  border 		add a border if this width --- color required
- *  fullw	    if specified, pad final image to this width with a border--- color required
+ *  border 		add a border of this width --- color required
+ *  fullw (h)	if specified, pad final image to this width (height) with a border--- color required
  */
 
 define('MEMORY_TO_ALLOCATE', '100M');
@@ -44,14 +44,6 @@ new ImageResizer(); // The consructor does all the work
 ////////////////////////////////////////////////////////////////
 //  Remainder of file consists of class and function definitions
 ////////////////////////////////////////////////////////////////
-function var_log($var, $prefix="") { // Used for debugging
-	if ($prefix) $prefix .= ': ';
-   	if ($var === null) $var = 'NULL';
-   	elseif ($var === true) $var = 'true';
-   	elseif ($var === false) $var = 'false';
-	error_log ($prefix . print_r($var, true));
-	return $var;
-}
 
 function request($var, $default = null) {
 	return isset ($_REQUEST[$var]) ? $_REQUEST[$var] : $default;
@@ -115,7 +107,6 @@ class ImageResizer {
 	function checkNoChanges() {
 		foreach (array('image','w','width','h','height','color','cropratio','quality','type','border','fullw','fullh') as $arg)
 			if (request($arg)) return;
-		var_log ("SERVING ORIGINAL");
 		serveFile($this->old->file(), $this->old->mime());
 		die();
 	}
