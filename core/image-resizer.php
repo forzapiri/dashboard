@@ -1,345 +1,291 @@
 <?php
-  // Most of this originated from Joe Lencioni, and I've retained his headers.
+
+// TODO:  Ask Chris or Adam to confirm that local cache code is working right header-wise
+
+  // Code contains ideas from Joe Lencioni.
   // Changes made to this file by David Wolfe, Norex.
 
   // Currently, an image is readable if either 
   // (1)  there is a filename 'public' in the same directory has the source image, or
   // (2)  the user checks is logged in with admin privileges
 
+/*
+ * PARAMETERS PASSED THROUGH URL QUERY STRING
+ *  image		(required) absolute path of local image starting with "/" (e.g. /images/toast.jpg)
+ *  w or width	maximum width of final image in pixels (e.g. 700)
+ *  h or height	maximum height of final image in pixels (e.g. 700)
+ *  color		background hex color for filling transparent PNGs (e.g. 900 or 16a942) or for borders
+ *  cropratio	ratio of width to height to crop final image (e.g. 1:1 or 3:2)
+ *  nocache		does not read image from the cache
+ *  quality		(0-100, default: 90) quality of output image
+ *  type 		output image type jpg, png, or gif
+ *  border 		add a border if this width --- color required
+ *  fullw	    if specified, pad final image to this width with a border--- color required
+ */
 
+define('MEMORY_TO_ALLOCATE', '100M');
+define('DEFAULT_QUALITY',	 90);
+define('CURRENT_DIR',        dirname(__FILE__));
+define('CACHE_DIR_NAME',     '/../cache/images/');
+define('CACHE_DIR',          CURRENT_DIR . CACHE_DIR_NAME);
+define('SITE_ROOT',      $_SERVER['DOCUMENT_ROOT']);
+define('INFINITY', 999999);
+$types = array ('image/gif' => 'gif',
+				'gif' => 'gif',
+				'image/x-png' => 'png',
+				'image/png' => 'png',
+				'png' => 'png',
+				'image/jpeg' => 'jpeg',
+				'image/jpg' => 'jpeg',
+				'jpg' => 'jpeg',
+	);
+		
+new ImageResizer(); // The consructor does all the work
+////////////////////////////////////////////////////////////////
+//  Remainder of file consists of class and function definitions
+////////////////////////////////////////////////////////////////
+function var_log($var, $prefix="") { // Used for debugging
+	if ($prefix) $prefix .= ': ';
+   	if ($var === null) $var = 'NULL';
+   	elseif ($var === true) $var = 'true';
+   	elseif ($var === false) $var = 'false';
+	error_log ($prefix . print_r($var, true));
+	return $var;
+}
 
-// Smart Image Resizer 1.4.1
-// Resizes images, intelligently sharpens, crops based on width:height ratios, color fills
-// transparent GIFs and PNGs, and caches variations for optimal performance
+function request($var, $default = null) {
+	return isset ($_REQUEST[$var]) ? $_REQUEST[$var] : $default;
+}
 
-// Created by: Joe Lencioni (http://shiftingpixel.com)
-// Date: August 6, 2008
-// Based on: http://veryraw.com/history/2005/03/image-resizing-with-php/
-
-/////////////////////
-// LICENSE
-/////////////////////
-
-// I love to hear when my work is being used, so if you decide to use this, feel encouraged
-// to send me an email. Smart Image Resizer is released under a Creative Commons
-// Attribution-Share Alike 3.0 United States license
-// (http://creativecommons.org/licenses/by-sa/3.0/us/). All I ask is that you include a link
-// back to Shifting Pixel (either this page or shiftingpixel.com), but don’t worry about
-// including a big link on each page if you don’t want to–one will do just nicely. Feel
-// free to contact me to discuss any specifics (joe@shiftingpixel.com).
-
-/////////////////////
-// REQUIREMENTS
-/////////////////////
-
-// PHP and GD
-
-/////////////////////
-// PARAMETERS
-/////////////////////
-
-// Parameters need to be passed in through the URL's query string:
-// image		absolute path of local image starting with "/" (e.g. /images/toast.jpg)
-// w or width	maximum width of final image in pixels (e.g. 700)
-// h or height	maximum height of final image in pixels (e.g. 700)
-// color		(optional) background hex color for filling transparent PNGs (e.g. 900 or 16a942)
-// cropratio	(optional) ratio of width to height to crop final image (e.g. 1:1 or 3:2)
-// nocache		(optional) does not read image from the cache
-// quality		(optional, 0-100, default: 90) quality of output image
-
-/////////////////////
-// EXAMPLES
-/////////////////////
-
-// Resizing a JPEG:
-// <img src="/image.php/image-name.jpg?width=100&amp;height=100&amp;image=/path/to/image.jpg" alt="Don't forget your alt text" />
-
-// Resizing and cropping a JPEG into a square:
-// <img src="/image.php/image-name.jpg?width=100&amp;height=100&amp;cropratio=1:1&amp;image=/path/to/image.jpg" alt="Don't forget your alt text" />
-
-// Matting a PNG with #990000:
-// <img src="/image.php/image-name.png?color=900&amp;image=/path/to/image.png" alt="Don't forget your alt text" />
-
-/////////////////////
-// CODE STARTS HERE
-/////////////////////
-
-if (!isset($_GET['image']))
-{
-	header('HTTP/1.1 400 Bad Request');
-	echo 'Error: no image was specified';
+function httpError($s, $code = 400) {
+	header("HTTP/1.1 $code Bad Request");
+	echo "Error: $s";
 	exit();
 }
 
-define('MEMORY_TO_ALLOCATE',	'100M');
-define('DEFAULT_QUALITY',		90);
-define('CURRENT_DIR',			dirname(__FILE__));
-define('CACHE_DIR_NAME',		'/../cache/images/');
-define('CACHE_DIR',				CURRENT_DIR . CACHE_DIR_NAME);
-define('DOCUMENT_ROOT',			$_SERVER['DOCUMENT_ROOT']);
-
-// Images must be local files, so for convenience we strip the domain if it's there
-$image			= preg_replace('/^(s?f|ht)tps?:\/\/[^\/]+/i', '', (string) $_GET['image']);
-
-// For security, directories cannot contain ':', images cannot contain '..' or '<', and
-// images must start with '/'
-if ($image{0} != '/' || strpos(dirname($image), ':') || preg_match('/(\.\.|<|>)/', $image))
-{
-	header('HTTP/1.1 400 Bad Request');
-	echo 'Error: malformed image path. Image paths must begin with \'/\'';
-	exit();
+function checkPerm ($file) {
+	// Replace trailing filename with 'public'
+	$publicFile = preg_replace('@/[^/]*$@', '/public', $file);
+	$permitted = file_exists($publicFile) && file_exists($file);
+	if (!$permitted) {
+		require_once ('../include/Site.php');
+		$u = @$_SESSION['authenticated_user'];
+		$permitted = $u && $u->hasPerm('CMS', 'admin');
+	}
+	return $permitted;
 }
 
-// If the image doesn't exist, or we haven't been told what it is, there's nothing
-// that we can do
-if (!$image)
-{
-	header('HTTP/1.1 400 Bad Request');
-	echo 'Error: no image was specified';
-	exit();
-}
-
-// Strip the possible trailing slash off the document root
-$docRoot	= preg_replace('/\/$/', '', DOCUMENT_ROOT);
-
-if (!file_exists($docRoot . $image))
-{
-	header('HTTP/1.1 404 Not Found');
-	echo 'Error: image does not exist: ' . $docRoot . $image;
-	exit();
-}
-
-// Replace trailing filename with 'public'
-$publicFile = preg_replace('@/[^/]*$@', '/public', $docRoot . $image);
-$permitted = file_exists($publicFile);
-
-if (!$permitted)
-{
-	// For now, just check that the user is authenticated and is in the Administrator group
-	require_once ('../include/Site.php');
-	$u = @$_SESSION['authenticated_user'];
-	$permitted = $u && ($u->hasPerm('CMS', 'admin') || $u->hasPerm('CMS','view'));
-}
-
-if (!$permitted)
-{
-	error_log ($publicFile);
-	header('HTTP/1.1 401 Unauthorized');
-	echo 'Error: Permission violation: ' . $docRoot . $image;
-	exit();
-}
-
-// Get the size and MIME type of the requested image
-$size	= GetImageSize($docRoot . $image);
-$mime	= $size['mime'];
-
-// Make sure that the requested file is actually an image
-if (substr($mime, 0, 6) != 'image/')
-{
-	header('HTTP/1.1 400 Bad Request');
-	echo 'Error: requested file is not an accepted type: ' . $docRoot . $image;
-	exit();
-}
-
-$width			= $size[0];
-$height			= $size[1];
-
-$maxWidth		= (isset($_GET['width'])) ? (int) $_GET['width'] : 0;
-$maxWidth		= (!$maxWidth && isset($_GET['w'])) ? (int) $_GET['w'] : $maxWidth;
-$maxHeight		= (isset($_GET['height'])) ? (int) $_GET['height'] : 0;
-$maxHeight		= (!$maxHeight && isset($_GET['h'])) ? (int) $_GET['h'] : $maxHeight;
-
-if (isset($_GET['color']))
-	$color		= preg_replace('/[^0-9a-fA-F]/', '', (string) $_GET['color']);
-else
-	$color		= FALSE;
-
-// If either a max width or max height are not specified, we default to something
-// large so the unspecified dimension isn't a constraint on our resized image.
-// If neither are specified but the color is, we aren't going to be resizing at
-// all, just coloring.
-if (!$maxWidth && $maxHeight)
-{
-	$maxWidth	= 99999999999999;
-}
-elseif ($maxWidth && !$maxHeight)
-{
-	$maxHeight	= 99999999999999;
-}
-elseif ($color && !$maxWidth && !$maxHeight)
-{
-	$maxWidth	= $width;
-	$maxHeight	= $height;
-}
-
-// If we don't have a max width or max height, OR the image is smaller than both
-// we do not want to resize it, so we simply output the original image and exit
-if ((!$maxWidth && !$maxHeight) || (!$color && $maxWidth >= $width && $maxHeight >= $height))
-{
-	$data	= file_get_contents($docRoot . '/' . $image);
-	
-	$lastModifiedString	= gmdate('D, d M Y H:i:s', filemtime($docRoot . '/' . $image)) . ' GMT';
-	$etag				= md5($data);
-	
-	doConditionalGet($etag, $lastModifiedString);
-	
+function serveFile($filename, $mime, $data = null) {
+	$lastModified = gmdate('D, d M Y H:i:s', filemtime($filename)) . ' GMT';
+	$etag = md5($filename . '//' . filesize($filename));
+	doConditionalGet($etag, $lastModified); // Exit if local cache suffices
+	$data = is_null($data) ? file_get_contents($filename) : $data;
 	header("Content-type: $mime");
 	header('Content-Length: ' . strlen($data));
 	echo $data;
 	exit();
+
 }
 
-// Ratio cropping
-$offsetX	= 0;
-$offsetY	= 0;
+function doConditionalGet($etag, $lastModified) { // Check if local (client side) cache has up-to-date version
+	header("Last-Modified: $lastModified");
+	header("ETag: \"{$etag}\"");
+	$if_none_match = stripslashes((string) @$_SERVER['HTTP_IF_NONE_MATCH']);
+	$if_modified_since = stripslashes((string) @$_SERVER['HTTP_IF_MODIFIED_SINCE']);
+	if (!$if_modified_since && !$if_none_match)	return;
+	if ($if_none_match && $if_none_match != $etag && $if_none_match != '"' . $etag . '"') return;
+	if ($if_modified_since && $if_modified_since != $lastModified) return;
+	header('HTTP/1.1 304 Not Modified');
+	exit();
+}
 
-if (isset($_GET['cropratio']))
-{
-	$cropRatio		= explode(':', (string) $_GET['cropratio']);
-	if (count($cropRatio) == 2)
-	{
-		$ratioComputed		= $width / $height;
-		$cropRatioComputed	= (float) $cropRatio[0] / (float) $cropRatio[1];
-		
-		if ($ratioComputed < $cropRatioComputed)
-		{ // Image is too tall so we will crop the top and bottom
-			$origHeight	= $height;
-			$height		= $width / $cropRatioComputed;
-			$offsetY	= ($origHeight - $height) / 2;
+class ImageResizer {
+	private $doSharpen;
+	public $new, $old;
+	
+	function __construct() {
+		$this->old = new OldImage();
+		$this->new = new NewImage($this->old);
+		$this->checkNoChanges();
+		$this->initCache();
+		$this->loadImage();
+		$this->computeWidthHeight();
+		$this->outputImage(); // Sets upcanvas, does matting, copies image, etc.
+	}
+	function checkNoChanges() {
+		foreach (array('image','w','width','h','height','color','cropratio','quality','type','border','fullw','fullh') as $arg)
+			if (request($arg)) return;
+		var_log ("SERVING ORIGINAL");
+		serveFile($this->old->file(), $this->old->mime());
+		die();
+	}
+	function loadImage() {
+		$this->doSharpen = ($this->old->type == 'jpeg' && $this->new->type == 'jpeg');
+		$creationFunction = "imagecreatefrom".$this->old->type;
+		$this->old->image	= $creationFunction($this->old->file());
+	}
+	function computeWidthHeight () {
+		if ($this->old->height <= $this->new->maxHeight
+			&& $this->old->width <= $this->new->maxWidth) {
+			$this->new->width = $this->old->width;
+			$this->new->height = $this->old->height;
+		} else {
+			$diff = $this->old->height * $this->new->maxWidth - $this->old->width * $this->new->maxHeight;
+			if ($diff == 0); // do nothing
+			else if ($diff < 0) $this->new->height = $this->old->height * $this->new->maxWidth / $this->old->width;
+			else $this->new->width = $this->old->width * $this->new->maxHeight / $this->old->height;
 		}
-		else if ($ratioComputed > $cropRatioComputed)
-		{ // Image is too wide so we will crop off the left and right sides
-			$origWidth	= $width;
-			$width		= $height * $cropRatioComputed;
-			$offsetX	= ($origWidth - $width) / 2;
+		$this->new->computeFull();
+		return;
+	}
+
+	function initCache() {
+		if (isset($_REQUEST['nocache'])) return;
+		require_once SITE_ROOT . '/core/PEAR/Cache/Lite.php';
+		define ('CACHED_PAGE_INDEX', $_SERVER['REQUEST_URI']);
+		$options = array(
+			'cacheDir' => SITE_ROOT . '/cache/images/',
+			'lifeTime' => 60*60*24*7 // 1 week
+			);
+		$this->cache = new Cache_Lite($options);
+		if ($data = $this->cache->get(CACHED_PAGE_INDEX)) {
+			serveFile($this->old->file(), $this->new->mime(), $data);
+			die();
 		}
 	}
-}
-
-// Setting up the ratios needed for resizing. We will compare these below to determine how to
-// resize the image (based on height or based on width)
-$xRatio		= $maxWidth / $width;
-$yRatio		= $maxHeight / $height;
-
-if ($xRatio * $height < $maxHeight)
-{ // Resize the image based on width
-	$tnHeight	= ceil($xRatio * $height);
-	$tnWidth	= $maxWidth;
-}
-else // Resize the image based on height
-{
-	$tnWidth	= ceil($yRatio * $width);
- 	$tnHeight	= $maxHeight;
-}
-
-// Determine the quality of the output image
-$quality	= (isset($_GET['quality'])) ? (int) $_GET['quality'] : DEFAULT_QUALITY;
-
-// Before we actually do any crazy resizing of the image, we want to make sure that we
-// haven't already done this one at these dimensions. To the cache!
-// Note, cache must be world-readable
-
-// We store our cached image filenames as a hash of the dimensions and the original filename
-$resizedImageSource		= $tnWidth . 'x' . $tnHeight . 'x' . $quality;
-if ($color)
-	$resizedImageSource	.= 'x' . $color;
-if (isset($_GET['cropratio']))
-	$resizedImageSource	.= 'x' . (string) $_GET['cropratio'];
-$resizedImageSource		.= '-' . $image;
-
-$resizedImage	= md5($resizedImageSource);
 	
-$resized		= CACHE_DIR . $resizedImage;
-
-// Check the modified times of the cached file and the original file.
-// If the original file is older than the cached file, then we simply serve up the cached file
-if (!isset($_GET['nocache']) && file_exists($resized))
-{
-	$imageModified	= filemtime($docRoot . $image);
-	$thumbModified	= filemtime($resized);
-	
-	if($imageModified < $thumbModified) {
-		$data	= file_get_contents($resized);
-	
-		$lastModifiedString	= gmdate('D, d M Y H:i:s', $thumbModified) . ' GMT';
-		$etag				= md5($data);
-		
-		doConditionalGet($etag, $lastModifiedString);
-		
-		header("Content-type: $mime");
-		header('Content-Length: ' . strlen($data));
-		echo $data;
-		exit();
+	function outputImage() {
+		$this->new->setUpCanvas();
+		$this->new->doColor();
+		// TODO:  Resize only if new jpeg image is nearly the same size as old image jpeg.  Otherwise resample.
+		// $resizeFunction = $this->doSharpen ? 'imagecopyresized' : 'imagecopyresampled'; // THIS IS JUST A GUESS
+		$resizeFunction = 'imagecopyresampled';
+		header('Content-type: ' . $this->new->mime());
+		$resizeFunction($this->new->image, $this->old->image,
+						$this->new->x, $this->new->y, $this->old->x, $this->old->y,
+						$this->new->width, $this->new->height, $this->old->width, $this->old->height);
+		$outputFunction = "image" . $this->new->type;
+		ob_start();
+		$outputFunction($this->new->image, null, $this->new->quality);
+		$data = ob_get_contents();
+		ob_end_clean();
+		if (!isset($_REQUEST['nocache'])) $this->cache->save($data, CACHED_PAGE_INDEX);
+		serveFile($this->old->file(), $this->new->mime(), $data);
+		ImageDestroy($this->new->image);
+		ImageDestroy($this->old->image);
 	}
 }
 
-// We don't want to run out of memory
-ini_set('memory_limit', MEMORY_TO_ALLOCATE);
-
-// Set up a blank canvas for our resized image (destination)
-$dst	= imagecreatetruecolor($tnWidth, $tnHeight);
-
-// Set up the appropriate image handling functions based on the original image's mime type
-switch ($size['mime'])
-{
-	case 'image/gif':
-		// We will be converting GIFs to PNGs to avoid transparency issues when resizing GIFs
-		// This is maybe not the ideal solution, but IE6 can suck it
-		$creationFunction	= 'ImageCreateFromGif';
-		$outputFunction		= 'ImagePng';
-		$resizeFunction		= 'ImageCopyResampled';
-		$mime				= 'image/png'; // We need to convert GIFs to PNGs
-		$doSharpen			= FALSE;
-		$quality			= round(10 - ($quality / 10)); // We are converting the GIF to a PNG and PNG needs a compression level of 0 (no compression) through 9
-	break;
-	
-	case 'image/x-png':
-	case 'image/png':
-		$creationFunction	= 'ImageCreateFromPng';
-		$outputFunction		= 'ImagePng';
-		$resizeFunction		= 'ImageCopyResampled';
-		$doSharpen			= FALSE;
-		$quality			= round(10 - ($quality / 10)); // PNG needs a compression level of 0 (no compression) through 9
-	break;
-	
-	default:
-		$creationFunction	= 'ImageCreateFromJpeg';
-		$outputFunction	 	= 'ImageJpeg';
-		$resizeFunction		= 'ImageCopyResized';
-		$doSharpen			= TRUE;
-	break;
+class Image {
+	public $image, $width, $height, $type;
+	function mime() {return "image/$this->type";}
 }
 
-// Read in the original image
-$src	= $creationFunction($docRoot . $image);
-
-if (in_array($size['mime'], array('image/gif', 'image/png')))
-{
-	if (!$color)
-	{
-		// If this is a GIF or a PNG, we need to set up transparency
-		imagealphablending($dst, false);
-		imagesavealpha($dst, true);
+class OldImage extends Image {
+	private $file;
+	function __construct() {
+		$this->_getFile();
+		$this->loadCrop();
 	}
-	else
-	{
-		// Fill the background with the specified color for matting purposes
-		if ($color[0] == '#')
-			$color = substr($color, 1);
-		
-		$background	= FALSE;
-		
-		if (strlen($color) == 6)
-			$background	= imagecolorallocate($dst, hexdec($color[0].$color[1]), hexdec($color[2].$color[3]), hexdec($color[4].$color[5]));
-		else if (strlen($color) == 3)
-			$background	= imagecolorallocate($dst, hexdec($color[0].$color[0]), hexdec($color[1].$color[1]), hexdec($color[2].$color[2]));
-		if ($background)
-			imagefill($dst, 0, 0, $background);
+	private function _getFile() {
+		global $types;
+		$file = @$_REQUEST['image'];
+		if (!$file) httpError('Image parameter required');
+		if ($file[0] != "/") $file = "/$file";
+		$this->file = SITE_ROOT . $file;
+		if (!checkPerm($this->file)) httpError("Access to file denied");
+		// Get the size and MIME type of the requested image
+		$size = getimagesize($this->file);
+		$this->type	= @$types[$size['mime']];
+		if (!$this->type) httpError ("Type of file not a handled image type");
+		$this->width = $size[0];
+		$this->height = $size[1];
+		return $this->file;
+	}
+	function loadCrop() {
+		$this->crop = @$_REQUEST["cropratio"];
+		$this->x = $this->y = 0; // Lower left corner
+		if  (!$this->crop) return;
+		$ratios = explode(":", $this->crop);
+		if (2 != count($ratios)) httpError ("Malformed cropratio");
+		$rw = $ratios[0];
+		$rh = $ratios[1];
+		$diff = $this->width * $rh - $this->height * $rw;
+		if ($diff == 0) {
+			return;
+		} elseif ($diff < 0) { // Trim top and bottom
+			$t = $this->height;
+			$this->height = $this->width * $rh / $rw;
+			$this->y = ($t - $this->height) / 2;
+		}
+		else { // Trim sides
+			$t = $this->width;
+			$this->width = $this->height * $rw / $rh;
+			$this->x = ($t - $this->width) / 2;
+		}
+	}
+
+	function file() {return $this->file;}
+}
+
+class NewImage extends Image {
+	public $nogrow; // Please don't grow this image; default to true
+	 
+	function __construct($old) {
+		// THE WORD "load" MEANS LOAD THE RELEVANT $_REQUEST PARAM AND UPDATE OBJECT ACCORDINGLY.
+		$this->type = $old->type;
+		$this->loadHeightWidth();
+		$this->quality = request('quality', DEFAULT_QUALITY);
+	}
+	function loadHeightWidth() {
+		$this->load("height");
+		$this->load("width");
+	}
+	private function load($dim) { // $dim is "width" or "height"; loading from $_REQUEST, set to INFINITY if unspecified
+		$Dim = ucfirst($dim);
+		$maxDim = "max$Dim";
+		$this->$dim = $this->$maxDim = (integer) @$_REQUEST[$dim];
+		if (!$this->$maxDim) $this->$dim = $this->$maxDim = (integer) @$_REQUEST[$dim{0}];
+		if (!$this->$maxDim) $this->$maxDim = INFINITY;
+	}
+	public function computeFull() {
+		$w = request('fullw', $this->width);
+		$h = request('fullh', $this->height);
+		$b = request('border', 0);
+		$this->fullWidth = max ($w, $this->width + 2*$b);
+		$this->fullHeight = max ($h, $this->height + 2*$b);
+		$this->x = ($this->fullWidth - $this->width) / 2;
+		$this->y = ($this->fullHeight - $this->height) / 2;
+	}
+	public function doColor() {
+		$color = preg_replace('/[^0-9a-fA-F]/', '', request('color',''));
+		if ($color) {
+			if ($color[0] == '#')
+				$color = substr($color, 1);
+			if (strlen($color) == 6)
+				$background	= imagecolorallocate($this->image, hexdec($color[0].$color[1]), hexdec($color[2].$color[3]), hexdec($color[4].$color[5]));
+			else if (strlen($color) == 3)
+				$background	= imagecolorallocate($this->image, hexdec($color[0].$color[0]), hexdec($color[1].$color[1]), hexdec($color[2].$color[2]));
+			else return;
+			imagefill($this->image, 0, 0, $background);
+		} else if ($this->type == '' || $this->type == 'png'){
+			imagealphablending($this->image, false);
+			imagesavealpha($this->image, true);
+		}
+	}
+	public function setUpCanvas() {
+		ini_set('memory_limit', MEMORY_TO_ALLOCATE);
+		if ($this->type == 'png') // Convert 0-100 to 10-0
+			$this->quality = round(10 - ($this->quality / 10));
+		$this->image = imagecreatetruecolor($this->fullWidth, $this->fullHeight);
 	}
 }
 
-// Resample the original image into the resized canvas we set up earlier
-$resizeFunction($dst, $src, 0, 0, $offsetX, $offsetY, $tnWidth, $tnHeight, $width, $height);
+die();
+////////////////////////////////////////////////////////////////
+// REST OF FILE IGNORED
+////////////////////////////////////////////////////////////////
+
 
 if ($doSharpen)
 {
@@ -358,48 +304,6 @@ if ($doSharpen)
 	imageconvolution($dst, $sharpenMatrix, $divisor, $offset);
 }
 
-// Make sure the cache exists. If it doesn't, then create it
-if (!file_exists(CACHE_DIR))
-	mkdir(CACHE_DIR, 0755);
-
-// Make sure we can read and write the cache directory
-if (!is_readable(CACHE_DIR))
-{
-	header('HTTP/1.1 500 Internal Server Error');
-	echo 'Error: the cache directory is not readable';
-	exit();
-}
-else if (!is_writable(CACHE_DIR))
-{
-	header('HTTP/1.1 500 Internal Server Error');
-	echo 'Error: the cache directory is not writable';
-	exit();
-}
-
-// Write the resized image to the cache
-$outputFunction($dst, $resized, $quality);
-
-// Put the data of the resized image into a variable
-ob_start();
-$outputFunction($dst, null, $quality);
-$data	= ob_get_contents();
-ob_end_clean();
-
-// Clean up the memory
-ImageDestroy($src);
-ImageDestroy($dst);
-
-// See if the browser already has the image
-$lastModifiedString	= gmdate('D, d M Y H:i:s', filemtime($resized)) . ' GMT';
-$etag				= md5($data);
-
-doConditionalGet($etag, $lastModifiedString);
-
-// Send the image to the browser with some delicious headers
-header("Content-type: $mime");
-header('Content-Length: ' . strlen($data));
-echo $data;
-
 function findSharp($orig, $final) // function from Ryan Rud (http://adryrun.com)
 {
 	$final	= $final * (750.0 / $orig);
@@ -410,37 +314,4 @@ function findSharp($orig, $final) // function from Ryan Rud (http://adryrun.com)
 	$result = $a + $b * $final + $c * $final * $final;
 	
 	return max(round($result), 0);
-} // findSharp()
-
-function doConditionalGet($etag, $lastModified)
-{
-	header("Last-Modified: $lastModified");
-	header("ETag: \"{$etag}\"");
-		
-	$if_none_match = isset($_SERVER['HTTP_IF_NONE_MATCH']) ?
-		stripslashes($_SERVER['HTTP_IF_NONE_MATCH']) : 
-		false;
-	
-	$if_modified_since = isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) ?
-		stripslashes($_SERVER['HTTP_IF_MODIFIED_SINCE']) :
-		false;
-	
-	if (!$if_modified_since && !$if_none_match)
-		return;
-	
-	if ($if_none_match && $if_none_match != $etag && $if_none_match != '"' . $etag . '"')
-		return; // etag is there but doesn't match
-	
-	if ($if_modified_since && $if_modified_since != $lastModified)
-		return; // if-modified-since is there but doesn't match
-	
-	// Nothing has changed since their last request - serve a 304 and exit
-	header('HTTP/1.1 304 Not Modified');
-	exit();
-} // doConditionalGet()
-
-// old pond
-// a frog jumps
-// the sound of water
-
-// —Matsuo Basho
+}
