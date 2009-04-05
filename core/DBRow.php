@@ -300,7 +300,7 @@ abstract class DBRow {
 		$form->addElement ('hidden', 'uniqid');
 		
 		foreach ($this->columns() as $column) {
-			if ($column->noForm() || $column->ignored()) continue;
+			if ($column->noForm()) continue;
 			$name = $column->name();
 			$value = call_user_func(array($this, 'get'.underscore2uccamel($name)));
 			// $value = &$this->get($name);
