@@ -121,6 +121,9 @@ abstract class DBColumn {
 			$options = trim($matches[3], '()');
 			$options = array_map('trim', explode(",", $options));
 		}
+		if (!is_null($name) && !preg_match ('/^[a-z]+(_[a-z_]+)*$/', $name)) {
+			trigger_error ("Malformed column name $name.  Column name must consists of lower case letters and _");
+		}
 		if ('A' <= $type[0] and $type[0] <= 'Z') {
 			return new DBColumnClass($type, $name, $label, $modifier, $options);
 		}
