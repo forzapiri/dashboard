@@ -3,7 +3,6 @@
 // TODO:  Ask Chris or Adam to confirm that local cache code is working right header-wise
 
   // Code contains ideas from Joe Lencioni.
-  // Changes made to this file by David Wolfe, Norex.
 
   // Currently, an image is readable if either 
   // (1)  there is a filename 'public' in the same directory has the source image, or
@@ -145,12 +144,30 @@ class ImageResizer {
 		}
 	}
 	
+	private function sharpen($ratio) { // Code from Ryan Rud http://adryrun.com
+		if (!$this->doSharpen) return;
+		$final	= 750.0 * $ratio;
+		$a		= 52;
+		$b		= -0.278;
+		$c		= .000473;
+		$result = $a + $b * $final + $c * $final * $final;
+		$divisor = max(round($result), 0);
+		$sharpenMatrix	= array(
+			array(-1, -2, -1),
+			array(-2, $divisor + 12, -2),
+			array(-1, -2, -1)
+		);
+		$offset		= 0;
+		imageconvolution($this->new->image,$sharpenMatrix,$divisor,$offset);
+	}
+
+
 	function outputImage() {
 		$this->new->setUpCanvas();
 		$this->new->doColor();
-		// TODO:  Resize only if new jpeg image is nearly the same size as old image jpeg.  Otherwise resample.
-		// $resizeFunction = $this->doSharpen ? 'imagecopyresized' : 'imagecopyresampled'; // THIS IS JUST A GUESS
-		$resizeFunction = 'imagecopyresampled';
+		$ratio = ($this->new->width * $this->new->height) / ($this->old->width * $this->old->height);
+		$resizeFunction = ($ratio < .75) ? 'imagecopyresampled' : 'imagecopyresized';
+		$this->sharpen($ratio);
 		header('Content-type: ' . $this->new->mime());
 		$resizeFunction($this->new->image, $this->old->image,
 						$this->new->x, $this->new->y, $this->old->x, $this->old->y,
@@ -270,39 +287,4 @@ class NewImage extends Image {
 			$this->quality = round(10 - ($this->quality / 10));
 		$this->image = imagecreatetruecolor($this->fullWidth, $this->fullHeight);
 	}
-}
-
-die();
-////////////////////////////////////////////////////////////////
-// REST OF FILE IGNORED
-////////////////////////////////////////////////////////////////
-
-
-if ($doSharpen)
-{
-	// Sharpen the image based on two things:
-	//	(1) the difference between the original size and the final size
-	//	(2) the final size
-	$sharpness	= findSharp($width, $tnWidth);
-	
-	$sharpenMatrix	= array(
-		array(-1, -2, -1),
-		array(-2, $sharpness + 12, -2),
-		array(-1, -2, -1)
-	);
-	$divisor		= $sharpness;
-	$offset			= 0;
-	imageconvolution($dst, $sharpenMatrix, $divisor, $offset);
-}
-
-function findSharp($orig, $final) // function from Ryan Rud (http://adryrun.com)
-{
-	$final	= $final * (750.0 / $orig);
-	$a		= 52;
-	$b		= -0.27810650887573124;
-	$c		= .00047337278106508946;
-	
-	$result = $a + $b * $final + $c * $final * $final;
-	
-	return max(round($result), 0);
 }
