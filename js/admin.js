@@ -116,8 +116,6 @@ var NorexUI = Class.create(Facebox, {
 		//		$item->save();
 		//	}
 		
-		this.reflowRows();
-
 		$$('tbody.sortable').each(function (e) {
 				id = e.identify();
 				Sortable.create(id, {
@@ -130,39 +128,24 @@ var NorexUI = Class.create(Facebox, {
 								ui.updateContent(transport.responseText);
 							}
 						});
-					},
-					onChange: function() {
-						ui.reflowRows();
 					}
 				});
 			}
 		);
 	},
 	
-	reflowRows: function() {
-		var counter = 0;
-		$$('table.admin_list tbody tr').each(function(el) {
-			counter++;
-			el.removeClassName('row1');
-			el.removeClassName('row2');
-			if (counter % 2 == 0) {
-				el.addClassName('row2');
-			} else {
-				el.addClassName('row1');
-			}
-		});
-	},
-	
 	addedit: function(event) {
 		var form = Event.element(event);
 		if (form.href) {
+			window.location.hash = form.href;
 			form = Builder.node('form', {action: form.href, method: 'post'});
+		} else {
+			window.location.hash = $(form).serialize();
 		}
 		var r = $(form).request({
 			onSuccess: function(transport) {
 				ui.loading();
 				ui.reveal(transport.responseText);
-				window.location.hash = form.serialize();
 				ui.updateEvents();
 				if (form = $('facebox').down('form')) {
 					Event.observe(form, 'submit', function(event) {
