@@ -59,6 +59,7 @@ abstract class DBColumn {
 	function noForm() {return $this->_modifier == 'no form';}
 	function ignored() {return $this->_modifier == 'ignored';}
 	function delayLoad() {return $this->prepareCode() == 'b';}
+	function showChunkRevisions() {return false;}
 	
    /**
 	*  Mssqli prepared statement type.

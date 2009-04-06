@@ -68,6 +68,7 @@ class DBColumnPassword extends DBColumn {
 
 class DBColumnTextArea extends DBColumn {
 	function type() {return "textarea";}
+	function showChunkRevisions() {return true;}
 	function addElementTo ($args) {
 		$value = '';
 		$label = $this->label();
@@ -99,7 +100,7 @@ class DBColumnTinytext extends DBColumn {
 	function suggestedMysql() {return "tinytext";}
 }
 
-class DBColumnsLongText extends DBColumnTextArea {
+class DBColumnLongText extends DBColumnTextArea {
 	function type() {return 'longtext';}
 	function prepareCode() {return 's';} // TODO: NOT SURE YET "b" or "s" ??
 	function delayLoad() {return true;}
@@ -232,7 +233,7 @@ class DBColumnId extends DBColumnInteger {
 	function suggestedMysql() {return "int(10) unsigned";}
 }
 
-class DBColumnTinyMCE extends DBColumnsLongText {
+class DBColumnTinyMCE extends DBColumnLongText {
 	function type() {return "tinymce";}
 	function addElementTo($args) {
 		$value = null;
@@ -392,6 +393,7 @@ class DBColumnCode extends DBColumn{
 class DBCaptcha extends DBColumn {
 	function type() {return 'captcha';}
 	function ignored() {return true;}
+	function suggestedMysql() {return "";}
 	function addElementTo($args) {
 		require_once(SITE_ROOT . '/core/captchalib/securimage.php');
 		$value = null;

@@ -40,7 +40,7 @@ INSERT INTO `modules` VALUES
 (8,'User','User'),
 (9,'Calendar','Calendar'),
 (17,'Block','Block Management'),
-(18,'DMS','Documents),
+(18,'DMS','Documents'),
 (19,'EComm','E-Commerce'),
 (21,'Gallery','Photo Gallery'),
 (22,'Templater','Templater'),
@@ -48,8 +48,7 @@ INSERT INTO `modules` VALUES
 (24,'SiteConfig','Site Config'),
 (25,'SEO','SEO'),
 (26,'Search','Search'),
-(27,'DBTable','DBTable')
-;
+(27,'DBTable','DBTable');
 /*!40000 ALTER TABLE `modules` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
