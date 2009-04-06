@@ -250,7 +250,7 @@ var NorexUI = Class.create(Facebox, {
 	updateContent: function(content) {
 		$('module_content').update(content);
 		$('module_content').fire('norexui:update');
-		this.updateEvents();
+		this.updateEvents.defer();
 	},
 
 	deleteConfirm: function(event) {
