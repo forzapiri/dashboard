@@ -162,6 +162,7 @@ var NorexUI = Class.create(Facebox, {
 			onSuccess: function(transport) {
 				ui.loading();
 				ui.reveal(transport.responseText);
+				window.location.hash = form.serialize();
 				ui.updateEvents();
 				if (form = $('facebox').down('form')) {
 					Event.observe(form, 'submit', function(event) {
@@ -176,10 +177,11 @@ var NorexUI = Class.create(Facebox, {
 	},
 	
 	formSubmit: function(form) {
+		window.location.hash = $(form).serialize();
 		return $(form).request( {
 			onSuccess: function(transport) {
 				if (transport.responseText.match(/class="error/)) {
-					var displaybox = $$('div#facebox div.content')[0]; 
+					var displaybox = $$('div#facebox div.content')[0];
 					displaybox.update(transport.responseText); 
 					var form = displaybox.down('form');
 					$(form).observe('submit', function(event){
