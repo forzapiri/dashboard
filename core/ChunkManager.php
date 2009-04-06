@@ -65,10 +65,24 @@ class ChunkManager {
 	private $previews = array();
 	private $chunks = array();
 	private $object = null;
+	//versions line
+	private $versions = array();
 
 	function __construct($obj) {$this->object = $obj;}
 	
+	function generateRevNav($i,$chunk,$role,$v){
+		$prev = "<input type='image' src='/images/admin/arrow_left.gif' onclick='return false' id='_chunk_prev_$i.v$v' name='_chunk_prev_$i[prev]'></img>";
+		$next = "<input type='image' src='/images/admin/arrow_right.gif' onclick='return false' id='_chunk_next_$i.v$v' name='_chunk_next_$i[next]'></img>";
+		$class = get_class($this->object);
+		$parent = $this->object->getId();
+		$total = $chunk ? $chunk->countRevisions() : 0;
+		$count = $chunk ? $chunk->getCount('draft') : 0;
+		$revisionNav = "&nbsp;&nbsp;&nbsp;&nbsp;\n<span class='revHistoryButtons'>\n$prev\n$next\n</span>\n";
+		$revisionScript = "\n<script type='text/javascript'>watchChunkSelect($i, '$role', '$class', $parent, $total, $count,$v);</script>\n";
+	}	
+	
 	function insertFormFields($form) {
+		$form->addElement('html',"<div id='_chunk_wrap_main'>");
 		$this->chunks = Chunk::getAllFor($this->object);
 		$i=-1;
 		foreach ($this->fields as $field) {
@@ -78,62 +92,87 @@ class ChunkManager {
 			$hidden = $this->hidden[$i];
 			$readOnly = $this->readOnly[$i];
 			$role = $this->roles[$i];
-			$el = array();
-			if ($field->showChunkRevisions()) {
-				$prev = "<input type='image' src='/images/admin/arrow_left.gif' onclick='return false' id='_chunk_prev_$i' name='_chunk_prev_$i[prev]'></img>";
-				$next = "<input type='image' src='/images/admin/arrow_right.gif' onclick='return false' id='_chunk_next_$i' name='_chunk_next_$i[next]'></img>";
-				$class = get_class($this->object);
-				$parent = $this->object->getId();
-				$total = $chunk ? $chunk->countRevisions() : 0;
-				$count = $chunk ? $chunk->getCount('draft') : 0;
-				$revisionNav = "&nbsp;&nbsp;&nbsp;&nbsp;\n<span class='revHistoryButtons'>\n$prev\n$next\n</span>\n";
-				$revisionScript = "\n<script type='text/javascript'>watchChunkSelect($i, '$role', '$class', $parent, $total, $count);</script>\n";
-			} else {
-				$revisionNav = "";
+			
+			//versions
+			$versions = $this->versions[$i];
+			
+			//ver is language code, or (ex.. english, french, loggedin, public)
+			//define i to keep track of which language i want to use
+			//version 1 = left column, version 2 = right column
+			//syntaxed in the element like( chunk_1.v1, chunk_1.v2 ) etc.
+			//default to chunk_1.v1
+			if(empty($versions)){
+				$versions[0] = 'single';	
 			}
-			if ($role && !$hidden) {
-				$el[] = $s = $form->createElement('select', "select", "", self::getSelection($role, $readOnly));
-				if ($chunk && $chunk->getRole() && $chunk->getName()) {
-					$s->setValue($chunk->getName());
-					$chunk = $chunk->getActualChunk();
+			$v=0;
+			foreach($versions as $ver){
+				$v++;
+				$form->addElement('html',"\n<div class=_chunk_wrap_v$v>");
+				$form->addElement('html',"\n<h6>$ver</h6>");
+				$form->addElement('hidden',"_chunk_$i.v$v.version",$ver);
+				//generate chunk revision navigation
+				if($field->showChunkRevisions()) $revisionNav = $this->generateRevNav($i,$chunk,$role,$v);
+				else $revisionNav = '';
+				
+				if ($role && !$hidden) {
+					$revGrp = array();
+					$revGrp[] = $s = $form->createElement('select', "select", "", self::getSelection($role, $readOnly,$ver));
+					if ($chunk && $chunk->getRole() && $chunk->getName()) {
+						$s->setValue($chunk->getName());
+						$chunk = $chunk->getActualChunk();
+					}
+					if (!$readOnly) {$revGrp[] = $form->createElement('text', "text", "");} // THESE FIELDS ARE HIDDEN AND/OR HANDLED BY chunks.js
+					$form->addElement('html', "\n<div id=_select_text_$i.v$v>");
+					$form->addGroup($revGrp, "_chunk_name_$i.v$v", "$label$revisionNav", '&nbsp;&nbsp;&nbsp;');
+					$form->addElement('html', "\n</div>");
+					$field->setLabel(""); // Inspect the add edit form, add an appropriate class, use JavaScript to watch for change and update content
+				} else {
+					$field->setLabel("$label$revisionNav");
 				}
-				if (!$readOnly) {$el[] = $form->createElement('text', "text", "");} // THESE FIELDS ARE HIDDEN AND/OR HANDLED BY chunks.js
-				$form->addElement('html', "\n<div id=_select_text_$i>");
-				$form->addGroup($el, "_chunk_name_$i", "$label$revisionNav", '&nbsp;&nbsp;&nbsp;');
-				$form->addElement('html', "\n</div>");
-
-				$field->setLabel(""); // Inspect the add edit form, add an appropriate class, use JavaScript to watch for change and update content
-			} else {
-				$field->setLabel("$label$revisionNav");
+				
+				if ($chunk && ($chunk->getId() || $chunk->getContent('draft',true,$ver))) {
+					$value = $chunk->getContent('draft',true,$ver);
+				} else {
+					$value = $this->previews[$i];
+				}
+				
+				$formValue = DBRow::toForm($field->type(), $value);
+				
+				if ($readOnly) {
+					$el = $form->createElement ('hidden', "_chunk_$i.v$v");
+					$el->setValue($formValue);
+				} else {
+					$field->addElementTo(array ('form' => $form, 'id' => "_chunk_$i.v$v", 'value' => $formValue));
+					$field->setLabel("$label");
+				}
+				if (!empty($revisionScript)) $form->addElement('html', "$revisionScript");
+				$form->addElement('html',"\n</div>");
+				
+				//generate entire thingy.
+				//do it in a separately classed div?
+				//set the revision's version text for future recollection.
+				// new function to load the chunk revision navigation
+				// new function to test hidden or read only chunks
+				// new functino to generate the form element.
 			}
-			if ($chunk && ($chunk->getId() || $chunk->getContent('draft'))) {
-				$value = $chunk->getContent('draft');
-			} else {
-				$value = $this->previews[$i];
-			}
-			$formValue = DBRow::toForm($field->type(), $value);
-			if ($readOnly) {
-				$el = $form->createElement ('hidden', "_chunk_$i");
-				$el->setValue($formValue);
-			} else {
-				$el = $field->addElementTo(array ('form' => $form, 'id' => "_chunk_$i", 'value' => $formValue));
-				$field->setLabel("$label");
-			}
-			if (!empty($revisionScript)) $form->addElement('html', "$revisionScript");
+			$form->addElement('html',"<hr style='width:100%' />");
+				
 		}
+		$form->addElement('html',"</div>");
 		return ++$i; // Returns the number of form fields which were added
+		//var_dump($el);
 	}
-
+	
 	private $form;
-    private function getName ($i, &$isNew) { // TODO: make second arg optional
+    private function getName ($i, &$isNew,$v) { // TODO: make second arg optional
 		$isNew = false;
 		if ($this->roles[$i]) {
-			$pair = $this->form->exportValue("_chunk_name_$i");
+			$pair = $this->form->exportValue("_chunk_name_$i.v$v");
 			if (is_array ($pair)) {
 				$isNew = $pair['select'] == '__new__';
 				return $isNew ? $pair['text'] : $pair['select'];
 			}
-			else if (is_object($value = $this->form->exportValue("_chunk_$i".'[select]'))) {
+			else if (is_object($value = $this->form->exportValue("_chunk_$i.v$v".'[select]'))) {
 				return null;
 			}
 			else {
@@ -156,14 +195,14 @@ class ChunkManager {
 		return $chunk;
 	}
 
-	private function createChunkIfNeeded ($i) {
+	private function createChunkIfNeeded ($i,$v=1) {
 		$chunk = @$this->chunks[$i];
 		/* Canonical Chunk will be created by Chunk->getRevision() if needed */
 		if (!$chunk) {
 			$chunk = $this->newChunk($i, false);
 			$this->chunks[$i] = $chunk;
 		}
-		$name = $this->getName($i, $new);
+		$name = $this->getName($i, $new, $v);
 		if (!$name
 			&& $this->readOnly[$i]
 			&& ($role = $this->roles[$i])
@@ -181,37 +220,47 @@ class ChunkManager {
 		$i=-1;
 		foreach ($this->fields as $field) {
 			$i++;
-			$this->createChunkIfNeeded ($i);
 			if ($this->readOnly[$i])
 				continue;
 			$type = $field->type();
-			$rawValue = $form->exportValue("_chunk_$i");
-			$el = $form->getElement("_chunk_$i");
-			$el->setValue($rawValue);
-			$value = DBRow::fromForm($type, $rawValue, $el);
-			$chunk = $this->chunks[$i];
-			$revs = $chunk->countRevisions();
-			$old_rev = $chunk->getRevision('draft');
-			if ((0 == $revs) && (0 == $old_rev->getCount())) { // Entirely new revision
-				$rev = $old_rev;
-				$rev->setCount(1);
-				$rev->setContent(DBRow::toDB($field->type(), $value));
-				$rev->setStatus('active');
-				$rev->save();
-			} else if ($value !== null // null value flags, for instance, an empty file upload; don't save
-					   && (DBRow::toDB($type, $value) != $chunk->getRawContent('draft'))) {
-				// New revision of old content
-				$rev = ChunkRevision::make();
-				$rev->setCount(1+$revs);
-				$rev->setParent($old_rev->getParent());
-				$rev->setStatus('draft');
-				// Need to reset the old status unless we're making a draft and the old one was active
-				if ($old_rev && $old_rev->getStatus() == 'draft') {
-					$old_rev->setStatus('inactive');
-					$old_rev->save();
-				}
-				$rev->setContent(DBRow::toDB($field->type(), $value));
-				$rev->save();
+			$versions = $this->versions[$i];
+			if(empty($versions)){
+				$versions[0] = 'single';	
+			}
+			$v=0;
+			foreach($versions as $ver){
+				$v++;
+				$this->createChunkIfNeeded ($i,$v);
+				$rawValue = $form->exportValue("_chunk_$i.v$v");
+				$el = $form->getElement("_chunk_$i.v$v");
+				$el->setValue($rawValue);
+				$value = DBRow::fromForm($type, $rawValue, $el);
+				$chunk = $this->chunks[$i];
+				$revs = $chunk->countRevisions();
+				$old_rev = $chunk->getRevision('draft',$v);
+				if ((0 == $revs) && (0 == $old_rev->getCount())) { // Entirely new revision
+					$rev = $old_rev;
+					$rev->setCount(1);
+					$rev->setContent(DBRow::toDB($field->type(), $value));
+					$rev->setStatus('active');
+					$rev->setVersion($ver);
+					$rev->save();
+				} else if ($value !== null // null value flags, for instance, an empty file upload; don't save
+						   && (DBRow::toDB($type, $value) != $chunk->getRawContent('draft',$v))) {
+					// New revision of old content
+					$rev = ChunkRevision::make();
+					$rev->setCount(1+$revs);
+					$rev->setParent($old_rev->getParent());
+					$rev->setStatus('draft');
+					$rev->setVersion($ver);
+					// Need to reset the old status unless we're making a draft and the old one was active
+					if ($old_rev && $old_rev->getStatus() == 'draft') {
+						$old_rev->setStatus('inactive');
+						$old_rev->save();
+					}
+					$rev->setContent(DBRow::toDB($field->type(), $value));
+					$rev->save();
+				   }
 			} // else no change was made to the revision so do nothing.
 		}
 	}
@@ -257,10 +306,13 @@ class ChunkManager {
 			$hidden = false;
 			$type = null;
 			$preview = "";
+			
+			//versions line
+			$versions = '';
 			foreach ($args as $arg) {
 				$pair = explode('=', trim($arg));
 				$var = $pair[0];
-				if (in_array ($var, array ("type", "role", "preview", "readOnly", "hidden")))
+				if (in_array ($var, array ("type", "role", "preview", "readOnly", "hidden","versions")))
 					$$var = $pair[1];
 				else trigger_error ("Variable $var not recognized in ChunkManager::setTemplate()");
 			}
@@ -271,11 +323,13 @@ class ChunkManager {
 			$this->hidden[] = $hidden && !SiteConfig::programmer();
 			$this->readOnly[] = ($readOnly || $hidden) && !SiteConfig::programmer();
 			$this->previews[] = $this->convertPreview($preview);
+			$this->versions[] = split(',',$versions);
+			//var_dump($this->versions);
 		}
 	}
 
 	static private $selectQuery = null;
-	static private function getSelection($role, $readOnly=false) {
+	static private function getSelection($role, $readOnly=false, $ver) {
 		if (!self::$selectQuery) {
 			self::$selectQuery = new Query('select name from chunk where role=? and role!="" and !isnull(role) and name!="" and !isnull(name) group by name order by name', 's');
 		}

@@ -20,12 +20,12 @@
  *
  */
 
-function watchChunkSelect(sort, role, parent_class, parent_id, n, i) { // We are in chunk i out of n
-	var div = $('_select_text_'+sort);
+function watchChunkSelect(sort, role, parent_class, parent_id, n, i, v) { // We are in chunk i out of n
+	var div = $('_select_text_'+sort+'.v'+v);
 	var select = div ? div.down('select') : '';
 	var text = div ? div.down('input') : '';
-	var prev = $('_chunk_prev_'+sort);
-	var next = $('_chunk_next_'+sort);
+	var prev = $('_chunk_prev_'+sort+'.v'+v);
+	var next = $('_chunk_next_'+sort+'.v'+v);
 	var rev = i;
 	if (text) text.hide();
 	checkArrows(i, n);

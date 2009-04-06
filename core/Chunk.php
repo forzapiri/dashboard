@@ -121,7 +121,7 @@ class Chunk extends DBRow {
 		}
 	}
 	
-	function getRevision ($statusORcount, $create = true, $follow = true) {
+	function getRevision ($statusORcount, $create = true, $follow = true, $version = 'single') {
 		// This code not only gets the current revision, but also creates one if needed.
 		$c = $follow ? $this->getActualChunk() : $this;
 		$id = $c->getId();
@@ -139,7 +139,7 @@ class Chunk extends DBRow {
 				$draft->save();
 			}
 		}
-		$all = ChunkRevision::getAll("where parent=? and $statusClause", 'i', $id);
+		$all = ChunkRevision::getAll("where parent=? and version=? AND $statusClause", 'is', $id,$version);
 		if ($all) {
 			$rev= $all[0];
 		} else {
@@ -155,9 +155,9 @@ class Chunk extends DBRow {
 		return $rev;
 	}
 
-	function getRawContent($status, $follow = true) {return $this->getRevision($status, true, $follow)->getContent();}
+	function getRawContent($status, $follow = true,$version='single') {return $this->getRevision($status, true, $follow,$version)->getContent();}
 	function getCount($status, $follow = true) {return $this->getRevision($status, true, $follow)->getCount();}
-	function getContent($status, $follow = true) {return DBRow::fromDB($this->getType(), $this->getRawContent($status, $follow));}
+	function getContent($status, $follow = true,$version='single') {return DBRow::fromDB($this->getType(), $this->getRawContent($status, $follow,$version));}
 
 	static $countQuery = null;
 	function countRevisions($follow = true) { // $follow means use canonical chunk of appropriate

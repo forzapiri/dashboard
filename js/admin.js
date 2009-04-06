@@ -329,7 +329,7 @@ function initRTE(mode, theme, name, stylesheet, bodyId, bodyClass) {
 		apply_source_formatting : true,
 		spellchecker_languages : "+English=en,Danish=da,Dutch=nl,Finnish=fi,French=fr,German=de,Italian=it,Polish=pl,Portuguese=pt,Spanish=es,Swedish=sv",
 		oninit: "resizeFacebox",
-		width: "600"
+		width: "450"
 	});
 	
 	
@@ -368,7 +368,7 @@ function norexFileBrowser (field_name, url, type, win) {
     tinyMCE.activeEditor.windowManager.open({
         file : cmsURL,
         title : 'Norex File Browser',
-        width : 750,  // Your dimensions may differ - toy around with them!
+        width : 500,  // Your dimensions may differ - toy around with them!
         height : 500,
         resizable : "yes",
         inline : "yes",  // This parameter only has an effect if you use the inlinepopups plugin!
