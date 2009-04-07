@@ -25,7 +25,7 @@ function doConditionalGet($etag, $lastModified)
 	exit();
 } // doConditionalGet()
 
-$file			= 'files/' . preg_replace('/^(s?f|ht)tps?:\/\/[^\/]+/i', '', (string) $_GET['file']);
+$file			= '/files/' . preg_replace('/^(s?f|ht)tps?:\/\/[^\/]+/i', '', (string) $_GET['file']);
 define('DOCUMENT_ROOT',			$_SERVER['DOCUMENT_ROOT']);
 $docRoot	= preg_replace('/\/$/', '', DOCUMENT_ROOT);
 
