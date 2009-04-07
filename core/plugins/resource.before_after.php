@@ -45,7 +45,13 @@ function smarty_resource_before_after_timestamp($tpl_name, &$tpl_timestamp, &$sm
 	$file = $args[2];
 	$params = array('resource_name' => $file);
 	if (!$smarty_obj->_fetch_resource_info($params)) return false;
-	$tpl_timestamp = $params['resource_timestamp'];
+	$tpl_timestamp1 = $params['resource_timestamp'];
+	
+	$params = array('resource_name' => $smarty_obj->templateOverride);
+	if (!$smarty_obj->_fetch_resource_info($params)) return false;
+	$tpl_timestamp2 = $params['resource_timestamp'];
+	
+	$tpl_timestamp = ($tpl_timestamp1 > $tpl_timestamp2) ? $tpl_timestamp1 : $tpl_timestamp2;
 	return true;
 }
 
