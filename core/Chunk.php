@@ -56,24 +56,25 @@ class Chunk extends DBRow {
 		return ($class && $id) ? self::getAll("where parent_class=? and parent=? order by sort", 'si', $class, $id) : array();
 	}
 
-	static function revertDrafts($class, $id) {
-		foreach (self::getAllFor($class, $id) as $chunk) $chunk->revert();
+	static function revertDrafts($class, $id,$version='single') {
+		foreach (self::getAllFor($class, $id) as $chunk) $chunk->revert($version);
 	}
-	function revert() {
-		$draft = $this->getRevision('draft');
+	function revert($version='single') {
+		$draft = $this->getRevision('draft',true,true,$version);
 		if ($draft->getStatus() == 'draft') {
 			$draft->setStatus('inactive');
 			$draft->save();
 		}
 	}
 
-	static function makeDraftActive($class, $id) {
-		foreach (self::getAllFor($class, $id) as $chunk) $chunk->activate();
+	static function makeDraftActive($class, $id,$version='single') {
+		foreach (self::getAllFor($class, $id) as $chunk) $chunk->activate($version);
 	}
-	function activate() {
-		$draft = $this->getRevision('draft');
+	
+	function activate($version='single') {
+		$draft = $this->getRevision('draft',true,true,$version);
 		if ($draft->getStatus() == 'draft') {
-			$active = $this->getRevision('active', false);
+			$active = $this->getRevision('active', false,true,$version);
 			if ($active && $active->getStatus() == 'active') {
 				$active->setStatus('inactive');
 				$active->save();
@@ -84,17 +85,17 @@ class Chunk extends DBRow {
 	}
 	
 	private static $hasDraftFlag;
-	static function hasDraft($obj) {
-		self::getAllContentFor($obj, 'draft');
+	static function hasDraft($obj,$version='single') {
+		self::getAllContentFor($obj, 'draft',$version);
 		return self::$hasDraftFlag;
 	}
 
-	static function getAllContentFor($obj, $status) {
+	static function getAllContentFor($obj, $status,$version='single') {
 		self::$hasDraftFlag = false;
 		$chunks = Chunk::getAllFor($obj);
 		foreach ($chunks as &$chunk) { // Converts Chunk -> rev -> content
 			$type = $chunk->getType();
-			$rev = $chunk->getRevision($status);
+			$rev = $chunk->getRevision($status,true,true,$version);
 			if ($rev->getStatus() == 'draft') self::$hasDraftFlag = true;
 			$chunk = DBRow::fromDB($type, $rev->getContent());
 			if ($type == 'MenuType') {
@@ -156,16 +157,16 @@ class Chunk extends DBRow {
 	}
 
 	function getRawContent($status, $follow = true,$version='single') {return $this->getRevision($status, true, $follow,$version)->getContent();}
-	function getCount($status, $follow = true) {return $this->getRevision($status, true, $follow)->getCount();}
-	function getContent($status, $follow = true,$version='single') {return DBRow::fromDB($this->getType(), $this->getRawContent($status, $follow,$version));}
+	function getCount($status, $follow = true,$version='single') {return $this->getRevision($status, true, $follow,$version)->getCount();}
+	function getContent($status, $follow = true,$version='single') {error_log($version);return DBRow::fromDB($this->getType(), $this->getRawContent($status, $follow,$version));}
 
 	static $countQuery = null;
-	function countRevisions($follow = true) { // $follow means use canonical chunk of appropriate
-		if (!self::$countQuery) self::$countQuery = new Query ("select count(*) as count from chunk_revision where parent=?", 'i');
+	function countRevisions($follow = true,$version='single') { // $follow means use canonical chunk of appropriate
+		if (!self::$countQuery) self::$countQuery = new Query ("select count(*) as count from chunk_revision where parent=? and version=?", 'is');
 		$c = $follow ? $this->getActualChunk() : $this;
 		$id = $c->getId();
 		$sql = "d";
-		$result = self::$countQuery->fetch($c->getId());
+		$result = self::$countQuery->fetch($c->getId(),$version);
 		return $result['count'];
 	}
 
@@ -183,10 +184,12 @@ class Chunk extends DBRow {
 		else $sort = '';
 		if(!empty($_REQUEST['i']))$count = e($_REQUEST['i']);
 		else $count = '';
+		if(!empty($_REQUEST['v']))$version = e($_REQUEST['v']);
+		else $version = 'single';
 		
 		$status = $count ? $count : 'draft';
-		if ($role && $name) $result = ChunkRevision::getNamedChunkFormField($role, $name, $status);
-		else if ($parent_class && $parent) $result = ChunkRevision::getChunkFormField ($parent_class, $parent, $sort, $status);
+		if ($role && $name) $result = ChunkRevision::getNamedChunkFormField($role, $name, $status,$version);
+		else if ($parent_class && $parent) $result = ChunkRevision::getChunkFormField ($parent_class, $parent, $sort, $status,$version);
 		else trigger_error ('Bad AJAX request for loadChunk');
 		return json_encode ($result);
 	}
