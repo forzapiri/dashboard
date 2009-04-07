@@ -22,12 +22,29 @@
  */
 
 if (!defined('SITE_ROOT')) define('SITE_ROOT', (dirname(__FILE__) . '/../../'));
+define ('DB_CONFIG', SITE_ROOT . '/include/db-config.php');
+
+function checkInstalled() {
+	$installed = false;
+	if (!is_readable(DB_CONFIG)) {
+		$installed = false;
+	}
+	if (!is_null(Database::singleton()->query_fetch('show tables like "auth"'))) $installed = true;
+	if (!is_null(Database::singleton()->query_fetch('show tables like "modules"'))) $installed = true;
+	if (!is_null(Database::singleton()->query_fetch('show tables like "config_options"'))) $installed = true;
+	return $installed;
+}
+
+require_once(SITE_ROOT . '/core/Database.php');
+
+if (checkInstalled()) {
+	$_REQUEST['step'] = 5;
+}
+
 require_once ('clearcaches.php');
 clearCacheDirectories();
 require_once('../../core/libs/Smarty.class.php');
 function isReadWriteDir($file) {return is_readable($file) && is_writable($file) && is_dir ($file);}
-
-define ('DB_CONFIG', SITE_ROOT . '/include/db-config.php');
 
 $s = new Smarty();
 $s->template_dir = dirname(__FILE__) . '/templates';
@@ -66,7 +83,7 @@ switch ($step) {
 		$content = $s->fetch('step1.htpl');
 		break;
 	case 2:
-		if (is_readable(DB_CONFIG)) {include_once (DB_CONFIG);} else {
+		if (is_readable(DB_CONFIG)) {include (DB_CONFIG);} else {
 			$dbhost = "localhost";
 			$dbuser = "";
 			$dbpass = "";
@@ -84,7 +101,7 @@ switch ($step) {
 		break;
 	case 3:
 	case 4:
-		if (is_readable(DB_CONFIG)) {include_once (DB_CONFIG);}
+		if (is_readable(DB_CONFIG)) {include (DB_CONFIG);}
 		if ($step == 3) {
 			if ($_REQUEST['db_host']) $dbhost = $_REQUEST['db_host'];
 			if ($_REQUEST['db_user']) $dbuser = $_REQUEST['db_user'];

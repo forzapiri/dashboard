@@ -393,6 +393,7 @@ class DBColumnCode extends DBColumn{
 class DBCaptcha extends DBColumn {
 	function type() {return 'captcha';}
 	function ignored() {return true;}
+	function suggestedMysql() {return "";}
 	function addElementTo($args) {
 		require_once(SITE_ROOT . '/core/captchalib/securimage.php');
 		$value = null;
