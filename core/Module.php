@@ -113,6 +113,14 @@ abstract class Module {
 			}
 		}
 		
+		public function assign($var, $val) {
+			$this->smarty->assign($var, $val);
+		}
+		
+		public function fetch($template) {
+			return $this->smarty->fetch($template);
+		}
+		
 		public function addCSS($url, $mediaType = null) {
 			$this->smarty->addCSS($url, $mediaType);
 		}
