@@ -235,7 +235,7 @@ class ChunkManager {
 				$value = DBRow::fromForm($type, $rawValue, $el);
 				//var_dump($value);
 				$chunk = $this->chunks[$i];
-				$revs = $chunk->countRevisions();
+				$revs = $chunk->countRevisions(true,$ver);
 				$old_rev = $chunk->getRevision('draft',true,true,$ver);
 				if ((0 == $revs) && (0 == $old_rev->getCount())) { // Entirely new revision
 					$rev = $old_rev;

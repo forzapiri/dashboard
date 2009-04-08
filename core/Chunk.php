@@ -67,21 +67,35 @@ class Chunk extends DBRow {
 		}
 	}
 
-	static function makeDraftActive($class, $id,$version='single') {
-		foreach (self::getAllFor($class, $id) as $chunk) $chunk->activate($version);
+	static function makeDraftActive($class, $id,$version=null) {
+		if($version==null){$version='all';}
+		foreach (self::getAllFor($class, $id) as $chunk){
+			$versions = $chunk->getVersions();
+			foreach($versions as $version){
+				$chunk->activate($version);
+			}	
+		}
 	}
 	
-	function activate($version='single') {
-		$draft = $this->getRevision('draft',true,true,$version);
-		if ($draft->getStatus() == 'draft') {
-			$active = $this->getRevision('active', false,true,$version);
-			if ($active && $active->getStatus() == 'active') {
-				$active->setStatus('inactive');
-				$active->save();
-			}
-			$draft->setStatus('active');
-			$draft->save();
+	function getVersions(){
+		$versions = array();
+		$chunkId = $this->getId();
+		$revisions = ChunkRevision::getAll("where parent=? and status='active'", "i", "$chunkId");
+		foreach($revisions as $rev){
+			$versions[] = $rev->getVersion();
 		}
+		return $versions;
+	}
+	
+	function activate($version=null) {
+		$draft = $this->getRevision('draft',true,true,$version);
+		$active = $this->getRevision('active',false,true,$draft->getVersion());
+		if($active && $active->getStatus()== 'active'){
+			$active->setStatus('inactive');
+			$active->save();
+		}
+		$draft->setStatus('active');
+		$draft->save();
 	}
 	
 	private static $hasDraftFlag;
@@ -141,6 +155,8 @@ class Chunk extends DBRow {
 				$draft->save();
 			}
 		}
+		
+		//return more revisions. if there are more than 1 returned, activate all of the drafts. only one active for each version though.
 		if($version=='all'){
 			$all = ChunkRevision::getAll("where parent=? AND $statusClause",'i',$id);
 		}else{

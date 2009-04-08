@@ -41,7 +41,7 @@ class ChunkRevision extends DBRow {
 		$type = $chunk->getType();
 		$c = $chunk->getContent($status, false,$version);
 		$content = DBRow::toForm($type, $c);
-		return array ('content' => $content, 'i' => $chunk->getCount($status), 'n' => $chunk->countRevisions(),'v'=>$version);
+		return array ('content' => $content, 'i' => $chunk->getCount($status,true,$version), 'n' => $chunk->countRevisions(true,$version),'v'=>$version);
 	}
 
 	static function getChunkFormField ($class, $parentId, $sort, $status, $version='single' /* or count */) {
