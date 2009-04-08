@@ -85,7 +85,8 @@ class Chunk extends DBRow {
 	}
 	
 	private static $hasDraftFlag;
-	static function hasDraft($obj,$version='single') {
+	static function hasDraft($obj,$version=null) {
+		if($version==null)$version='all';
 		self::getAllContentFor($obj, 'draft',$version);
 		return self::$hasDraftFlag;
 	}
@@ -140,7 +141,11 @@ class Chunk extends DBRow {
 				$draft->save();
 			}
 		}
-		$all = ChunkRevision::getAll("where parent=? and version=? AND $statusClause", 'is', $id,$version);
+		if($version=='all'){
+			$all = ChunkRevision::getAll("where parent=? AND $statusClause",'i',$id);
+		}else{
+			$all = ChunkRevision::getAll("where parent=? and version=? AND $statusClause", 'is', $id,$version);
+		}
 		if ($all) {
 			$rev= $all[0];
 		} else {
