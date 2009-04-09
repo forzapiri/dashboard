@@ -4,6 +4,9 @@ php_value memory_limit 16M
 RewriteEngine On
 Options -Indexes
 
+#Multi language options must be defined here.
+RewriteRule ^(english|french)(.*)?$ $2&chunk_version=$1 [NC,L]
+
 <FilesMatch "\.(engine|inc|info|install|module|profile|po|sh|.*sql|theme|tpl|htpl|tpl(\.php)?|xtmpl)$|^(code-style\.pl|Entries.*|Repository|Root|Tag|Template)$">
   Order allow,deny
 </FilesMatch>
