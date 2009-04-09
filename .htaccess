@@ -61,5 +61,5 @@ RewriteRule ^forum/([0-9]+)?-?([a-z\-]+)? /index.php?module=Forums&page=$1 [NC,L
 RewriteRule ^im/(.*) /core/image-resizer.php?image=/$1 [L,QSA]
 RewriteRule ^search/? /index.php?module=Search
 
-RewriteRule files/(.*) file_not_found
+RewriteRule ^files/(.*)$ /core/file-load.php?file=$1
 ErrorDocument 404 /index.php?module=Content&page=_ERROR_
