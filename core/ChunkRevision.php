@@ -36,7 +36,6 @@ class ChunkRevision extends DBRow {
 	static function make($id = null) {return parent::make($id, __CLASS__);}
 
 	static private function getRevisionFormField($chunk, $status,$version='single') {
-		error_log('RevFormField '.$version);
 		if (!$chunk) return null;
 		$type = $chunk->getType();
 		$c = $chunk->getContent($status, false,$version);

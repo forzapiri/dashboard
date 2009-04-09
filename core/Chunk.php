@@ -218,7 +218,7 @@ class Chunk extends DBRow {
 
 	function getRawContent($status, $follow = true,$version='single') {return $this->getRevision($status, true, $follow,$version)->getContent();}
 	function getCount($status, $follow = true,$version='single') {return $this->getRevision($status, true, $follow,$version)->getCount();}
-	function getContent($status, $follow = true,$version='single') {error_log($version);return DBRow::fromDB($this->getType(), $this->getRawContent($status, $follow,$version));}
+	function getContent($status, $follow = true,$version='single'){return DBRow::fromDB($this->getType(), $this->getRawContent($status, $follow,$version));}
 
 	static $countQuery = null;
 	function countRevisions($follow = true,$version='single') { // $follow means use canonical chunk of appropriate
