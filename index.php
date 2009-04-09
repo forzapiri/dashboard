@@ -58,6 +58,7 @@ $ajaxHelper = new HTML_AJAX_Helper ( );
 if ( $ajaxHelper->isAJAX () ){
 	echo Module::factory($_REQUEST['module'], $smarty)->getUserInterface($_REQUEST);
 } else {
+	$smarty->addJS('/js/prototype.js');
 	$smarty->addJS('/js/scriptaculous.js');
 
 	$smarty->content[$_REQUEST['module']] = Module::factory($_REQUEST['module'], $smarty)->getUserInterface($_REQUEST);

@@ -55,6 +55,13 @@ class File extends DBRow {
 		$string = "<img src='$link' alt='$alt' />";
 		return $string;
 	}
+	function getFlashLink($args) {
+		$width = $args['width'];
+		$height = $args['height'];
+		$link = $this->getLink();
+		return "<object type='application/x-shockwave-flash' data='$link' width='$width' height='$height'><param name='movie' value='$link' /></object>";
+	}
+	
 	function getImageLink($args = array()) {
 		// $arg is either array(width => 100, height => 200, ...) OR
 		// "width=100&height=100&..."
