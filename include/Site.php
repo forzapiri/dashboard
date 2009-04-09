@@ -343,9 +343,11 @@ class Smarty_Compiler_Norex extends Smarty_Compiler {
 $smarty = new SmartySite();
 
 $config = Config::singleton();
+$_modules = array();
 
 foreach ($config->getActiveModules() as $mod) {
 	$smarty->plugins_dir[] = SITE_ROOT . '/modules/' . $mod['module'] . '/plugins';
+	$_modules[$mod['module']] = Module::factory($mod['module'], $smarty);
 }
 
 $smarty->assign_by_ref('config', $config);

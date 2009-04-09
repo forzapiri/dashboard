@@ -41,13 +41,6 @@ if (isset($_REQUEST['username']) && isset($_REQUEST['password'])) {
 
 SiteConfig::warnInstall();
 
-if (! (SiteConfig::programmer() // If the site isn't live, usually show an error page.
-	   || SiteConfig::get('live')
-	   || (@$_REQUEST['module'] == 'User' && @$_REQUEST['section'] == 'logout'))) {
-	$_REQUEST['module'] = "Content";
-	$_REQUEST['page'] = "_ERROR_";
-}
-
 if (@!isset($_REQUEST['module'])) {
 	$_REQUEST['module'] = SiteConfig::get('defaultModule');
 }
@@ -61,7 +54,11 @@ if ( $ajaxHelper->isAJAX () ){
 	$smarty->addJS('/js/prototype.js');
 	$smarty->addJS('/js/scriptaculous.js');
 
-	$smarty->content[$_REQUEST['module']] = Module::factory($_REQUEST['module'], $smarty)->getUserInterface($_REQUEST);
+	if ($route = Router::match()) {
+		$smarty->content[$_REQUEST['module']] = call_user_func(array($route[0], $route[1]), $_REQUEST);
+	} else {
+		$smarty->content[$_REQUEST['module']] = Module::factory($_REQUEST['module'], $smarty)->getUserInterface($_REQUEST);
+	}
 
 	$smarty->template_dir = SITE_ROOT . '/templates/';
 	$smarty->compile_dir = SITE_ROOT . '/cache/templates';

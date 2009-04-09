@@ -23,7 +23,11 @@
 
 class Module_SEO extends Module {
 	
-	public function getUserInterface($params) {
+	public function __construct() {
+		Router::connect('seo\/?', array($this, 'show'));
+	}
+	
+	public function show($params) {
 		/* Make sure menu generation code is included */
 		include_once(dirname(__FILE__) . '/../Menu/include/Menu.php');
 		include_once(dirname(__FILE__) . '/../Menu/include/MenuItem.php');
