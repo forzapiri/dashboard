@@ -105,12 +105,51 @@ class Chunk extends DBRow {
 		return self::$hasDraftFlag;
 	}
 
+	
+	/*static function getUserContent($obj,$status,$specificversion = 'single'){
+		self::$hasDraftFlag = false;
+		$chunks = Chunk::getAllFor($obj);
+		foreach($chunks as &$chunk){
+			$type = $chunk->getType();
+			
+			//check if it has versions
+			$versions = $chunk->getVersions();
+			//if there's just a single version, grab the single.
+			//otherwise grab the specified version.
+			if(in_array('single',$versions)){
+				$rev = $chunk->getRevision($status,true,true,'single');
+			}else{
+				$rev = $chunk->getRevision($status,true,true,$specificversion);
+			}
+			
+			if ($rev->getStatus() == 'draft') self::$hasDraftFlag = true;
+			$chunk= DBRow::fromDB($type,$rev->getContent());
+			if ($type == 'MenuType'){
+				$chunk = Module::factory('Menu')->getUserInterface(array('id' => $chunk));
+			}
+		}
+	}*/
 	static function getAllContentFor($obj, $status,$version='single') {
+		if(!isset($_REQUEST['chunk_version'])){
+			$version = SiteConfig::get('defaultVersion');
+		}else{
+			$version = $_REQUEST['chunk_version'];
+		}
+		
 		self::$hasDraftFlag = false;
 		$chunks = Chunk::getAllFor($obj);
 		foreach ($chunks as &$chunk) { // Converts Chunk -> rev -> content
 			$type = $chunk->getType();
-			$rev = $chunk->getRevision($status,true,true,$version);
+			//check if it has versions
+			$versions = $chunk->getVersions();
+			//if there's just a single version, grab the single.
+			//otherwise grab the specified version.
+			if(in_array('single',$versions)){
+				$rev = $chunk->getRevision($status,true,true,'single');
+			}else{
+				$rev = $chunk->getRevision($status,true,true,$version);
+			}
+			
 			if ($rev->getStatus() == 'draft') self::$hasDraftFlag = true;
 			$chunk = DBRow::fromDB($type, $rev->getContent());
 			if ($type == 'MenuType') {
