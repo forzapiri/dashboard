@@ -41,24 +41,21 @@ if (isset($_REQUEST['username']) && isset($_REQUEST['password'])) {
 
 SiteConfig::warnInstall();
 
-if (@!isset($_REQUEST['module'])) {
-	$_REQUEST['module'] = SiteConfig::get('defaultModule');
-}
+$_module_to_load = Router::match();
 
 require_once 'HTML/AJAX/Helper.php';
 $ajaxHelper = new HTML_AJAX_Helper ( );
 
 if ( $ajaxHelper->isAJAX () ){
-	echo Module::factory($_REQUEST['module'], $smarty)->getUserInterface($_REQUEST);
+	echo $_module_to_load['identity'][0]->getUserInterface($_REQUEST);
 } else {
 	$smarty->addJS('/js/prototype.js');
 	$smarty->addJS('/js/scriptaculous.js');
+	
+	$_module_name = Router::module($_module_to_load['identity']);
 
-	if ($route = Router::match()) {
-		$smarty->content[$_REQUEST['module']] = call_user_func(array($route[0], $route[1]), $_REQUEST);
-	} else {
-		$smarty->content[$_REQUEST['module']] = Module::factory($_REQUEST['module'], $smarty)->getUserInterface($_REQUEST);
-	}
+	$smarty->content[$_module_name] = call_user_func($_module_to_load['identity'], $_module_to_load['params']);
+	$smarty->assign ( 'module', $_module_name );
 
 	$smarty->template_dir = SITE_ROOT . '/templates/';
 	$smarty->compile_dir = SITE_ROOT . '/cache/templates';
@@ -73,12 +70,11 @@ if ( $ajaxHelper->isAJAX () ){
 	$smarty->assign('path',$inurl);
 
 	
-	$smarty->assign ( 'module', $_REQUEST['module'] );
 	if (isset($_SESSION['authenticated_user'])) {
 		$smarty->assign_by_ref ( 'user', $_SESSION['authenticated_user'] );
 	}
 	$cachedModules = SiteConfig::get('cachedModules');
-	if (!SiteConfig::programmer() && in_array ($_REQUEST['module'], (array) $cachedModules)) {
+	if (!SiteConfig::programmer() && in_array ($_module_name, (array) $cachedModules)) {
 			$result = $smarty->render ('db:site.tpl', $smarty->templateOverride, false);
 			$pageCache->save($result, CACHED_PAGE_INDEX);
 			echo $result;

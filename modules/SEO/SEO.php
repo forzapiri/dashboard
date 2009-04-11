@@ -24,10 +24,15 @@
 class Module_SEO extends Module {
 	
 	public function __construct() {
-		Router::connect('seo\/?', array($this, 'show'));
+		Router::connect('seo\/?$', array($this, 'show'));
+		Router::connect('seo\/(?<name>\w+)', array($this, 'wewt'));
 	}
 	
-	public function show($params) {
+	public function wewt($params) {
+		return $params['name'];
+	}
+	
+	public function show() {
 		/* Make sure menu generation code is included */
 		include_once(dirname(__FILE__) . '/../Menu/include/Menu.php');
 		include_once(dirname(__FILE__) . '/../Menu/include/MenuItem.php');

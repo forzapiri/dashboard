@@ -26,7 +26,8 @@ class Module_Content extends Module implements linkable {
 	public $icon = '/modules/Content/images/page_edit.png';
 	
 	public function __construct() {
-		parent::__construct();
+		Router::connect('content\/(?<page>\w+)$', array($this, 'getUserInterface'));
+		
 		$this->page = new Page();
 		$this->page->with('ContentPage')
 			->show(array('Name' => 'name',
@@ -42,15 +43,18 @@ class Module_Content extends Module implements linkable {
 		}
 	}
 	
-	function getUserInterface() {
-		if(ucfirst($_REQUEST['module']) == 'Content' && @empty($_REQUEST['page'])){
-			$_REQUEST['page'] = SiteConfig::get('Content::defaultPage');
+	function getUserInterface($params) {
+		$page = null;
+		
+		if(@empty($params['page'])) {
+			$page = SiteConfig::get('Content::defaultPage');
+		} else {
+			$page = $params['page'];
 		}
 		
-		$isHome = ucfirst($_REQUEST['module']) == 'Content'
-			&& (strtolower(ucfirst(@$_REQUEST['page']))
+		$isHome = (strtolower(ucfirst(@$page))
 				== strtolower(SiteConfig::get('Content::defaultPage')));
-		$this->parentSmarty->assign('ishome', $isHome);
+		$this->parentSmarty->assign('ishome', $isHome); 
 		
 		$pageid = @$_REQUEST['id'];
 		if (@$_REQUEST['action'] == 'viewdraft') { // CHUNKS:  Admin preview of a page; allow preview only if visitor has addedit privilege
@@ -61,7 +65,7 @@ class Module_Content extends Module implements linkable {
 			$page = ContentPage::make($pageid);
 		} else {
 			$status = 'active';  // CHUNK
-			$pageid = ContentPage::keytoid($_REQUEST['page']);
+			$pageid = ContentPage::keytoid($page);
 			$pageid = $pageid['id'];
 			$page = ContentPage::make($pageid);
 			if (!$page->getStatus()) {
