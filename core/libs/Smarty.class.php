@@ -27,10 +27,10 @@
  * @author Monte Ohrt <monte at ohrt dot com>
  * @author Andrei Zmievski <andrei@php.net>
  * @package Smarty
- * @version 2.6.21-dev
+ * @version 2.6.23-dev
  */
 
-/* $Id: Smarty.class.php 2785 2008-09-18 21:04:12Z Uwe.Tews $ */
+/* $Id$ */
 
 /**
  * DIR_SEP isn't used anymore, but third party apps might
@@ -79,7 +79,7 @@ class Smarty
      *
      * @var string
      */
-    var $compile_dir     =  'cache/templates';
+    var $compile_dir     =  'templates_c';
 
     /**
      * The directory where config files are located.
@@ -464,7 +464,7 @@ class Smarty
      *
      * @var string
      */
-    var $_version              = '2.6.21-dev';
+    var $_version              = '2.6.23-dev';
 
     /**
      * current template inclusion depth
@@ -1956,3 +1956,5 @@ class Smarty
 }
 
 /* vim: set expandtab: */
+
+?>
