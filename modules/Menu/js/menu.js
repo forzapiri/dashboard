@@ -35,7 +35,7 @@ var menuitems = function(type) {
 				
 				menu.insert({after: box});
 				return;
-			} else {
+			} else if (menu.type == 'text') {
 				menu.id = 'old';
 				menu.name = 'old';
 				var menuitem = Builder.node('select', {name: 'menuitem_link', id: 'menuitem_link'});
