@@ -35,7 +35,15 @@ var menuitems = function(type) {
 				
 				menu.insert({after: box});
 				return;
+			} else {
+				menu.id = 'old';
+				menu.name = 'old';
+				var menuitem = Builder.node('select', {name: 'menuitem_link', id: 'menuitem_link'});
+				menu.insert({after: menuitem});
+				menu.remove();
 			}
+			
+			var menu = $('menuitem_link');
 			
 			var i = 0;
 			opts.each(function(el) {
