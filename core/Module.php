@@ -51,7 +51,7 @@ abstract class Module {
 		 * @param string $name
 		 * @return ref|bool Reference to loaded module
 		 */
-		public static final function &factory($name, &$parentSmarty = null) {
+		public static final function &factory($name) {
 			if (isset(self::$cache[$name])) {
 				return self::$cache[$name];
 			}
@@ -65,9 +65,10 @@ abstract class Module {
 				$module = new $classname;
 				$module->name = $name;
 				
-				if (!is_null($parentSmarty)) {
+				$module->smarty = new SmartySite(); //$parentSmarty;
+				
+				/*if (!is_null($parentSmarty)) {
 					$module->parentSmarty =& $parentSmarty;
-					$module->smarty =& $parentSmarty;
 					if($parentSmarty->compile_id != 'admin'){
 						try {
 							$module->parentSmarty->templateOverride(SiteConfig::get($name."::templateOverride"));
@@ -76,7 +77,9 @@ abstract class Module {
 					}
 				} else {
 					$module->smarty = new SmartySite();
-				}
+				}*/
+				global $smarty;
+				$module->parentSmarty = &$smarty;
 				
 				// Set up module's Smarty resouce. Make sure it has its own template directory
 				// as well as a unique compile id. Using the class name is a clever way of avoiding

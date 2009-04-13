@@ -22,9 +22,13 @@
  */
 
 class Module_Splash extends Module {
+	
+	public function __construct() {
+		Router::connect('splash$', array($this, 'getUserInterface'));
+	}
+	
 	function getUserInterface($params){
-		$this->parentSmarty->templateOverride('db:splash.tpl');
-		return true;
+		return $this->fetch('db:splash.tpl');
 	}
 }
 ?>

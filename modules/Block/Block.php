@@ -26,6 +26,7 @@ class Module_Block extends Module {
 	public $icon = '/modules/Block/images/package_green.png';
 	
 	public function __construct() {
+		Router::connect('blocks$', array($this, 'getUserInterface'));
 		$this->page = new Page();
 		$this->page->with('Block')
 			 ->show(array(

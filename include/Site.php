@@ -347,7 +347,7 @@ $_modules = array();
 
 foreach ($config->getActiveModules() as $mod) {
 	$smarty->plugins_dir[] = SITE_ROOT . '/modules/' . $mod['module'] . '/plugins';
-	$_modules[$mod['module']] = Module::factory($mod['module'], $smarty);
+	$m = Module::factory($mod['module']);
 }
 
 $smarty->assign_by_ref('config', $config);
