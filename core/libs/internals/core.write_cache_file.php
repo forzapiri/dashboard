@@ -22,7 +22,7 @@ function smarty_core_write_cache_file($params, &$smarty)
 {
 
     // put timestamp in cache header
-    $smarty->_cache_info['timestamp'] = $_SERVER['REQUEST_TIME'];
+    $smarty->_cache_info['timestamp'] = time();
     if ($smarty->cache_lifetime > -1){
         // expiration set
         $smarty->_cache_info['expires'] = $smarty->_cache_info['timestamp'] + $smarty->cache_lifetime;
@@ -43,7 +43,7 @@ function smarty_core_write_cache_file($params, &$smarty)
         
         $level = 0;
         $j = 0;
-        for ($i=0, $results_count = count($results); $i < $results_count && $j < $match_count; ++$i) {
+        for ($i=0, $results_count = count($results); $i < $results_count && $j < $match_count; $i++) {
             if ($results[$i] == $match[0][$j]) {
                 // nocache tag
                 if ($match[1][$j]) { // closing tag
