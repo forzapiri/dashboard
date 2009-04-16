@@ -222,8 +222,10 @@ abstract class DBRow {
 	}
 	
 	public function &toggle() {
+		$this->toggleBeforeSaveHook();
 		$this->set('status', 1 - $this->get('status'))->save();
 		$this->table()->resetWhereCache();
+		$this->toggleAfterSaveHook();
 		return $this;
 	}
 
@@ -279,6 +281,9 @@ abstract class DBRow {
 		$this->table()->resetWhereCache();
 		return $this;
 	}
+	
+	function toggleAfterSaveHook() {}
+	function toggleBeforeSaveHook() {}
 
 	function getAddEditFormHook($form) {}
 	function getAddEditFormSaveHook($form) {} // Method deprecated; called below for backward compatability
