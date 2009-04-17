@@ -103,6 +103,12 @@ class Chunk extends DBRow {
 		}
 		return new ChunkList($chunks);
 	}
+	
+	static function getNamedChunkContent($name, $status = 'active') {
+		$chunks = self::getAll("where name=? order by sort", 's', $name);
+		if (count($chunks) == 0) return false;
+		return $chunks[0]->getContent($status, false);;
+	}
 
 	function getActualChunk() { // If this is a roled, named chunk returns the canonical version
 		if (!($this->getName() && $this->getRole() && $this->getParent())) return $this;
