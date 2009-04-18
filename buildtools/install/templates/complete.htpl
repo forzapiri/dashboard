@@ -1,3 +1,5 @@
-<p>Installation complete</p>
+<h2>Installation Complete</h2>
+
+<p>You can log into the <a href="/admin">admin area</a> with your username and password, or visit the <a href="/">home page</a>.</p>
 
 {include file="checks.htpl"}
