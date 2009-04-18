@@ -14,6 +14,18 @@ body {
 	background-image: url(/buildtools/install/bg.png);
 }
 
+h3, h2 {
+border-bottom:1px solid #EEEEEE;
+color:#9D2900;
+font-size:1.5em;
+margin:0 0 0.8em;
+}
+
+a, .red {
+color:#9D2900;
+font-weight:700;
+}
+
 div#wrapper {
 	width: 700px;
 	margin-left: auto;
@@ -22,8 +34,8 @@ div#wrapper {
 }
 
 div#header {
-	background-image: url(/images/admin/norex_logo.png);
-	height: 65px;
+	background-image: url(/images/dashFrame_logo.png);
+	height: 90px;
 	background-repeat: no-repeat;
 	margin: 0 0 10px 10px;
 }
