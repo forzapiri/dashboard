@@ -1437,22 +1437,31 @@ tinymce.create('static tinymce.util.XHR', {
 			n = t.get(n);
 			ro = ro || d.body;
 
-			// Use getBoundingClientRect on IE, Opera has it but it's not perfect
-			if (n && isIE && !t.stdMode) {
-				n = n.getBoundingClientRect();
-				e = t.boxModel ? d.documentElement : d.body;
-				x = t.getStyle(t.select('html')[0], 'borderWidth'); // Remove border
-				x = (x == 'medium' || t.boxModel && !t.isIE6) && 2 || x;
-				n.top += t.win.self != t.win.top ? 2 : 0; // IE adds some strange extra cord if used in a frameset
+			if (n) {
+				// Use getBoundingClientRect on IE, Opera has it but it's not perfect
+				if (isIE && !t.stdMode) {
+					n = n.getBoundingClientRect();
+					e = t.boxModel ? d.documentElement : d.body;
+					x = t.getStyle(t.select('html')[0], 'borderWidth'); // Remove border
+					x = (x == 'medium' || t.boxModel && !t.isIE6) && 2 || x;
+					n.top += t.win.self != t.win.top ? 2 : 0; // IE adds some strange extra cord if used in a frameset
 
-				return {x : n.left + e.scrollLeft - x, y : n.top + e.scrollTop - x};
-			}
+					return {x : n.left + e.scrollLeft - x, y : n.top + e.scrollTop - x};
+				}
 
-			r = n;
-			while (r) {
-				x += r.offsetLeft || 0;
-				y += r.offsetTop || 0;
-				r = r.offsetParent;
+				r = n;
+				while (r && r != ro && r.nodeType) {
+					x += r.offsetLeft || 0;
+					y += r.offsetTop || 0;
+					r = r.offsetParent;
+				}
+
+				r = n.parentNode;
+				while (r && r != ro && r.nodeType) {
+					x -= r.scrollLeft || 0;
+					y -= r.scrollTop || 0;
+					r = r.parentNode;
+				}
 			}
 
 			return {x : x, y : y};
@@ -2150,6 +2159,7 @@ tinymce.create('static tinymce.util.XHR', {
 			}
 		},
 
+
 		_isRes : function(c) {
 			// Is live resizble element
 			return /^(top|left|bottom|right|width|height)/i.test(c) || /;\s*(top|left|bottom|right|width|height)/i.test(c);
@@ -2381,10 +2391,6 @@ tinymce.create('static tinymce.util.XHR', {
 		},
 
 /*
-		toString : function() {
-			// Not implemented
-		},
-
 		detach : function() {
 			// Not implemented
 		},
@@ -2892,105 +2898,127 @@ tinymce.create('static tinymce.util.XHR', {
 })(tinymce.dom);
 (function() {
 	function Selection(selection) {
-		var t = this;
+		var t = this, invisibleChar = '|', range, lastIERng;
+
+		function compareRanges(rng1, rng2) {
+			if (rng1 && rng2) {
+				// Both are control ranges and the selected element matches
+				if (rng1.item && rng2.item && rng1.item(0) === rng2.item(0))
+					return 1;
+
+				// Both are text ranges and the range matches
+				if (rng1.isEqual && rng2.isEqual && rng2.isEqual(rng1))
+					return 1;
+			}
+
+			return 0;
+		};
 
 		function getRange() {
-			var dom = selection.dom, ieRange = selection.getRng(), domRange = dom.createRng(), startPos = {}, endPos = {};
+			var dom = selection.dom, ieRange = selection.getRng(), domRange = dom.createRng(), startPos, endPos, element, sc, ec, collapsed;
 
-			// Handle control selection
-			if (ieRange.item) {
-				domRange.setStartBefore(ieRange.item(0));
-				domRange.setEndAfter(ieRange.item(0));
+			function findIndex(element) {
+				var nl = element.parentNode.childNodes, i;
+
+				for (i = nl.length - 1; i >= 0; i--) {
+					if (nl[i] == element)
+						return i;
+				}
+
+				return -1;
+			};
+
+			function findEndPoint(start) {
+				var rng = ieRange.duplicate(), parent, i, nl, n, offset = 0, index = 0, pos, tmpRng;
+
+				// Insert marker character
+				rng.collapse(start);
+				parent = rng.parentElement();
+				rng.pasteHTML(invisibleChar); // Needs to be a pasteHTML instead of .text = since IE has a bug with nodeValue
+
+				// Find marker character
+				nl = parent.childNodes;
+				for (i = 0; i < nl.length; i++) {
+					n = nl[i];
+
+					// Calculate node index excluding text node fragmentation
+					if (i > 0 && (n.nodeType !== 3 || nl[i - 1].nodeType !== 3))
+						index++;
+
+					// If text node then calculate offset
+					if (n.nodeType === 3) {
+						// Look for marker
+						pos = n.nodeValue.indexOf(invisibleChar);
+						if (pos !== -1) {
+							offset += pos;
+							break;
+						}
+
+						offset += n.nodeValue.length;
+					} else
+						offset = 0;
+				}
+
+				// Remove marker character
+				rng.moveStart('character', -1);
+				rng.text = '';
+
+				return {index : index, offset : offset, parent : parent};
+			};
+
+			// If selection is outside the current document just return an empty range
+			element = ieRange.item ? ieRange.item(0) : ieRange.parentElement();
+			if (element.ownerDocument != dom.doc)
+				return domRange;
+
+			// Handle control selection or text selection of a image
+			if (ieRange.item || !element.hasChildNodes()) {
+				domRange.setStart(element.parentNode, findIndex(element));
+				domRange.setEnd(domRange.startContainer, domRange.startOffset + 1);
 
 				return domRange;
 			}
 
-			function findEndPoint(ie_rng, start, pos) {
-				var rng, rng2, startElement;
+			// Check collapsed state
+			collapsed = selection.isCollapsed();
 
-				rng = ie_rng.duplicate();
-				rng.collapse(start);
-				element = rng.parentElement();
-
-				// If element is block then we need to move one character
-				// since the selection has a extra invisible character
-				if (element.currentStyle.display == 'block') {
-					rng = ie_rng.duplicate();
-					rng2 = ie_rng.duplicate();
-
-					// Move one character at beginning/end of selection
-					if (start)
-						rng.moveStart('character', 1);
-					else
-						rng.moveEnd('character', -1);
-
-					// The range shouldn't have been changed so lets restore it
-					if (rng.text != rng2.text)
-						rng = rng2;
-
-					rng.collapse(start);
-					element = rng.parentElement();
-				}
-
-				pos.parent = element;
-				pos.range = rng;
-			};
-
-			function findIndexAndOffset(pos) {
-				var rng = pos.range, i, nl, marker, sibling, idx = 0;
-
-				// Set parent and offset
-				pos.offset = 0;
-				pos.parent = rng.parentElement();
-
-				// Insert marker
-				rng.pasteHTML('<span id="_mce"></span>');
-				marker = dom.get('_mce');
-
-				// Find the makers node index excluding text node fragmentation
-				nl = pos.parent.childNodes;
-				for (i = 0; i < nl.length; i++) {
-					if (nl[i] == marker) {
-						pos.index = idx;
-						break;
-					}
-
-					if (i > 0 && (nl[i].nodeType != 3 || nl[i - 1].nodeType != 3))
-						idx++;
-				}
-
-				// Figure out the character offset excluding text node fragmentation
-				sibling = marker.previousSibling;
-				if (sibling) {
-					if (sibling.nodeType === 3) {
-						do {
-							pos.offset += sibling.nodeValue.length;
-						} while ((sibling = sibling.previousSibling) && sibling.nodeType == 3);
-					} else
-						pos.index++;
-				}
-
-				// Remove the marker
-				dom.remove(marker);
-
-				return pos;
-			};
-
-			// Find end points
-			findEndPoint(ieRange, true, startPos);
-			findEndPoint(ieRange, false, endPos);
-
-			// Find start and end positions
-			findIndexAndOffset(startPos);
-			findIndexAndOffset(endPos);
+			// Find start and end pos index and offset
+			startPos = findEndPoint(true);
+			endPos = findEndPoint(false);
 
 			// Normalize the elements to avoid fragmented dom
 			startPos.parent.normalize();
 			endPos.parent.normalize();
 
-			// Set start and end points of the domRange
-			domRange.setStart(startPos.parent.childNodes[startPos.index], startPos.offset);
-			domRange.setEnd(endPos.parent.childNodes[endPos.index], endPos.offset);
+			// Set start container and offset
+			sc = startPos.parent.childNodes[Math.min(startPos.index, startPos.parent.childNodes.length - 1)];
+
+			if (sc.nodeType != 3)
+				domRange.setStart(startPos.parent, startPos.index);
+			else
+				domRange.setStart(startPos.parent.childNodes[startPos.index], startPos.offset);
+
+			// Set end container and offset
+			ec = endPos.parent.childNodes[Math.min(endPos.index, endPos.parent.childNodes.length - 1)];
+
+			if (ec.nodeType != 3) {
+				if (!collapsed)
+					endPos.index++;
+
+				domRange.setEnd(endPos.parent, endPos.index);
+			} else
+				domRange.setEnd(endPos.parent.childNodes[endPos.index], endPos.offset);
+
+			// If not collapsed then make sure offsets are valid
+			if (!collapsed) {
+				sc = domRange.startContainer;
+				if (sc.nodeType == 1)
+					domRange.setStart(sc, Math.min(domRange.startOffset, sc.childNodes.length));
+
+				ec = domRange.endContainer;
+				if (ec.nodeType == 1)
+					domRange.setEnd(ec, Math.min(domRange.endOffset, ec.childNodes.length));
+			}
 
 			// Restore selection to new range
 			t.addRange(domRange);
@@ -2999,68 +3027,135 @@ tinymce.create('static tinymce.util.XHR', {
 		};
 
 		this.addRange = function(rng) {
-			var ieRng, startPos, endPos, body = selection.dom.doc.body;
+			var ieRng, body = selection.dom.doc.body, startPos, endPos, sc, so, ec, eo;
 
-			// Element selection, then make a control range
-			if (rng.startContainer.nodeType == 1) {
-				ieRng = body.createControlRange();
-				ieRng.addElement(rng.startContainer.childNodes[rng.startOffset]);
+			// Setup some shorter versions
+			sc = rng.startContainer;
+			so = rng.startOffset;
+			ec = rng.endContainer;
+			eo = rng.endOffset;
+			ieRng = body.createTextRange();
+
+			// Find element
+			sc = sc.nodeType == 1 ? sc.childNodes[Math.min(so, sc.childNodes.length - 1)] : sc;
+			ec = ec.nodeType == 1 ? ec.childNodes[Math.min(so == eo ? eo : eo - 1, ec.childNodes.length - 1)] : ec;
+
+			// Single element selection
+			if (sc == ec && sc.nodeType == 1) {
+				// Make control selection for some elements
+				if (/^(IMG|TABLE)$/.test(sc.nodeName) && so != eo) {
+					ieRng = body.createControlRange();
+					ieRng.addElement(sc);
+				} else {
+					ieRng = body.createTextRange();
+
+					// Padd empty elements with invisible character
+					if (!sc.hasChildNodes() && sc.canHaveHTML)
+						sc.innerHTML = invisibleChar;
+
+					// Select element contents
+					ieRng.moveToElementText(sc);
+
+					// If it's only containing a padding remove it so the caret remains
+					if (sc.innerHTML == invisibleChar) {
+						ieRng.collapse(true);
+						sc.removeChild(sc.firstChild);
+					}
+				}
+
+				if (so == eo)
+					ieRng.collapse(eo <= rng.endContainer.childNodes.length - 1);
+
+				ieRng.select();
+
 				return;
 			}
 
-			function findPos(start) {
-				var container, offset, rng2, pos;
+			function getCharPos(container, offset) {
+				var nodeVal, rng, pos;
 
-				// Get container and offset
-				container = start ? rng.startContainer : rng.endContainer;
-				offset = start ? rng.startOffset : rng.endOffset;
+				if (container.nodeType != 3)
+					return -1;
 
-				// Insert marker character
-				container.nodeValue = container.nodeValue.substring(0, offset) + '\uFEFF' + container.nodeValue.substring(offset);
+				nodeVal = container.nodeValue;
+				rng = body.createTextRange();
 
-				// Create range for whole parent element
-				rng2 = body.createTextRange();
-				rng2.moveToElementText(container.parentNode);
-				pos = rng2.text.indexOf('\uFEFF');
-				container.nodeValue = container.nodeValue.replace(/\uFEFF/, '');
+				// Insert marker at offset position
+				container.nodeValue = nodeVal.substring(0, offset) + invisibleChar + nodeVal.substring(offset);
 
-				if (start)
-					startPos = pos;
-				else
-					endPos = pos;
+				// Find char pos of marker and remove it
+				rng.moveToElementText(container.parentNode);
+				rng.findText(invisibleChar);
+				pos = Math.abs(rng.moveStart('character', -0xFFFFF));
+				container.nodeValue = nodeVal;
+
+				return pos;
 			};
 
-			function setPos(start) {
-				var rng2, container = start ? rng.startContainer : rng.endContainer;
+			// Collapsed range
+			if (rng.collapsed) {
+				pos = getCharPos(sc, so);
 
-				rng2 = body.createTextRange();
-				rng2.moveToElementText(container.parentNode);
-				rng2.collapse(true);
-				rng2.move('character', start ? startPos : endPos);
+				ieRng = body.createTextRange();
+				ieRng.move('character', pos);
+				ieRng.select();
 
-				if (start)
-					ieRng.setEndPoint('StartToStart', rng2);
+				return;
+			} else {
+				// If same text container
+				if (sc == ec && sc.nodeType == 3) {
+					startPos = getCharPos(sc, so);
+
+					ieRng.move('character', startPos);
+					ieRng.moveEnd('character', eo - so);
+					ieRng.select();
+
+					return;
+				}
+
+				// Get caret positions
+				startPos = getCharPos(sc, so);
+				endPos = getCharPos(ec, eo);
+				ieRng = body.createTextRange();
+
+				// Move start of range to start character position or start element
+				if (startPos == -1) {
+					ieRng.moveToElementText(sc);
+					startPos = 0;
+				} else
+					ieRng.move('character', startPos);
+
+				// Move end of range to end character position or end element
+				tmpRng = body.createTextRange();
+
+				if (endPos == -1)
+					tmpRng.moveToElementText(ec);
 				else
-					ieRng.setEndPoint('EndToStart', rng2);
-			};
+					tmpRng.move('character', endPos);
 
-			// Create IE specific range
-			ieRng = body.createTextRange();
+				ieRng.setEndPoint('EndToEnd', tmpRng);
+				ieRng.select();
 
-			// Find start/end pos
-			findPos(true);
-			findPos(false);
-
-			// Set start/end pos
-			setPos(true);
-			setPos(false);
-
-			ieRng.select();
+				return;
+			}
 		};
 
 		this.getRangeAt = function() {
-			// todo: Implement range caching here later
-			return getRange();
+			// Setup new range if the cache is empty
+			if (!range || !compareRanges(lastIERng, selection.getRng())) {
+				range = getRange();
+
+				// Store away text range for next call
+				lastIERng = selection.getRng();
+			}
+
+			// Return cached range
+			return range;
+		};
+
+		this.destroy = function() {
+			// Destroy cached range and last IE range to avoid memory leaks
+			lastIERng = range = null;
 		};
 	};
 
@@ -3141,7 +3236,7 @@ tinymce.create('static tinymce.util.XHR', {
 		_pageInit : function() {
 			var e = Event;
 
-			// Safari on Mac fires this twice
+			// Keep it from running more than once
 			if (e.domLoaded)
 				return;
 
@@ -3156,35 +3251,42 @@ tinymce.create('static tinymce.util.XHR', {
 		},
 
 		_wait : function() {
-			var t;
-
 			// No need since the document is already loaded
 			if (window.tinyMCE_GZ && tinyMCE_GZ.loaded) {
 				Event.domLoaded = 1;
 				return;
 			}
 
-			if (isIE && document.location.protocol != 'https:') {
-				// Fake DOMContentLoaded on IE
-				document.write('<script id=__ie_onload defer src=\'javascript:""\';><\/script>');
-				DOM.get("__ie_onload").onreadystatechange = function() {
-					if (this.readyState == "complete") {
+			// Use IE method
+			if (document.attachEvent) {
+				document.attachEvent("onreadystatechange", function() {
+					if (document.readyState === "complete") {
+						document.detachEvent("onreadystatechange", arguments.callee);
 						Event._pageInit();
-						DOM.get("__ie_onload").onreadystatechange = null; // Prevent leak
 					}
-				};
-			} else {
+				});
+
+				if (document.documentElement.doScroll && window == window.top) {
+					(function() {
+						if (Event.domLoaded)
+							return;
+
+						try {
+							// If IE is used, use the trick by Diego Perini
+							// http://javascript.nwbox.com/IEContentLoaded/
+							document.documentElement.doScroll("left");
+						} catch (ex) {
+							setTimeout(arguments.callee, 0);
+							return;
+						}
+
+						Event._pageInit();
+					})();
+				}
+			} else if (document.addEventListener)
 				Event._add(window, 'DOMContentLoaded', Event._pageInit, Event);
 
-				if (isIE || isWebKit) {
-					t = setInterval(function() {
-						if (/loaded|complete/.test(document.readyState)) {
-							clearInterval(t);
-							Event._pageInit();
-						}
-					}, 10);
-				}
-			}
+			Event._add(window, 'load', Event._pageInit, Event);
 		}
 
 		});
@@ -3951,6 +4053,9 @@ tinymce.create('static tinymce.util.XHR', {
 			var t = this;
 
 			t.win = null;
+
+			if (t.tridentSel)
+				t.tridentSel.destroy();
 
 			// Manual destroy then remove unload handler
 			if (!s)
@@ -8539,25 +8644,7 @@ var tinyMCE = window.tinyMCE = tinymce.EditorManager;
 
 					case 'paste':
 						Event.add(t.getBody(), k, function(e) {
-							var tx, h, el, r;
-
-							// Get plain text data
-							if (e.clipboardData)
-								tx = e.clipboardData.getData('text/plain');
-							else if (tinymce.isIE)
-								tx = t.getWin().clipboardData.getData('Text');
-
-							// Get HTML data
-							/*if (tinymce.isIE) {
-								el = DOM.add(DOM.doc.body, 'div', {style : 'visibility:hidden;overflow:hidden;position:absolute;width:1px;height:1px'});
-								r = DOM.doc.body.createTextRange();
-								r.moveToElementText(el);
-								r.execCommand('Paste');
-								h = el.innerHTML;
-								DOM.remove(el);
-							}*/
-
-							eventHandler(e, {text : tx, html : h});
+							eventHandler(e);
 						});
 						break;
 
@@ -11293,8 +11380,8 @@ var tinyMCE = window.tinyMCE = tinymce.EditorManager;
 		ec = r.endContainer;
 		so = r.startOffset;
 		eo = r.endOffset;
-		sc = sc.nodeType == 1 ? sc.childNodes[so] : sc;
-		ec = ec.nodeType == 1 ? ec.childNodes[eo - 1] : ec;
+		sc = sc.nodeType == 1 ? sc.childNodes[Math.min(so, sc.childNodes.length - 1)] : sc;
+		ec = ec.nodeType == 1 ? ec.childNodes[Math.min(so == eo ? eo : eo - 1, ec.childNodes.length - 1)] : ec;
 
 		// Same container
 		if (sc == ec) { // TEXT_NODE
