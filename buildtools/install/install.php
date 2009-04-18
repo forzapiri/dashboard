@@ -27,7 +27,7 @@ define ('DB_CONFIG', SITE_ROOT . '/include/db-config.php');
 function checkInstalled() {
 	$installed = false;
 	if (!is_readable(DB_CONFIG)) {
-		$installed = false;
+		return false;
 	}
 	if (!is_null(Database::singleton()->query_fetch('show tables like "auth"'))) $installed = true;
 	if (!is_null(Database::singleton()->query_fetch('show tables like "modules"'))) $installed = true;
