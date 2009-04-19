@@ -35,22 +35,22 @@ class ChunkRevision extends DBRow {
 	}
 	static function make($id = null) {return parent::make($id, __CLASS__);}
 
-	static private function getRevisionFormField($chunk, $status) {
+	static private function getRevisionFormField($chunk, $status,$version='single') {
 		if (!$chunk) return null;
 		$type = $chunk->getType();
-		$c = $chunk->getContent($status, false);
+		$c = $chunk->getContent($status, false,$version);
 		$content = DBRow::toForm($type, $c);
-		return array ('content' => $content, 'i' => $chunk->getCount($status), 'n' => $chunk->countRevisions());
+		return array ('content' => $content, 'i' => $chunk->getCount($status,true,$version), 'n' => $chunk->countRevisions(true,$version),'v'=>$version);
 	}
 
-	static function getChunkFormField ($class, $parentId, $sort, $status /* or count */) {
+	static function getChunkFormField ($class, $parentId, $sort, $status, $version='single' /* or count */) {
 		$c = Chunk::getAll("where parent_class=? and parent=? and sort=?", 'sii', $class, $parentId, $sort);
-		return $c ? self::getRevisionFormField($c[0], $status) : "";
+		return $c ? self::getRevisionFormField($c[0], $status,$version) : "";
 	}
 
-	static function getNamedChunkFormField ($role, $name, $status = 'draft') {
+	static function getNamedChunkFormField ($role, $name, $status = 'draft', $version='single') {
 		$c = Chunk::getAll("where role=? and name=? and (parent is null or parent=0)", 'ss', $role, $name);
-		return self::getRevisionFormField($c[0], $status);
+		return self::getRevisionFormField($c[0], $status,$version);
 	}
 }
 	
