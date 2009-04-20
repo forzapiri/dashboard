@@ -14,7 +14,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with Dashboard.  If not, see <http://www.gnu.org/licenses/>.
- *  
+ *
  *  @license http://www.gnu.org/licenses/gpl.txt
  *  @copyright Copyright 2007-2009 Norex Core Web Development
  *  @author See CREDITS file
@@ -73,10 +73,10 @@ class Chunk extends DBRow {
 			$versions = $chunk->getVersions();
 			foreach($versions as $version){
 				$chunk->activate($version);
-			}	
+			}
 		}
 	}
-	
+
 	function getVersions(){
 		$versions = array();
 		$chunkId = $this->getId();
@@ -86,7 +86,7 @@ class Chunk extends DBRow {
 		}
 		return $versions;
 	}
-	
+
 	function activate($version=null) {
 		$draft = $this->getRevision('draft',true,true,$version);
 		$active = $this->getRevision('active',false,true,$draft->getVersion());
@@ -97,7 +97,7 @@ class Chunk extends DBRow {
 		$draft->setStatus('active');
 		$draft->save();
 	}
-	
+
 	private static $hasDraftFlag;
 	static function hasDraft($obj,$version=null) {
 		if($version==null)$version='all';
@@ -105,13 +105,13 @@ class Chunk extends DBRow {
 		return self::$hasDraftFlag;
 	}
 
-	
+
 	/*static function getUserContent($obj,$status,$specificversion = 'single'){
 		self::$hasDraftFlag = false;
 		$chunks = Chunk::getAllFor($obj);
 		foreach($chunks as &$chunk){
 			$type = $chunk->getType();
-			
+
 			//check if it has versions
 			$versions = $chunk->getVersions();
 			//if there's just a single version, grab the single.
@@ -121,7 +121,7 @@ class Chunk extends DBRow {
 			}else{
 				$rev = $chunk->getRevision($status,true,true,$specificversion);
 			}
-			
+
 			if ($rev->getStatus() == 'draft') self::$hasDraftFlag = true;
 			$chunk= DBRow::fromDB($type,$rev->getContent());
 			if ($type == 'MenuType'){
@@ -130,12 +130,14 @@ class Chunk extends DBRow {
 		}
 	}*/
 	static function getAllContentFor($obj, $status,$version='single') {
-		if(!isset($_REQUEST['chunk_version'])){
+		if($version == 'all'){
+			//bug fix for revision draft stuff
+		}elseif(!isset($_REQUEST['chunk_version'])){
 			$version = SiteConfig::get('defaultVersion');
 		}else{
 			$version = $_REQUEST['chunk_version'];
 		}
-		
+
 		self::$hasDraftFlag = false;
 		$chunks = Chunk::getAllFor($obj);
 		foreach ($chunks as &$chunk) { // Converts Chunk -> rev -> content
@@ -149,7 +151,7 @@ class Chunk extends DBRow {
 			}else{
 				$rev = $chunk->getRevision($status,true,true,$version);
 			}
-			
+
 			if ($rev->getStatus() == 'draft') self::$hasDraftFlag = true;
 			$chunk = DBRow::fromDB($type, $rev->getContent());
 			if ($type == 'MenuType') {
@@ -181,7 +183,7 @@ class Chunk extends DBRow {
 			return $c[0];
 		}
 	}
-	
+
 	function getRevision ($statusORcount, $create = true, $follow = true, $version = 'single') {
 		// This code not only gets the current revision, but also creates one if needed.
 		$c = $follow ? $this->getActualChunk() : $this;
@@ -200,7 +202,7 @@ class Chunk extends DBRow {
 				$draft->save();
 			}
 		}
-		
+
 		//return more revisions. if there are more than 1 returned, activate all of the drafts. only one active for each version though.
 		if($version=='all'){
 			$all = ChunkRevision::getAll("where parent=? AND $statusClause",'i',$id);
@@ -252,7 +254,7 @@ class Chunk extends DBRow {
 		else $count = '';
 		if(!empty($_REQUEST['v']))$version = e($_REQUEST['v']);
 		else $version = 'single';
-		
+
 		$status = $count ? $count : 'draft';
 		if ($role && $name) $result = ChunkRevision::getNamedChunkFormField($role, $name, $status,$version);
 		else if ($parent_class && $parent) $result = ChunkRevision::getChunkFormField ($parent_class, $parent, $sort, $status,$version);
