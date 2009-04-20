@@ -6,5 +6,6 @@ CREATE TABLE `chunk_revision` (
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `status` enum('active','draft','inactive') default NULL,
   `count` int(11) default NULL,
+  `version` varchar(256) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;

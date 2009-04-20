@@ -26,3 +26,4 @@ INSERT INTO `dbtable` VALUES
 (14,'chunk_revision','timestamp','Timestamp','timestamp','',4),
 (15,'chunk_revision','status','Status','enum(active,draft,inactive)','',5),
 (21,'chunk_revision','count','Count','integer','',6);
+(22,'chunk_revision','version','Version','text','',0);
