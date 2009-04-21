@@ -17,14 +17,9 @@
 
 
 -- 
--- Insert into the modules table
--- 
-insert into modules (module, display_name)values ('EComm','E-Commerce');
-
--- 
 -- Insert the SiteConfig options
 -- 
-INSERT INTO `config_options` VALUES ('EComm','CurrencySign','How the currency will be displayed to end users','enum($,C$,U$,â¬,Â£)','C$',13,'1'),('EComm','AdminEmail','The email address that orders notifications will be sent to','string','anas@norex.ca',8,'0'),('EComm','MinimumOrderValue','The minimum amount of value per order','string','17.30',5,'0'),('EComm','PaypalBusinessEmailAddress','The business email account that the money to be deposited to','enum(anas_s_1232461915_biz@norex.ca)','anas_s_1232461915_biz@norex.ca',2,'0'),('EComm','PaypalHostName','If this website is beta, set PaypalHostName to sandbox. If it is live, set it to paypal.com','enum(www.sandbox.paypal.com,www.paypal.com)','www.sandbox.paypal.com',1,'0'),('EComm','Currency','The currency used in the transactions','enum(CAD,USD,EUR,GBP)','CAD',12,'0');
+-- INSERT INTO `config_options` VALUES ('EComm','CurrencySign','How the currency will be displayed to end users','enum($,C$,U$,â¬,Â£)','C$',13,'1'),('EComm','AdminEmail','The emaaddress that orders notifications will be sent to','string','anas@norex.ca',8,'0'),('EComm','MinimumOrderValue','The minimum amount of value per order','string','17.30',5,'0'),('EComm','PaypalBusinessEmailAddress','The business email account that the money to be deposited to','enum(anas_s_1232461915_biz@norex.ca)','anas_s_1232461915_biz@norex.ca',2,'0'),('EComm','PaypalHostName','If this website is beta, set PaypalHostName to sandbox. If it is live, set it to paypal.com','enum(www.sandbox.paypal.com,www.paypal.com)','www.sandbox.paypal.com',1,'0'),('EComm','Currency','The currency used in the transactions','enum(CAD,USD,EUR,GBP)','CAD',12,'0');
 
 
 --

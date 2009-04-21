@@ -16,12 +16,12 @@ if test "x$PHP_PEAR_INSTALL_DIR" != "x"; then
   INCDIR=$PHP_PEAR_INSTALL_DIR
   INCARG="-d include_path=$PHP_PEAR_INSTALL_DIR"
 else
-  if test "/Users/mini/Documents/workspace/Trunk/core/PEAR" = '@'php_dir'@'; then
+  if test "/Users/mini/Documents/workspace/Framework/core/PEAR" = '@'php_dir'@'; then
     INCDIR=`dirname $0`
     INCARG=""  
   else
-    INCDIR="/Users/mini/Documents/workspace/Trunk/core/PEAR"
-    INCARG="-d include_path=/Users/mini/Documents/workspace/Trunk/core/PEAR"
+    INCDIR="/Users/mini/Documents/workspace/Framework/core/PEAR"
+    INCARG="-d include_path=/Users/mini/Documents/workspace/Framework/core/PEAR"
   fi
 fi
 

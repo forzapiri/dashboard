@@ -3,29 +3,47 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Norex Dashboard :: Installer</title>
+<title>Dashboard Framework :: Installer</title>
 <link rel="stylesheet" href="/buildtools/install/style.css" type="text/css" />
 <style>{literal}
 @CHARSET "UTF-8";
 
+html {
+height: 100%;
+}
+
 body {
 	margin: 0;
 	padding: 0;
+	height: 100%;
 	background-image: url(/buildtools/install/bg.png);
+}
+
+h3, h2 {
+border-bottom:1px solid #EEEEEE;
+color:#9D2900;
+font-size:1.5em;
+margin:0 0 0.8em;
+}
+
+a, .red {
+color:#9D2900;
+font-weight:700;
 }
 
 div#wrapper {
 	width: 700px;
 	margin-left: auto;
+	height: 100%;
 	margin-right: auto;
 	background-color: #fff;
 }
 
 div#header {
-	background-image: url(/images/admin/norex_logo.png);
-	height: 65px;
-	background-repeat: no-repeat;
-	margin: 0 0 10px 10px;
+	background-image: url(/buildtools/install/head_bg.gif);
+	height: 90px;
+	background-repeat: repeat-x;
+	padding: 30px 0 10px 10px;
 }
 
 div#nav {
@@ -43,7 +61,7 @@ div#nav ol {
 
 div#nav ol li {
 	margin-bottom: 5px;
-}
+} 
 
 div#nav ol li.current {
 	font-weight: bolder;
@@ -52,9 +70,9 @@ div#nav ol li.current {
 
 div#content {
 	float: left;
-	width: 520px;
+	width: 515px;
 	font-size: 0.8em;
-	padding: 0px 5px 0 5px;
+	padding: 0px 5px 0 10px;
 	font-family: sans-serif;
 	color: #333;
 }
@@ -87,7 +105,7 @@ div#footer {
 <body>
 
 <div id="wrapper">
-<div id="header">&nbsp;</div>
+<div id="header"><img src="/images/dashFrame_logo.png" /></div>
 <div id="cols">
 	<div id="nav">
 		<ol>

@@ -1,0 +1,7 @@
+div#left_menu, div#header, div#header_shadow, div#footer {
+	display: none;
+}
+
+div#main_window {
+	margin: 0;
+}

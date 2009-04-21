@@ -53,6 +53,15 @@ if ( $ajaxHelper->isAJAX () ){
 	$smarty->addJS('/js/scriptaculous.js');
 	
 	$_module_name = Router::module($_module_to_load['identity']);
+	$smarty->addJS('/js/frontend.js');
+	$smarty->addJS('/js/sifr.js');
+	$smarty->addJS('/js/sifr-config.js');
+	$smarty->addJS('/js/prototip.js');
+	$smarty->addCSS('/css/style.css');
+	$smarty->addCSS('/css/cssMenus.css');
+	$smarty->addCSS('/css/prototip.css');
+	$smarty->addCSS('/css/sIFR-screen.css', 'screen');
+	$smarty->addCSS('/css/sIFR-print.css', 'print');
 
 	$smarty->content[$_module_name] = call_user_func($_module_to_load['identity'], $_module_to_load['params']);
 	$smarty->assign ( 'module', $_module_name );

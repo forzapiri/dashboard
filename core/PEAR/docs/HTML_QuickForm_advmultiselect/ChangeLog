@@ -1,3 +1,11 @@
+2009-04-05 Laurent Laville <pear@laurent-laville.org>
+
+    * VERSION: Version 1.5.1 released.
+
+    - single or dual shape is now well commented when using setComment()
+    - Improve unit test suites (for PHPUnit 3.2+) with code coverage closest to 100% (99.81)
+    - Upgrade HTML_Common dependency from 1.2.4 to 1.2.5
+
 2009-02-15 Laurent Laville <pear@laurent-laville.org>
 
     * VERSION: Version 1.5.0 released.

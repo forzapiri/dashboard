@@ -20,12 +20,12 @@
  *
  */
 
-function watchChunkSelect(sort, role, parent_class, parent_id, n, i) { // We are in chunk i out of n
-	var div = $('_select_text_'+sort);
+function watchChunkSelect(sort, role, parent_class, parent_id, n, i, v,ver) { // We are in chunk i out of n
+	var div = $('_select_text_'+sort+'_v'+v);
 	var select = div ? div.down('select') : '';
 	var text = div ? div.down('input') : '';
-	var prev = $('_chunk_prev_'+sort);
-	var next = $('_chunk_next_'+sort);
+	var prev = $('_chunk_prev_'+sort+'_v'+v);
+	var next = $('_chunk_next_'+sort+'_v'+v);
 	var rev = i;
 	if (text) text.hide();
 	checkArrows(i, n);
@@ -45,8 +45,8 @@ function watchChunkSelect(sort, role, parent_class, parent_id, n, i) { // We are
 			return;
 		}
 		if (text) text.hide();
-		var ed = tinyMCE.get('_chunk_'+sort);
-		var input = $('_chunk_'+sort);
+		var ed = tinyMCE.get('_chunk_'+sort+'_v'+v);
+		var input = $('_chunk_'+sort+'_v'+v);
 		if (typeof(ed) == 'undefined') ed = false;
 		if (ed) ed.setProgressState(1); // Show progress
 
@@ -56,9 +56,9 @@ function watchChunkSelect(sort, role, parent_class, parent_id, n, i) { // We are
 		if (event.element() == prev) {i = rev-1;}
 		if (event.element() == next) {i = rev+1;}
 		if (!select || select.value == '')
-		    $params = {action: 'chunk_load', section: parent_class, id: parent_id, sort: sort, i: i};
+		    $params = {action: 'chunk_load', section: parent_class, id: parent_id, sort: sort, i: i, v: ver};
 		else
-			$params = {action: 'chunk_load', role: role, name: select ? select.value : '', i: i};
+			$params = {action: 'chunk_load', role: role, name: select ? select.value : '', i: i,v: ver};
 		new Ajax.Request ('/admin/Content',
 						  {method: 'post',
 						   parameters: $params,

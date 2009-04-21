@@ -400,3 +400,13 @@ span.error {
 	padding: 0;
 	margin: 0;
 }
+._chunk_wrap_v1{
+	float:left;
+	}
+._chunk_wrap_v2{
+	float:right;
+}
+#_chunk_wrap_main{
+	width:1130px;
+	overflow: visible;
+}

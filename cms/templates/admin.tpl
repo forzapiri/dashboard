@@ -4,15 +4,8 @@
 <head>
 <title>{siteconfig get="CMSname"} - Website Management</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-
-<link rel="stylesheet" href="/css/screen.css,/css/liquid.css,/css/admin_styles.css{if $css.norm|@count > 0}{foreach from=$css.norm item=cssUrl},{$cssUrl}{/foreach}{/if}" type="text/css" />
-{if $css.print|@count > 0}
-	<link rel="stylesheet" href="{foreach from=$css.print item=cssUrl}{$cssUrl}{if $css.print|@key < $css.print|@count},{/if}{/foreach}" type="text/css" media="print" />
-{/if}
-{if $css.screen|@count > 0}
-	<link rel="stylesheet" href="{foreach from=$css.screen item=cssUrl}{$cssUrl}{if $css.screen|@key < $css.screen|@count},{/if}{/foreach}" type="text/css" media="screen" />
-{/if}
-<script type="text/javascript" src="/js/prototype.js,/js/scriptaculous.js{foreach from=$js item=jsUrl},{$jsUrl}{/foreach}"></script>
+{stylesheets}
+{javascripts}
 <script type="text/javascript" src="/core/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 
 </head>
