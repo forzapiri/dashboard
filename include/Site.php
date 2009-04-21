@@ -141,6 +141,12 @@ function authHTML() {
 	 $smarty->compile_dir = SITE_ROOT . '/cache/templates';
 	 $smarty->plugins_dir[] = SITE_ROOT . '/core/plugins';
 	 
+	$smarty->addCSS('/css/style.css', 'screen');
+	$smarty->addCSS('/css/cssMenus.css', 'screen');
+	$smarty->addJS('/js/prototype.js');
+	$smarty->addJS('/js/scriptaculous.js');
+	$smarty->addJS('/js/frontend.js');
+	 
 	$config = Config::singleton();
 	$modules = $config->getActiveModules();
 
