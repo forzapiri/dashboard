@@ -36,7 +36,7 @@
  * @author    Laurent Laville <pear@laurent-laville.org>
  * @copyright 2005-2009 Laurent Laville
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD
- * @version   CVS: $Id: advmultiselect.php,v 1.35 2009/02/07 11:56:29 farell Exp $
+ * @version   CVS: $Id: advmultiselect.php,v 1.36 2009/04/05 07:03:39 farell Exp $
  * @link      http://pear.php.net/package/HTML_QuickForm_advmultiselect
  * @since     File available since Release 0.4.0
  */
@@ -63,7 +63,7 @@ define('HTML_QUICKFORM_ADVMULTISELECT_ERROR_INVALID_INPUT', 1);
  * @author    Laurent Laville <pear@laurent-laville.org>
  * @copyright 2005-2009 Laurent Laville
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD
- * @version   Release: 1.5.0
+ * @version   Release: 1.5.1
  * @link      http://pear.php.net/package/HTML_QuickForm_advmultiselect
  * @since     Class available since Release 0.4.0
  */
@@ -591,11 +591,6 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
 
         $tabs    = $this->_getTabs();
         $tab     = $this->_getTab();
-        $strHtml = '';
-
-        if ($this->getComment() != '') {
-            $strHtml .= $tabs . '<!-- ' . $this->getComment() . " //-->" . PHP_EOL;
-        }
 
         $selectId       = $this->getName();
         $selectName     = $this->getName() . '[]';
@@ -993,6 +988,12 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
         );
 
         $strHtml = str_replace($placeHolders, $htmlElements, $strHtml);
+
+        $comment = $this->getComment();
+
+        if (!empty($comment)) {
+            $strHtml = $tabs . '<!-- ' . $comment . " //-->" . PHP_EOL . $strHtml;
+        }
 
         return $strHtml;
     }
