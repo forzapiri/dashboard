@@ -21,7 +21,7 @@
  *
  */
 function smarty_function_stylesheets($params, &$smarty) {
-	$str = '<link rel="stylesheet" href="/css/style.css,/css/cssMenus.css';
+	$str = '<link rel="stylesheet" href="';
 	if (count($smarty->css['norm']) > 0) {
 		foreach ($smarty->css['norm'] as $css) {
 			$str .= ',' . $css;

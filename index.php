@@ -60,6 +60,15 @@ if ( $ajaxHelper->isAJAX () ){
 } else {
 	$smarty->addJS('/js/prototype.js');
 	$smarty->addJS('/js/scriptaculous.js');
+	$smarty->addJS('/js/frontend.js');
+	$smarty->addJS('/js/sifr.js');
+	$smarty->addJS('/js/sifr-config.js');
+	$smarty->addJS('/js/prototip.js');
+	$smarty->addCSS('/css/style.css');
+	$smarty->addCSS('/css/cssMenus.css');
+	$smarty->addCSS('/css/prototip.css');
+	$smarty->addCSS('/css/sIFR-screen.css', 'screen');
+	$smarty->addCSS('/css/sIFR-print.css', 'print');
 
 	$smarty->content[$_REQUEST['module']] = Module::factory($_REQUEST['module'], $smarty)->getUserInterface($_REQUEST);
 

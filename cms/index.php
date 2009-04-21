@@ -51,6 +51,18 @@ if ($auth->checkAuth()) {
 	// set a custom compile id to ensure Smarty doesent accidentally overwrite duplicate compiled files.
 	$smarty->compile_id = 'admin';
 	
+	$smarty->addCSS('/css/screen.css', 'screen');
+	$smarty->addCSS('/css/print.css', 'print');
+	$smarty->addCSS('/css/liquid.css', 'screen');
+	$smarty->addCSS('/css/admin_styles.css', 'screen');
+	$smarty->addCSS('/css/admin_print.css', 'print');
+	$smarty->addCSS('/css/facebox.css', 'screen');
+	$smarty->addJS('/js/prototype.js');
+	$smarty->addJS('/js/scriptaculous.js');
+	$smarty->addJS('/js/facebox.js');
+	$smarty->addJS('/js/help.js');
+	$smarty->addJS('/js/admin.js');
+	
 	// This is currently a hack since my url-rewriting syntax keeps a trailing slash on the module name
 	if(!empty($_GET['module']))$requestedModule = trim($_GET['module'], '/');
 	else $requestedModule = '';
@@ -89,14 +101,6 @@ if ($auth->checkAuth()) {
 			$r = Database::singleton()->query_fetch($sql);
 			$smarty->assign ( 'module_title', $r['display_name'] );
 		}
-		
-		
-		$smarty->addCSS('/css/facebox.css');
-		$smarty->addJS('/js/facebox.js');
-		
-		$smarty->addJS('/js/help.js');
-		
-		$smarty->addJS('/js/admin.js');
 		
 		$smarty->template_dir = SITE_ROOT . '/cms/templates';
 		$smarty->compile_id = 'admin';
