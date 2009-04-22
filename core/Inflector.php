@@ -36,4 +36,8 @@ class Inflector {
 		}
 		return false;
 	}
+	
+	public static function camelize($string) {
+		return preg_replace('/(^|_)(.)/e', "strtoupper('\\2')", $string);
+	}
 }
