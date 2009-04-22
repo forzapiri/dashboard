@@ -40,4 +40,31 @@ class Inflector {
 	public static function camelize($string) {
 		return preg_replace('/(^|_)(.)/e', "strtoupper('\\2')", $string);
 	}
+	
+	public static function humanize($string) {
+		return ucwords(str_replace("_", " ", $string));
+	}
+	
+	public static function slug($string) {
+		$map = array(
+			'/à|á|å|â/' => 'a',
+			'/è|é|ê|ẽ|ë/' => 'e',
+			'/ì|í|î/' => 'i',
+			'/ò|ó|ô|ø/' => 'o',
+			'/ù|ú|ů|û/' => 'u',
+			'/ç/' => 'c',
+			'/ñ/' => 'n',
+			'/ä|æ/' => 'ae',
+			'/ö/' => 'oe',
+			'/ü/' => 'ue',
+			'/Ä/' => 'Ae',
+			'/Ü/' => 'Ue',
+			'/Ö/' => 'Oe',
+			'/ß/' => 'ss',
+			'/[^\w\s]/' => ' ',
+			'/\\s+/' => '_',
+			'/^[' . preg_quote('_', '/') . ']+|[' . preg_quote('_', '/') . ']+$/' => '',
+		);
+		return preg_replace(array_keys($map), array_values($map), $string);
+	}
 }
