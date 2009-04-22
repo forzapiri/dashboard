@@ -514,7 +514,7 @@ class Page extends defaultPageActs {
 		
 		$html .= '<tbody id="data"';
 		foreach ($items[0]->columns() as $col) {
-			if ($col->type() == 'sort') $html .= ' class="sortable"';
+			if ($col->type() == 'sort') $html .= ' class="sortable sort:' . $this->pointer . ';"';
 		}
 		$html .= '>';
 		

@@ -118,12 +118,20 @@ var NorexUI = Class.create(Facebox, {
 		
 		$$('tbody.sortable').each(function (e) {
 				id = e.identify();
+				var names = $w(e.className);
+				var pointer = null;
+				names.each(function(name){
+					name.gsub(/sort:(.*);/, function(match){
+						pointer = match[1];
+					});
+				});
+				
 				Sortable.create(id, {
 					tag: 'tr',
 					onUpdate: function() {
 						new Ajax.Request (window.location, {
 							method: "post",
-							parameters: { action: 'sort', data: Sortable.serialize(id) },
+							parameters: { action: 'sort', data: Sortable.serialize(id), 'section': pointer },
 							onComplete: function(transport) {
 								ui.updateContent(transport.responseText);
 							}
