@@ -26,14 +26,14 @@ additional tools such as print and other media forms play important supporting r
 	{foreach from=$module->page->heading item=heading key=key}
 		<li>
 		<span class="data">{$module->page->getCount($key)}</span>
-		<span class="title"><a href="/admin/{$module->name}&amp;section={$key}">{$key}s</a></span>
+		<span class="title"><a href="/admin/{$module->name}&amp;section={$key}">{$key|inflector:"pluralize"}</a></span>
 		</li>
 	{/foreach}
 	{else}
 		{assign value=$module->page->pointer var=pointer}
 		<li><span class="data">{$module->page->getCount()}</span>
 		<span class="title">
-		<a href="/admin/{$module->name}&amp;section={$pointer}">{if $module->page->names[$pointer]}{$module->page->names[$pointer]}{else}{$pointer}{/if}s
+		<a href="/admin/{$module->name}&amp;section={$pointer}">{if $module->page->names[$pointer]}{$module->page->names[$pointer]|inflector:"pluralize"}{else}{$pointer|inflector:"pluralize"}{/if}
 		</a></span>
 		</li>
 	{/if}
