@@ -26,13 +26,72 @@
  */
  
 class Inflector {
+	
 	public static function pluralize($string) {
-		if(substr($string, 0, -1) == 's') { 
-			return $string . 'es';
-		} else if(substr($string, -2) == 'ry') { 
-			return substr($string, 0, -1) . 'ies';
-		} else {
-			return $string . 's';
+		$corePluralRules = array(
+			'/(s)tatus$/i' => '\1\2tatuses',
+			'/(quiz)$/i' => '\1zes',
+			'/^(ox)$/i' => '\1\2en',
+			'/([m|l])ouse$/i' => '\1ice',
+			'/(matr|vert|ind)(ix|ex)$/i'  => '\1ices',
+			'/(x|ch|ss|sh)$/i' => '\1es',
+			'/([^aeiouy]|qu)y$/i' => '\1ies',
+			'/(hive)$/i' => '\1s',
+			'/(?:([^f])fe|([lr])f)$/i' => '\1\2ves',
+			'/sis$/i' => 'ses',
+			'/([ti])um$/i' => '\1a',
+			'/(p)erson$/i' => '\1eople',
+			'/(m)an$/i' => '\1en',
+			'/(c)hild$/i' => '\1hildren',
+			'/(buffal|tomat)o$/i' => '\1\2oes',
+			'/(alumn|bacill|cact|foc|fung|nucle|radi|stimul|syllab|termin|vir)us$/i' => '\1i',
+			'/us$/' => 'uses',
+			'/(alias)$/i' => '\1es',
+			'/(ax|cris|test)is$/i' => '\1es',
+			'/s$/' => 's',
+			'/^$/' => '',
+			'/$/' => 's');
+		
+		$coreIrregularPlural = array(
+			'atlas' => 'atlases',
+			'beef' => 'beefs',
+			'brother' => 'brothers',
+			'child' => 'children',
+			'corpus' => 'corpuses',
+			'cow' => 'cows',
+			'ganglion' => 'ganglions',
+			'genie' => 'genies',
+			'genus' => 'genera',
+			'graffito' => 'graffiti',
+			'hoof' => 'hoofs',
+			'loaf' => 'loaves',
+			'man' => 'men',
+			'money' => 'monies',
+			'mongoose' => 'mongooses',
+			'move' => 'moves',
+			'mythos' => 'mythoi',
+			'numen' => 'numina',
+			'occiput' => 'occiputs',
+			'octopus' => 'octopuses',
+			'opus' => 'opuses',
+			'ox' => 'oxen',
+			'penis' => 'penises',
+			'person' => 'people',
+			'sex' => 'sexes',
+			'soliloquy' => 'soliloquies',
+			'testis' => 'testes',
+			'trilby' => 'trilbys',
+			'turf' => 'turfs');
+		
+		$regexIrregular = (join( '|', array_keys($coreIrregularPlural)));
+		if (preg_match('/(.*)\\b(' . $regexIrregular . ')$/i', $string, $regs)) {
+			return $regs[1] . substr($string, 0, 1) . substr($coreIrregularPlural[strtolower($regs[2])], 1);
+		}
+		
+		foreach ($corePluralRules as $rule => $replacement) {
+			if (preg_match($rule, $string)) {
+				return preg_replace($rule, $replacement, $string);
+			}
 		}
 		return false;
 	}
