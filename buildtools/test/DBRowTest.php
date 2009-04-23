@@ -49,10 +49,10 @@ class DBRowTest extends PHPUnit_Framework_TestCase {
 	}
 	
 	public function testCamelCase() {
-		$this->assertEquals('MenuItem', underscore2uccamel('menu_item'));
-		$this->assertEquals('TestId', underscore2uccamel('test_id'));
-		$this->assertEquals('MenuItem', underscore2uccamel('MenuItem'));
-		$this->assertEquals('Test_', underscore2uccamel('test_'));
+		$this->assertEquals('MenuItem', Inflector::camelize('menu_item'));
+		$this->assertEquals('TestId', Inflector::camelize('test_id'));
+		$this->assertEquals('MenuItem', Inflector::camelize('MenuItem'));
+		$this->assertEquals('Test_', Inflector::camelize('test_'));
 	}
 	
 	public function testCreateTable() {
