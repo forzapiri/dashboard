@@ -28,7 +28,11 @@ function checkInstalled() {
 	$installed = false;
 	if (!is_readable(DB_CONFIG)) {
 		return false;
+	} else {
+		$db = @Database::singleton();
+		if (!$db->link) return false;
 	}
+	
 	if (!is_null(Database::singleton()->query_fetch('show tables like "auth"'))) $installed = true;
 	if (!is_null(Database::singleton()->query_fetch('show tables like "modules"'))) $installed = true;
 	if (!is_null(Database::singleton()->query_fetch('show tables like "config_options"'))) $installed = true;
