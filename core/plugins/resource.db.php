@@ -25,10 +25,11 @@ function smarty_resource_db_source ($tpl_name, &$tpl_source, &$smarty_obj)
 {
 	$mod = explode("::",$tpl_name);
 	if(count($mod)>1){
-		$tpl_module = $mod[1];
+		$tpl_module = $mod[0];
+		$tpl_name = $mod[1];
 	}else{
 		$tpl_module = $smarty_obj->compile_id;
-	}	
+	}
 	$sql = 'select * from templates where path="' . $tpl_name . '" and module="' . $tpl_module . '" order by `timestamp` desc limit 1';
     $r = Database::singleton()->query_fetch($sql);
 	$tpl_source = $r['data'];
