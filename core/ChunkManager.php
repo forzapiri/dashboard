@@ -293,7 +293,7 @@ class ChunkManager {
 		if (is_object ($template)) $template = $template->getData();
 		$titlechars = '[^"\']';
 		$argchars = '[^"\']';
-		if (!preg_match_all('/{\$chunks->get\("([^":]*):([^"]*)"\)}/',
+		if (!preg_match_all('/\$chunks->get\("([^":]*):([^"]*)"\)/',
 							$template,
 							$matches,
 							PREG_SET_ORDER)) return array();
