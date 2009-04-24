@@ -411,6 +411,21 @@ class DBCaptcha extends DBColumn {
 		return $el;
 	}
 }
+
+class DBFieldsetStart extends DBColumn {
+	function type() {return 'fieldset';}
+	function ignored() {return true;}
+	function suggestedMysql() {return "";}
+	function addElementTo($args) {
+		$value = null;
+		extract ($args);
+		$label = $this->label();
+		$el = $form->addElement ('header', $id, $label);
+		
+		$el->setValue($label);
+		return $el;
+	}
+}
 /* ----------------------------- PUT NEW CLASSES ABOVE THIS LINE! ---------------------- */
 DBColumn::registerClasses();
 /* ------------------------------------------------------------------------------------- */

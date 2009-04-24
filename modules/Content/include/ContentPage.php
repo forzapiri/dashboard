@@ -25,12 +25,15 @@ class ContentPage extends DBRow {
 	function createTable() {
 		$cols = array(
 			'id?',
+			DBColumn::make('fieldset', 'pageinfo', 'Page Info'),
 			DBColumn::make('text', 'name', 'Page Name'),
 			DBColumn::make('text', 'url_key', 'URL Key'),
 			DBColumn::make('select', 'page_template', 'Page Template', Template::toArray('CMS')),
+			DBColumn::make('fieldset', 'pagetitle', 'Browser Title'),
 			DBColumn::make('text', 'page_title', 'Page Title'),
 			'//timestamp',
-			'//status'
+			'//status',
+			DBColumn::make('fieldset', 'content', 'Page Content'),
 			);
 			
 		if (SiteConfig::get('Content::restrictedPages') == 'true') {

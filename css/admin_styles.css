@@ -207,9 +207,18 @@ div#footer p a {
 
 
 form fieldset {
-	margin: 0;
-	padding: 0;
-	border: none;
+	margin: 0 0 15px 0;
+	padding: 10px;
+	border: 1px solid #aaa;
+	background-color: #fff;
+	-moz-border-radius-bottomleft:6px;
+	-moz-border-radius-bottomright:6px;
+	-moz-border-radius-topleft:6px;
+	-moz-border-radius-topright:6px;
+}
+
+form fieldset legend {
+	
 }
 
 form fieldset input[type="text"], form fieldset input[type="password"] {
