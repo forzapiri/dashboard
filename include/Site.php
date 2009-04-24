@@ -53,7 +53,6 @@ function error_handler($errno, $errstr, $errfile, $errline) {
 // set to the user defined error handler
 $old_error_handler = set_error_handler('error_handler', E_ERROR | E_PARSE);
 
-
 /*
  * Check if there is a cached copy of the request.
  */
@@ -75,7 +74,7 @@ session_start();
 if (!isset($_SESSION['cacheperms']) || $_SESSION['cacheperms'] != 'set'){
 	chmod (SITE_ROOT . '/cache/', 0777);
 	$_SESSION['cacheperms'] = 'set';
-	header ('location: /');
+	header ('location: ' . $_SERVER['REDIRECT_URL']);
 }
 
 include_once(SITE_ROOT . '/core/libs/Smarty.class.php');
