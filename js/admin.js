@@ -296,27 +296,29 @@ var myCustomOnChangeHandler = function(inst) {
 }
 
 function initRTE(mode, theme, name, stylesheet, bodyId, bodyClass) {
-	tinyMCE_GZ.init({
-		plugins : 'safari,spellchecker,style,advimage,advlink,iespell,inlinepopups,contextmenu,paste',
-		themes : 'dashboard',
-		languages : 'en',
-		disk_cache : true,
-		debug : false
-	});
-
+	//relative_urls:"", remove_script_host:"", convert_urls:"", apply_source_formatting:"", remove_linebreaks:"1", paste_convert_middot_lists:"1", paste_remove_spans:"1", paste_remove_styles:"1", gecko_spellcheck:"1", entities:"38,amp,60,lt,62,gt", accessibility_focus:"1", tabfocus_elements:"major-publishing-actions", media_strict:"", save_callback:"switchEditors.saveCallback", wpeditimage_disable_captions:"", plugins:"safari,inlinepopups,autosave,spellchecker,paste,wordpress,media,fullscreen,wpeditimage,wpgallery,tabfocus"},
 	tinyMCE.init({
 		mode : mode,
 		theme : theme,
+		skin: 'dashboard',
 		elements : name,
-		plugins : "safari,spellchecker,style,advimage,advlink,iespell,inlinepopups,contextmenu,paste",
-		theme_dashboard_buttons1_add : "forecolor,backcolor",
+		plugins : "safari,inlinepopups,autosave,spellchecker,paste,media,fullscreen,tabfocus,showhide",
+		/*theme_dashboard_buttons1_add : "forecolor,backcolor",
 		theme_dashboard_buttons1_add_before: "cut,copy,paste,pastetext,pasteword",
-		theme_dashboard_buttons3 : "",
+		theme_dashboard_buttons3 : "", */
+		theme_dashboard_buttons1:"bold,italic,underline,strikethrough,|,bullist,blockquote,|,justifyleft,justifycenter,justifyright,justifyfull,|,link,unlink,|,fullscreen,|,formatselect,|,showhide", 
+		theme_dashboard_buttons2:"code,|,forecolor,|,pastetext,pasteword,removeformat,|,image,media,charmap,numlist,|,outdent,indent,|,undo,redo", 
+		theme_dashboard_buttons3:"", 
+		theme_dashboard_buttons4:"",
 		theme_dashboard_toolbar_location : "top",
 		theme_dashboard_toolbar_align : "left",
-		dialog_type : "modal",
+		dialog_type:"modal",
 		relative_urls : false,
 		button_tile_map : true,
+		forced_root_block : false,
+		force_br_newlines : true,
+		force_p_newlines : false,
+		inlinepopups_skin: 'dashboard', 
 		theme_dashboard_statusbar_location : "bottom",
 		content_css : stylesheet,
 	    plugin_insertdate_dateFormat : "%Y-%m-%d",
@@ -328,7 +330,7 @@ function initRTE(mode, theme, name, stylesheet, bodyId, bodyClass) {
 		theme_dashboard_resize_horizontal : true,
 		theme_dashboard_resizing : true,
 		apply_source_formatting : true,
-		spellchecker_languages : "+English=en,Danish=da,Dutch=nl,Finnish=fi,French=fr,German=de,Italian=it,Polish=pl,Portuguese=pt,Spanish=es,Swedish=sv",
+		spellchecker_languages : "+English=en",
 		oninit: "resizeFacebox",
 		width: "450"
 	});
