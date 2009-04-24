@@ -24,6 +24,11 @@
 //Insures that db-config exists. Runs installer if not
 if(!file_exists('include/db-config.php') || !file_exists('cache/templates')) header("Location: buildtools/install/install.php");
 
+//fix perms
+if(!is_writeable(dirname(__FILE__) . '/cache/*')){
+	require_once (dirname(__FILE__) .'/buildtools/install/clearcaches.php');
+	chmodCacheDirectories();
+}
 /*
  * Kicks things off with initiliziation of the general framework infrastructure.
  */
