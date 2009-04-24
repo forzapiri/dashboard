@@ -307,6 +307,7 @@ function initRTE(mode, theme, name, stylesheet, bodyId, bodyClass) {
 	tinyMCE.init({
 		mode : mode,
 		theme : theme,
+		skin: 'dashboard',
 		elements : name,
 		plugins : "safari,inlinepopups,autosave,spellchecker,paste,media,fullscreen,tabfocus",
 		/*theme_dashboard_buttons1_add : "forecolor,backcolor",

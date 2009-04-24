@@ -39,8 +39,8 @@ class TinyMCE {
 	}
 	
 	public function toHTML() {
-		return '
-		<textarea id="' . $this->name . '" name="' . $this->name . '" rows="15" cols="16" class="' . $this->name . '" style="width: 200px">' . $this->value . '</textarea>
+		return '<div class="editorcontainer">
+		<textarea id="' . $this->name . '" name="' . $this->name . '" rows="15" cols="16" class="' . $this->name . '" style="width: 200px">' . $this->value . '</textarea></div>
 			<script type="text/javascript">
 			initRTE("' . $this->mode . '","' . $this->theme . '","' . $this->name . '","' . $this->stylesheet . '","' . $this->bodyId . '","' . $this->bodyClass . '");
 			</script>';
