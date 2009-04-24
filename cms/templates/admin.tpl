@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 {stylesheets}
 {javascripts}
-<script type="text/javascript" src="/core/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript" src="/core/tinymce/jscripts/tiny_mce/tiny_mce_gzip.js"></script>
 
 </head>
 <body>

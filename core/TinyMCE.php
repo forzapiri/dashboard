@@ -27,7 +27,7 @@ class TinyMCE {
 	public $name;
 	public $value = '<p></p>';
 	public $mode = 'exact';
-	public $theme = 'advanced';
+	public $theme = 'dashboard';
 	public $stylesheet = '/css/style.css';
 	public $bodyId = 'mainContent';
 	public $bodyClass = 'tinymce';

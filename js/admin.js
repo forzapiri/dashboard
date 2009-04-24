@@ -296,20 +296,28 @@ var myCustomOnChangeHandler = function(inst) {
 }
 
 function initRTE(mode, theme, name, stylesheet, bodyId, bodyClass) {
+	tinyMCE_GZ.init({
+		plugins : 'safari,spellchecker,style,advimage,advlink,iespell,inlinepopups,contextmenu,paste',
+		themes : 'dashboard',
+		languages : 'en',
+		disk_cache : true,
+		debug : false
+	});
+
 	tinyMCE.init({
 		mode : mode,
 		theme : theme,
 		elements : name,
 		plugins : "safari,spellchecker,style,advimage,advlink,iespell,inlinepopups,contextmenu,paste",
-		theme_advanced_buttons1_add : "forecolor,backcolor",
-		theme_advanced_buttons1_add_before: "cut,copy,paste,pastetext,pasteword",
-		theme_advanced_buttons3 : "",
-		theme_advanced_toolbar_location : "top",
-		theme_advanced_toolbar_align : "left",
+		theme_dashboard_buttons1_add : "forecolor,backcolor",
+		theme_dashboard_buttons1_add_before: "cut,copy,paste,pastetext,pasteword",
+		theme_dashboard_buttons3 : "",
+		theme_dashboard_toolbar_location : "top",
+		theme_dashboard_toolbar_align : "left",
 		dialog_type : "modal",
 		relative_urls : false,
 		button_tile_map : true,
-		theme_advanced_statusbar_location : "bottom",
+		theme_dashboard_statusbar_location : "bottom",
 		content_css : stylesheet,
 	    plugin_insertdate_dateFormat : "%Y-%m-%d",
 	    body_id : bodyId,
@@ -317,8 +325,8 @@ function initRTE(mode, theme, name, stylesheet, bodyId, bodyClass) {
 	    body_class : bodyClass,
 	    plugin_insertdate_timeFormat : "%H:%M:%S",
 		file_browser_callback : "norexFileBrowser",
-		theme_advanced_resize_horizontal : false,
-		theme_advanced_resizing : true,
+		theme_dashboard_resize_horizontal : true,
+		theme_dashboard_resizing : true,
 		apply_source_formatting : true,
 		spellchecker_languages : "+English=en,Danish=da,Dutch=nl,Finnish=fi,French=fr,German=de,Italian=it,Polish=pl,Portuguese=pt,Spanish=es,Swedish=sv",
 		oninit: "resizeFacebox",
