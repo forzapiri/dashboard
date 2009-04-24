@@ -21,6 +21,7 @@
  *
  */
 
+
 error_reporting(E_ALL);
 
 function var_log($var, $prefix="") {
@@ -68,12 +69,19 @@ if ($data = $pageCache->get(CACHED_PAGE_INDEX)) {
 	die();
 }
 
+session_start();
+
+//Check for perms on cache dir
+if (!isset($_SESSION['cacheperms']) || $_SESSION['cacheperms'] != 'set'){
+	chmod (SITE_ROOT . '/cache/', 0777);
+	$_SESSION['cacheperms'] = 'set';
+	header ('location: /');
+}
 
 include_once(SITE_ROOT . '/core/libs/Smarty.class.php');
 include_once(SITE_ROOT . '/core/libs/Smarty_Compiler.class.php');
 include_once(SITE_ROOT . '/include/fb.php');
 
-session_start();
 
 //FIX for PHP 5.3
 //set the default timezone as set in the Administration interface, else use the best timezone in the world.
