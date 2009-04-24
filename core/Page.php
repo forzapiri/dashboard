@@ -303,6 +303,9 @@ class Page extends defaultPageActs {
 			$pointer = $this->pointer;
 		}
 		$items = call_user_func(array($pointer, 'getAll'), $this->getWhere($pointer), ''); // TODO: CONVERT TO PREPARED STMT
+		foreach ($items as &$item) {
+			$item->page = &$this;
+		}
 		return $items;
 	}
 
