@@ -325,6 +325,7 @@ function initRTE(mode, theme, name, stylesheet, bodyId, bodyClass) {
 		forced_root_block : false,
 		force_br_newlines : true,
 		force_p_newlines : false,
+		inlinepopups_skin: 'dashboard', 
 		theme_dashboard_statusbar_location : "bottom",
 		content_css : stylesheet,
 	    plugin_insertdate_dateFormat : "%Y-%m-%d",
