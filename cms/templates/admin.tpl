@@ -10,8 +10,8 @@ tinyMCE_GZ.init({
 		plugins : 'safari,inlinepopups,autosave,spellchecker,paste,media,fullscreen,tabfocus,showhide',
 		themes : 'advanced,dashboard',
 		languages : 'en',
-		disk_cache : false,
-		debug : true
+		disk_cache : true,
+		debug : false
 	});
 {/literal}</script>
 {stylesheets}
