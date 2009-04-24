@@ -1,5 +1,7 @@
 (function() {
 	// Load plugin specific language pack
+	tinymce.PluginManager.requireLangPack('showhide');
+
 	tinymce.create('tinymce.plugins.ShowHide', {
 		/**
 		 * Initializes the plugin, this will be executed after the plugin has been created.
@@ -38,7 +40,7 @@
 
 			// Register example button
 			ed.addButton('showhide', {
-				title : 'example.desc',
+				title : 'showhide.desc',
 				cmd : 'mceShowHide',
 				image : url + '/img/toolbars.gif'
 			});
@@ -72,9 +74,9 @@
 		getInfo : function() {
 			return {
 				longname : 'ShowHide plugin',
-				author : 'Some author',
-				authorurl : 'http://tinymce.moxiecode.com',
-				infourl : 'http://wiki.moxiecode.com/index.php/TinyMCE:Plugins/example',
+				author : 'Chris Troup',
+				authorurl : 'http://www.dashboardwebapp.com',
+				infourl : 'http://www.dashboardwebapp.com',
 				version : "1.0"
 			};
 		}
