@@ -208,9 +208,13 @@ div#footer p a {
 
 
 form fieldset {
+	/* margin: 0 1% 15px 0;
+	padding: 0;
+	width: 47%;
+	float: left; */
 	margin: 0 0 15px 0;
-	padding: 10px;
-	border: 1px solid #aaa;
+	padding: 0;
+	border: 1px solid #dfdfdf;
 	background-color: #fff;
 	-moz-border-radius-bottomleft:6px;
 	-moz-border-radius-bottomright:6px;
@@ -218,8 +222,22 @@ form fieldset {
 	-moz-border-radius-topright:6px;
 }
 
-form fieldset legend {
-	
+form fieldset h3 {
+	background-color: #dfdfdf;
+	background-image: url(/images/admin/gray-grad.png);
+	font-size:12px;
+	font-weight:bold;
+	line-height:1;
+	margin:0;
+	padding:7px 9px;
+}
+
+form fieldset h3 span {
+	padding: 6px 0;
+}
+
+form fieldset ol {
+	margin: 10px;
 }
 
 form fieldset input[type="text"], form fieldset input[type="password"] {
@@ -417,6 +435,6 @@ span.error {
 	float:right;
 }
 #_chunk_wrap_main{
-	width:1130px;
+	width:100%;
 	overflow: visible;
 }
