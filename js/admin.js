@@ -314,7 +314,7 @@ function initRTE(mode, theme, name, stylesheet, bodyId, bodyClass) {
 		theme_dashboard_buttons1_add_before: "cut,copy,paste,pastetext,pasteword",
 		theme_dashboard_buttons3 : "", */
 		theme_dashboard_buttons1:"bold,italic,underline,strikethrough,|,bullist,blockquote,|,justifyleft,justifycenter,justifyright,justifyfull,|,link,unlink,|,fullscreen,|,formatselect,|,showhide", 
-		theme_dashboard_buttons2:"forecolor,|,pastetext,pasteword,removeformat,|,media,charmap,numlist,|,outdent,indent,|,undo,redo", 
+		theme_dashboard_buttons2:"code,|,forecolor,|,pastetext,pasteword,removeformat,|,media,charmap,numlist,|,outdent,indent,|,undo,redo", 
 		theme_dashboard_buttons3:"", 
 		theme_dashboard_buttons4:"",
 		theme_dashboard_toolbar_location : "top",
