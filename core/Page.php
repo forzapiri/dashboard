@@ -566,11 +566,18 @@ class Page extends defaultPageActs {
 		case 'json':
 			$tmp = array();
 			foreach ($items as $item) {
+				$new = array();
 				$tmp[] = $item->values();
 			}
 			
+			$array = array();
+			$array['values'] = $tmp;
+			$array['section'] = $this->pointer;
+			$array['show'] = $this->tables[$this->pointer];
+			
+			
 			header('Content-Type: text/javascript');
-			echo json_encode($tmp);
+			echo json_encode($array);
 			die();
 		}
 	}
