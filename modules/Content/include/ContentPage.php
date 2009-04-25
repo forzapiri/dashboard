@@ -25,11 +25,11 @@ class ContentPage extends DBRow {
 	function createTable() {
 		$cols = array(
 			'id?',
-			DBColumn::make('fieldset', 'pageinfo', 'Page Info'),
+			DBColumn::make('fieldset', 'pageinfo', 'Page Info', array('class'=>'title small')),
 			DBColumn::make('text', 'name', 'Page Name'),
 			DBColumn::make('text', 'url_key', 'URL Key'),
 			DBColumn::make('select', 'page_template', 'Page Template', Template::toArray('CMS')),
-			DBColumn::make('fieldset', 'pagetitle', 'Browser Title'),
+			DBColumn::make('fieldset', 'pagetitle', 'Browser Title', array('class'=>'title small')),
 			DBColumn::make('text', 'page_title', 'Page Title'),
 			'//timestamp',
 			'//status',

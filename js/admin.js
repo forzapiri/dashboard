@@ -101,6 +101,7 @@ var NorexUI = Class.create(Facebox, {
 				}
 		);
 		
+		$$('form fieldset h3').invoke('observe', 'click', this.toggleCollapse);
 		$$('form.norexui_addedit').invoke('observe', 'submit', this.addedit);
 		$$('form.norexui_delete').invoke('observe', 'submit', this.deleteConfirm);
 		$$('li.norexui_delete').invoke('observe', 'click', this.deleteConfirm);
@@ -140,6 +141,17 @@ var NorexUI = Class.create(Facebox, {
 				});
 			}
 		);
+	},
+	
+	toggleCollapse: function(event) {
+		var el = event.element();
+		var fs = el.up('fieldset');
+		if (fs.getHeight() >= 30) {
+			fs.setStyle({'overflow':'hidden', 'height': '26px'});
+		} else {
+			fs.setStyle({'overflow':'display', 'height': '100%'});
+		}
+		//Effect.toggle(fs, 'blind', { duration: 0.5 });
 	},
 	
 	addedit: function(event) {
@@ -332,7 +344,7 @@ function initRTE(mode, theme, name, stylesheet, bodyId, bodyClass) {
 		apply_source_formatting : true,
 		spellchecker_languages : "+English=en",
 		oninit: "resizeFacebox",
-		width: "450"
+		width: "100%"
 	});
 	
 	

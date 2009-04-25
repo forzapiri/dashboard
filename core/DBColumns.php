@@ -422,6 +422,10 @@ class DBFieldsetStart extends DBColumn {
 		$label = $this->label();
 		$el = $form->addElement ('header', $id, $label);
 		
+		$options = $this->options();
+		if (count($options) > 0 && (!isset($options[0]) || $options[0] != '')) {
+			$el->updateAttributes($options);
+		}
 		$el->setValue($label);
 		return $el;
 	}
