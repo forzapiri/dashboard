@@ -267,7 +267,8 @@ class ChunkList { // Just so that the template doesn't need to pass in an iterat
 	private $list, $ptr=0;
 	function __construct($list) {$this->list = $list;}
 	function get($ignored_string=null) {
-		if(preg_match("([0-9]?)",$ignored_string)){
+		//if(preg_match("([0-9]?)",$ignored_string)){
+		if(ctype_digit($ignored_string)){
 			return $this->list[$ignored_string];
 		}
 		return $this->list[$this->ptr++];
