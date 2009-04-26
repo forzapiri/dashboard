@@ -4,10 +4,18 @@
 <head>
 <title>{siteconfig get="CMSname"} - Website Management</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<script type="text/javascript" src="/core/tinymce/jscripts/tiny_mce/tiny_mce_gzip.js"></script>
+<script>{literal}
+tinyMCE_GZ.init({
+		plugins : 'safari,inlinepopups,autosave,spellchecker,paste,media,fullscreen,tabfocus,showhide',
+		themes : 'advanced,dashboard',
+		languages : 'en',
+		disk_cache : true,
+		debug : false
+	});
+{/literal}</script>
 {stylesheets}
 {javascripts}
-<script type="text/javascript" src="/core/tinymce/jscripts/tiny_mce/tiny_mce_gzip.js"></script>
-
 </head>
 <body>
 <div id="container">
