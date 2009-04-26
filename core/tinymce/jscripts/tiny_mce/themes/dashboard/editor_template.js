@@ -205,7 +205,7 @@
 
 		_createStyleSelect : function(n) {
 			var t = this, ed = t.editor, cf = ed.controlManager, c = cf.createListBox('styleselect', {
-				title : 'advanced.style_select',
+				title : 'dashboard.style_select',
 				onselect : function(v) {
 					if (c.selectedValue === v) {
 						ed.execCommand('mceSetStyleInfo', 0, {command : 'removeformat'});
@@ -281,24 +281,24 @@
 
 		_createBlockFormats : function() {
 			var c, fmts = {
-				p : 'advanced.paragraph',
-				address : 'advanced.address',
-				pre : 'advanced.pre',
-				h1 : 'advanced.h1',
-				h2 : 'advanced.h2',
-				h3 : 'advanced.h3',
-				h4 : 'advanced.h4',
-				h5 : 'advanced.h5',
-				h6 : 'advanced.h6',
-				div : 'advanced.div',
-				blockquote : 'advanced.blockquote',
-				code : 'advanced.code',
-				dt : 'advanced.dt',
-				dd : 'advanced.dd',
-				samp : 'advanced.samp'
+				p : 'dashboard.paragraph',
+				address : 'dashboard.address',
+				pre : 'dashboard.pre',
+				h1 : 'dashboard.h1',
+				h2 : 'dashboard.h2',
+				h3 : 'dashboard.h3',
+				h4 : 'dashboard.h4',
+				h5 : 'dashboard.h5',
+				h6 : 'dashboard.h6',
+				div : 'dashboard.div',
+				blockquote : 'dashboard.blockquote',
+				code : 'dashboard.code',
+				dt : 'dashboard.dt',
+				dd : 'dashboard.dd',
+				samp : 'dashboard.samp'
 			}, t = this;
 
-			c = t.editor.controlManager.createListBox('formatselect', {title : 'advanced.block', cmd : 'FormatBlock'});
+			c = t.editor.controlManager.createListBox('formatselect', {title : 'dashboard.block', cmd : 'FormatBlock'});
 			if (c) {
 				each(t.editor.getParam('theme_dashboard_blockformats', t.settings.theme_dashboard_blockformats, 'hash'), function(v, k) {
 					c.add(t.editor.translate(k != v ? k : fmts[v]), v, {'class' : 'mce_formatPreview mce_' + v});
@@ -687,7 +687,7 @@
 
 			n = DOM.add(tb, 'tr');
 			n = td = DOM.add(n, 'td', {'class' : 'mceStatusbar'});
-			n = DOM.add(n, 'div', {id : ed.id + '_path_row'}, s.theme_dashboard_path ? ed.translate('advanced.path') + ': ' : '&#160;');
+			n = DOM.add(n, 'div', {id : ed.id + '_path_row'}, s.theme_dashboard_path ? ed.translate('dashboard.path') + ': ' : '&#160;');
 			DOM.add(n, 'a', {href : '#', accesskey : 'x'});
 
 			if (s.theme_dashboard_resizing) {
