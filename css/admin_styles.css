@@ -25,6 +25,7 @@
 	padding: 0;
 	font-family: "Lucida Grande","Tahoma","Lucida Sans Unicode",Tahoma,Verdana !important;
 	height: 100%;
+	background-color: #f9f9f9;
 }
 
 a {
@@ -173,14 +174,14 @@ div#main_window h1 {
 	font-weight:normal;
 	line-height:35px;
 	margin:0;
-	padding: 0 0 3px 47px;
+	padding: 0 0 3px 10px;
 	text-shadow:0 1px 0 #FFFFFF;
 	color: #464646;
-	background: url(/images/admin/icon.png) no-repeat 7px;
 }
 
 div#content {
 	padding: 7px;
+	margin-right: 300px;
 }
 
 div#footer {
@@ -207,26 +208,73 @@ div#footer p a {
 
 
 form fieldset {
-	margin: 0;
+	/* margin: 0 1% 15px 0;
 	padding: 0;
-	border: none;
+	width: 47%;
+	float: left; */
+	margin: 0 0 15px 0;
+	padding: 0;
+	clear: right;
+	width: 100%;
+	border: 1px solid #dfdfdf;
+	background-color: #fff;
+	-moz-border-radius-bottomleft:6px;
+	-moz-border-radius-bottomright:6px;
+	-moz-border-radius-topleft:6px;
+	-moz-border-radius-topright:6px;
+}
+
+form fieldset.small {
+	width: 48%;
+	margin-right: 1%;
+	float: left;
+}
+
+form fieldset h3 {
+	background-color: #dfdfdf;
+	background-image: url(/images/admin/gray-grad.png);
+	font-size:12px;
+	font-weight:bold;
+	line-height:1;
+	margin:0;
+	padding:7px 9px;
+}
+
+form fieldset h3 span {
+	padding: 6px 0;
+}
+
+form fieldset ol {
+	margin: 10px;
 }
 
 form fieldset input[type="text"], form fieldset input[type="password"] {
-	border: 1px solid #666;
+	border: 1px solid #DFDFDF;
 	padding: 4px;
-	font-size: 16px;
+	font-size: 12x;
+	-moz-border-radius-bottomleft:6px;
+	-moz-border-radius-bottomright:6px;
+	-moz-border-radius-topleft:6px;
+	-moz-border-radius-topright:6px;
+}
+
+form fieldset.title input[type="text"], form fieldset.title input[type="password"] {
+	width: 97%;
 }
 
 form fieldset select {
-	border: 1px solid #666;
+	border: 1px solid #DFDFDF;
 	padding: 4px;
-	font-size: 16px;
+	font-size: 12px;
+	-moz-border-radius-bottomleft:6px;
+	-moz-border-radius-bottomright:6px;
+	-moz-border-radius-topleft:6px;
+	-moz-border-radius-topright:6px;
 }
 
 form input[type="submit"] {
-	border: 1px solid #666;
-	font-size: 16px;
+	border: 1px solid #DFDFDF;
+	font-size: 12px;
 	padding: 4px;
 	width: 100px;
 	-moz-border-radius-bottomleft:11px;
@@ -407,6 +455,6 @@ span.error {
 	float:right;
 }
 #_chunk_wrap_main{
-	width:1130px;
+	width:100%;
 	overflow: visible;
 }
