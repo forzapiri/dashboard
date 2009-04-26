@@ -55,6 +55,7 @@ class Form extends HTML_QuickForm {
 	
 	public function display() {
 		$renderer =& new HTML_QuickForm_Renderer_Tableless();
+		$renderer->_headerTemplate = "\n\t\t<legend></legend><h3><span>{header}</span></h3>\n\t\t<ol>";
 		$this->accept($renderer);
 		$this->removeAttribute('name');
 		
